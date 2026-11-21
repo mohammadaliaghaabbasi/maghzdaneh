@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/fx.css">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -21,8 +22,8 @@
 
   <section>
     <div class="container">
-      <div class="chips" id="cat-chips"></div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px">
+      <div class="chips" id="cat-chips" data-reveal></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px" data-reveal style="transition-delay:100ms">
         <div class="field" style="flex:1;min-width:220px;max-width:420px">
           <input type="search" id="q" placeholder="جستجو در مغزها… (مثلاً اکبری، خلال، گردو)" aria-label="جستجوی محصول">
         </div>
@@ -48,6 +49,7 @@
   <footer class="site-footer" id="site-footer"></footer>
 
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/motion.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
     let filterCat = params.get('cat') || 'all';
@@ -81,6 +83,7 @@
         document.getElementById('empty').style.display = list.length ? 'none' : 'block';
         document.getElementById('grid').innerHTML = list.map(productCard).join('');
         bindAddButtons();
+        if (window.MGZ) MGZ.init(); // rescan tilt/reveal for new cards
       }
 
       document.getElementById('q').addEventListener('input', render);

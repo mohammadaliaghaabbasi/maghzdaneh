@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/fx.css">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -25,7 +26,7 @@
         <span class="eyebrow">پله‌های خرید</span>
         <h2>سه پله، سه قیمت — همه شفاف</h2>
       </div>
-      <div class="tier-cards" id="tier-cards"></div>
+      <div class="tier-cards" id="tier-cards" data-reveal-stagger></div>
       <p style="text-align:center;font-size:var(--fs-sm);color:var(--c-text-soft);max-width:640px;margin:18px auto 0">
         پله خرید انتخابی شما روی کل سایت اعمال می‌شود و قیمت‌ها همان لحظه به‌روز می‌شوند. بالای ۱۰۰ کیلو (صادرات و صنایع بزرگ)؟ با شماره فروش عمده تماس بگیرید تا قیمت روز بورس مغز را استعلام کنیم.
       </p>
@@ -38,7 +39,7 @@
         <h2>جدول کامل قیمت پلکانی</h2>
         <p>همه محصولات با سه قیمت. ستون آخر نشان می‌دهد در پله عمده چقدر نسبت به خرده‌فروشی صرفه‌جویی می‌کنید.</p>
       </div>
-      <div class="table-wrap">
+      <div class="table-wrap" data-reveal>
         <table class="shop" id="price-table">
           <thead><tr><th>محصول</th><th>خرده (کیلو)</th><th>نیم‌عمده (۵–۲۴ کیلو)</th><th>عمده (۲۵+ کیلو)</th><th>صرفه‌جویی عمده</th></tr></thead>
           <tbody></tbody>
@@ -67,6 +68,7 @@
   <footer class="site-footer" id="site-footer"></footer>
 
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/motion.js"></script>
   <script>
     boot('wholesale').then(db => {
       // tier cards + selector

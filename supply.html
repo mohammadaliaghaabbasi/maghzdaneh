@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/fx.css">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -44,7 +45,7 @@
         <h2>محصول‌تان را پیشنهاد دهید</h2>
         <p>مشخصات محموله را ثبت کنید؛ همان روز کاری بعدی با قیمت خرید تماس می‌گیریم.</p>
       </div>
-      <form class="contact-card" id="supply-form" style="max-width:760px;margin:0 auto">
+      <form class="contact-card" id="supply-form" data-reveal style="max-width:760px;margin:0 auto">
         <div class="form-grid">
           <div class="field"><label for="sp-name">نام شما / مجموعه *</label><input id="sp-name" required placeholder="مثلاً بنه حاجی‌زاده — رفسنجان"></div>
           <div class="field"><label for="sp-phone">شماره تماس *</label><input id="sp-phone" required inputmode="tel" placeholder="09xxxxxxxxx" style="direction:ltr;text-align:right"></div>
@@ -72,6 +73,7 @@
   <footer class="site-footer" id="site-footer"></footer>
 
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/motion.js"></script>
   <script src="assets/js/ghdb.js"></script>
   <script>
     boot('supply').then(db => {
@@ -81,6 +83,7 @@
       document.getElementById('s-steps').innerHTML = s.steps.map((st, i) => `
         <div class="step"><span class="n">${['۱','۲','۳'][i]}</span><div><h4>${st.t}</h4><p>${st.d}</p></div></div>`).join('');
       document.getElementById('s-webuy').innerHTML = s.we_buy.map(w => `<li>${w}</li>`).join('');
+      if (window.MGZ) MGZ.init();
       document.getElementById('s-phone').textContent = s.phone;
 
       document.getElementById('supply-form').addEventListener('submit', async e => {

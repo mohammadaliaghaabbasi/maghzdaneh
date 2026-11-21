@@ -1,0 +1,346 @@
+/* ============================================================
+   مغزدانه — fx.css
+   لایه سه‌بعدی/موشن (فوق‌ساخت دیزاین سیستم موجود)
+   سبک: Lusion / Awwwards — تیره سینمایی + سبز نئونی + طلایی
+   ============================================================ */
+
+:root {
+  --fx-neon: #6fe39b;
+  --fx-neon-soft: rgba(111, 227, 155, 0.16);
+  --fx-gold: #e8b830;
+  --fx-dark: #0b1610;
+  --fx-dark-2: #10231a;
+  --fx-glow: 0 0 22px rgba(111, 227, 155, 0.35);
+  --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- scroll progress HUD ---------- */
+.scroll-progress {
+  position: fixed; top: 0; inset-inline-start: 0; height: 3px; width: 100%;
+  background: linear-gradient(90deg, var(--fx-neon), var(--fx-gold));
+  transform-origin: right; transform: scaleX(0);
+  z-index: 200;
+}
+
+/* ---------- custom cursor ---------- */
+.mgz-cursor {
+  position: fixed; top: 0; left: 0; width: 34px; height: 34px;
+  border: 1.5px solid rgba(111, 227, 155, 0.8); border-radius: 50%;
+  pointer-events: none; z-index: 300;
+  transition: width 0.25s var(--fx-ease), height 0.25s var(--fx-ease),
+              background 0.25s, border-color 0.25s;
+  mix-blend-mode: screen;
+}
+.mgz-cursor-dot {
+  position: fixed; top: 0; left: 0; width: 5px; height: 5px;
+  background: var(--fx-gold); border-radius: 50%;
+  pointer-events: none; z-index: 301;
+}
+body.cursor-hot .mgz-cursor {
+  width: 56px; height: 56px;
+  background: var(--fx-neon-soft);
+  border-color: var(--fx-gold);
+}
+@media (hover: none) { .mgz-cursor, .mgz-cursor-dot { display: none; } }
+
+/* ---------- reveal ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.9s var(--fx-ease), transform 0.9s var(--fx-ease);
+  will-change: opacity, transform;
+}
+[data-reveal].in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
+}
+
+/* ============================================================
+   HERO سه‌بعدی
+   ============================================================ */
+.hero3d {
+  position: relative;
+  min-height: 100svh;
+  display: flex; align-items: center;
+  background: var(--fx-dark);
+  overflow: clip;
+}
+.hero3d canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.hero3d .hero-copy {
+  position: relative; z-index: 5;
+  pointer-events: none; /* کلیک‌ها به صحنه نرسد؛ دکمه‌ها زیر خودش فعال */
+}
+.hero3d .hero-copy a, .hero3d .hero-copy button { pointer-events: auto; }
+
+.hero3d .hero-kicker {
+  background: rgba(111, 227, 155, 0.1);
+  border: 1px solid rgba(111, 227, 155, 0.35);
+  color: var(--fx-neon);
+  backdrop-filter: blur(6px);
+}
+.hero3d h1, .hero3d p { text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55); }
+
+.hero-title-3d {
+  font-size: clamp(2.1rem, 1.6rem + 3.2vw, 4.6rem);
+  font-weight: 900; line-height: 1.28; color: #fff;
+}
+.hero-title-3d .glow {
+  color: var(--fx-neon);
+  text-shadow: 0 0 26px rgba(111, 227, 155, 0.55);
+}
+.hero-title-3d .gold { color: var(--fx-gold); }
+
+.hero3d .hero-stats {
+  display: flex; gap: clamp(18px, 4vw, 46px); flex-wrap: wrap;
+  margin-top: 34px;
+}
+.hero3d .hstat { color: #cfe3d6; font-size: var(--fs-sm); }
+.hero3d .hstat b {
+  display: block; font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  font-weight: 900; color: #fff;
+}
+
+.scroll-hint {
+  position: absolute; bottom: 26px; inset-inline-start: 50%;
+  transform: translateX(50%);
+  z-index: 6; color: #9fbfae; font-size: var(--fs-xs);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  letter-spacing: 0.12em;
+}
+.scroll-hint::after {
+  content: ""; width: 1.5px; height: 42px;
+  background: linear-gradient(to bottom, var(--fx-neon), transparent);
+  animation: hintDrop 1.8s var(--fx-ease) infinite;
+}
+@keyframes hintDrop {
+  0% { transform: scaleY(0); transform-origin: top; }
+  45% { transform: scaleY(1); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+.hero-corners { /* قاب HUD */
+  position: absolute; inset: 18px; z-index: 4; pointer-events: none;
+}
+.hero-corners::before, .hero-corners::after,
+.hero-corners i::before, .hero-corners i::after {
+  content: ""; position: absolute; width: 26px; height: 26px;
+  border: 1.5px solid rgba(111, 227, 155, 0.4);
+}
+.hero-corners::before { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.hero-corners::after { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.hero-corners i::before { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+.hero-corners i::after { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+
+.hero-badge-3d {
+  position: absolute; top: 26px; inset-inline-end: 26px; z-index: 6;
+  writing-mode: vertical-rl;
+  font-size: var(--fs-xs); letter-spacing: 0.28em; color: #9fbfae;
+  border-inline-start: 1px solid rgba(111, 227, 155, 0.3);
+  padding-inline-start: 10px;
+}
+@media (max-width: 640px) { .hero-badge-3d { display: none; } }
+
+/* WebGL fallback */
+.hero3d .no-webgl {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(60% 55% at 68% 38%, rgba(111, 227, 155, 0.2), transparent 65%),
+    radial-gradient(45% 40% at 30% 70%, rgba(212, 160, 23, 0.12), transparent 60%),
+    var(--fx-dark);
+}
+.hero3d .no-webgl::after { /* الگوی نقطه‌ای پسته */
+  content: ""; position: absolute; inset: 0; opacity: 0.5;
+  background-image: radial-gradient(rgba(111, 227, 155, 0.16) 1px, transparent 1.6px);
+  background-size: 26px 26px;
+}
+
+/* ============================================================
+   Marquee نوار متحرک
+   ============================================================ */
+.marquee {
+  overflow: clip; white-space: nowrap;
+  background: var(--fx-dark-2);
+  border-block: 1px solid rgba(111, 227, 155, 0.18);
+  padding-block: 12px;
+  direction: ltr; /* برای انیمیشن یکنواخت */
+}
+.marquee-track {
+  display: inline-flex; gap: 54px; padding-inline-end: 54px;
+  animation: mq 34s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-track span {
+  font-weight: 800; font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+  color: #cfe3d6; display: inline-flex; align-items: center; gap: 12px;
+}
+.marquee-track span::before { content: "🥜"; font-size: 0.9em; opacity: 0.8; }
+.marquee-track span.hl { color: var(--fx-gold); }
+@keyframes mq { to { transform: translateX(50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* ============================================================
+   سکشن‌های روایی تیره
+   ============================================================ */
+.sec-dark {
+  background: var(--fx-dark);
+  color: #d7e8dd;
+  position: relative; overflow: clip;
+}
+.sec-dark h2, .sec-dark h3 { color: #fff; }
+.sec-dark .sec-head h2 { color: #fff; text-shadow: 0 0 30px rgba(111, 227, 155, 0.25); }
+.sec-dark .sec-head p { color: #a9c3b4; }
+
+/* کانتینر شیشه‌ای */
+.glass {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(111, 227, 155, 0.16);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(10px);
+}
+
+/* شبکه روایت زنجیره (خط تولید پسته) */
+.chain {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
+  gap: 16px;
+}
+.chain-node {
+  position: relative; padding: 26px 20px;
+  counter-increment: chain;
+}
+.chain-node::before {
+  content: "0" counter(chain);
+  font-size: 2.6rem; font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgba(111, 227, 155, 0.45);
+  position: absolute; top: 12px; inset-inline-end: 14px; line-height: 1;
+}
+.chain-node h4 { color: var(--fx-neon); font-size: var(--fs-md); margin-bottom: 8px; position: relative; }
+.chain-node p { font-size: var(--fs-sm); color: #a9c3b4; line-height: 1.85; }
+.chain-node .ico { font-size: 1.9rem; margin-bottom: 12px; display: block; }
+
+/* آمار بزرگ */
+.big-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px,100%), 1fr)); gap: 14px; }
+.big-stat .v {
+  font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900;
+  color: var(--fx-neon);
+  text-shadow: 0 0 30px rgba(111, 227, 155, 0.4);
+  direction: ltr; text-align: center;
+}
+.big-stat .l { color: #a9c3b4; font-size: var(--fs-sm); text-align: center; }
+
+/* کارت محصول روی زمینه تیره */
+.sec-dark .card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(111, 227, 155, 0.14);
+  color: #e6f2ea;
+  transition: transform 0.35s var(--fx-ease), border-color 0.3s, box-shadow 0.35s;
+}
+.sec-dark .card:hover {
+  border-color: rgba(111, 227, 155, 0.55);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45), 0 0 24px rgba(111, 227, 155, 0.12);
+}
+.sec-dark .card-cat, .sec-dark .card-meta { color: #9dbcaa; }
+.sec-dark .card-title a { color: #fff; }
+.sec-dark .price { color: var(--fx-neon); }
+.sec-dark .price small { color: #9dbcaa; }
+.sec-dark .btn-add { background: var(--fx-neon); color: #08130d; }
+.sec-dark .btn-add:hover { background: #93efb4; }
+.sec-dark .btn-details { border-color: rgba(111, 227, 155, 0.3); color: #d7e8dd; }
+.sec-dark .card-img { background: #0d1a12; }
+
+/* کارت‌های دسته با گرادیان نئون */
+.cat-tile {
+  position: relative; padding: 28px 22px; border-radius: var(--r-lg);
+  background: linear-gradient(150deg, rgba(111, 227, 155, 0.09), rgba(255, 255, 255, 0.03) 55%);
+  border: 1px solid rgba(111, 227, 155, 0.2);
+  overflow: hidden; display: block; color: #fff;
+  transition: transform 0.35s var(--fx-ease), border-color 0.3s, box-shadow 0.35s;
+}
+.cat-tile:hover {
+  transform: translateY(-6px);
+  border-color: var(--fx-neon);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), var(--fx-glow);
+}
+.cat-tile .ico { font-size: 2.4rem; }
+.cat-tile h3 { margin: 12px 0 8px; font-size: var(--fs-md); }
+.cat-tile p { font-size: var(--fs-sm); color: #a9c3b4; line-height: 1.8; }
+.cat-tile .cnt {
+  position: absolute; top: 18px; inset-inline-end: 18px;
+  font-size: var(--fs-xs); color: var(--fx-gold); font-weight: 800;
+  border: 1px solid rgba(232, 184, 48, 0.35); border-radius: 99px; padding: 2px 11px;
+}
+
+/* جدول تیره */
+.sec-dark .table-wrap { background: rgba(255,255,255,0.03); border-color: rgba(111,227,155,0.16); }
+.sec-dark table.shop th { background: rgba(111, 227, 155, 0.09); color: var(--fx-neon); }
+.sec-dark table.shop td { color: #d7e8dd; border-color: rgba(111, 227, 155, 0.1); }
+.sec-dark table.shop tr:hover td { background: rgba(111, 227, 155, 0.04); }
+
+/* ---------- دکمه‌های نئونی برای سکشن تیره ---------- */
+.btn-neon {
+  background: linear-gradient(120deg, var(--fx-neon), #4fd18a);
+  color: #07120c; font-weight: 900;
+  box-shadow: 0 8px 28px rgba(111, 227, 155, 0.3);
+}
+.btn-neon:hover { box-shadow: 0 12px 36px rgba(111, 227, 155, 0.5); transform: translateY(-2px); color: #07120c; }
+.btn-ghost2 { border: 1.5px solid rgba(111, 227, 155, 0.45); color: #dff3e7; }
+.btn-ghost2:hover { background: rgba(111, 227, 155, 0.12); color: #fff; }
+
+/* ---------- عنوان‌های سکشن شماره‌دار (سبک استودیویی) ---------- */
+.sec-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--fx-gold); font-weight: 800; font-size: var(--fs-xs);
+  letter-spacing: 0.18em; margin-bottom: 14px;
+}
+.sec-label::before { content: ""; width: 34px; height: 1.5px; background: var(--fx-gold); }
+
+/* ---------- footer تیره‌تر ---------- */
+.site-footer { background: #081109; }
+
+/* ---------- پس‌زمینه گرادیان نقطه‌ای برای سکشن‌های روشن ---------- */
+.dot-bg {
+  background-image: radial-gradient(rgba(47, 125, 79, 0.13) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* ---------- hero معمولی صفحات داخلی با موج نئون ---------- */
+.page-head {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(52% 90px at 85% 0%, rgba(111, 227, 155, 0.14), transparent),
+    radial-gradient(40% 70px at 12% 100%, rgba(212, 160, 23, 0.1), transparent),
+    #fff;
+}
+.page-head h1 { position: relative; z-index: 2; }
+
+/* ---------- toast نئونی ---------- */
+#toast { background: var(--fx-dark-2); border: 1px solid rgba(111, 227, 155, 0.4); }
+
+/* ---------- هدر شیشه‌ای روی صحنه تیره ---------- */
+.hero3d ~ * .site-header,
+body:has(.hero3d) .site-header {
+  background: rgba(11, 22, 16, 0.72);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(111, 227, 155, 0.16);
+}
+body:has(.hero3d) .brand-name { color: #fff; }
+body:has(.hero3d) .brand-sub { color: #9fbfae; }
+body:has(.hero3d) .main-nav a { color: #d7e8dd; }
+body:has(.hero3d) .main-nav a:hover, body:has(.hero3d) .main-nav a.active {
+  background: rgba(111, 227, 155, 0.14); color: var(--fx-neon);
+}
+body:has(.hero3d) .cart-btn { background: var(--fx-neon); color: #07120c; }
+body:has(.hero3d) .topstrip {
+  background: #081109; border-bottom: 1px solid rgba(111, 227, 155, 0.12);
+}
+
+/* ---------- کارت تیلت روی موبایل غیرفعال ---------- */
+@media (hover: none) {
+  .card, .tier-card { transform: none !important; }
+}

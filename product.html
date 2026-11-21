@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/fx.css">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -15,8 +16,8 @@
   <div class="container">
     <nav class="crumb" id="crumb" aria-label="مسیر صفحه"></nav>
     <div class="pd-grid" id="pd">
-      <div class="pd-img"><img id="pd-img" src="" alt="" width="600" height="545"></div>
-      <div class="pd-info" id="pd-info"></div>
+      <div class="pd-img" data-reveal><img id="pd-img" src="" alt="" width="600" height="545"></div>
+      <div class="pd-info" id="pd-info" data-reveal style="transition-delay:140ms"></div>
     </div>
   </div>
 
@@ -32,6 +33,7 @@
   <footer class="site-footer" id="site-footer"></footer>
 
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/motion.js"></script>
   <script>
     const pid = new URLSearchParams(location.search).get('id');
 
@@ -131,6 +133,7 @@
       const fill = rel.length < 4 ? db.products.filter(x => x.category !== p.category).slice(0, 4 - rel.length) : [];
       document.getElementById('related').innerHTML = [...rel, ...fill].map(productCard).join('');
       bindAddButtons();
+      if (window.MGZ) MGZ.init();
 
       // JSON-LD product
       const ld = document.createElement('script');
