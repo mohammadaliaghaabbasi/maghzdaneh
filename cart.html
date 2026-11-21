@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سبد خرید | مغزدانه</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>سبد خرید شما</h1>
+      <p>مغزهای انتخابی‌تان را بررسی کنید و به تسویه‌حساب بروید.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div id="cart-area"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('').then(db => {
+      function render() {
+        const area = document.getElementById('cart-area');
+        if (!APP.cart.length) {
+          area.innerHTML = `
+            <div class="empty">
+              <div class="big">🛒</div>
+              <p><b>سبد خرید شما خالی است.</b></p>
+              <p style="margin:8px 0 18px">از کاتالوگ مغزها، محصول‌تان را انتخاب کنید — از ۲۵۰ گرم تا ۲۵ کیلو و بیشتر.</p>
+              <a class="btn btn-primary" href="catalog.html">رفتن به کاتالوگ</a>
+            </div>`;
+          return;
+        }
+        const ship = db.site.shipping;
+        const rows = APP.cart.map((it, idx) => {
+          const p = byId(it.id);
+          const unit = p.prices[it.tier] || p.prices.retail;
+          return `
+          <tr>
+            <td><a href="product.html?id=${p.id}"><img src="${p.img}" alt="${p.name}"></a></td>
+            <td><b>${p.name}</b><br><span style="color:var(--c-text-soft);font-size:var(--fs-xs)">پله: ${tierLabel(it.tier)}</span></td>
+            <td>${fmt(unit)}</td>
+            <td style="min-width:110px">
+              <div class="qty-box" style="max-width:130px">
+                <button data-dec="${idx}" aria-label="کاهش">−</button>
+                <input type="number" min="0.25" step="0.25" value="${it.qty}" data-q="${idx}" style="width:60px" aria-label="مقدار">
+                <button data-inc="${idx}" aria-label="افزایش">+</button>
+              </div>
+            </td>
+            <td style="font-weight:800;white-space:nowrap;color:var(--c-primary-dark)">${fmt(Math.round(unit * it.qty))}</td>
+            <td><button class="rm-btn" data-rm="${idx}">حذف ✕</button></td>
+          </tr>`;
+        }).join('');
+
+        const subtotal = APP.cart.reduce((s, it) => {
+          const p = byId(it.id);
+          return s + (p.prices[it.tier] || p.prices.retail) * it.qty;
+        }, 0);
+        const totalKg = APP.cart.reduce((s, it) => s + it.qty, 0);
+        const freeShip = subtotal >= ship.free_over;
+        const shipCost = freeShip ? 0 : ship.flat_cost;
+        const grand = subtotal + shipCost;
+
+        area.innerHTML = `
+          <div style="display:grid;gap:22px;grid-template-columns:2fr 1fr;align-items:start" class="cart-layout">
+            <div class="table-wrap">
+              <table class="shop">
+                <thead><tr><th></th><th>محصول</th><th>قیمت کیلو</th><th>مقدار (کیلو)</th><th>جمع</th><th></th></tr></thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+            <aside class="cart-summary">
+              <h3>خلاصه سفارش</h3>
+              <div class="sum-row"><span>مجموع وزن</span><span>${fmt(Math.round(totalKg * 100) / 100)} کیلوگرم</span></div>
+              <div class="sum-row"><span>جمع کالاها</span><span>${fmt(subtotal)} تومان</span></div>
+              <div class="sum-row"><span>هزینه ارسال</span><span>${freeShip ? 'رایگان 🎉' : fmt(shipCost) + ' تومان'}</span></div>
+              <div class="sum-row total"><span>پرداخت نهایی</span><span>${fmt(grand)} تومان</span></div>
+              ${!freeShip ? `<p class="free-ship-note">با ${fmt(ship.free_over - subtotal)} تومان خرید بیشتر، ارسال رایگان می‌شود.</p>` : ''}
+              ${totalKg > 10 ? `<p class="free-ship-note">ℹ️ ${ship.heavy_note}</p>` : ''}
+              <a class="btn btn-primary" href="checkout.html" style="width:100%;margin-top:16px">ادامه تسویه‌حساب ←</a>
+              <a class="btn btn-outline" href="catalog.html" style="width:100%;margin-top:10px">افزودن محصول بیشتر</a>
+            </aside>
+          </div>`;
+
+        area.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { removeFromCart(+b.dataset.rm); render(); });
+        area.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => {
+          const i = +b.dataset.dec;
+          APP.cart[i].qty = Math.max(0.25, APP.cart[i].qty - 0.5);
+          saveCart(); render();
+        });
+        area.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => {
+          const i = +b.dataset.inc;
+          APP.cart[i].qty += 0.5;
+          saveCart(); render();
+        });
+        area.querySelectorAll('[data-q]').forEach(inp => inp.onchange = () => {
+          const i = +inp.dataset.q;
+          const v = parseFloat(inp.value);
+          APP.cart[i].qty = isNaN(v) || v <= 0 ? 0.25 : v;
+          saveCart(); render();
+        });
+      }
+      render();
+      document.addEventListener('cart:changed', render);
+    });
+  </script>
+  <style>
+    @media (max-width: 880px) { .cart-layout { grid-template-columns: 1fr !important; } }
+  </style>
+</body>
+</html>

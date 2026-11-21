@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تماس با مغزدانه | فروش خرده، عمده و خرید از باغدار</title>
+  <meta name="description" content="راه‌های تماس با مغزدانه: تلفن فروش، فروش عمده، خرید از باغداران، آدرس و ساعت کاری.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>تماس با مغزدانه</h1>
+      <p>برای سفارش تلفنی، استعلام قیمت عمده یا هر سوال دیگری، از راه‌های زیر در دسترس هستیم.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container contact-grid">
+      <div class="contact-card">
+        <h3>اطلاعات تماس</h3>
+        <div id="contact-lines"></div>
+      </div>
+      <form class="contact-card" id="contact-form">
+        <h3>پیام بفرستید</h3>
+        <div class="form-grid">
+          <div class="field"><label for="c-name">نام شما *</label><input id="c-name" required></div>
+          <div class="field"><label for="c-phone">موبایل یا ایمیل *</label><input id="c-phone" required style="direction:ltr;text-align:right"></div>
+          <div class="field form-full"><label for="c-msg">پیام *</label><textarea id="c-msg" rows="4" required placeholder="سوال یا درخواست‌تان را بنویسید…"></textarea></div>
+        </div>
+        <button class="btn btn-primary" type="submit" style="margin-top:14px">ارسال پیام</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('contact').then(db => {
+      const s = db.site;
+      document.getElementById('contact-lines').innerHTML = `
+        <div class="contact-line"><b>تلفن فروش</b><span class="ltr">${s.phone}</span></div>
+        <div class="contact-line"><b>موبایل/واتس‌اپ</b><span class="ltr">${s.mobile}</span></div>
+        <div class="contact-line"><b>ایمیل</b><span class="ltr">${s.email}</span></div>
+        <div class="contact-line"><b>آدرس</b><span>${s.address}</span></div>
+        <div class="contact-line"><b>ساعت کاری</b><span>${s.worktime}</span></div>
+        <div class="contact-line"><b>فروش عمده</b><span class="ltr">0912-111-2233</span></div>
+        <div class="contact-line"><b>خرید از باغدار</b><span class="ltr">${db.supply.phone}</span></div>
+        <div class="social-row" style="margin-top:16px">
+          <a href="${s.social.instagram}" target="_blank" rel="noopener" aria-label="اینستاگرام">📷</a>
+          <a href="${s.social.telegram}" target="_blank" rel="noopener" aria-label="تلگرام">✈️</a>
+          <a href="${s.social.whatsapp}" target="_blank" rel="noopener" aria-label="واتس‌اپ">💬</a>
+        </div>`;
+
+      document.getElementById('contact-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const msgs = JSON.parse(localStorage.getItem('maghzdaneh_msgs') || '[]');
+        msgs.push({
+          id: 'MSG-' + Date.now().toString(36).toUpperCase(),
+          date: new Date().toISOString(),
+          name: document.getElementById('c-name').value.trim(),
+          contact: document.getElementById('c-phone').value.trim(),
+          text: document.getElementById('c-msg').value.trim(),
+        });
+        localStorage.setItem('maghzdaneh_msgs', JSON.stringify(msgs));
+        e.target.reset();
+        toast('پیام شما ثبت شد — به‌زودی پاسخ می‌دهیم 🌿');
+      });
+    });
+  </script>
+</body>
+</html>

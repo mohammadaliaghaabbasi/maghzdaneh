@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مغزدانه | خرید تخصصی مغز پسته، بادام و گردو — خرده و عمده</title>
+  <meta name="description" content="مغزدانه، بازار تخصصی مغز پسته (اکبری، فندقی، کله‌قوچی، احمدآقایی، خلال، پودر)، مغز بادام و مغز گردو. خرید مستقیم از دست اول با قیمت پلکانی خرده‌فروشی، نیم‌عمده و عمده.">
+  <meta name="keywords" content="مغز پسته، خرید مغز پسته، قیمت مغز پسته، مغز بادام، مغز گردو، خلال پسته، خرید عمده مغز، پسته اکبری">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta property="og:title" content="مغزدانه — بازار تخصصی مغز پسته، بادام و گردو">
+  <meta property="og:description" content="از دست اول تا مصرف‌کننده: مغز پسته در همه گریدها، مغز بادام و گردو با قیمت پلکانی خرده و عمده.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/hero-pistachio-bowl.jpg">
+  <meta property="og:locale" content="fa_IR">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="hero-kicker">🥜 تخصص ما مغز است — مخصوصاً مغز پسته</span>
+      <h1>بازار تخصصی <em>مغز پسته، بادام و گردو</em><br>از دست اول تا خانه شما</h1>
+      <p>هر مدل مغز پسته که بخواهید اینجاست: اکبری، فندقی، کله‌قوچی، احمدآقایی، سبز، سرخ، برشته، خلال و پودر. خرده‌فروش ۲۵۰ گرمی هم خریدار و قنادی ۲۵ کیلویی هم — با قیمت پلکانی منصفانه.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="catalog.html">مشاهده کاتالوگ مغزها</a>
+        <a class="btn btn-ghost" href="wholesale.html">قیمت عمده و پلکانی</a>
+      </div>
+      <div class="hero-trust">
+        <span>✓ خرید مستقیم از بنه و باغ</span>
+        <span>✓ بسته‌بندی نوک‌زنی همان روز</span>
+        <span>✓ ارسال به سراسر ایران</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section class="features">
+    <div class="container grid">
+      <div class="feature"><span class="ico">🌿</span><div><h3>از دست اول</h3><p>زنجیره بدون واسطه: باغدار → مغزدانه → شما. قیمت مغز را قیمت بنه تعیین می‌کند، نه چانه‌زنی بازار.</p></div></div>
+      <div class="feature"><span class="ico">⚖️</span><div><h3>قیمت پلکانی شفاف</h3><p>هرچه بیشتر بخرید ارزان‌تر: از ۵ کیلو نیم‌عمده و از ۲۵ کیلو قیمت بورس مغز. قیمت هر پله از قبل مشخص است.</p></div></div>
+      <div class="feature"><span class="ico">📦</span><div><h3>بسته‌بندی تازه</h3><p>مغزها پس از سفارش بسته‌بندی و نوک‌زنی می‌شوند؛ برشته‌ها همان روز برشته و ارسال می‌شوند.</p></div></div>
+      <div class="feature"><span class="ico">🚚</span><div><h3>ارسال سریع</h3><p>تهران همان‌روز، سایر شهرها با پست پیشتاز و تیپاکس. سفارش بالای ۵ میلیون تومان ارسال رایگان.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ================= CATEGORIES ================= -->
+  <section id="cats">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">دسته‌بندی‌ها</span>
+        <h2>همه مغزها، یک‌جا</h2>
+        <p>تخصص اصلی ما مغز پسته است؛ اما بادام و گردوی ممتاز را هم از همان زنجیره بدون واسطه عرضه می‌کنیم.</p>
+      </div>
+      <div class="tier-cards" id="cat-cards"></div>
+    </div>
+  </section>
+
+  <!-- ================= BESTSELLERS ================= -->
+  <section id="best" style="background:#fff;border-block:1px solid var(--c-line)">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">پرفروش‌ترین‌ها</span>
+        <h2>مغزهایی که بیشترین سفارش را دارند</h2>
+        <p>قیمت‌ها بر اساس پله خرید فعلی شما (<b id="current-tier-label"></b>) نمایش داده می‌شود. پله خرید را از <a href="wholesale.html">صفحه خرید عمده</a> عوض کنید.</p>
+      </div>
+      <div class="grid" id="best-grid"></div>
+      <div style="text-align:center;margin-top:26px">
+        <a class="btn btn-outline" href="catalog.html">مشاهده همه ۲۰ محصول ←</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PISTACHO GUIDE ================= -->
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">راهنمای تخصصی</span>
+        <h2>کدام مغز پسته برای شما؟</h2>
+        <p>هر رقم پسته برای مصرفی ساخته شده؛ این جدول کمک می‌کند دقیق‌تر انتخاب کنید.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="shop" aria-label="مقایسه انواع مغز پسته">
+          <thead>
+            <tr><th>نوع مغز</th><th>ویژگی</th><th>بهترین کاربرد</th><th>قیمت از (کیلو)</th></tr>
+          </thead>
+          <tbody id="compare-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIALS ================= -->
+  <section style="background:#fff;border-block:1px solid var(--c-line)">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">اعتماد مشتریان</span>
+        <h2>خریدارهای همیشگی مغزدانه</h2>
+      </div>
+      <div class="tst-grid" id="tst-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= SUPPLY CTA ================= -->
+  <section class="supply-sec">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow" style="color:#ffe9b3">باغدار و بنه‌دار هستید؟</span>
+        <h2>محصول‌تان را به مغزدانه بفروشید</h2>
+        <p style="color:#c4d5ca">ما خریدار دائم پسته، بادام و گردوی مرغوب از ابتدای زنجیره هستیم — تسویه نقدی، درِ باغ.</p>
+      </div>
+      <div class="supply-grid">
+        <div class="steps">
+          <div class="step"><span class="n">۱</span><div><h4>استعلام روز</h4><p>قیمت روز خرید هر محصول را تلفنی همان لحظه اعلام می‌کنیم؛ بدون انتظار و بدون تعارف.</p></div></div>
+          <div class="step"><span class="n">۲</span><div><h4>نمونه‌برداری و آزمایش</h4><p>نمونه ۱ کیلویی محصول شما از نظر رطوبت، رنگ و درصد پرخوری آزمایش می‌شود.</p></div></div>
+          <div class="step"><span class="n">۳</span><div><h4>تحویل و تسویه نقدی</h4><p>محموله درب باغ یا بنه تحویل گرفته می‌شود و مبلغ همان روز نقدی تسویه می‌گردد.</p></div></div>
+        </div>
+        <div class="we-buy">
+          <h3>چه چیزی می‌خریم؟</h3>
+          <ul>
+            <li>پسته خام پوست‌دار همه ارقام (اکبری، کله‌قوچی، احمدآقایی، فندقی)</li>
+            <li>مغز پسته خام سبز و سرخ — مقطع و غیرمقطع</li>
+            <li>بادام پوست‌سخت و پوست‌کاغذی</li>
+            <li>گردوی مغزدار و پوست‌کاغذی</li>
+            <li>خلال و مغز گل (فقط درجه A)</li>
+          </ul>
+          <div class="supply-call">
+            <a class="btn btn-gold" href="supply.html">صفحه عرضه محصول</a>
+            <span>تلفن خرید: <span class="tel">0912-111-2233</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('home').then(db => {
+      // category cards
+      document.getElementById('cat-cards').innerHTML = db.categories.map(c => `
+        <a class="tier-card" href="catalog.html?cat=${c.id}" style="display:block">
+          <div class="t-ico">${c.icon}</div>
+          <h3>${c.name}</h3>
+          <p>${c.desc}</p>
+          <span class="t-save">${db.products.filter(p => p.category === c.id).length} محصول</span>
+        </a>`).join('');
+
+      // bestsellers: top 8 by sold
+      const best = [...db.products].sort((a, b) => b.sold - a.sold).slice(0, 8);
+      document.getElementById('best-grid').innerHTML = best.map(productCard).join('');
+      bindAddButtons();
+      document.getElementById('current-tier-label').textContent = tierLabel(APP.tier);
+
+      // compare table
+      const picks = ['maghz-akbari-premium', 'maghz-fandoghi', 'maghz-kallehghoochi', 'maghz-ahmadaghaei', 'khall-qazvin', 'maghz-broken'];
+      const useFor = {
+        'maghz-akbari-premium': 'پذیرایی و چهارمغز لوکس',
+        'maghz-fandoghi': 'آجیل روزانه و رستوران',
+        'maghz-kallehghoochi': 'پذیرایی مجلسی',
+        'maghz-ahmadaghaei': 'آجیل ترکیبی',
+        'khall-qazvin': 'تزئین شیرینی و بستنی',
+        'maghz-broken': 'صنایع غذایی و بستنی',
+      };
+      document.getElementById('compare-body').innerHTML = picks.map(id => {
+        const p = byId(id);
+        return `<tr>
+          <td><b>${p.name}</b></td>
+          <td>${p.specs.slice(0, 2).join(' · ')}</td>
+          <td>${useFor[id]}</td>
+          <td style="white-space:nowrap;font-weight:800;color:var(--c-primary-dark)">${fmt(Math.min(...Object.values(p.prices)))}</td>
+        </tr>`;
+      }).join('');
+
+      // testimonials
+      document.getElementById('tst-grid').innerHTML = db.testimonials.map(t => `
+        <div class="tst">
+          <span class="stars">${'★'.repeat(t.stars)}</span>
+          <p>«${t.text}»</p>
+          <span class="who">${t.name}</span>
+        </div>`).join('');
+    });
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "مغزدانه",
+    "description": "بازار تخصصی مغز پسته، بادام و گردو — خرده‌فروشی و عمده‌فروشی",
+    "image": "assets/img/hero-pistachio-bowl.jpg",
+    "telephone": "+98-21-9100-8080",
+    "address": { "@type": "PostalAddress", "streetAddress": "خیابان امیرکبیر، پاساژ خشکبار، پلاک ۱۲", "addressLocality": "تهران", "addressCountry": "IR" },
+    "openingHours": "Sa-Th 08:00-18:00",
+    "priceRange": "$$"
+  }
+  </script>
+</body>
+</html>

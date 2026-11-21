@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>عرضه محصول — به مغزدانه بفروشید | مغزدانه</title>
+  <meta name="description" content="باغدار، بنه‌دار و مغزکن هستید؟ پسته، بادام و گردوی مرغوب را با تسویه نقدی و قیمت روز به مغزدانه بفروشید.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1 id="s-title"></h1>
+      <p id="s-intro"></p>
+    </div>
+  </div>
+
+  <section class="supply-sec" style="margin-top:0">
+    <div class="container">
+      <div class="supply-grid">
+        <div class="steps" id="s-steps"></div>
+        <div>
+          <div class="we-buy">
+            <h3>چه چیزی می‌خریم؟</h3>
+            <ul id="s-webuy"></ul>
+          </div>
+          <div class="supply-call">
+            <span style="font-size:var(--fs-sm)">تلفن مستقیم خرید:</span>
+            <span class="tel" id="s-phone"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">فرم عرضه</span>
+        <h2>محصول‌تان را پیشنهاد دهید</h2>
+        <p>مشخصات محموله را ثبت کنید؛ همان روز کاری بعدی با قیمت خرید تماس می‌گیریم.</p>
+      </div>
+      <form class="contact-card" id="supply-form" style="max-width:760px;margin:0 auto">
+        <div class="form-grid">
+          <div class="field"><label for="sp-name">نام شما / مجموعه *</label><input id="sp-name" required placeholder="مثلاً بنه حاجی‌زاده — رفسنجان"></div>
+          <div class="field"><label for="sp-phone">شماره تماس *</label><input id="sp-phone" required inputmode="tel" placeholder="09xxxxxxxxx" style="direction:ltr;text-align:right"></div>
+          <div class="field">
+            <label for="sp-type">نوع محصول *</label>
+            <select id="sp-type" required>
+              <option value="">— انتخاب کنید —</option>
+              <option>پسته خام پوست‌دار</option>
+              <option>مغز پسته خام (سبز/سرخ)</option>
+              <option>خلال / مغز گل</option>
+              <option>بادام</option>
+              <option>گردو</option>
+              <option>سایر</option>
+            </select>
+          </div>
+          <div class="field"><label for="sp-amount">تقریب وزن (کیلوگرم) *</label><input id="sp-amount" required inputmode="numeric" placeholder="مثلاً ۲۰۰۰"></div>
+          <div class="field form-full"><label for="sp-desc">توضیح محصول</label><textarea id="sp-desc" rows="3" placeholder="رقم، منطقه برداشت، سال برداشت، رنگ مغز، درصد پرخوری تقریبی، نمونه موجود است یا نه…"></textarea></div>
+        </div>
+        <button class="btn btn-gold" type="submit" style="margin-top:16px">ارسال پیشنهاد عرضه</button>
+        <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:8px">پس از ارسال، کارشناس خرید تماس می‌گیرد و در صورت توافق اولیه، نمونه ۱ کیلویی برای آزمایش هماهنگ می‌شود.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/ghdb.js"></script>
+  <script>
+    boot('supply').then(db => {
+      const s = db.supply;
+      document.getElementById('s-title').textContent = s.title;
+      document.getElementById('s-intro').textContent = s.intro;
+      document.getElementById('s-steps').innerHTML = s.steps.map((st, i) => `
+        <div class="step"><span class="n">${['۱','۲','۳'][i]}</span><div><h4>${st.t}</h4><p>${st.d}</p></div></div>`).join('');
+      document.getElementById('s-webuy').innerHTML = s.we_buy.map(w => `<li>${w}</li>`).join('');
+      document.getElementById('s-phone').textContent = s.phone;
+
+      document.getElementById('supply-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const offer = {
+          id: 'SP-' + Date.now().toString(36).toUpperCase(),
+          date: new Date().toISOString(),
+          seller: document.getElementById('sp-name').value.trim(),
+          phone: document.getElementById('sp-phone').value.trim(),
+          type: document.getElementById('sp-type').value,
+          amountKg: document.getElementById('sp-amount').value.trim(),
+          desc: document.getElementById('sp-desc').value.trim(),
+          kind: 'supply-offer',
+          status: 'new'
+        };
+        try {
+          const ok = await GHDB.submitOrder(offer); // reuse writer (needs admin token context; falls back)
+          const local = JSON.parse(localStorage.getItem('maghzdaneh_offers') || '[]');
+          local.push(offer);
+          localStorage.setItem('maghzdaneh_offers', JSON.stringify(local));
+          e.target.reset();
+          toast(ok ? 'پیشنهاد شما ثبت شد — منتظر تماس کارشناس خرید باشید' : 'پیشنهاد شما ذخیره شد؛ برای پیگیری سریع‌تر تماس بگیرید: ' + s.phone);
+        } catch (err) {
+          toast('ارسال ناموفق بود — لطفاً تماس بگیرید: ' + s.phone);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

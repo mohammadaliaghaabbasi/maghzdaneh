@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سوالات متداول | مغزدانه</title>
+  <meta name="description" content="پاسخ سوال‌های رایج درباره خرید مغز پسته، بادام و گردو: قیمت‌ها، خرید عمده، ارسال، بسته‌بندی و مرجوعی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>سوالات متداول</h1>
+      <p>پاسخ پرتکرارترین سوال‌هایی که خریداران مغز از ما می‌پرسند.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container" style="max-width:820px">
+      <div id="faq-list"></div>
+      <div class="empty" style="margin-top:26px">
+        <p>سوال‌تان اینجا نبود؟ <a href="contact.html"><b>از ما بپرسید</b></a> — سریع جواب می‌دهیم.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('faq').then(db => {
+      document.getElementById('faq-list').innerHTML = db.faq.map((f, i) => `
+        <details class="faq" ${i === 0 ? 'open' : ''}>
+          <summary>${f.q}</summary>
+          <div class="a">${f.a}</div>
+        </details>`).join('');
+
+      const ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": db.faq.map(f => ({
+          "@type": "Question", "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        }))
+      });
+      document.head.appendChild(ld);
+    });
+  </script>
+</body>
+</html>

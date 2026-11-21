@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسویه‌حساب | مغزدانه</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>تسویه‌حساب</h1>
+      <p>اطلاعات ارسال و پرداخت را کامل کنید؛ سفارش شما مستقیماً در سیستم مغزدانه ثبت می‌شود.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div id="co-area"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/ghdb.js"></script>
+  <script>
+    boot('').then(db => {
+      const area = document.getElementById('co-area');
+
+      function totals() {
+        const subtotal = APP.cart.reduce((s, it) => {
+          const p = byId(it.id);
+          return s + (p.prices[it.tier] || p.prices.retail) * it.qty;
+        }, 0);
+        const freeShip = subtotal >= db.site.shipping.free_over;
+        return { subtotal, ship: freeShip ? 0 : db.site.shipping.flat_cost, grand: subtotal + (freeShip ? 0 : db.site.shipping.flat_cost) };
+      }
+
+      function render() {
+        if (!APP.cart.length) {
+          area.innerHTML = `
+            <div class="empty">
+              <div class="big">🧺</div>
+              <p><b>سبدی برای تسویه وجود ندارد.</b></p>
+              <a class="btn btn-primary" href="catalog.html" style="margin-top:14px">رفتن به کاتالوگ</a>
+            </div>`;
+          return;
+        }
+        const t = totals();
+        area.innerHTML = `
+        <form id="co-form" style="display:grid;gap:22px;grid-template-columns:2fr 1fr;align-items:start" class="co-layout">
+          <div style="display:grid;gap:18px">
+            <div class="contact-card">
+              <h3>۱. اطلاعات خریدار</h3>
+              <div class="form-grid">
+                <div class="field"><label for="f-name">نام و نام خانوادگی *</label><input id="f-name" required placeholder="مثلاً علی رضایی"></div>
+                <div class="field"><label for="f-phone">شماره موبایل *</label><input id="f-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" style="direction:ltr;text-align:right"></div>
+                <div class="field form-full"><label for="f-email">ایمیل (اختیاری)</label><input id="f-email" type="email" placeholder="you@example.com" style="direction:ltr;text-align:right"></div>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <h3>۲. آدرس ارسال</h3>
+              <div class="form-grid">
+                <div class="field"><label for="f-prov">استان *</label><input id="f-prov" required placeholder="مثلاً تهران"></div>
+                <div class="field"><label for="f-city">شهر *</label><input id="f-city" required placeholder="مثلاً تهران"></div>
+                <div class="field form-full"><label for="f-addr">آدرس کامل پستی *</label><textarea id="f-addr" required rows="3" placeholder="خیابان، کوچه، پلاک، واحد، کد پستی"></textarea></div>
+                <div class="field"><label for="f-post">کد پستی</label><input id="f-post" inputmode="numeric" placeholder="۱۰ رقم" style="direction:ltr;text-align:right"></div>
+                <div class="field"><label for="f-ship">روش ارسال</label>
+                  <select id="f-ship">
+                    <option value="tipax">تیپاکس (۲–۴ روز کاری)</option>
+                    <option value="post">پست پیشتاز (۳–۵ روز کاری)</option>
+                    <option value="tehran-courier" ${!db.site.shipping.tehran_same_day ? 'disabled' : ''}>پیک تهران (همان روز — فقط تهران)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <h3>۳. روش پرداخت</h3>
+              <div class="pay-methods">
+                ${db.site.payment.methods.map((m, i) => `
+                  <label class="pay-opt ${i === 0 ? 'sel' : ''}">
+                    <input type="radio" name="pay" value="${i}" ${i === 0 ? 'checked' : ''}>
+                    <span>${m}</span>
+                  </label>`).join('')}
+              </div>
+              <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">پس از ثبت سفارش، لینک پرداخت آنلاین (درگاه ${db.site.payment.gateway}) برای شما پیامک می‌شود. سفارش‌های کارت‌به‌کارت پس از تأیید واریز پردازش می‌شوند.</p>
+            </div>
+
+            <div class="contact-card">
+              <h3>۴. یادداشت سفارش</h3>
+              <div class="field"><textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا درخواست صورت‌حساب رسمی برای قنادی"></textarea></div>
+            </div>
+          </div>
+
+          <aside class="cart-summary">
+            <h3>سفارش شما</h3>
+            ${APP.cart.map(it => {
+              const p = byId(it.id);
+              const u = p.prices[it.tier] || p.prices.retail;
+              return `<div class="sum-row"><span>${p.name} × ${fmt(it.qty)} کیلو</span><span>${fmt(Math.round(u * it.qty))}</span></div>`;
+            }).join('')}
+            <div class="sum-row"><span>ارسال</span><span>${t.ship ? fmt(t.ship) + ' تومان' : 'رایگان'}</span></div>
+            <div class="sum-row total"><span>قابل پرداخت</span><span>${fmt(t.grand)} تومان</span></div>
+            <button class="btn btn-primary" type="submit" style="width:100%;margin-top:16px" id="submit-btn">ثبت نهایی سفارش</button>
+            <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">با ثبت سفارش، <a href="legal.html">قوانین فروش</a> مغزدانه را می‌پذیرید.</p>
+          </aside>
+        </form>`;
+
+        document.querySelectorAll('.pay-opt input').forEach(r => r.addEventListener('change', () => {
+          document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
+          r.closest('.pay-opt').classList.add('sel');
+        }));
+
+        document.getElementById('co-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const btn = document.getElementById('submit-btn');
+          btn.disabled = true;
+          btn.textContent = 'در حال ثبت سفارش…';
+          const order = {
+            id: 'MD-' + Date.now().toString(36).toUpperCase(),
+            date: new Date().toISOString(),
+            customer: {
+              name: document.getElementById('f-name').value.trim(),
+              phone: document.getElementById('f-phone').value.trim(),
+              email: document.getElementById('f-email').value.trim(),
+              province: document.getElementById('f-prov').value.trim(),
+              city: document.getElementById('f-city').value.trim(),
+              address: document.getElementById('f-addr').value.trim(),
+              postal: document.getElementById('f-post').value.trim(),
+            },
+            shipping: document.getElementById('f-ship').selectedOptions[0].textContent,
+            payment: db.site.payment.methods[+document.querySelector('input[name="pay"]:checked').value],
+            note: document.getElementById('f-note').value.trim(),
+            items: APP.cart.map(it => {
+              const p = byId(it.id);
+              return { id: p.id, name: p.name, tier: it.tier, qty: it.qty, unitPrice: p.prices[it.tier] || p.prices.retail, total: Math.round((p.prices[it.tier] || p.prices.retail) * it.qty) };
+            }),
+            totals: { subtotal: Math.round(t.subtotal), shipping: t.ship, grand: Math.round(t.grand) },
+            status: 'new'
+          };
+          try {
+            const ok = await GHDB.submitOrder(order);
+            if (ok) {
+              APP.cart = [];
+              saveCart();
+              location.href = 'success.html?order=' + encodeURIComponent(order.id) + '&total=' + t.grand;
+            } else {
+              // offline fallback: keep order locally so nothing is lost
+              const local = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
+              local.push(order);
+              localStorage.setItem('maghzdaneh_orders', JSON.stringify(local));
+              APP.cart = [];
+              saveCart();
+              location.href = 'success.html?order=' + encodeURIComponent(order.id) + '&total=' + t.grand + '&local=1';
+            }
+          } catch (err) {
+            console.error(err);
+            toast('خطا در ثبت سفارش — دوباره تلاش کنید');
+            btn.disabled = false;
+            btn.textContent = 'ثبت نهایی سفارش';
+          }
+        });
+      }
+      render();
+      document.addEventListener('cart:changed', render);
+    });
+  </script>
+  <style>
+    @media (max-width: 880px) { .co-layout { grid-template-columns: 1fr !important; } }
+  </style>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سفارش ثبت شد | مغزدانه</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <section>
+    <div class="container">
+      <div class="success-box">
+        <div class="tick">✓</div>
+        <h1 style="font-size:var(--fs-xl);margin-bottom:10px">سفارش شما ثبت شد!</h1>
+        <p style="color:var(--c-text-soft);margin-bottom:6px">کد پیگیری سفارش:</p>
+        <p style="font-size:var(--fs-lg);font-weight:900;color:var(--c-primary-dark);direction:ltr" id="order-id"></p>
+        <p style="margin-top:10px" id="msg"></p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px">
+          <a class="btn btn-primary" href="catalog.html">ادامه خرید</a>
+          <button class="btn btn-outline" onclick="window.print()">چاپ رسید</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('').then(db => {
+      const params = new URLSearchParams(location.search);
+      document.getElementById('order-id').textContent = params.get('order') || '—';
+      const total = params.get('total');
+      const local = params.get('local') === '1';
+      document.getElementById('msg').innerHTML = local
+        ? `⚠️ اتصال به سرور برقرار نشد و سفارش روی همین دستگاه ذخیره شد. لطفاً برای تأیید نهایی با شماره <b class="ltr" style="direction:ltr">${db.site.phone}</b> تماس بگیرید و کد پیگیری را اعلام کنید.`
+        : `مبلغ قابل پرداخت: <b>${fmt(total)} تومان</b> — لینک پرداخت درگاه ${db.site.payment.gateway} تا چند دقیقه آینده برای شما پیامک می‌شود. برای پیگیری سفارش با <b style="direction:ltr">${db.site.phone}</b> در تماس باشید.`;
+    });
+  </script>
+</body>
+</html>

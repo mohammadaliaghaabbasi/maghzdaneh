@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /checkout.html
+Disallow: /cart.html
+Disallow: /success.html
+
+Sitemap: https://maghzdaneh.ir/sitemap.xml

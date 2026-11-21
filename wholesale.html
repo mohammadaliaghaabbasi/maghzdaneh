@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>خرید عمده مغزها با قیمت پلکانی | مغزدانه</title>
+  <meta name="description" content="خرید عمده و نیم‌عمده مغز پسته، بادام و گردو با قیمت پلکانی شفاف: از ۵ کیلو نیم‌عمده، از ۲۵ کیلو قیمت بورس مغز. مخصوص قنادی، آجیل‌فروشی، شیرینی‌فروشی و رستوران.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>خرید عمده با قیمت پلکانی</h1>
+      <p>قیمت شما با وزن سفارش عوض می‌شود، نه با چانه‌زنی. پله‌ها از قبل شفاف است — برای قنادی، آجیل‌فروشی، شیرینی‌فروشی، سوپرمارکت، رستوران و کارخانه‌های غذایی.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">پله‌های خرید</span>
+        <h2>سه پله، سه قیمت — همه شفاف</h2>
+      </div>
+      <div class="tier-cards" id="tier-cards"></div>
+      <p style="text-align:center;font-size:var(--fs-sm);color:var(--c-text-soft);max-width:640px;margin:18px auto 0">
+        پله خرید انتخابی شما روی کل سایت اعمال می‌شود و قیمت‌ها همان لحظه به‌روز می‌شوند. بالای ۱۰۰ کیلو (صادرات و صنایع بزرگ)؟ با شماره فروش عمده تماس بگیرید تا قیمت روز بورس مغز را استعلام کنیم.
+      </p>
+    </div>
+  </section>
+
+  <section style="background:#fff;border-block:1px solid var(--c-line)">
+    <div class="container">
+      <div class="sec-head">
+        <h2>جدول کامل قیمت پلکانی</h2>
+        <p>همه محصولات با سه قیمت. ستون آخر نشان می‌دهد در پله عمده چقدر نسبت به خرده‌فروشی صرفه‌جویی می‌کنید.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="shop" id="price-table">
+          <thead><tr><th>محصول</th><th>خرده (کیلو)</th><th>نیم‌عمده (۵–۲۴ کیلو)</th><th>عمده (۲۵+ کیلو)</th><th>صرفه‌جویی عمده</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">خدمات B2B</span>
+        <h2>برای کسب‌وکار شما چه می‌کنیم؟</h2>
+      </div>
+      <div class="features">
+        <div class="grid" style="background:transparent;border:none;padding:0">
+          <div class="feature"><span class="ico">🧾</span><div><h3>صورت‌حساب رسمی</h3><p>برای همه سفارش‌های عمده، صورتحساب رسمی با مالیات بر ارزش افزوده صادر می‌شود؛ شفاف برای حسابداری شما.</p></div></div>
+          <div class="feature"><span class="ico">🏷️</span><div><h3>بسته‌بندی سردفتی</h3><p>برچسب اختصاصی فروشگاه شما روی بسته‌ها؛ سفارش‌های قنادی و آجیل‌فروشی با برند خودتان ارسال می‌شود.</p></div></div>
+          <div class="feature"><span class="ico">📅</span><div><h3>قرارداد دوره‌ای</h3><p>قیمت ثابت فصلی برای خرید منظم ماهانه؛ در بازار پرنوسان مغز، این یعنی قابل‌محاسبه‌بودن بهای تمام‌شده.</p></div></div>
+          <div class="feature"><span class="ico">🚛</span><div><h3>ارسال باربری</h3><p>سفارش‌های بالای ۱۰ کیلو با باربری و بارنامه رسمی به سراسر کشور؛ هزینه بر اساس مسافت اعلام می‌شود.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('wholesale').then(db => {
+      // tier cards + selector
+      document.getElementById('tier-cards').innerHTML = db.tiers.map((t, i) => `
+        <div class="tier-card ${APP.tier === t.id ? 'hot' : ''}">
+          <div class="t-ico">${['🛍️', '📦', '🏭'][i]}</div>
+          <h3>${t.label}</h3>
+          <div class="t-range">${t.desc}</div>
+          <p>${[
+            'خرید خانگی و مصرف شخصی؛ از ۲۵۰ گرم تا ۵ کیلو.',
+            'قنادی، آجیل‌فروشی و رستوران؛ ۵ تا ۲۴ کیلو با تخفیف پلکانی.',
+            'فروشگاه‌ها و صنایع غذایی؛ ۲۵ کیلو به بالا با قیمت بورس.'
+          ][i]}</p>
+          <button class="btn ${APP.tier === t.id ? 'btn-primary' : 'btn-outline'}" data-tier="${t.id}" style="margin-top:12px">
+            ${APP.tier === t.id ? '✓ پله فعال شما' : 'انتخاب این پله'}
+          </button>
+        </div>`).join('');
+
+      document.querySelectorAll('[data-tier]').forEach(b => b.onclick = () => {
+        setTier(b.dataset.tier);
+        location.reload();
+      });
+
+      // price table
+      document.querySelector('#price-table tbody').innerHTML = db.products.map(p => {
+        const w = p.prices.wholesale;
+        const r = p.prices.retail;
+        const save = Math.round((1 - w / r) * 100);
+        return `<tr>
+          <td><b>${p.name}</b><br><span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${catName(p.category)}</span></td>
+          <td>${fmt(r)}</td>
+          <td>${fmt(p.prices.semi)}</td>
+          <td style="font-weight:800;color:var(--c-primary-dark)">${fmt(w)}</td>
+          <td style="color:var(--c-accent);font-weight:800">٪${fmt(save)}</td>
+        </tr>`;
+      }).join('');
+    });
+  </script>
+</body>
+</html>

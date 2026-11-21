@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>پنل مدیریت مغزدانه</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    /* admin-specific */
+    .admin-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 0; }
+    .admin-top h1 { font-size: var(--fs-lg); }
+    .admin-user { margin-inline-start: auto; font-size: var(--fs-sm); color: var(--c-text-soft); }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; border-bottom: 2px solid var(--c-line); padding-bottom: 0; }
+    .tab-btn {
+      padding: 10px 18px; font-weight: 800; font-size: var(--fs-sm); color: var(--c-text-soft);
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+    }
+    .tab-btn.active { color: var(--c-primary-dark); border-bottom-color: var(--c-primary); }
+    .admin-card { background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: 20px; margin-bottom: 18px; }
+    .admin-card h3 { margin-bottom: 12px; font-size: var(--fs-md); }
+    .order-card { border-inline-start: 4px solid var(--c-accent); }
+    .order-card.new { border-inline-start-color: var(--c-primary); }
+    .status-badge { display: inline-block; border-radius: 99px; padding: 2px 12px; font-size: var(--fs-xs); font-weight: 800; background: #e8f3ec; color: var(--c-primary-dark); }
+    .status-badge.done { background: #e2e8f0; color: var(--c-text-soft); }
+    .status-badge.canceled { background: #fdecea; color: var(--c-danger); }
+    pre.code {
+      background: #14261c; color: #d7ecd f; color: #d7ecdf; padding: 14px; border-radius: var(--r-md);
+      font-size: var(--fs-xs); overflow-x: auto; direction: ltr; text-align: left; line-height: 1.6;
+      font-family: ui-monospace, monospace; max-height: 420px; overflow-y: auto;
+    }
+    .prod-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--c-line); flex-wrap: wrap; }
+    .prod-row:last-child { border-bottom: none; }
+    .prod-row img { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; }
+    .prod-row .p-name { font-weight: 800; font-size: var(--fs-sm); min-width: 200px; }
+    .prod-row .p-prices { font-size: var(--fs-xs); color: var(--c-text-soft); }
+    .prod-row .spacer { margin-inline-start: auto; display: flex; gap: 6px; }
+    .icon-btn { border: 1.5px solid var(--c-line); border-radius: 8px; padding: 6px 12px; font-size: var(--fs-xs); font-weight: 700; background: #fff; }
+    .icon-btn:hover { border-color: var(--c-primary); color: var(--c-primary-dark); }
+    .icon-btn.danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
+    .login-box { max-width: 480px; margin: 60px auto; background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: 34px; text-align: center; }
+    .login-box img { width: 60px; margin-bottom: 12px; }
+    .login-box p { font-size: var(--fs-sm); color: var(--c-text-soft); margin: 10px 0 20px; }
+    .warn { background: #fff8e6; border: 1px solid #f1df9a; color: #8a6d1a; border-radius: var(--r-md); padding: 12px 16px; font-size: var(--fs-sm); margin-bottom: 18px; line-height: 1.8; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px,100%), 1fr)); gap: 14px; margin-bottom: 20px; }
+    .stat { background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-md); padding: 16px; text-align: center; }
+    .stat .v { font-size: var(--fs-xl); font-weight: 900; color: var(--c-primary-dark); }
+    .stat .l { font-size: var(--fs-xs); color: var(--c-text-soft); }
+  </style>
+</head>
+<body>
+  <header class="site-header" style="position:static">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/img/logo.svg" alt="" width="44" height="44">
+        <span><span class="brand-name">مغزدانه — پنل مدیریت</span><br>
+        <span class="brand-sub">دیتابیس زنده روی گیت‌هاب</span></span>
+      </a>
+      <div class="header-actions">
+        <a class="btn btn-outline" href="index.html" style="font-size:var(--fs-xs)">مشاهده سایت ←</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ LOGIN ============ -->
+  <div class="container" id="login-view" style="display:none">
+    <div class="login-box">
+      <img src="assets/img/logo.svg" alt="">
+      <h2 style="font-size:var(--fs-lg)">ورود مدیر</h2>
+      <p>برای مدیریت محصولات، قیمت‌ها و سفارش‌ها، یک <b>Personal Access Token</b> گیت‌هاب با دسترسی <span class="ltr" style="direction:ltr">repo</span> وارد کنید.</p>
+      <div class="field" style="text-align:right">
+        <label for="token-input">توکن گیت‌هاب (ghp_…)</label>
+        <input id="token-input" type="password" placeholder="ghp_xxxxxxxxxxxx" style="direction:ltr;text-align:left">
+        <span class="hint">توکن فقط در مرورگر شما ذخیره می‌شود و به هیچ سروری ارسال نمی‌گردد. برای امنیت بیشتر، توکن را محدود به همین ریپو بسازید.</span>
+      </div>
+      <button class="btn btn-primary" id="login-btn" style="width:100%;margin-top:16px">ورود به پنل</button>
+      <p id="login-err" style="color:var(--c-danger);font-size:var(--fs-xs);margin-top:10px"></p>
+    </div>
+  </div>
+
+  <!-- ============ PANEL ============ -->
+  <div class="container" id="panel-view" style="display:none">
+    <div class="admin-top">
+      <h1>داشبورد مدیریت</h1>
+      <span class="admin-user">👤 <span id="who"></span></span>
+      <button class="icon-btn danger" id="logout-btn">خروج</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="orders">📋 سفارش‌ها</button>
+      <button class="tab-btn" data-tab="products">🥜 محصولات و قیمت‌ها</button>
+      <button class="tab-btn" data-tab="settings">⚙️ تنظیمات سایت</button>
+      <button class="tab-btn" data-tab="raw">📦 دیتابیس خام (JSON)</button>
+    </div>
+
+    <!-- orders -->
+    <div id="tab-orders" class="tab-pane">
+      <div class="stats" id="order-stats"></div>
+      <div id="orders-list">
+        <div class="empty"><p>در حال بارگذاری سفارش‌ها…</p></div>
+      </div>
+    </div>
+
+    <!-- products -->
+    <div id="tab-products" class="tab-pane" style="display:none">
+      <div class="warn">⚠️ هر تغییر، مستقیماً <b>data/db.json</b> ریپوی گیت‌هاب را به‌روز می‌کند (یک کامیت می‌سازد) و بلافاصله روی سایت زنده اعمال می‌شود. تاریخ «به‌روزرسانی قیمت» هم خودکار عوض می‌شود.</div>
+      <div class="admin-card">
+        <h3>افزودن محصول جدید</h3>
+        <div class="form-grid">
+          <div class="field"><label>نام محصول *</label><input id="np-name"></div>
+          <div class="field"><label>دسته</label><select id="np-cat"></select></div>
+          <div class="field"><label>مبدأ</label><input id="np-origin" placeholder="مثلاً رفسنجان"></div>
+          <div class="field"><label>گرید</label><input id="np-grade" placeholder="مثلاً ممتاز"></div>
+          <div class="field"><label>قیمت خرده (تومان/کیلو) *</label><input id="np-retail" type="number" min="0" inputmode="numeric"></div>
+          <div class="field"><label>قیمت نیم‌عمده *</label><input id="np-semi" type="number" min="0" inputmode="numeric"></div>
+          <div class="field"><label>قیمت عمده *</label><input id="np-whole" type="number" min="0" inputmode="numeric"></div>
+          <div class="field"><label>موجودی (کیلو)</label><input id="np-stock" type="number" min="0" value="100" inputmode="numeric"></div>
+          <div class="field"><label>نام فایل تصویر (از assets/img)</label><input id="np-img" value="assets/img/maghz-pistachio-premium.jpg" style="direction:ltr;text-align:left"></div>
+          <div class="field form-full"><label>توضیح</label><textarea id="np-desc" rows="2"></textarea></div>
+        </div>
+        <button class="btn btn-primary" id="add-prod-btn" style="margin-top:14px">افزودن و کامیت</button>
+      </div>
+      <div class="admin-card">
+        <h3>ویرایش سریع قیمت و موجودی</h3>
+        <div id="prod-list"></div>
+      </div>
+    </div>
+
+    <!-- settings -->
+    <div id="tab-settings" class="tab-pane" style="display:none">
+      <div class="warn">⚠️ تغییر تنظیمات مستقیماً روی فوتر، تماس‌ها و قوانین ارسال همه صفحات اثر می‌گذارد.</div>
+      <div class="admin-card">
+        <h3>اطلاعات تماس و فروش</h3>
+        <div class="form-grid" id="settings-form"></div>
+        <button class="btn btn-primary" id="save-settings" style="margin-top:14px">ذخیره تنظیمات و کامیت</button>
+      </div>
+    </div>
+
+    <!-- raw -->
+    <div id="tab-raw" class="tab-pane" style="display:none">
+      <div class="admin-card">
+        <h3>data/db.json — ویرایش مستقیم (پیشرفته)</h3>
+        <p style="font-size:var(--fs-sm);color:var(--c-text-soft);margin-bottom:12px">محتوا بعد از «اعتبارسنجی و کامیت» با یک کامیت روی برنچ main نوشته می‌شود. اگر JSON نامعتبر باشد، نوشته نمی‌شود.</p>
+        <textarea id="raw-json" rows="22" style="width:100%;font-family:ui-monospace,monospace;font-size:var(--fs-xs);direction:ltr;text-align:left;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px" spellcheck="false"></textarea>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="raw-save">اعتبارسنجی و کامیت</button>
+          <button class="btn btn-outline" id="raw-reload">بارگذاری مجدد از گیت‌هاب</button>
+        </div>
+        <p id="raw-msg" style="font-size:var(--fs-xs);margin-top:10px"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/ghdb.js"></script>
+  <script>
+    let DB = null;
+
+    /* ---------- auth ---------- */
+    async function tryLogin(token) {
+      GHDB.setToken(token);
+      try {
+        const who = await GHDB.checkAuth();
+        localStorage.setItem('maghzdaneh_gh_user', who);
+        return who;
+      } catch (e) {
+        GHDB.setToken('');
+        throw e;
+      }
+    }
+
+    async function init() {
+      const savedUser = localStorage.getItem('maghzdaneh_gh_user');
+      if (GHDB.hasToken() && savedUser) {
+        document.getElementById('login-view').style.display = 'none';
+        document.getElementById('panel-view').style.display = 'block';
+        document.getElementById('who').textContent = savedUser;
+        await loadPanel();
+      } else {
+        document.getElementById('login-view').style.display = 'block';
+      }
+    }
+
+    document.getElementById('login-btn').onclick = async () => {
+      const t = document.getElementById('token-input').value.trim();
+      const err = document.getElementById('login-err');
+      if (!t) { err.textContent = 'توکن را وارد کنید'; return; }
+      err.textContent = '';
+      document.getElementById('login-btn').disabled = true;
+      try {
+        const who = await tryLogin(t);
+        location.reload();
+      } catch (e) {
+        err.textContent = 'ورود ناموفق: ' + (e.status === 401 ? 'توکن نامعتبر است' : e.message);
+      } finally {
+        document.getElementById('login-btn').disabled = false;
+      }
+    };
+    document.getElementById('logout-btn').onclick = () => {
+      GHDB.setToken('');
+      localStorage.removeItem('maghzdaneh_gh_user');
+      location.reload();
+    };
+
+    /* ---------- tabs ---------- */
+    document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
+      document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      document.querySelectorAll('.tab-pane').forEach(p => (p.style.display = 'none'));
+      document.getElementById('tab-' + b.dataset.tab).style.display = 'block';
+    });
+
+    /* ---------- data ---------- */
+    async function loadPanel() {
+      DB = await GHDB.fetchDB();
+      renderProducts();
+      renderSettings();
+      document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
+      loadOrders();
+    }
+
+    /* ---------- orders ---------- */
+    async function loadOrders() {
+      const list = document.getElementById('orders-list');
+      try {
+        const files = await GHDB.listOrders();
+        if (!files.length) {
+          list.innerHTML = '<div class="empty"><div class="big">📭</div><p><b>هنوز سفارشی ثبت نشده است.</b></p><p style="margin-top:8px">سفارش‌های جدید به‌صورت فایل JSON در پوشه data/orders ریپو ثبت می‌شوند و همین‌جا نمایش داده می‌شوند.</p></div>';
+          document.getElementById('order-stats').innerHTML = '';
+          return;
+        }
+        const orders = [];
+        for (const f of files.slice(0, 30)) {
+          try { orders.push(await GHDB.readOrder(f.path)); } catch {}
+        }
+        orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const newCount = orders.filter(o => o.status === 'new').length;
+        const revenue = orders.filter(o => o.status !== 'canceled').reduce((s, o) => s + (o.totals ? o.totals.grand : 0), 0);
+        document.getElementById('order-stats').innerHTML = `
+          <div class="stat"><div class="v">${orders.length.toLocaleString('fa-IR')}</div><div class="l">کل سفارش‌ها</div></div>
+          <div class="stat"><div class="v">${newCount.toLocaleString('fa-IR')}</div><div class="l">در انتظار پردازش</div></div>
+          <div class="stat"><div class="v">${revenue.toLocaleString('fa-IR')}</div><div class="l">ارزش سفارش‌ها (تومان)</div></div>`;
+
+        list.innerHTML = orders.map(o => `
+          <div class="admin-card order-card ${o.status}">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <b>${o.id}</b>
+              <span class="status-badge ${o.status}">${({new:'جدید',processing:'در حال پردازش',done:'تکمیل شده',canceled:'لغو شده'})[o.status] || o.status}</span>
+              <span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${new Date(o.date).toLocaleString('fa-IR')}</span>
+              <span style="margin-inline-start:auto;font-weight:900;color:var(--c-primary-dark)">${(o.totals ? o.totals.grand : 0).toLocaleString('fa-IR')} تومان</span>
+            </div>
+            <div style="font-size:var(--fs-sm);margin-top:10px;line-height:2">
+              👤 ${o.customer ? o.customer.name : o.seller || '—'}
+              · 📞 <span style="direction:ltr;display:inline-block">${o.customer ? o.customer.phone : o.phone || ''}</span>
+              ${o.customer ? `<br>📍 ${o.customer.province || ''} ${o.customer.city || ''} — ${o.customer.address || ''}` : ''}
+              ${o.items ? `<br>🛒 ${o.items.map(i => `${i.name} × ${i.qty} کیلو`).join('، ')}` : ''}
+              ${o.type ? `<br>🌾 عرضه: ${o.type} — حدود ${o.amountKg} کیلو` : ''}
+              ${o.note ? `<br>📝 ${o.note}` : ''}
+              ${o.desc ? `<br>📝 ${o.desc}` : ''}
+            </div>
+          </div>`).join('');
+      } catch (e) {
+        list.innerHTML = `<div class="empty"><p>خطا در خواندن سفارش‌ها: ${e.message}</p></div>`;
+      }
+    }
+
+    /* ---------- products ---------- */
+    function renderProducts() {
+      document.getElementById('np-cat').innerHTML = DB.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      document.getElementById('prod-list').innerHTML = DB.products.map((p, i) => `
+        <div class="prod-row">
+          <img src="${p.img}" alt="">
+          <span class="p-name">${p.name}</span>
+          <span class="p-prices">خرده: <input type="number" value="${p.prices.retail}" data-p="${i}" data-f="retail" style="width:110px"> · نیم‌عمده: <input type="number" value="${p.prices.semi}" data-p="${i}" data-f="semi" style="width:110px"> · عمده: <input type="number" value="${p.prices.wholesale}" data-p="${i}" data-f="wholesale" style="width:110px"> (تومان/کیلو)</span>
+          <span class="p-prices">موجودی: <input type="number" value="${p.stock}" data-p="${i}" data-f="stock" style="width:80px"> کیلو</span>
+          <span class="spacer">
+            <button class="icon-btn" data-open="${p.id}">مشاهده در سایت</button>
+            <button class="icon-btn danger" data-del="${i}">حذف</button>
+          </span>
+        </div>`).join('');
+
+      document.querySelectorAll('#prod-list [data-open]').forEach(b =>
+        b.onclick = () => window.open('product.html?id=' + b.dataset.open, '_blank'));
+      document.querySelectorAll('#prod-list [data-del]').forEach(b => b.onclick = async () => {
+        const p = DB.products[+b.dataset.del];
+        if (!confirm(`محصول «${p.name}» حذف شود؟ این عمل یک کامیت روی گیت‌هاب می‌سازد.`)) return;
+        DB.products.splice(+b.dataset.del, 1);
+        await commitDB(`حذف محصول: ${p.name}`);
+      });
+
+      // جمع‌آوری تغییرات و ذخیره
+      let saveBtn = document.getElementById('save-prices-btn');
+      if (!saveBtn) {
+        saveBtn = document.createElement('button');
+        saveBtn.id = 'save-prices-btn';
+        saveBtn.className = 'btn btn-gold';
+        saveBtn.style.marginTop = '14px';
+        saveBtn.textContent = 'ذخیره همه تغییرات قیمت‌ها و کامیت';
+        saveBtn.onclick = savePriceEdits;
+        document.getElementById('prod-list').after(saveBtn);
+      }
+    }
+
+    async function savePriceEdits() {
+      document.querySelectorAll('#prod-list input[data-p]').forEach(inp => {
+        const p = DB.products[+inp.dataset.p];
+        const v = parseFloat(inp.value);
+        if (isNaN(v)) return;
+        if (inp.dataset.f === 'stock') p.stock = Math.round(v);
+        else p.prices[inp.dataset.f] = Math.round(v);
+      });
+      await commitDB('بروزرسانی قیمت‌ها و موجودی محصولات');
+    }
+
+    document.getElementById('add-prod-btn').onclick = async () => {
+      const name = document.getElementById('np-name').value.trim();
+      const retail = +document.getElementById('np-retail').value;
+      const semi = +document.getElementById('np-semi').value;
+      const whole = +document.getElementById('np-whole').value;
+      if (!name || !retail || !semi || !whole) { alert('نام و سه قیمت الزامی است'); return; }
+      DB.products.push({
+        id: 'p-' + Date.now().toString(36),
+        name,
+        category: document.getElementById('np-cat').value,
+        origin: document.getElementById('np-origin').value.trim() || '—',
+        grade: document.getElementById('np-grade').value.trim() || 'درجه یک',
+        img: document.getElementById('np-img').value.trim() || 'assets/img/maghz-pistachio-premium.jpg',
+        desc: document.getElementById('np-desc').value.trim() || name,
+        specs: ['به‌روزرسانی توسط مدیر'],
+        uses: ['مصرف عمومی'],
+        stock: +document.getElementById('np-stock').value || 0,
+        prices: { retail: Math.round(retail), semi: Math.round(semi), wholesale: Math.round(whole) },
+        badge: '',
+        rating: 4.5,
+        sold: 0
+      });
+      await commitDB(`افزودن محصول جدید: ${name}`);
+      document.getElementById('np-name').value = '';
+      document.getElementById('np-desc').value = '';
+    };
+
+    /* ---------- settings ---------- */
+    const SETTINGS_FIELDS = [
+      ['name', 'نام سایت'], ['tagline', 'شعار'], ['phone', 'تلفن'], ['mobile', 'موبایل'],
+      ['email', 'ایمیل'], ['address', 'آدرس'], ['worktime', 'ساعت کاری'],
+    ];
+    function renderSettings() {
+      document.getElementById('settings-form').innerHTML = SETTINGS_FIELDS.map(([k, l]) => `
+        <div class="field"><label>${l}</label><input data-s="${k}" value="${DB.site[k] || ''}"></div>`).join('') + `
+        <div class="field"><label>هزینه ارسال ثابت (تومان)</label><input type="number" data-s="flat_cost" value="${DB.site.shipping.flat_cost}"></div>
+        <div class="field"><label>سقف ارسال رایگان (تومان)</label><input type="number" data-s="free_over" value="${DB.site.shipping.free_over}"></div>
+        <div class="field form-full"><label>توضیح ارسال بار سنگین</label><textarea data-s="heavy_note" rows="2">${DB.site.shipping.heavy_note}</textarea></div>`;
+    }
+    document.getElementById('save-settings').onclick = async () => {
+      document.querySelectorAll('#settings-form [data-s]').forEach(inp => {
+        const k = inp.dataset.s;
+        const v = isNaN(+inp.value) || inp.value.trim() === '' ? inp.value : +inp.value;
+        if (k === 'flat_cost' || k === 'free_over' || k === 'heavy_note') DB.site.shipping[k] = v;
+        else DB.site[k] = v;
+      });
+      await commitDB('بروزرسانی تنظیمات سایت');
+    };
+
+    /* ---------- raw json ---------- */
+    document.getElementById('raw-save').onclick = async () => {
+      const msg = document.getElementById('raw-msg');
+      try {
+        const parsed = JSON.parse(document.getElementById('raw-json').value);
+        DB = parsed;
+        await commitDB('ویرایش مستقیم db.json');
+        msg.style.color = 'var(--c-success)';
+        msg.textContent = '✓ اعتبارسنجی شد و روی گیت‌هاب ذخیره شد.';
+      } catch (e) {
+        msg.style.color = 'var(--c-danger)';
+        msg.textContent = 'JSON نامعتبر: ' + e.message;
+      }
+    };
+    document.getElementById('raw-reload').onclick = async () => {
+      DB = await GHDB.fetchDB();
+      document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
+      renderProducts(); renderSettings();
+      toast('از گیت‌هاب بازخوانی شد');
+    };
+
+    /* ---------- commit ---------- */
+    async function commitDB(message) {
+      DB.site.price_date = new Date().toISOString().slice(0, 10);
+      toast('در حال کامیت روی گیت‌هاب…');
+      try {
+        await GHDB.saveDB(DB, message);
+        toast('✓ ذخیره شد — سایت به‌روز شد');
+        renderProducts();
+        renderSettings();
+        document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
+      } catch (e) {
+        alert('خطا در ذخیره روی گیت‌هاب: ' + e.message);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

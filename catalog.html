@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>کاتالوگ مغزها | مغزدانه — مغز پسته، بادام و گردو</title>
+  <meta name="description" content="کاتالوگ کامل مغز پسته (اکبری، فندقی، کله‌قوچی، احمدآقایی، سبز، خلال، پودر، شکسته)، مغز بادام و مغز گردو با قیمت روز و خرید پلکانی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1>کاتالوگ مغزها</h1>
+      <p>همه مدل‌های مغز پسته به‌همراه مغز بادام و گردو — قیمت‌ها بر اساس پله خرید <b id="tier-name"></b> است.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="chips" id="cat-chips"></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px">
+        <div class="field" style="flex:1;min-width:220px;max-width:420px">
+          <input type="search" id="q" placeholder="جستجو در مغزها… (مثلاً اکبری، خلال، گردو)" aria-label="جستجوی محصول">
+        </div>
+        <div class="field" style="min-width:190px">
+          <select id="sort" aria-label="ترتیب نمایش">
+            <option value="popular">پرفروش‌ترین</option>
+            <option value="cheap">ارزان‌ترین</option>
+            <option value="exp">گران‌ترین</option>
+            <option value="rating">بهترین امتیاز</option>
+          </select>
+        </div>
+        <span style="font-size:var(--fs-sm);color:var(--c-text-soft)" id="count"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" style="display:none">
+        <div class="big">🔍</div>
+        <p><b>مغزی با این مشخصات پیدا نشد.</b></p>
+        <p>عبارت دیگری امتحان کنید یا فیلتر دسته را بردارید.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let filterCat = params.get('cat') || 'all';
+
+    boot('catalog').then(db => {
+      document.getElementById('tier-name').textContent = tierLabel(APP.tier);
+
+      // chips
+      const chips = [{ id: 'all', name: 'همه', icon: '✳️' }, ...db.categories];
+      renderChips();
+
+      function renderChips() {
+        document.getElementById('cat-chips').innerHTML = chips.map(c => `
+          <button class="chip ${filterCat === c.id ? 'active' : ''}" data-cat="${c.id}">${c.icon || ''} ${c.name}</button>`).join('');
+        document.querySelectorAll('#cat-chips .chip').forEach(b =>
+          b.addEventListener('click', () => { filterCat = b.dataset.cat; renderChips(); render(); }));
+      }
+
+      function render() {
+        const q = (document.getElementById('q').value || '').trim();
+        let list = db.products.filter(p => (filterCat === 'all' || p.category === filterCat));
+        if (q) list = list.filter(p => (p.name + p.desc + p.origin + p.grade + p.uses.join(' ')).includes(q));
+        const sort = document.getElementById('sort').value;
+        const price = p => priceFor(p, APP.tier);
+        if (sort === 'cheap') list.sort((a, b) => price(a) - price(b));
+        else if (sort === 'exp') list.sort((a, b) => price(b) - price(a));
+        else if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
+        else list.sort((a, b) => b.sold - a.sold);
+
+        document.getElementById('count').textContent = list.length ? `${fmt(list.length)} محصول` : '';
+        document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+        document.getElementById('grid').innerHTML = list.map(productCard).join('');
+        bindAddButtons();
+      }
+
+      document.getElementById('q').addEventListener('input', render);
+      document.getElementById('sort').addEventListener('change', render);
+      render();
+    });
+  </script>
+</body>
+</html>
