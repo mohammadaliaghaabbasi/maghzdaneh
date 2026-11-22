@@ -7,8 +7,9 @@
   <meta name="description" content="مشخصات کامل، قیمت پلکانی و خرید عمده و خرده مغزها در مغزدانه.">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
+  <link rel="stylesheet" href="assets/css/main.css?v=10">
+  <link rel="stylesheet" href="assets/css/fx.css?v=10">
+  <meta name="theme-color" content="#060907">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -16,14 +17,29 @@
   <div class="container">
     <nav class="crumb" id="crumb" aria-label="مسیر صفحه"></nav>
     <div class="pd-grid" id="pd">
-      <div class="pd-img" data-reveal><img id="pd-img" src="" alt="" width="600" height="545"></div>
-      <div class="pd-info" id="pd-info" data-reveal style="transition-delay:140ms"></div>
+      <div class="pd-media-col">
+        <div class="pd-img">
+          <img id="pd-img" src="" alt="" width="640" height="480" referrerpolicy="no-referrer">
+        </div>
+        <div class="features-grid" style="margin-top:16px;grid-template-columns:1fr 1fr">
+          <div class="feature" style="padding:14px">
+            <span class="ico-wrap" id="pd-ico-1"></span>
+            <div><h3 style="font-size:var(--fs-xs)">ضمانت تازگی ۷ روزه</h3><p style="font-size:0.76rem">مرجوعی بی‌قیدوشرط در صورت عدم تطابق</p></div>
+          </div>
+          <div class="feature" style="padding:14px">
+            <span class="ico-wrap" id="pd-ico-2"></span>
+            <div><h3 style="font-size:var(--fs-xs)">بسته‌بندی نوک‌زنی</h3><p style="font-size:0.76rem">وکیوم سبک روز ارسال برای حفظ عطر</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="pd-info" id="pd-info"></div>
     </div>
   </div>
 
-  <section>
+  <section class="sec-alt" style="margin-top:52px">
     <div class="container">
-      <div class="sec-head">
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">پیشنهادهای هم‌خانواده</span>
         <h2>محصولات مرتبط</h2>
       </div>
       <div class="grid" id="related"></div>
@@ -37,105 +53,197 @@
   <script>
     const pid = new URLSearchParams(location.search).get('id');
 
-    boot('').then(db => {
+    boot('catalog').then(db => {
+      document.getElementById('pd-ico-1').innerHTML = icon('shield');
+      document.getElementById('pd-ico-2').innerHTML = icon('box');
+
       const p = byId(pid);
       if (!p) {
-        document.getElementById('pd').innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🤷</div><p>این محصول پیدا نشد. <a href="catalog.html">به کاتالوگ برگردید</a>.</p></div>';
+        document.getElementById('pd').innerHTML = `
+          <div class="empty" style="grid-column:1/-1;margin-block:32px">
+            <div class="big">${icon('search')}</div>
+            <p style="color:#fff;font-weight:800">این محصول پیدا نشد</p>
+            <p style="margin:8px 0 18px">ممکن است نشانی محصول تغییر کرده باشد.</p>
+            <a class="btn btn-primary" href="catalog.html">بازگشت به کاتالوگ</a>
+          </div>`;
         return;
       }
+
       document.title = `${p.name} | مغزدانه — خرید با قیمت پلکانی`;
-      document.querySelector('meta[name="description"]').setAttribute('content',
-        `${p.desc} — قیمت از ${fmt(Math.min(...Object.values(p.prices)))} تومان، خرید خرده و عمده.`);
+      document.querySelector('meta[name="description"]').setAttribute(
+        'content',
+        `${p.desc} — قیمت از ${fmt(Math.min(...Object.values(p.prices)))} تومان، خرید خرده و عمده.`
+      );
 
       document.getElementById('crumb').innerHTML =
-        `<a href="index.html">مغزدانه</a> › <a href="catalog.html">کاتالوگ</a> › <a href="catalog.html?cat=${p.category}">${catName(p.category)}</a> › <b>${p.name}</b>`;
+        `<a href="index.html">مغزدانه</a> <span>›</span> <a href="catalog.html">کاتالوگ</a> <span>›</span> <a href="catalog.html?cat=${p.category}">${catName(p.category)}</a> <span>›</span> <b>${p.name}</b>`;
 
-      document.getElementById('pd-img').src = p.img;
-      document.getElementById('pd-img').alt = p.name;
+      const imgEl = document.getElementById('pd-img');
+      imgEl.src = p.img;
+      imgEl.alt = p.name;
+      imgEl.onerror = () => mgzImgFallback(imgEl, p.name);
 
-      let selTier = APP.tier === 'retail' ? 'retail' : APP.tier;
-      let qty = selTier === 'retail' ? 1 : selTier === 'semi' ? 5 : 25;
+      let selTier = APP.tier || 'retail';
+      let qty = defaultQtyForTier(selTier);
+
+      function stepForTier(t) {
+        if (t === 'wholesale') return 5;
+        if (t === 'semi') return 1;
+        return 0.25;
+      }
 
       function render() {
         const price = p.prices[selTier];
-        const tierMeta = db.tiers.find(t => t.id === selTier);
         const retail = p.prices.retail;
         const save = selTier !== 'retail' ? Math.round((1 - price / retail) * 100) : 0;
+        const minQ = tierMin(selTier);
+        const step = stepForTier(selTier);
+
+        const presets = selTier === 'retail'
+          ? [0.25, 0.5, 1, 2, 4]
+          : selTier === 'semi'
+          ? [5, 10, 15, 20]
+          : [25, 40, 50, 100];
+
         document.getElementById('pd-info').innerHTML = `
-          <h1>${p.name}</h1>
-          <div class="pd-meta">
-            <span class="stars">${starsHtml(p.rating)} ${fmt(p.rating)}</span>
-            <span>${fmt(p.sold)} فروش موفق</span>
+          <div class="pd-meta" style="color:var(--c-accent)">
+            <span>${catName(p.category)}</span>
+            <span aria-hidden="true">·</span>
             <span>مبدأ: ${p.origin}</span>
+            <span aria-hidden="true">·</span>
             <span>گرید: ${p.grade}</span>
+          </div>
+          <h1>${p.name}</h1>
+          <div class="pd-meta" style="margin-top:6px;margin-bottom:18px">
+            <span>برداشت ۱۴۰۵</span>
+            <span aria-hidden="true">·</span>
+            <span>بسته‌بندی وکیوم روز ارسال</span>
+            <span aria-hidden="true">·</span>
+            <span style="color:var(--c-primary-light)">آماده ارسال</span>
           </div>
           <p class="pd-desc">${p.desc}</p>
           <ul class="spec-list">${p.specs.map(s => `<li>${s}</li>`).join('')}</ul>
           <p class="uses"><b>مناسب برای:</b> ${p.uses.join('، ')}</p>
 
-          <h3 style="font-size:var(--fs-base);margin-bottom:8px">پله خرید را انتخاب کنید</h3>
+          <h3 style="font-size:var(--fs-sm);color:#fff;margin-bottom:10px">۱. انتخاب پله خرید (قیمت پلکانی شفاف)</h3>
           <div class="tier-select">
-            ${db.tiers.map(t => `
+            ${db.tiers.map(t => {
+              const tSave = t.id !== 'retail' ? Math.round((1 - p.prices[t.id] / retail) * 100) : 0;
+              return `
               <label class="tier-opt ${selTier === t.id ? 'sel' : ''}">
                 <input type="radio" name="tier" value="${t.id}" ${selTier === t.id ? 'checked' : ''}>
-                <span><span class="t-name">${t.label}</span><br><span class="t-min">${t.desc}</span></span>
+                <span>
+                  <span class="t-name">${t.label} ${tSave ? `<span style="color:var(--c-accent-light);font-size:var(--fs-xs)">(٪${fmt(tSave)} صرفه‌جویی)</span>` : ''}</span><br>
+                  <span class="t-min">${t.desc}</span>
+                </span>
                 <span class="t-price">${fmt(p.prices[t.id])} <small style="font-weight:600;color:var(--c-text-soft)">ت/کیلو</small></span>
-              </label>`).join('')}
+              </label>`;
+            }).join('')}
+          </div>
+
+          <h3 style="font-size:var(--fs-sm);color:#fff;margin-bottom:8px">۲. انتخاب وزن سفارش (کیلوگرم)</h3>
+          <div class="weight-presets">
+            ${presets.map(w => `<button type="button" class="preset-btn ${qty === w ? 'active' : ''}" data-preset="${w}">${w < 1 ? fmt(w * 1000) + ' گرم' : fmt(w) + ' کیلو'}</button>`).join('')}
           </div>
 
           <div class="qty-row">
             <div class="qty-box">
-              <button type="button" id="minus" aria-label="کاهش">−</button>
-              <input type="number" id="qty" min="0.25" step="0.25" value="${qty}" aria-label="مقدار">
-              <button type="button" id="plus" aria-label="افزایش">+</button>
+              <button type="button" id="minus" aria-label="کاهش وزن">−</button>
+              <input type="number" id="qty" min="${minQ}" step="${step}" value="${qty}" aria-label="وزن به کیلوگرم">
+              <button type="button" id="plus" aria-label="افزایش وزن">+</button>
             </div>
             <span class="qty-unit">کیلوگرم</span>
             <span class="pd-total" id="total"></span>
           </div>
 
           <div class="pd-cta">
-            <button class="btn btn-primary" id="add-btn" style="flex:1">افزودن به سبد خرید</button>
-            <a class="btn btn-outline" href="cart.html">مشاهده سبد</a>
+            <button type="button" class="btn btn-primary" id="add-btn" style="flex:1">${icon('cart')} افزودن به سبد خرید</button>
+            <button type="button" class="btn btn-outline" id="fav-btn" aria-label="نشان کردن محصول">${icon('heart')} نشان کردن</button>
+            <a class="btn btn-outline" href="cart.html">سبد خرید</a>
           </div>
-          <p class="stock-note">✓ ${p.stock > 0 ? `${fmt(p.stock)} کیلو آماده ارسال` : 'موجودی به اتمام رسیده — تماس بگیرید'}</p>
-          ${save ? `<p class="stock-note" style="color:var(--c-accent)">با این پله ${fmt(save)}٪ نسبت به قیمت خرده‌فروشی صرفه‌جویی می‌کنید.</p>` : ''}
+          <p class="stock-note">${icon('check')} ${p.stock > 0 ? `${fmt(p.stock)} کیلوگرم آماده ارسال در انبار` : 'موجودی موقتاً به اتمام رسیده — برای استعلام تماس بگیرید'}</p>
+          ${save ? `<p class="stock-note gold">با انتخاب پله «${tierLabel(selTier)}»، در هر کیلو ${fmt(retail - price)} تومان (٪${fmt(save)}) صرفه‌جویی می‌کنید.</p>` : ''}
         `;
 
-        const total = document.getElementById('total');
+        const totalEl = document.getElementById('total');
         const qEl = document.getElementById('qty');
+
         function updTotal() {
           const q = parseFloat(qEl.value) || 0;
-          total.innerHTML = `${fmt(Math.round(q * p.prices[selTier]))} <small>تومان</small>`;
+          qty = q;
+          totalEl.innerHTML = `${fmt(Math.round(q * p.prices[selTier]))} <small>تومان</small>`;
+          document.querySelectorAll('[data-preset]').forEach(b => {
+            b.classList.toggle('active', parseFloat(b.dataset.preset) === q);
+          });
         }
+
         qEl.addEventListener('input', updTotal);
-        document.getElementById('minus').onclick = () => { qEl.value = Math.max(0.25, (parseFloat(qEl.value) || 1) - 0.5); updTotal(); };
-        document.getElementById('plus').onclick = () => { qEl.value = (parseFloat(qEl.value) || 0) + 0.5; updTotal(); };
+        document.getElementById('minus').onclick = () => {
+          qEl.value = Math.max(minQ, Math.round(((parseFloat(qEl.value) || minQ) - step) * 100) / 100);
+          updTotal();
+        };
+        document.getElementById('plus').onclick = () => {
+          qEl.value = Math.round(((parseFloat(qEl.value) || 0) + step) * 100) / 100;
+          updTotal();
+        };
+        document.querySelectorAll('[data-preset]').forEach(b => {
+          b.onclick = () => {
+            qEl.value = b.dataset.preset;
+            updTotal();
+          };
+        });
         updTotal();
 
-        document.querySelectorAll('input[name="tier"]').forEach(r => r.addEventListener('change', () => {
-          selTier = r.value;
-          qty = selTier === 'retail' ? 1 : selTier === 'semi' ? 5 : 25;
-          render();
-        }));
+        document.querySelectorAll('input[name="tier"]').forEach(r => {
+          r.addEventListener('change', () => {
+            selTier = r.value;
+            qty = defaultQtyForTier(selTier);
+            render();
+          });
+        });
 
         document.getElementById('add-btn').onclick = () => {
           const q = parseFloat(qEl.value);
-          if (!q || q <= 0) { toast('مقدار را وارد کنید'); return; }
-          const min = db.tiers.find(t => t.id === selTier).min;
-          if (q < min) { toast(`حداقل خرید پله «${tierLabel(selTier)}» ${fmt(min)} کیلو است`); return; }
-          addToCart(p.id, q, selTier);
+          if (!q || q <= 0) { toast('لطفاً وزن سفارش را وارد کنید'); return; }
+          if (q < minQ) { toast(`حداقل خرید پله «${tierLabel(selTier)}» ${fmt(minQ)} کیلوگرم است`); return; }
+          addToCart(p.id, q, selTier, true);
         };
+
+        const favBtn = document.getElementById('fav-btn');
+        if (favBtn) {
+          favBtn.onclick = async () => {
+            if (!window.MgzCloud) return;
+            let u = window.MgzCloud.getCurrentUser();
+            if (!u) {
+              try {
+                u = await window.MgzCloud.signInWithGoogle();
+              } catch {
+                toast('برای نشان کردن محصول ابتدا وارد حساب کاربری شوید');
+                return;
+              }
+            }
+            try {
+              const prof = (await window.MgzCloud.getMyProfile(u.uid)) || {};
+              const favs = Array.isArray(prof.favoriteIds) ? [...prof.favoriteIds] : [];
+              const exists = favs.includes(p.id);
+              const nextFavs = exists ? favs.filter(x => x !== p.id) : [...favs, p.id];
+              await window.MgzCloud.saveMyProfile(u.uid, { favoriteIds: nextFavs });
+              favBtn.innerHTML = `${icon('heart')} ${exists ? 'نشان کردن' : 'نشان شد'}`;
+              toast(exists ? 'از نشان‌شده‌ها حذف شد' : 'به لیست نشان‌شده‌های حساب شما اضافه شد');
+            } catch {
+              toast('خطا در ذخیره نشان‌شده');
+            }
+          };
+        }
       }
       render();
 
-      // related
       const rel = db.products.filter(x => x.category === p.category && x.id !== p.id).slice(0, 4);
       const fill = rel.length < 4 ? db.products.filter(x => x.category !== p.category).slice(0, 4 - rel.length) : [];
       document.getElementById('related').innerHTML = [...rel, ...fill].map(productCard).join('');
-      bindAddButtons();
+      bindAddButtons(document.getElementById('related'));
       if (window.MGZ) MGZ.init();
 
-      // JSON-LD product
       const ld = document.createElement('script');
       ld.type = 'application/ld+json';
       ld.textContent = JSON.stringify({

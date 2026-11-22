@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>حساب کاربری و سفارش‌ها | مغزدانه</title>
+  <meta name="description" content="ثبت‌نام، ویرایش پروفایل و نشانی ارسال، و پیگیری زنده سفارش‌های خرده و عمده در مغزدانه.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/main.css?v=8">
+  <link rel="stylesheet" href="assets/css/fx.css?v=8">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <main class="studio-wrap">
+    <!-- Loading State -->
+    <div id="acc-loading" class="auth-gate-card">
+      <h2>در حال بررسی وضعیت حساب کاربری...</h2>
+      <p>لطفاً چند لحظه شکیبا باشید.</p>
+    </div>
+
+    <!-- Guest Sign-In / Registration Gate -->
+    <section id="acc-guest" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
+      <span class="band-kicker">عضویت و پورتال مشتریان مغزدانه</span>
+      <h2>ورود یا ثبت‌نام سریع</h2>
+      <p>
+        با حساب گوگل خود وارد شوید تا پروفایل خریدار (خرده، قنادی یا عمده)، نشانی‌های ارسال و سابقهٔ تمام سفارش‌های شما به‌صورت ایمن در فضای ابری ذخیره شود.
+      </p>
+      <button type="button" class="btn-google" id="btn-google-signin">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.71-4.95 3.71-8.7z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09L2.18 7.07C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.71-2.88c-.98.66-2.23 1.06-3.57 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        </svg>
+        <span>ادامه با حساب گوگل</span>
+      </button>
+      <p style="font-size:0.78rem;color:var(--lux-muted);margin-top:18px;margin-bottom:0">
+        پس از ورود، می‌توانید نوع خریدار و آدرس ارسال خود را تکمیل کنید تا در تسویه‌حساب به‌صورت خودکار پر شود.
+      </p>
+    </section>
+
+    <!-- Authenticated Customer Dashboard -->
+    <div id="acc-dashboard" hidden>
+      <div class="studio-hero">
+        <div>
+          <span class="band-kicker">پورتال کاربری مغزدانه</span>
+          <h1 id="u-welcome">خوش آمدید</h1>
+          <p id="u-email-line"></p>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <a href="admin.html" id="u-admin-link" class="admin-banner-link" hidden>ورود به پنل مدیریت محتوا ←</a>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-signout">خروج از حساب</button>
+        </div>
+      </div>
+
+      <nav class="studio-tabs" role="tablist" aria-label="بخش‌های حساب کاربری">
+        <button type="button" class="studio-tab active" data-tab="profile">پروفایل و آدرس ثبت‌نام</button>
+        <button type="button" class="studio-tab" data-tab="orders">سفارش‌های من <span id="orders-cnt" class="num"></span></button>
+        <button type="button" class="studio-tab" data-tab="favorites">محصولات نشان‌شده <span id="favs-cnt" class="num"></span></button>
+      </nav>
+
+      <!-- Tab 1: Profile & Address Registration -->
+      <section class="studio-panel" id="tab-profile">
+        <div class="studio-panel-head">
+          <div>
+            <h2>اطلاعات ثبت‌نام و نشانی پیش‌فرض ارسال</h2>
+            <p>این مشخصات هنگام ثبت سفارش در صفحه تسویه‌حساب به‌طور خودکار پر می‌شود.</p>
+          </div>
+          <span id="profile-saved-note" style="font-size:0.8rem;color:var(--lux-emerald)"></span>
+        </div>
+        <form id="profile-form" class="form-grid">
+          <div class="field">
+            <label for="pf-name">نام و نام خانوادگی</label>
+            <input id="pf-name" required maxlength="120" placeholder="مثلاً: محمدعلی آقاعباسی">
+          </div>
+          <div class="field">
+            <label for="pf-phone">شماره تلفن همراه</label>
+            <input id="pf-phone" class="ltr" maxlength="24" placeholder="09123456789">
+          </div>
+          <div class="field">
+            <label for="pf-buyer-type">نوع خریدار</label>
+            <select id="pf-buyer-type">
+              <option value="retail">خریدار خانگی / خرده‌فروشی (۲۵۰ گرم به بالا)</option>
+              <option value="confectionery">قنادی، کافه و کارگاه شیرینی‌پزی (نیم‌عمده ۵ کیلو+)</option>
+              <option value="wholesale">خریدار عمده و آجیل‌فروشی (۲۵ کیلو+)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pf-province">استان</label>
+            <input id="pf-province" maxlength="80" placeholder="مثلاً: تهران">
+          </div>
+          <div class="field">
+            <label for="pf-city">شهر</label>
+            <input id="pf-city" maxlength="80" placeholder="مثلاً: تهران">
+          </div>
+          <div class="field">
+            <label for="pf-postal">کد پستی (اختیاری)</label>
+            <input id="pf-postal" class="ltr" maxlength="20" placeholder="1234567890">
+          </div>
+          <div class="field form-full">
+            <label for="pf-address">نشانی دقیق ارسال</label>
+            <textarea id="pf-address" rows="3" maxlength="400" placeholder="خیابان، کوچه، پلاک، واحد..."></textarea>
+          </div>
+          <div class="form-full" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:6px">
+            <button type="submit" class="btn btn-primary" id="pf-save-btn">ذخیره اطلاعات کاربری</button>
+            <a class="btn btn-outline" href="catalog.html">رفتن به فروشگاه</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tab 2: Live Orders -->
+      <section class="studio-panel" id="tab-orders" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>سفارش‌های ثبت‌شده من</h2>
+            <p>وضعیت سفارش‌های شما به‌صورت زنده از سیستم مدیریت مغزدانه به‌روزرسانی می‌شود.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-refresh-orders">به‌روزرسانی</button>
+        </div>
+        <div id="orders-list"></div>
+      </section>
+
+      <!-- Tab 3: Saved Favorites -->
+      <section class="studio-panel" id="tab-favorites" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>محصولات نشان‌شده</h2>
+            <p>محصولات محبوب خود را برای خرید سریع‌تر و بررسی قیمت روز اینجا نگه دارید.</p>
+          </div>
+        </div>
+        <div id="favorites-grid" class="grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Clean In-Page Confirmation Modal -->
+  <div class="modal-back" id="confirm-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cm-title">
+      <h3 id="cm-title">تأیید عملیات</h3>
+      <p id="cm-text" style="color:var(--c-text-soft);font-size:0.9rem;margin-bottom:22px"></p>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="btn btn-outline btn-sm" id="cm-cancel">انصراف</button>
+        <button type="button" class="btn btn-primary btn-sm" id="cm-ok">تأیید</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=8"></script>
+  <script>
+    const STATUS_FA = {
+      new: 'ثبت جدید (در انتظار تأیید)',
+      processing: 'در حال آماده‌سازی و برشته‌کاری',
+      shipped: 'ارسال‌شده',
+      done: 'تحویل‌شده',
+      canceled: 'لغوشده',
+    };
+
+    let currentProfile = null;
+    let currentUser = null;
+    let confirmResolver = null;
+
+    function askConfirm(title, text) {
+      return new Promise((resolve) => {
+        confirmResolver = resolve;
+        document.getElementById('cm-title').textContent = title;
+        document.getElementById('cm-text').textContent = text;
+        document.getElementById('confirm-modal').classList.add('open');
+      });
+    }
+
+    document.getElementById('cm-cancel').onclick = () => {
+      document.getElementById('confirm-modal').classList.remove('open');
+      if (confirmResolver) confirmResolver(false);
+    };
+    document.getElementById('cm-ok').onclick = () => {
+      document.getElementById('confirm-modal').classList.remove('open');
+      if (confirmResolver) confirmResolver(true);
+    };
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.studio-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+      ['profile', 'orders', 'favorites'].forEach(t => {
+        document.getElementById('tab-' + t).hidden = t !== tabId;
+      });
+    }
+
+    document.querySelectorAll('.studio-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    function formatTs(ts) {
+      if (!ts) return 'لحظاتی پیش';
+      const ms = ts.seconds ? ts.seconds * 1000 : Date.parse(ts);
+      if (!ms || Number.isNaN(ms)) return '—';
+      return new Date(ms).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    async function loadOrders() {
+      const box = document.getElementById('orders-list');
+      if (!currentUser || !window.MgzCloud) return;
+      box.innerHTML = '<p style="color:var(--lux-muted)">در حال دریافت سفارش‌ها...</p>';
+      try {
+        const orders = await window.MgzCloud.getMyOrders(currentUser.uid);
+        document.getElementById('orders-cnt').textContent = orders.length ? `(${fmt(orders.length)})` : '';
+        if (!orders.length) {
+          box.innerHTML = `
+            <div class="empty">
+              <p style="color:#fff;font-weight:700;margin-bottom:6px">هنوز سفارشی ثبت نکرده‌اید</p>
+              <p style="font-size:0.84rem;margin-bottom:16px">پس از ثبت اولین سفارش، جزئیات و وضعیت ارسال آن اینجا نمایش داده می‌شود.</p>
+              <a class="btn btn-primary btn-sm" href="catalog.html">مشاهده فروشگاه</a>
+            </div>`;
+          return;
+        }
+        box.innerHTML = orders.map(o => {
+          const items = Array.isArray(o.items) ? o.items : [];
+          const stClass = o.status === 'done' ? 'st-done' : o.status === 'canceled' ? 'st-canceled' : o.status === 'shipped' ? 'st-shipped' : '';
+          return `
+            <article class="order-card">
+              <div class="order-card-top">
+                <div>
+                  <strong class="ltr" style="color:var(--lux-ivory);font-size:0.95rem">${o.orderCode || o.id}</strong>
+                  <span style="color:var(--lux-muted);font-size:0.8rem;margin-inline-start:12px">${formatTs(o.createdAt)}</span>
+                </div>
+                <span class="status-label ${stClass}">${STATUS_FA[o.status] || o.status}</span>
+              </div>
+              <div style="font-size:0.85rem;color:var(--lux-soft);margin-bottom:12px">
+                ${items.map(it => `${it.name} (${fmt(it.qty)} کیلو)`).join(' · ')}
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:0.86rem">
+                <div class="num">
+                  وزن کل: <b>${fmt(o.totalKg || 0)} کیلو</b> · جمع پرداختی: <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal || 0)}</strong>
+                </div>
+                ${o.status === 'new' ? `<button type="button" class="rm-btn" data-cancel-order="${o.id}">لغو سفارش</button>` : ''}
+              </div>
+            </article>`;
+        }).join('');
+
+        box.querySelectorAll('[data-cancel-order]').forEach(btn => {
+          btn.onclick = async () => {
+            const ok = await askConfirm('لغو سفارش', 'آیا از لغو این سفارش مطمئن هستید؟');
+            if (!ok) return;
+            try {
+              await window.MgzCloud.updateOrderStatus(btn.dataset.cancelOrder, 'canceled');
+              toast('سفارش لغو شد');
+              loadOrders();
+            } catch {
+              toast('خطا در لغو سفارش');
+            }
+          };
+        });
+      } catch {
+        box.innerHTML = '<p style="color:var(--c-danger)">خطا در بارگذاری سفارش‌ها.</p>';
+      }
+    }
+
+    function renderFavorites() {
+      const grid = document.getElementById('favorites-grid');
+      const favIds = Array.isArray(currentProfile?.favoriteIds) ? currentProfile.favoriteIds : [];
+      document.getElementById('favs-cnt').textContent = favIds.length ? `(${fmt(favIds.length)})` : '';
+      const prods = favIds.map(id => byId(id)).filter(Boolean);
+      if (!prods.length) {
+        grid.innerHTML = `
+          <div class="empty" style="grid-column:1/-1">
+            <p style="color:#fff;font-weight:700;margin-bottom:6px">لیست نشان‌شده‌ها خالی است</p>
+            <p style="font-size:0.84rem;margin-bottom:16px">می‌توانید محصولات مورد علاقه خود را برای دسترسی سریع اینجا ذخیره کنید.</p>
+            <a class="btn btn-outline btn-sm" href="catalog.html">گشت‌وگذار در کاتالوگ</a>
+          </div>`;
+        return;
+      }
+      grid.innerHTML = prods.map(p => productCard(p)).join('');
+      bindAddButtons(grid);
+    }
+
+    async function hydrateUserDashboard(user) {
+      currentUser = user;
+      document.getElementById('acc-loading').hidden = true;
+      if (!user) {
+        document.getElementById('acc-guest').hidden = false;
+        document.getElementById('acc-dashboard').hidden = true;
+        return;
+      }
+
+      document.getElementById('acc-guest').hidden = true;
+      document.getElementById('acc-dashboard').hidden = false;
+      document.getElementById('u-welcome').textContent = `سلام، ${user.displayName || 'مشتری گرامی'}`;
+      document.getElementById('u-email-line').textContent = user.email || '';
+
+      const isAdm = await window.MgzCloud.checkIsAdmin(user);
+      document.getElementById('u-admin-link').hidden = !isAdm;
+
+      try {
+        await window.MgzCloud.ensureUserProfileExists(user);
+        currentProfile = await window.MgzCloud.getMyProfile(user.uid);
+        if (currentProfile) {
+          document.getElementById('pf-name').value = currentProfile.fullName || user.displayName || '';
+          document.getElementById('pf-phone').value = currentProfile.phone || '';
+          document.getElementById('pf-buyer-type').value = currentProfile.buyerType || 'retail';
+          document.getElementById('pf-province').value = currentProfile.province || '';
+          document.getElementById('pf-city').value = currentProfile.city || '';
+          document.getElementById('pf-postal').value = currentProfile.postalCode || '';
+          document.getElementById('pf-address').value = currentProfile.address || '';
+        }
+      } catch (err) {
+        console.warn('Profile load warning:', err);
+      }
+
+      renderFavorites();
+      loadOrders();
+    }
+
+    document.getElementById('btn-google-signin').addEventListener('click', async () => {
+      if (!window.MgzCloud) {
+        toast('سرویس ابری در حال آماده‌سازی است، لطفاً دوباره تلاش کنید.');
+        return;
+      }
+      try {
+        await window.MgzCloud.signInWithGoogle();
+        toast('با موفقیت وارد حساب کاربری شدید');
+      } catch (err) {
+        console.error(err);
+        toast('ورود با حساب گوگل انجام نشد');
+      }
+    });
+
+    document.getElementById('btn-signout').addEventListener('click', async () => {
+      if (!window.MgzCloud) return;
+      await window.MgzCloud.signOutUser();
+      toast('از حساب کاربری خارج شدید');
+    });
+
+    document.getElementById('btn-refresh-orders').addEventListener('click', loadOrders);
+
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUser || !window.MgzCloud) return;
+      const btn = document.getElementById('pf-save-btn');
+      btn.disabled = true;
+      btn.textContent = 'در حال ذخیره...';
+      try {
+        const nextData = {
+          fullName: document.getElementById('pf-name').value.trim(),
+          phone: document.getElementById('pf-phone').value.trim(),
+          buyerType: document.getElementById('pf-buyer-type').value,
+          province: document.getElementById('pf-province').value.trim(),
+          city: document.getElementById('pf-city').value.trim(),
+          postalCode: document.getElementById('pf-postal').value.trim(),
+          address: document.getElementById('pf-address').value.trim(),
+        };
+        await window.MgzCloud.saveMyProfile(currentUser.uid, nextData);
+        currentProfile = { ...(currentProfile || {}), ...nextData };
+        document.getElementById('profile-saved-note').textContent = 'ذخیره شد';
+        toast('اطلاعات کاربری با موفقیت در فضای ابری ذخیره شد');
+      } catch (err) {
+        console.error(err);
+        toast('خطا در ذخیره اطلاعات پروفایل');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'ذخیره اطلاعات کاربری';
+      }
+    });
+
+    boot('account').then(() => {
+      if (window.MgzCloud) {
+        window.MgzCloud.onAuth(hydrateUserDashboard);
+      } else {
+        document.getElementById('acc-loading').hidden = true;
+        document.getElementById('acc-guest').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

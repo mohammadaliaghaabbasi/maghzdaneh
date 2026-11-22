@@ -9,59 +9,98 @@
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/fx.css">
+  <meta name="theme-color" content="#07100b">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
     <div class="container">
+      <span class="sec-label">قیمت‌گذاری شفاف B2B و قنادی</span>
       <h1>خرید عمده با قیمت پلکانی</h1>
-      <p>قیمت شما با وزن سفارش عوض می‌شود، نه با چانه‌زنی. پله‌ها از قبل شفاف است — برای قنادی، آجیل‌فروشی، شیرینی‌فروشی، سوپرمارکت، رستوران و کارخانه‌های غذایی.</p>
+      <p>قیمت شما با وزن سفارش عوض می‌شود، نه با چانه‌زنی. پله‌ها از قبل شفاف است — مخصوص قنادی‌ها، آجیل‌فروشی‌ها، رستوران‌ها و صنایع غذایی.</p>
     </div>
   </div>
 
+  <!-- ================= ماشین‌حساب زنده خرید عمده ================= -->
   <section>
     <div class="container">
-      <div class="sec-head">
-        <span class="eyebrow">پله‌های خرید</span>
-        <h2>سه پله، سه قیمت — همه شفاف</h2>
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">ماشین‌حساب آنلاین صرفه‌جویی</span>
+        <h2>محاسبه دقیق قیمت و سود خرید پلکانی</h2>
+        <p>محصول و وزن مورد نظرتان را انتخاب کنید تا پله خرید، قیمت هر کیلو و میزان صرفه‌جویی شما دقیق محاسبه شود.</p>
       </div>
-      <div class="tier-cards" id="tier-cards" data-reveal-stagger></div>
-      <p style="text-align:center;font-size:var(--fs-sm);color:var(--c-text-soft);max-width:640px;margin:18px auto 0">
-        پله خرید انتخابی شما روی کل سایت اعمال می‌شود و قیمت‌ها همان لحظه به‌روز می‌شوند. بالای ۱۰۰ کیلو (صادرات و صنایع بزرگ)؟ با شماره فروش عمده تماس بگیرید تا قیمت روز بورس مغز را استعلام کنیم.
-      </p>
+      <div class="calc-box" data-reveal>
+        <div style="display:grid;gap:18px">
+          <div class="field">
+            <label for="calc-prod">انتخاب محصول</label>
+            <select id="calc-prod"></select>
+          </div>
+          <div class="field">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <label for="calc-weight">وزن سفارش (کیلوگرم)</label>
+              <strong id="calc-weight-label" class="num" style="color:var(--c-primary-light);font-size:var(--fs-md)">۱۰ کیلوگرم</strong>
+            </div>
+            <input type="range" id="calc-weight" min="1" max="100" step="1" value="10">
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--c-text-muted)">
+              <span>۱ کیلو (خرده)</span>
+              <span>۵ کیلو (نیم‌عمده)</span>
+              <span>۲۵ کیلو (عمده)</span>
+              <span>۱۰۰ کیلو</span>
+            </div>
+          </div>
+        </div>
+        <div class="calc-result" id="calc-result"></div>
+      </div>
     </div>
   </section>
 
-  <section style="background:#fff;border-block:1px solid var(--c-line)">
+  <!-- ================= کارت‌های سه پله ================= -->
+  <section class="sec-alt">
     <div class="container">
-      <div class="sec-head">
-        <h2>جدول کامل قیمت پلکانی</h2>
-        <p>همه محصولات با سه قیمت. ستون آخر نشان می‌دهد در پله عمده چقدر نسبت به خرده‌فروشی صرفه‌جویی می‌کنید.</p>
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">انتخاب پله فعال سایت</span>
+        <h2>سه پله، سه قیمت — بدون ابهام</h2>
+        <p>با انتخاب هر پله، قیمت کل کاتالوگ و صفحه اصلی فوراً روی آن پله تنظیم می‌شود.</p>
+      </div>
+      <div class="tier-cards" id="tier-cards" data-reveal-stagger></div>
+    </div>
+  </section>
+
+  <!-- ================= جدول کامل قیمت پلکانی ================= -->
+  <section>
+    <div class="container">
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">لیست قیمت روز</span>
+        <h2>جدول کامل قیمت پلکانی ۲۰ محصول</h2>
+        <p>مقایسه مستقیم قیمت خرده، نیم‌عمده و عمده به‌همراه درصد صرفه‌جویی در خرید عمده.</p>
       </div>
       <div class="table-wrap" data-reveal>
         <table class="shop" id="price-table">
-          <thead><tr><th>محصول</th><th>خرده (کیلو)</th><th>نیم‌عمده (۵–۲۴ کیلو)</th><th>عمده (۲۵+ کیلو)</th><th>صرفه‌جویی عمده</th></tr></thead>
+          <thead>
+            <tr>
+              <th>محصول و مبدأ</th>
+              <th>خرده (کیلو)</th>
+              <th>نیم‌عمده (۵–۲۴ کیلو)</th>
+              <th>عمده (۲۵+ کیلو)</th>
+              <th>صرفه‌جویی عمده</th>
+              <th></th>
+            </tr>
+          </thead>
           <tbody></tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <section>
+  <!-- ================= خدمات B2B ================= -->
+  <section class="sec-alt">
     <div class="container">
-      <div class="sec-head">
-        <span class="eyebrow">خدمات B2B</span>
-        <h2>برای کسب‌وکار شما چه می‌کنیم؟</h2>
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">خدمات سازمانی و قنادی</span>
+        <h2>برای کسب‌وکار شما چه امکاناتی داریم؟</h2>
       </div>
-      <div class="features">
-        <div class="grid" style="background:transparent;border:none;padding:0">
-          <div class="feature"><span class="ico">🧾</span><div><h3>صورت‌حساب رسمی</h3><p>برای همه سفارش‌های عمده، صورتحساب رسمی با مالیات بر ارزش افزوده صادر می‌شود؛ شفاف برای حسابداری شما.</p></div></div>
-          <div class="feature"><span class="ico">🏷️</span><div><h3>بسته‌بندی سردفتی</h3><p>برچسب اختصاصی فروشگاه شما روی بسته‌ها؛ سفارش‌های قنادی و آجیل‌فروشی با برند خودتان ارسال می‌شود.</p></div></div>
-          <div class="feature"><span class="ico">📅</span><div><h3>قرارداد دوره‌ای</h3><p>قیمت ثابت فصلی برای خرید منظم ماهانه؛ در بازار پرنوسان مغز، این یعنی قابل‌محاسبه‌بودن بهای تمام‌شده.</p></div></div>
-          <div class="feature"><span class="ico">🚛</span><div><h3>ارسال باربری</h3><p>سفارش‌های بالای ۱۰ کیلو با باربری و بارنامه رسمی به سراسر کشور؛ هزینه بر اساس مسافت اعلام می‌شود.</p></div></div>
-        </div>
-      </div>
+      <div class="features-grid" id="b2b-features" data-reveal-stagger></div>
     </div>
   </section>
 
@@ -70,41 +109,115 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/motion.js"></script>
   <script>
-    boot('wholesale').then(db => {
-      // tier cards + selector
-      document.getElementById('tier-cards').innerHTML = db.tiers.map((t, i) => `
-        <div class="tier-card ${APP.tier === t.id ? 'hot' : ''}">
-          <div class="t-ico">${['🛍️', '📦', '🏭'][i]}</div>
-          <h3>${t.label}</h3>
-          <div class="t-range">${t.desc}</div>
-          <p>${[
-            'خرید خانگی و مصرف شخصی؛ از ۲۵۰ گرم تا ۵ کیلو.',
-            'قنادی، آجیل‌فروشی و رستوران؛ ۵ تا ۲۴ کیلو با تخفیف پلکانی.',
-            'فروشگاه‌ها و صنایع غذایی؛ ۲۵ کیلو به بالا با قیمت بورس.'
-          ][i]}</p>
-          <button class="btn ${APP.tier === t.id ? 'btn-primary' : 'btn-outline'}" data-tier="${t.id}" style="margin-top:12px">
-            ${APP.tier === t.id ? '✓ پله فعال شما' : 'انتخاب این پله'}
-          </button>
-        </div>`).join('');
+    boot('wholesale').then(async db => {
+      if (window.MgzCloud) {
+        const pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
+        if (pg && pg.wholesaleTitle) {
+          const h1 = document.querySelector('.page-head h1');
+          if (h1) h1.textContent = pg.wholesaleTitle;
+        }
+        if (pg && pg.wholesaleBody) {
+          const p = document.querySelector('.page-head p');
+          if (p) p.textContent = pg.wholesaleBody;
+        }
+      }
+      // 1. Live Wholesale Calculator
+      const prodSel = document.getElementById('calc-prod');
+      const weightInp = document.getElementById('calc-weight');
+      const weightLbl = document.getElementById('calc-weight-label');
+      const resBox = document.getElementById('calc-result');
 
-      document.querySelectorAll('[data-tier]').forEach(b => b.onclick = () => {
-        setTier(b.dataset.tier);
-        location.reload();
-      });
+      prodSel.innerHTML = db.products.map(p => `<option value="${p.id}">${p.name} (${p.origin})</option>`).join('');
 
-      // price table
+      function updateCalc() {
+        const p = byId(prodSel.value) || db.products[0];
+        const kg = Number(weightInp.value) || 1;
+        weightLbl.textContent = `${fmt(kg)} کیلوگرم`;
+
+        const activeTier = kg >= 25 ? 'wholesale' : kg >= 5 ? 'semi' : 'retail';
+        const unit = p.prices[activeTier];
+        const retailUnit = p.prices.retail;
+        const total = Math.round(unit * kg);
+        const totalSavings = Math.round((retailUnit - unit) * kg);
+        const savePct = Math.round((1 - unit / retailUnit) * 100);
+
+        resBox.innerHTML = `
+          <div class="calc-row"><span>پله محاسبه‌شده</span><strong style="color:var(--c-accent-light)">${tierLabel(activeTier)}</strong></div>
+          <div class="calc-row"><span>قیمت هر کیلو</span><strong class="num">${faToman(unit)}</strong></div>
+          <div class="calc-row"><span>صرفه‌جویی نسبت به خرده</span><strong class="num" style="color:var(--c-accent-light)">${totalSavings > 0 ? faToman(totalSavings) + ' (٪' + fmt(savePct) + ')' : '—'}</strong></div>
+          <div class="calc-row grand"><span>جمع کل سفارش</span><strong class="num">${faToman(total)}</strong></div>
+          ${kg > 10 ? `<p style="font-size:var(--fs-xs);color:var(--c-text-soft)">${db.site.shipping.heavy_note}</p>` : ''}
+          <button type="button" class="btn btn-primary" id="calc-add" style="width:100%;margin-top:6px">${icon('cart')} افزودن ${fmt(kg)} کیلو به سبد خرید</button>
+        `;
+        document.getElementById('calc-add').onclick = () => addToCart(p.id, kg, activeTier, true);
+      }
+
+      prodSel.addEventListener('change', updateCalc);
+      weightInp.addEventListener('input', updateCalc);
+      updateCalc();
+
+      // 2. Interactive Tier Cards (No page reload!)
+      const tierIcons = ['cart', 'box', 'scale'];
+      const tierDescs = [
+        'خرید خانگی و مصرف شخصی؛ از ۲۵۰ گرم تا زیر ۵ کیلو با بسته‌بندی نوک‌زنی.',
+        'قنادی، آجیل‌فروشی و رستوران؛ ۵ تا ۲۴ کیلو با تخفیف پلکانی فوری.',
+        'فروشگاه‌ها، کارخانه‌ها و صادرات؛ ۲۵ کیلو به بالا با قیمت بورس مغز.'
+      ];
+      function renderTierCards() {
+        document.getElementById('tier-cards').innerHTML = db.tiers.map((t, i) => `
+          <div class="tier-card ${APP.tier === t.id ? 'hot' : ''}">
+            <span class="ico-wrap">${icon(tierIcons[i])}</span>
+            <h3>${t.label}</h3>
+            <div class="t-range">${t.desc}</div>
+            <p>${tierDescs[i]}</p>
+            <button type="button" class="btn ${APP.tier === t.id ? 'btn-primary' : 'btn-outline'}" data-tier="${t.id}" style="margin-top:auto">
+              ${APP.tier === t.id ? '✓ پله فعال شما' : 'انتخاب این پله'}
+            </button>
+          </div>`).join('');
+
+        document.querySelectorAll('[data-tier]').forEach(b => {
+          b.onclick = () => {
+            setTier(b.dataset.tier);
+            renderTierCards();
+            toast(`پله خرید روی «${tierLabel(b.dataset.tier)}» فعال شد`);
+          };
+        });
+      }
+      renderTierCards();
+
+      // 3. Full Price Table
       document.querySelector('#price-table tbody').innerHTML = db.products.map(p => {
         const w = p.prices.wholesale;
         const r = p.prices.retail;
         const save = Math.round((1 - w / r) * 100);
         return `<tr>
-          <td><b>${p.name}</b><br><span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${catName(p.category)}</span></td>
+          <td><a href="product.html?id=${p.id}" style="color:#fff;font-weight:800">${p.name}</a><br><span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${catName(p.category)} · ${p.origin}</span></td>
           <td>${fmt(r)}</td>
           <td>${fmt(p.prices.semi)}</td>
-          <td style="font-weight:800;color:var(--c-primary-dark)">${fmt(w)}</td>
-          <td style="color:var(--c-accent);font-weight:800">٪${fmt(save)}</td>
+          <td style="font-weight:900;color:var(--c-primary-light)">${fmt(w)}</td>
+          <td style="color:var(--c-accent-light);font-weight:800">٪${fmt(save)}</td>
+          <td><button type="button" class="btn btn-outline btn-sm" data-quick-whole="${p.id}">سفارش ۲۵ کیلو</button></td>
         </tr>`;
       }).join('');
+
+      document.querySelectorAll('[data-quick-whole]').forEach(b => {
+        b.onclick = () => addToCart(b.dataset.quickWhole, 25, 'wholesale', true);
+      });
+
+      // 4. B2B Features
+      const b2b = [
+        { ico: 'receipt', t: 'صورت‌حساب رسمی', d: 'برای همه سفارش‌های نیم‌عمده و عمده، فاکتور رسمی با ارزش افزوده صادر می‌شود.' },
+        { ico: 'tag', t: 'بسته‌بندی با برند شما', d: 'امکان الصاق برچسب اختصاصی فروشگاه یا قنادی شما روی بسته‌ها و سطل‌های عمده.' },
+        { ico: 'calendar', t: 'قرارداد تأمین دوره‌ای', d: 'تثبیت قیمت فصلی برای خریدهای منظم ماهانه تا بهای تمام‌شده شما قابل پیش‌بینی بماند.' },
+        { ico: 'truck', t: 'ارسال باربری با بارنامه', d: 'سفارش‌های بالای ۱۰ کیلو با باربری معتبر و بارنامه رسمی به سراسر کشور ارسال می‌شوند.' },
+      ];
+      document.getElementById('b2b-features').innerHTML = b2b.map(f => `
+        <div class="feature">
+          <span class="ico-wrap">${icon(f.ico)}</span>
+          <div><h3>${f.t}</h3><p>${f.d}</p></div>
+        </div>`).join('');
+
+      if (window.MGZ) MGZ.init();
     });
   </script>
 </body>

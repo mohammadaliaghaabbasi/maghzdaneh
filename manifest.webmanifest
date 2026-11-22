@@ -1,13 +1,13 @@
 {
   "name": "مغزدانه — بازار تخصصی مغز پسته، بادام و گردو",
   "short_name": "مغزدانه",
-  "description": "خرید و فروش تخصصی مغز پسته، بادام و گردو — خرده‌فروشی و عمده با قیمت پلکانی",
+  "description": "خرید و فروش تخصصی مغز پسته، بادام و گردو — خرده‌فروشی، نیم‌عمده و عمده با قیمت پلکانی شفاف",
   "start_url": "index.html",
   "display": "standalone",
   "dir": "rtl",
   "lang": "fa",
-  "background_color": "#faf8f3",
-  "theme_color": "#2f7d4f",
+  "background_color": "#07100b",
+  "theme_color": "#07100b",
   "icons": [
     { "src": "assets/img/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]

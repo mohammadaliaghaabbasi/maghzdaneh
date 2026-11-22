@@ -1,0 +1,463 @@
+{
+  "entities": {
+    "SiteContentSection": {
+      "title": "SiteContentSection",
+      "description": "Editable CMS content document for a major page section (home, branding, pages)",
+      "type": "object",
+      "properties": {
+        "sectionKey": {
+          "type": "string",
+          "enum": ["home", "branding", "pages"],
+          "maxLength": 32
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 600
+        },
+        "kicker": {
+          "type": "string",
+          "maxLength": 140
+        },
+        "primaryCtaLabel": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "primaryCtaHref": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "secondaryCtaLabel": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "secondaryCtaHref": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "stages": {
+          "type": "array",
+          "description": "Up to 4 sequential pistachio narrative stage objects"
+        },
+        "featuredTitle": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "featuredKicker": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "featuredIds": {
+          "type": "array",
+          "description": "Up to 6 featured product IDs"
+        },
+        "craftKicker": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "craftTitle": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "craftBody": {
+          "type": "string",
+          "maxLength": 1200
+        },
+        "craftImage": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "announcement": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "siteName": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "tagline": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "mobile": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "worktime": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "flatShippingCost": {
+          "type": "number"
+        },
+        "freeShippingOver": {
+          "type": "number"
+        },
+        "heavyShippingNote": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "aboutTitle": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "aboutBody": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "wholesaleTitle": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "wholesaleBody": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "faqItems": {
+          "type": "array",
+          "description": "Up to 20 FAQ objects"
+        },
+        "updatedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["sectionKey", "updatedBy", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Storefront pistachio, almond, or walnut product item with 3-tier pricing",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 96,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "category": {
+          "type": "string",
+          "enum": ["pistachio-kernel", "pistachio-slice", "almond-kernel", "walnut-kernel", "in-shell"],
+          "maxLength": 40
+        },
+        "origin": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "grade": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "img": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "desc": {
+          "type": "string",
+          "maxLength": 1200
+        },
+        "specs": {
+          "type": "array"
+        },
+        "uses": {
+          "type": "array"
+        },
+        "stock": {
+          "type": "number"
+        },
+        "retailPrice": {
+          "type": "number"
+        },
+        "semiPrice": {
+          "type": "number"
+        },
+        "wholesalePrice": {
+          "type": "number"
+        },
+        "badge": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "rating": {
+          "type": "number"
+        },
+        "sold": {
+          "type": "number"
+        },
+        "featured": {
+          "type": "boolean"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "name", "category", "origin", "grade", "img", "desc", "stock", "retailPrice", "semiPrice", "wholesalePrice", "updatedAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private customer account profile containing PII (restricted strictly to owner and admin)",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["customer"],
+          "maxLength": 20
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "buyerType": {
+          "type": "string",
+          "enum": ["retail", "confectionery", "wholesale"],
+          "maxLength": 24
+        },
+        "province": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "favoriteIds": {
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "role", "fullName", "email", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer storefront order with shipping details and status lifecycle",
+      "type": "object",
+      "properties": {
+        "orderCode": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "processing", "shipped", "done", "canceled"],
+          "maxLength": 24
+        },
+        "customerName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "customerPhone": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 24
+        },
+        "customerEmail": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "province": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "address": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 400
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array"
+        },
+        "subtotal": {
+          "type": "number"
+        },
+        "shippingCost": {
+          "type": "number"
+        },
+        "grandTotal": {
+          "type": "number"
+        },
+        "totalKg": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["orderCode", "userId", "status", "customerName", "customerPhone", "address", "items", "grandTotal", "createdAt", "updatedAt"]
+    },
+    "SupplyOffer": {
+      "title": "SupplyOffer",
+      "description": "Orchard/supplier wholesale supply proposal submitted by authenticated partner",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sellerName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 24
+        },
+        "origin": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "productType": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "amountKg": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "reviewing", "accepted", "rejected"],
+          "maxLength": 24
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "sellerName", "phone", "productType", "amountKg", "status", "createdAt", "updatedAt"]
+    },
+    "AdminMember": {
+      "title": "AdminMember",
+      "description": "Authorized admin UID registry entry",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "addedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "addedBy", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/siteContent/{sectionId}": {
+      "schema": { "$ref": "#/entities/SiteContentSection" },
+      "description": "Live CMS content sections for homepage, branding, and inner pages"
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Live product catalog managed by admins and publicly browsed by customers"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private customer profile & PII isolated per authenticated user"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer orders readable only by owner or admin"
+    },
+    "/supplyOffers/{offerId}": {
+      "schema": { "$ref": "#/entities/SupplyOffer" },
+      "description": "Supplier harvest offers readable only by submitter or admin"
+    },
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/AdminMember" },
+      "description": "Admin role registry strictly controlled by existing admins"
+    }
+  }
+}

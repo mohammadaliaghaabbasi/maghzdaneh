@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- مغزدانه logo: pistachio kernel in a circle -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2f7d4f"/>
-      <stop offset="1" stop-color="#4fae6f"/>
+    <linearGradient id="mgz-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#13261b"/>
+      <stop offset="1" stop-color="#07100b"/>
+    </linearGradient>
+    <linearGradient id="mgz-kernel" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#7be8a3"/>
+      <stop offset="0.55" stop-color="#3da867"/>
+      <stop offset="1" stop-color="#1e633b"/>
+    </linearGradient>
+    <linearGradient id="mgz-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3cf76"/>
+      <stop offset="1" stop-color="#b8861e"/>
     </linearGradient>
   </defs>
-  <circle cx="32" cy="32" r="30" fill="#f7f3e9" stroke="#2f7d4f" stroke-width="3"/>
-  <!-- pistachio kernel shape -->
-  <path d="M32 12 C43 14 50 24 48 36 C46 48 38 53 32 53 C26 53 18 48 16 36 C14 24 21 14 32 12 Z" fill="url(#g)"/>
-  <!-- kernel seam -->
-  <path d="M32 16 C38 20 41 28 39 37 C37.5 45 34 49 32 50" fill="none" stroke="#1f5c39" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M31 15 C25 20 22.5 28 24 37 C25.5 45 29 49 31 50" fill="none" stroke="#7fd39b" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#mgz-bg)" stroke="url(#mgz-gold)" stroke-width="2"/>
+  <path d="M32 11 C43 14 49.5 23.5 47.5 36 C45.5 47.5 38 53 32 53 C26 53 18.5 47.5 16.5 36 C14.5 23.5 21 14 32 11 Z" fill="url(#mgz-kernel)"/>
+  <path d="M32 15 C37.5 19.5 40.5 27.5 38.8 37 C37.3 45 34 49 32 50" fill="none" stroke="#0d2417" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M31.5 15 C26 20 23.5 28 25 37 C26.3 44.5 29.5 49 31.5 50" fill="none" stroke="#a6f5c2" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+  <circle cx="32" cy="11" r="2" fill="url(#mgz-gold)"/>
 </svg>

@@ -5,50 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>درباره مغزدانه | ما مغز را می‌شناسیم</title>
   <meta name="description" content="داستان مغزدانه: از بازار عمده مغز تا پلتفرم تخصصی خرید و فروش مغز پسته، بادام و گردو بدون واسطه.">
+  <meta name="theme-color" content="#07100b">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/fx.css">
+  <style>
+    .about-banner {
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--c-line);
+      aspect-ratio: 21 / 8;
+      background: var(--c-surface);
+      margin-bottom: 32px;
+    }
+    .about-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .about-grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+      align-items: start;
+    }
+    .pledge-card {
+      background: linear-gradient(180deg, rgba(78, 200, 125, 0.09), var(--c-surface) 70%);
+      border: 1px solid rgba(78, 200, 125, 0.3);
+      border-radius: var(--r-xl);
+      padding: 26px;
+      position: sticky;
+      top: 118px;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .pledge-card { position: static; }
+      .about-banner { aspect-ratio: 16 / 9; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
     <div class="container">
+      <span class="sec-label">ABOUT MAGHZDANEH — داستان ما</span>
       <h1>درباره مغزدانه</h1>
-      <p>چرا یک سایت، فقط برای مغز؟</p>
+      <p>چرا یک بازار تخصصی، فقط برای مغز پسته، بادام و گردو؟</p>
     </div>
   </div>
 
   <section>
-    <div class="container prose" data-reveal>
-      <h2>ما از بازار مغز آمده‌ایم، نه از دفتر</h2>
-      <p>مغزدانه از یک مغازه کوچک در بازار خشکبار شروع شد؛ مغازه‌ای که سی سال فقط یک چیز فروخت: مغز. مغز پسته، مغز بادام، مغز گردو. نه چای، نه زعفران، نه هیچ چیز دیگر. این تمرکز باعث شد مشتریانمان — از خانم خانه‌دار تا مدیر کارخانه شیرینی — دقیقاً بدانند برای مغز مرغوب باید به کجا بیایند.</p>
-      <p>سال ۱۴۰۵ تصمیم گرفتیم همان اعتماد و همان قیمت‌گذاری شفاف را به اینترنت بیاوریم. اما یک مشکل وجود داشت: سایت‌های موجود یا فقط خرده‌فروشی می‌کردند، یا فقط عمده. ما هر دو را در یک‌جا با <b>قیمت پلکانی شفاف</b> جمع کردیم — چون در بازار واقعی هم خریدار ۲۵۰ گرمی و هم خریدار ۲۵ کیلویی حق دارند قیمت منصفانه ببینند.</p>
+    <div class="container">
+      <div class="about-banner" data-reveal>
+        <img src="src/assets/images/editorial_orchard_craft_1795339905141.jpg" alt="نمای استودیویی مغز پسته اکبری رفسنجان در مغزدانه" width="1200" height="460" onerror="mgzImgFallback(this,'مغزدانه')">
+      </div>
 
-      <h2>زنجیره بدون واسطه، از بنه تا خانه</h2>
-      <p>قیمت مغز پسته در بازار سنتی چند لایه واسطه دارد: بنه‌دار → مغزکن → دلال بازار → بنکدار → آجیل‌فروش محله → شما. هر لایه ۱۰ تا ۲۰ درصد به قیمت اضافه می‌کند. ما با خرید مستقیم از باغدار و بنه‌دار و فروش مستقیم به مصرف‌کننده نهایی، دو تا سه لایه واسطه را حذف کرده‌ایم؛ صرفه‌جویی حاصل همان چیزی است که در قیمت پلکانی ما می‌بینید.</p>
-      <ul class="bullets">
-        <li><b>خرید از مبدأ:</b> پسته از رفسنجان، دامغان و یزد؛ بادام از همدان و سامان؛ گردو از تویسرکان و ارومیه.</li>
-        <li><b>مغزکنی و برشته‌کاری اختصاصی:</b> در کارگاه خودمان، همان روز سفارش.</li>
-        <li><b>آزمایش رطوبت و پرخوری:</b> هر محموله ورودی قبل از پذیرش، آزمایش می‌شود.</li>
-      </ul>
+      <div class="big-stats" style="margin-bottom:36px" data-reveal-stagger>
+        <div class="big-stat"><span class="v">۳۰ سال</span><span class="l">سابقه تخصصی در بازار خشکبار و مغز</span></div>
+        <div class="big-stat"><span class="v">۰ واسطه</span><span class="l">خرید مستقیم از باغدار و بنه‌دار</span></div>
+        <div class="big-stat"><span class="v">۲۰ گرید</span><span class="l">تخصصی پسته، بادام و گردو</span></div>
+        <div class="big-stat"><span class="v">۷ روز</span><span class="l">ضمانت بی‌قیدوشرط تازگی و تطابق گرید</span></div>
+      </div>
 
-      <h2>چرا تمرکز ویژه روی مغز پسته؟</h2>
-      <p>پسته محصول استراتژیک ایران است و بزرگ‌ترین تنوع گرید را دارد: اکبری، کله‌قوچی، احمدآقایی، فندقی، بادامی؛ هر کدام با سبز و سرخ، خام و برشته، درشت و ریز، کامل و شکسته و خلال. قنادی‌ها، شیرینی‌فروشی‌ها، بستنی‌سازها و آجیل‌فروشی‌ها هر کدام گرید متفاوتی لازم دارند — و تشخیص گرید درست، تخصص است. ما ده‌ها سال است که فقط این کار را می‌کنیم و در کاتالوگ، برای هر محصول نوشته‌ایم برای چه مصرفی مناسب است.</p>
+      <div class="about-grid">
+        <div class="prose" data-reveal>
+          <h2 style="margin-top:0">ما از بازار مغز آمده‌ایم، نه از دفتر</h2>
+          <p>مغزدانه از یک مغازه کوچک در بازار خشکبار شروع شد؛ مغازه‌ای که سی سال فقط یک چیز فروخت: مغز. مغز پسته، مغز بادام و مغز گردو. نه چای، نه زعفران، نه هیچ کالای متفرقه دیگر. این تمرکز باعث شد مشتریانمان — از مصرف‌کننده خانگی تا مدیر کارگاه شیرینی و قنادی — دقیقاً بدانند برای مغز مرغوب باید به کجا مراجعه کنند.</p>
+          <p>سال ۱۴۰۵ تصمیم گرفتیم همان اعتماد و قیمت‌گذاری شفاف را آنلاین کنیم. سایت‌های موجود یا فقط خرده‌فروشی می‌کردند یا فقط عمده با برچسب «تماس بگیرید». ما هر دو را یک‌جا با <b>قیمت پلکانی شفاف</b> کنار هم گذاشتیم؛ چون در بازار واقعی هم خریدار ۲۵۰ گرمی و هم خریدار ۲۵ کیلویی حق دارند قیمت منصفانه ببینند.</p>
 
-      <h2>مغزدانه برای چه کسانی است؟</h2>
-      <ul class="bullets">
-        <li><b>مصرف‌کننده خانگی:</b> از ۲۵۰ گرم با قیمت منصفانه و تضمین تازگی.</li>
-        <li><b>شیرینی‌فروشی و قنادی:</b> خلال، پودر و مغز سبز با صورت‌حساب رسمی.</li>
-        <li><b>آجیل‌فروشی و سوپرمارکت:</b> قیمت نیم‌عمده و عمده با برچسب اختصاصی.</li>
-        <li><b>رستوران و کافه:</b> قرارداد دوره‌ای با قیمت ثابت فصلی.</li>
-        <li><b>صنایع غذایی:</b> مغز شکسته صنعتی و پودر با مشخصات فنی دقیق.</li>
-        <li><b>باغدار و بنه‌دار:</b> کانال فروش مطمئن با تسویه نقدی (صفحه <a href="supply.html">عرضه محصول</a>).</li>
-      </ul>
+          <h2>زنجیره بدون واسطه، از بنه تا خانه</h2>
+          <p>قیمت مغز پسته در بازار سنتی چند لایه واسطه دارد: بنه‌دار ← مغزکن ← دلال بازار ← بنکدار ← آجیل‌فروش محله ← شما. هر لایه ۱۰ تا ۲۰ درصد به قیمت نهایی اضافه می‌کند. ما با خرید مستقیم از باغدار و بنه‌دار و عرضه مستقیم به مصرف‌کننده نهایی، دو تا سه لایه واسطه را حذف کرده‌ایم.</p>
+          <ul class="bullets">
+            <li><b>خرید از مبدأ:</b> پسته از رفسنجان، دامغان و یزد؛ بادام از سامان و همدان؛ گردو از تویسرکان و ارومیه.</li>
+            <li><b>مغزکنی و برشته‌کاری اختصاصی:</b> در کارگاه خودمان، تازه و مطابق سفارش روز.</li>
+            <li><b>آزمایش رطوبت و پرخوری:</b> هر محموله ورودی قبل از پذیرش نمونه‌گیری و کنترل کیفیت می‌شود.</li>
+          </ul>
 
-      <h2>تعهد ما</h2>
-      <p>اگر مغزی که از ما خریدید تازه نبود یا با توضیحات سایت مطابقت نداشت، تا ۷ روز پس از دریافت مرجوع کنید و کل مبلغ را پس بگیرید. اعتبار یک مغازه سی‌ساله با یک بسته مغز بی‌کیفیت از دست می‌رود — و ما این را با پوست و استخوان می‌دانیم.</p>
+          <h2>چرا تمرکز ویژه روی مغز پسته؟</h2>
+          <p>پسته محصول استراتژیک ایران است و بیشترین تنوع گرید را دارد: اکبری، کله‌قوچی، احمدآقایی، فندقی و بادامی؛ هر کدام در حالت سبز و سرخ، خام و برشته، درشت و ریز، کامل و شکسته و خلال. قنادی‌ها، بستنی‌سازها و آجیل‌فروشی‌ها هر کدام گرید متفاوتی لازم دارند و تشخیص گرید درست تخصص است. در کاتالوگ مغزدانه برای هر محصول دقیقاً نوشته‌ایم برای چه مصرفی ساخته شده است.</p>
+
+          <h2>مغزدانه برای چه کسانی است؟</h2>
+          <ul class="bullets">
+            <li><b>مصرف‌کننده خانگی:</b> از ۲۵۰ گرم با قیمت منصفانه و تضمین تازگی.</li>
+            <li><b>شیرینی‌فروشی و قنادی:</b> خلال سبز قزوین، پودر آسیاب روز و مغز سبز با صورت‌حساب رسمی.</li>
+            <li><b>آجیل‌فروشی و سوپرمارکت:</b> قیمت نیم‌عمده و عمده با بسته‌بندی و برچسب اختصاصی.</li>
+            <li><b>رستوران و کافه:</b> قرارداد دوره‌ای با قیمت ثابت فصلی.</li>
+            <li><b>صنایع غذایی:</b> مغز شکسته صنعتی و پودر با مشخصات فنی دقیق.</li>
+            <li><b>باغدار و بنه‌دار:</b> کانال فروش مطمئن با تسویه نقدی در صفحه <a href="supply.html">عرضه محصول</a>.</li>
+          </ul>
+        </div>
+
+        <aside class="pledge-card" data-reveal>
+          <div class="cat-tile-top" style="margin-bottom:14px">
+            <span class="ico-wrap" id="pledge-ico" style="width:46px;height:46px;border-radius:var(--r-md);background:rgba(78,200,125,0.14);color:var(--c-primary-light);display:inline-flex;align-items:center;justify-content:center"></span>
+            <span style="font-size:var(--fs-xs);font-weight:800;color:var(--c-accent-light)">ضمانت اصالت و تازگی</span>
+          </div>
+          <h3 style="font-size:var(--fs-lg);font-weight:900;color:#fff;margin-bottom:10px">تعهد مغزدانه</h3>
+          <p style="font-size:var(--fs-sm);color:var(--c-text-soft);line-height:1.9">
+            اگر مغزی که از ما خریدید تازه نبود یا با گرید و توضیحات ثبت‌شده در سایت مطابقت نداشت، تا ۷ روز پس از دریافت مرجوع کنید و کل مبلغ سفارش همراه با هزینه برگشت را دریافت نمایید. اعتبار یک نام تخصصی در بازار با یک بسته بی‌کیفیت از دست می‌رود و ما این را با پوست و استخوان می‌دانیم.
+          </p>
+          <div style="display:grid;gap:10px;margin-top:20px">
+            <a class="btn btn-primary" href="catalog.html">مشاهده کاتالوگ مغزها</a>
+            <a class="btn btn-outline" href="wholesale.html">محاسبه‌گر خرید عمده</a>
+            <a class="btn btn-ghost" href="supply.html">همکاری باغداران و بنه‌داران</a>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -56,6 +121,22 @@
 
   <script src="assets/js/app.js"></script>
   <script src="assets/js/motion.js"></script>
-  <script>boot('about');</script>
+  <script>
+    boot('about').then(async () => {
+      document.getElementById('pledge-ico').innerHTML = icon('shield');
+      if (window.MgzCloud) {
+        const pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
+        if (pg && pg.aboutTitle) {
+          const h1 = document.querySelector('.page-head h1');
+          if (h1) h1.textContent = pg.aboutTitle;
+        }
+        if (pg && pg.aboutBody) {
+          const p = document.querySelector('.page-head p');
+          if (p) p.textContent = pg.aboutBody;
+        }
+      }
+      if (window.MGZ) MGZ.init();
+    });
+  </script>
 </body>
 </html>

@@ -5,24 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>صفحه پیدا نشد | مغزدانه</title>
   <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#07100b">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/fx.css">
 </head>
 <body>
+  <header class="site-header" id="site-header"></header>
+
   <section>
     <div class="container">
       <div class="success-box">
-        <div class="tick" style="background:#fdecea;color:var(--c-danger)">؟</div>
-        <h1 style="font-size:var(--fs-xl);margin-bottom:10px">این صفحه پیدا نشد!</h1>
-        <p style="color:var(--c-text-soft)">شاید مغزش را جای دیگری ریخته‌اند 😉 — از این‌جا ادامه دهید:</p>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px">
+        <div class="tick" id="nf-ico" style="background:rgba(226,100,90,0.12);border-color:rgba(226,100,90,0.4);color:var(--c-danger)"></div>
+        <span class="sec-label" style="justify-content:center;margin-bottom:8px">ERROR 404</span>
+        <h1 style="font-size:var(--fs-xl);color:#fff;margin-bottom:10px">این صفحه پیدا نشد</h1>
+        <p style="color:var(--c-text-soft);font-size:var(--fs-sm);line-height:1.85">
+          نشانی واردشده تغییر کرده یا دیگر وجود ندارد. می‌توانید از صفحه اصلی یا کاتالوگ مغزها مسیرتان را ادامه دهید.
+        </p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">
           <a class="btn btn-primary" href="index.html">صفحه اصلی</a>
           <a class="btn btn-outline" href="catalog.html">کاتالوگ مغزها</a>
+          <a class="btn btn-ghost" href="wholesale.html">خرید عمده</a>
         </div>
       </div>
     </div>
   </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    boot('').then(() => {
+      document.getElementById('nf-ico').innerHTML = icon('search');
+    }).catch(() => {
+      document.getElementById('nf-ico').textContent = '۴۰۴';
+    });
+  </script>
 </body>
 </html>

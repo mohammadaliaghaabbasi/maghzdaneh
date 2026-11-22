@@ -9,19 +9,28 @@
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/fx.css">
+  <meta name="theme-color" content="#07100b">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
     <div class="container">
+      <span class="sec-label">ثبت امن و بدون اصطکاک</span>
       <h1>تسویه‌حساب</h1>
-      <p>اطلاعات ارسال و پرداخت را کامل کنید؛ سفارش شما مستقیماً در سیستم مغزدانه ثبت می‌شود.</p>
+      <p>اطلاعات خریدار، نشانی ارسال و روش پرداخت را کامل کنید؛ رسید و کد پیگیری بلافاصله صادر می‌شود.</p>
     </div>
   </div>
 
   <section>
     <div class="container">
+      <div class="co-steps" aria-label="مراحل تسویه‌حساب">
+        <span class="co-step active"><b>۱</b> اطلاعات خریدار</span>
+        <span style="color:var(--c-text-muted)">←</span>
+        <span class="co-step active"><b>۲</b> آدرس و ارسال</span>
+        <span style="color:var(--c-text-muted)">←</span>
+        <span class="co-step active"><b>۳</b> روش پرداخت و ثبت نهایی</span>
+      </div>
       <div id="co-area"></div>
     </div>
   </section>
@@ -35,28 +44,19 @@
     boot('').then(db => {
       const area = document.getElementById('co-area');
 
-      function totals() {
-        const subtotal = APP.cart.reduce((s, it) => {
-          const p = byId(it.id);
-          return s + (p.prices[it.tier] || p.prices.retail) * it.qty;
-        }, 0);
-        const freeShip = subtotal >= db.site.shipping.free_over;
-        return { subtotal, ship: freeShip ? 0 : db.site.shipping.flat_cost, grand: subtotal + (freeShip ? 0 : db.site.shipping.flat_cost) };
-      }
-
       function render() {
         if (!APP.cart.length) {
           area.innerHTML = `
             <div class="empty">
-              <div class="big">🧺</div>
-              <p><b>سبدی برای تسویه وجود ندارد.</b></p>
-              <a class="btn btn-primary" href="catalog.html" style="margin-top:14px">رفتن به کاتالوگ</a>
+              <div class="big">${icon('cart')}</div>
+              <p style="color:#fff;font-weight:800">سبدی برای تسویه وجود ندارد</p>
+              <a class="btn btn-primary" href="catalog.html" style="margin-top:16px">رفتن به کاتالوگ</a>
             </div>`;
           return;
         }
-        const t = totals();
+        const t = cartTotals();
         area.innerHTML = `
-        <form id="co-form" style="display:grid;gap:22px;grid-template-columns:2fr 1fr;align-items:start" class="co-layout">
+        <form id="co-form" style="display:grid;gap:24px;grid-template-columns:minmax(0, 1.8fr) minmax(0, 1fr);align-items:start" class="co-layout">
           <div style="display:grid;gap:18px">
             <div class="contact-card">
               <h3>۱. اطلاعات خریدار</h3>
@@ -72,7 +72,7 @@
               <div class="form-grid">
                 <div class="field"><label for="f-prov">استان *</label><input id="f-prov" required placeholder="مثلاً تهران"></div>
                 <div class="field"><label for="f-city">شهر *</label><input id="f-city" required placeholder="مثلاً تهران"></div>
-                <div class="field form-full"><label for="f-addr">آدرس کامل پستی *</label><textarea id="f-addr" required rows="3" placeholder="خیابان، کوچه، پلاک، واحد، کد پستی"></textarea></div>
+                <div class="field form-full"><label for="f-addr">آدرس کامل پستی *</label><textarea id="f-addr" required rows="3" placeholder="خیابان، کوچه، پلاک، واحد"></textarea></div>
                 <div class="field"><label for="f-post">کد پستی</label><input id="f-post" inputmode="numeric" placeholder="۱۰ رقم" style="direction:ltr;text-align:right"></div>
                 <div class="field"><label for="f-ship">روش ارسال</label>
                   <select id="f-ship">
@@ -85,7 +85,7 @@
             </div>
 
             <div class="contact-card">
-              <h3>۳. روش پرداخت</h3>
+              <h3>۳. روش پرداخت و یادداشت</h3>
               <div class="pay-methods">
                 ${db.site.payment.methods.map((m, i) => `
                   <label class="pay-opt ${i === 0 ? 'sel' : ''}">
@@ -94,23 +94,24 @@
                   </label>`).join('')}
               </div>
               <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">پس از ثبت سفارش، لینک پرداخت آنلاین (درگاه ${db.site.payment.gateway}) برای شما پیامک می‌شود. سفارش‌های کارت‌به‌کارت پس از تأیید واریز پردازش می‌شوند.</p>
-            </div>
-
-            <div class="contact-card">
-              <h3>۴. یادداشت سفارش</h3>
-              <div class="field"><textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا درخواست صورت‌حساب رسمی برای قنادی"></textarea></div>
+              <div class="field" style="margin-top:16px">
+                <label for="f-note">یادداشت سفارش (اختیاری)</label>
+                <textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا درخواست صورت‌حساب رسمی برای قنادی"></textarea>
+              </div>
             </div>
           </div>
 
           <aside class="cart-summary">
-            <h3>سفارش شما</h3>
+            <h3>خلاصه سفارش</h3>
             ${APP.cart.map(it => {
               const p = byId(it.id);
+              if (!p) return '';
               const u = p.prices[it.tier] || p.prices.retail;
               return `<div class="sum-row"><span>${p.name} × ${fmt(it.qty)} کیلو</span><span>${fmt(Math.round(u * it.qty))}</span></div>`;
             }).join('')}
-            <div class="sum-row"><span>ارسال</span><span>${t.ship ? fmt(t.ship) + ' تومان' : 'رایگان'}</span></div>
-            <div class="sum-row total"><span>قابل پرداخت</span><span>${fmt(t.grand)} تومان</span></div>
+            <div class="sum-row"><span>وزن کل</span><span>${fmt(t.totalKg)} کیلوگرم</span></div>
+            <div class="sum-row"><span>هزینه ارسال</span><span>${t.shipCost ? faToman(t.shipCost) : 'رایگان'}</span></div>
+            <div class="sum-row total"><span>قابل پرداخت</span><span>${faToman(t.grand)}</span></div>
             <button class="btn btn-primary" type="submit" style="width:100%;margin-top:16px" id="submit-btn">ثبت نهایی سفارش</button>
             <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">با ثبت سفارش، <a href="legal.html">قوانین فروش</a> مغزدانه را می‌پذیرید.</p>
           </aside>
@@ -143,40 +144,70 @@
             note: document.getElementById('f-note').value.trim(),
             items: APP.cart.map(it => {
               const p = byId(it.id);
-              return { id: p.id, name: p.name, tier: it.tier, qty: it.qty, unitPrice: p.prices[it.tier] || p.prices.retail, total: Math.round((p.prices[it.tier] || p.prices.retail) * it.qty) };
+              const u = p.prices[it.tier] || p.prices.retail;
+              return { id: p.id, name: p.name, tier: it.tier, qty: it.qty, unit: u, unitPrice: u, lineTotal: Math.round(u * it.qty), total: Math.round(u * it.qty) };
             }),
-            totals: { subtotal: Math.round(t.subtotal), shipping: t.ship, grand: Math.round(t.grand) },
-            status: 'new'
+            totals: { subtotal: t.subtotal, shipping: t.shipCost, totalKg: t.totalKg, grand: t.grand },
+            status: 'new',
           };
+
+          const local = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
+          local.push(order);
+          localStorage.setItem('maghzdaneh_orders', JSON.stringify(local));
+
+          let savedRemote = false;
           try {
-            const ok = await GHDB.submitOrder(order);
-            if (ok) {
-              APP.cart = [];
-              saveCart();
-              location.href = 'success.html?order=' + encodeURIComponent(order.id) + '&total=' + t.grand;
+            if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
+              await window.MgzCloud.createOrder({
+                orderCode: order.id,
+                customerName: order.customer.name,
+                customerPhone: order.customer.phone,
+                customerEmail: order.customer.email,
+                province: order.customer.province,
+                city: order.customer.city,
+                address: order.customer.address,
+                note: order.note,
+                items: order.items,
+                subtotal: t.subtotal,
+                shippingCost: t.shipCost,
+                grandTotal: t.grand,
+                totalKg: t.totalKg,
+              });
+              savedRemote = true;
             } else {
-              // offline fallback: keep order locally so nothing is lost
-              const local = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
-              local.push(order);
-              localStorage.setItem('maghzdaneh_orders', JSON.stringify(local));
-              APP.cart = [];
-              saveCart();
-              location.href = 'success.html?order=' + encodeURIComponent(order.id) + '&total=' + t.grand + '&local=1';
+              savedRemote = await GHDB.submitOrder(order);
             }
           } catch (err) {
             console.error(err);
-            toast('خطا در ثبت سفارش — دوباره تلاش کنید');
-            btn.disabled = false;
-            btn.textContent = 'ثبت نهایی سفارش';
           }
+
+          APP.cart = [];
+          saveCart();
+          location.href = `success.html?order=${encodeURIComponent(order.id)}&total=${t.grand}${savedRemote ? '' : '&local=1'}`;
         });
+
+        // Autofill from authenticated customer profile in Firestore
+        if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
+          window.MgzCloud.getMyProfile(window.MgzCloud.getCurrentUser().uid).then(prof => {
+            if (!prof) return;
+            if (prof.fullName && !document.getElementById('f-name').value) document.getElementById('f-name').value = prof.fullName;
+            if (prof.phone && !document.getElementById('f-phone').value) document.getElementById('f-phone').value = prof.phone;
+            if (prof.email && !document.getElementById('f-email').value) document.getElementById('f-email').value = prof.email;
+            if (prof.province && !document.getElementById('f-prov').value) document.getElementById('f-prov').value = prof.province;
+            if (prof.city && !document.getElementById('f-city').value) document.getElementById('f-city').value = prof.city;
+            if (prof.address && !document.getElementById('f-addr').value) document.getElementById('f-addr').value = prof.address;
+            if (prof.postalCode && !document.getElementById('f-post').value) document.getElementById('f-post').value = prof.postalCode;
+          }).catch(() => {});
+        }
       }
       render();
       document.addEventListener('cart:changed', render);
+      document.addEventListener('mgz:auth', render);
+      if (window.MGZ) MGZ.init();
     });
   </script>
   <style>
-    @media (max-width: 880px) { .co-layout { grid-template-columns: 1fr !important; } }
+    @media (max-width: 900px) { .co-layout { grid-template-columns: 1fr !important; } }
   </style>
 </body>
 </html>

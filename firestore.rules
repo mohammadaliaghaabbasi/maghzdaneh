@@ -1,0 +1,331 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Pillar 0: Default-deny global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ---------- Shared Hardened Primitives ----------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isOwner(uid) {
+      return isVerified() && request.auth.uid == uid;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerified() && request.auth.token.email == 'mohammadaliaghaabbasi@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isVerified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isOptString(data, key, maxLen) {
+      return !(key in data) || (data[key] is string && data[key].size() <= maxLen);
+    }
+
+    function isOptNumber(data, key, minVal, maxVal) {
+      return !(key in data) || (data[key] is number && data[key] >= minVal && data[key] <= maxVal);
+    }
+
+    function isOptBool(data, key) {
+      return !(key in data) || (data[key] is bool);
+    }
+
+    function isOptStringList(data, key, maxSize) {
+      return !(key in data) || (
+        data[key] is list
+        && data[key].size() <= maxSize
+        && (data[key].size() == 0 || (data[key][0] is string && data[key][0].size() <= 200))
+      );
+    }
+
+    function isOptMapList(data, key, maxSize) {
+      return !(key in data) || (
+        data[key] is list
+        && data[key].size() <= maxSize
+        && (data[key].size() == 0 || data[key][0] is map)
+      );
+    }
+
+    // ---------- Entity Validation Blueprints (Pillar 2 + Pillar 5) ----------
+    function isValidSiteContent(data) {
+      return data.keys().hasAll(['sectionKey', 'updatedBy', 'updatedAt'])
+        && data.keys().hasOnly([
+          'sectionKey', 'title', 'subtitle', 'kicker',
+          'primaryCtaLabel', 'primaryCtaHref', 'secondaryCtaLabel', 'secondaryCtaHref',
+          'stages', 'featuredTitle', 'featuredKicker', 'featuredIds',
+          'craftKicker', 'craftTitle', 'craftBody', 'craftImage',
+          'announcement', 'siteName', 'tagline', 'phone', 'mobile', 'email', 'address', 'worktime',
+          'flatShippingCost', 'freeShippingOver', 'heavyShippingNote',
+          'aboutTitle', 'aboutBody', 'wholesaleTitle', 'wholesaleBody', 'faqItems',
+          'updatedBy', 'updatedAt'
+        ])
+        && data.sectionKey is string && data.sectionKey in ['home', 'branding', 'pages']
+        && data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid
+        && data.updatedAt == request.time
+        && isOptString(data, 'title', 200)
+        && isOptString(data, 'subtitle', 600)
+        && isOptString(data, 'kicker', 140)
+        && isOptString(data, 'primaryCtaLabel', 80)
+        && isOptString(data, 'primaryCtaHref', 200)
+        && isOptString(data, 'secondaryCtaLabel', 80)
+        && isOptString(data, 'secondaryCtaHref', 200)
+        && isOptMapList(data, 'stages', 5)
+        && isOptString(data, 'featuredTitle', 160)
+        && isOptString(data, 'featuredKicker', 120)
+        && isOptStringList(data, 'featuredIds', 6)
+        && isOptString(data, 'craftKicker', 120)
+        && isOptString(data, 'craftTitle', 200)
+        && isOptString(data, 'craftBody', 1200)
+        && isOptString(data, 'craftImage', 300)
+        && isOptString(data, 'announcement', 240)
+        && isOptString(data, 'siteName', 80)
+        && isOptString(data, 'tagline', 240)
+        && isOptString(data, 'phone', 40)
+        && isOptString(data, 'mobile', 40)
+        && isOptString(data, 'email', 120)
+        && isOptString(data, 'address', 240)
+        && isOptString(data, 'worktime', 120)
+        && isOptNumber(data, 'flatShippingCost', 0, 50000000)
+        && isOptNumber(data, 'freeShippingOver', 0, 500000000)
+        && isOptString(data, 'heavyShippingNote', 300)
+        && isOptString(data, 'aboutTitle', 200)
+        && isOptString(data, 'aboutBody', 3000)
+        && isOptString(data, 'wholesaleTitle', 200)
+        && isOptString(data, 'wholesaleBody', 2000)
+        && isOptMapList(data, 'faqItems', 20);
+    }
+
+    function isValidProduct(data, productId) {
+      return data.keys().hasAll([
+          'id', 'name', 'category', 'origin', 'grade', 'img', 'desc',
+          'stock', 'retailPrice', 'semiPrice', 'wholesalePrice', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'name', 'category', 'origin', 'grade', 'img', 'desc',
+          'specs', 'uses', 'stock', 'retailPrice', 'semiPrice', 'wholesalePrice',
+          'badge', 'rating', 'sold', 'featured', 'updatedAt'
+        ])
+        && data.id is string && data.id == productId && isValidId(data.id)
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 160
+        && data.category is string && data.category in ['pistachio-kernel', 'pistachio-slice', 'almond-kernel', 'walnut-kernel', 'in-shell']
+        && data.origin is string && data.origin.size() <= 80
+        && data.grade is string && data.grade.size() <= 80
+        && data.img is string && data.img.size() <= 300
+        && data.desc is string && data.desc.size() <= 1200
+        && data.stock is number && data.stock >= 0 && data.stock <= 1000000
+        && data.retailPrice is number && data.retailPrice >= 0 && data.retailPrice <= 500000000
+        && data.semiPrice is number && data.semiPrice >= 0 && data.semiPrice <= 500000000
+        && data.wholesalePrice is number && data.wholesalePrice >= 0 && data.wholesalePrice <= 500000000
+        && isOptStringList(data, 'specs', 10)
+        && isOptStringList(data, 'uses', 10)
+        && isOptString(data, 'badge', 40)
+        && isOptNumber(data, 'rating', 0, 5)
+        && isOptNumber(data, 'sold', 0, 10000000)
+        && isOptBool(data, 'featured')
+        && data.updatedAt == request.time;
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'role', 'fullName', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'uid', 'role', 'fullName', 'email', 'phone', 'buyerType',
+          'province', 'city', 'address', 'postalCode', 'favoriteIds',
+          'createdAt', 'updatedAt'
+        ])
+        && data.uid is string && data.uid == userId && isValidId(data.uid)
+        && data.role is string && data.role == 'customer'
+        && data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 120
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+        && isOptString(data, 'phone', 24)
+        && (!('buyerType' in data) || (data.buyerType is string && data.buyerType in ['retail', 'confectionery', 'wholesale']))
+        && isOptString(data, 'province', 80)
+        && isOptString(data, 'city', 80)
+        && isOptString(data, 'address', 400)
+        && isOptString(data, 'postalCode', 20)
+        && isOptStringList(data, 'favoriteIds', 30)
+        && data.updatedAt == request.time;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+          'orderCode', 'userId', 'status', 'customerName', 'customerPhone',
+          'address', 'items', 'grandTotal', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'orderCode', 'userId', 'status', 'customerName', 'customerPhone',
+          'customerEmail', 'province', 'city', 'address', 'note',
+          'items', 'subtotal', 'shippingCost', 'grandTotal', 'totalKg',
+          'createdAt', 'updatedAt'
+        ])
+        && data.orderCode is string && isValidId(data.orderCode)
+        && data.userId is string && isValidId(data.userId)
+        && data.status is string && data.status in ['new', 'processing', 'shipped', 'done', 'canceled']
+        && data.customerName is string && data.customerName.size() >= 2 && data.customerName.size() <= 120
+        && data.customerPhone is string && data.customerPhone.size() >= 7 && data.customerPhone.size() <= 24
+        && isOptString(data, 'customerEmail', 160)
+        && isOptString(data, 'province', 80)
+        && isOptString(data, 'city', 80)
+        && data.address is string && data.address.size() >= 5 && data.address.size() <= 400
+        && isOptString(data, 'note', 500)
+        && data.items is list && data.items.size() >= 1 && data.items.size() <= 40 && data.items[0] is map
+        && isOptNumber(data, 'subtotal', 0, 5000000000)
+        && isOptNumber(data, 'shippingCost', 0, 100000000)
+        && data.grandTotal is number && data.grandTotal >= 0 && data.grandTotal <= 5000000000
+        && isOptNumber(data, 'totalKg', 0.1, 100000)
+        && data.updatedAt == request.time;
+    }
+
+    function isValidSupplyOffer(data) {
+      return data.keys().hasAll([
+          'userId', 'sellerName', 'phone', 'productType', 'amountKg', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'userId', 'sellerName', 'phone', 'origin', 'productType',
+          'amountKg', 'description', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.userId is string && isValidId(data.userId)
+        && data.sellerName is string && data.sellerName.size() >= 2 && data.sellerName.size() <= 120
+        && data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 24
+        && isOptString(data, 'origin', 80)
+        && data.productType is string && data.productType.size() >= 2 && data.productType.size() <= 120
+        && data.amountKg is number && data.amountKg >= 1 && data.amountKg <= 1000000
+        && isOptString(data, 'description', 1000)
+        && data.status is string && data.status in ['new', 'reviewing', 'accepted', 'rejected']
+        && data.updatedAt == request.time;
+    }
+
+    function isValidAdminMember(data, adminUid) {
+      return data.keys().hasAll(['uid', 'email', 'addedBy', 'createdAt'])
+        && data.keys().hasOnly(['uid', 'email', 'addedBy', 'createdAt'])
+        && data.uid is string && data.uid == adminUid && isValidId(data.uid)
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+        && data.addedBy is string && data.addedBy == request.auth.uid
+        && data.createdAt == request.time;
+    }
+
+    // ---------- Collections ----------
+
+    // 1. Live CMS Site Content (Public Read, Admin-Only Write)
+    match /siteContent/{sectionId} {
+      allow get: if isValidId(sectionId);
+      allow list: if true;
+      allow create: if isValidId(sectionId) && isValidSiteContent(incoming()) && isAdmin() && incoming().sectionKey == sectionId;
+      allow update: if isValidId(sectionId) && isValidSiteContent(incoming()) && isAdmin() && incoming().sectionKey == existing().sectionKey;
+      allow delete: if isValidId(sectionId) && isAdmin();
+    }
+
+    // 2. Live Storefront Product Catalog (Public Read, Admin-Only Write)
+    match /products/{productId} {
+      allow get: if isValidId(productId);
+      allow list: if true;
+      allow create: if isValidId(productId) && isValidProduct(incoming(), productId) && isAdmin();
+      allow update: if isValidId(productId) && isValidProduct(incoming(), productId) && isAdmin();
+      allow delete: if isValidId(productId) && isAdmin();
+    }
+
+    // 3. Private Customer Profiles & PII (Strict Owner/Admin Isolation)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().role == existing().role
+        && incoming().createdAt == existing().createdAt
+        && (
+          isAdmin() ||
+          (
+            isOwner(userId)
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'fullName', 'phone', 'buyerType', 'province', 'city', 'address', 'postalCode', 'favoriteIds', 'updatedAt'
+            ])
+          )
+        );
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    // 4. Orders (Owner & Admin Only; Strict State Machine + Terminal Lock)
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId) && isVerified() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isValidId(orderId)
+        && isVerified()
+        && isValidOrder(incoming())
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'new'
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().orderCode == existing().orderCode
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && (
+          isAdmin() ||
+          (
+            isVerified()
+            && existing().userId == request.auth.uid
+            && existing().status == 'new'
+            && incoming().status == 'canceled'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+        );
+      allow delete: if isValidId(orderId) && isAdmin();
+    }
+
+    // 5. Orchard / Supplier Offers
+    match /supplyOffers/{offerId} {
+      allow get: if isValidId(offerId) && isVerified() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isVerified() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isValidId(offerId)
+        && isVerified()
+        && isValidSupplyOffer(incoming())
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'new'
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(offerId)
+        && isValidSupplyOffer(incoming())
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && isAdmin();
+      allow delete: if isValidId(offerId) && isAdmin();
+    }
+
+    // 6. Admin Registry (Admin-Only Access)
+    match /admins/{adminUid} {
+      allow get: if isValidId(adminUid) && (isOwner(adminUid) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(adminUid) && isValidAdminMember(incoming(), adminUid) && isAdmin();
+      allow update: if false;
+      allow delete: if isValidId(adminUid) && isAdmin();
+    }
+  }
+}

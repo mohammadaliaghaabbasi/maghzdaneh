@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>تماس با مغزدانه | فروش خرده، عمده و خرید از باغدار</title>
-  <meta name="description" content="راه‌های تماس با مغزدانه: تلفن فروش، فروش عمده، خرید از باغداران، آدرس و ساعت کاری.">
+  <title>تماس با مغزدانه و پیگیری سفارش | فروش خرده، عمده و خرید از باغدار</title>
+  <meta name="description" content="راه‌های تماس با مغزدانه، پیگیری وضعیت سفارش، تلفن فروش عمده و خرید مستقیم از باغداران.">
+  <meta name="theme-color" content="#07100b">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
@@ -15,26 +16,46 @@
 
   <div class="page-head">
     <div class="container">
-      <h1>تماس با مغزدانه</h1>
-      <p>برای سفارش تلفنی، استعلام قیمت عمده یا هر سوال دیگری، از راه‌های زیر در دسترس هستیم.</p>
+      <span class="sec-label">CONTACT & TRACKING — پشتیبانی و پیگیری</span>
+      <h1>تماس با مغزدانه و پیگیری سفارش</h1>
+      <p>برای سفارش تلفنی، استعلام قیمت عمده، پیگیری کد سفارش یا مشاوره انتخاب گرید مغز در دسترس هستیم.</p>
     </div>
   </div>
 
   <section>
-    <div class="container contact-grid" data-reveal-stagger>
-      <div class="contact-card">
-        <h3>اطلاعات تماس</h3>
-        <div id="contact-lines"></div>
-      </div>
-      <form class="contact-card" id="contact-form">
-        <h3>پیام بفرستید</h3>
-        <div class="form-grid">
-          <div class="field"><label for="c-name">نام شما *</label><input id="c-name" required></div>
-          <div class="field"><label for="c-phone">موبایل یا ایمیل *</label><input id="c-phone" required style="direction:ltr;text-align:right"></div>
-          <div class="field form-full"><label for="c-msg">پیام *</label><textarea id="c-msg" rows="4" required placeholder="سوال یا درخواست‌تان را بنویسید…"></textarea></div>
+    <div class="container">
+      <div class="contact-grid" data-reveal-stagger>
+        <div class="contact-card">
+          <h3>اطلاعات تماس مستقیم</h3>
+          <div id="contact-lines"></div>
         </div>
-        <button class="btn btn-primary" type="submit" style="margin-top:14px">ارسال پیام</button>
-      </form>
+
+        <form class="contact-card" id="contact-form">
+          <h3>پیام بفرستید</h3>
+          <div class="form-grid">
+            <div class="field"><label for="c-name">نام شما *</label><input id="c-name" required></div>
+            <div class="field"><label for="c-phone">موبایل یا ایمیل *</label><input id="c-phone" required style="direction:ltr;text-align:right"></div>
+            <div class="field form-full"><label for="c-msg">پیام *</label><textarea id="c-msg" rows="4" required placeholder="سوال، نوع مغز مورد نظر یا درخواست استعلام عمده را بنویسید…"></textarea></div>
+          </div>
+          <button class="btn btn-primary" type="submit" style="margin-top:16px">ارسال پیام</button>
+          <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">پاسخ سوال‌های رایج در صفحه <a href="faq.html">سوالات متداول</a> نیز آماده است.</p>
+        </form>
+      </div>
+
+      <div class="contact-card" id="track" data-reveal style="margin-top:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <h3 style="margin-bottom:0">پیگیری سفارش و پیشنهاد عرضه</h3>
+          <span style="font-size:var(--fs-xs);color:var(--c-text-soft)">کد پیگیری با پیشوند <b class="ltr">MD-</b> یا <b class="ltr">SP-</b></span>
+        </div>
+        <form id="track-form" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+          <div class="field" style="flex:1;min-width:240px">
+            <label for="track-code">کد پیگیری</label>
+            <input id="track-code" placeholder="مثلاً MD-M8A1B2C3" style="direction:ltr;text-align:left">
+          </div>
+          <button class="btn btn-gold" type="submit">جستجو</button>
+        </form>
+        <div id="track-result" style="margin-top:16px"></div>
+      </div>
     </div>
   </section>
 
@@ -43,20 +64,25 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/motion.js"></script>
   <script>
+    function escHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     boot('contact').then(db => {
       const s = db.site;
       document.getElementById('contact-lines').innerHTML = `
-        <div class="contact-line"><b>تلفن فروش</b><span class="ltr">${s.phone}</span></div>
-        <div class="contact-line"><b>موبایل/واتس‌اپ</b><span class="ltr">${s.mobile}</span></div>
-        <div class="contact-line"><b>ایمیل</b><span class="ltr">${s.email}</span></div>
+        <div class="contact-line"><b>تلفن فروش</b><a class="ltr" href="tel:${s.phone.replace(/[^0-9+]/g,'')}">${s.phone}</a></div>
+        <div class="contact-line"><b>موبایل و واتس‌اپ</b><a class="ltr" href="tel:${s.mobile.replace(/[^0-9+]/g,'')}">${s.mobile}</a></div>
+        <div class="contact-line"><b>ایمیل</b><a class="ltr" href="mailto:${s.email}">${s.email}</a></div>
         <div class="contact-line"><b>آدرس</b><span>${s.address}</span></div>
         <div class="contact-line"><b>ساعت کاری</b><span>${s.worktime}</span></div>
         <div class="contact-line"><b>فروش عمده</b><span class="ltr">0912-111-2233</span></div>
         <div class="contact-line"><b>خرید از باغدار</b><span class="ltr">${db.supply.phone}</span></div>
-        <div class="social-row" style="margin-top:16px">
-          <a href="${s.social.instagram}" target="_blank" rel="noopener" aria-label="اینستاگرام">📷</a>
-          <a href="${s.social.telegram}" target="_blank" rel="noopener" aria-label="تلگرام">✈️</a>
-          <a href="${s.social.whatsapp}" target="_blank" rel="noopener" aria-label="واتس‌اپ">💬</a>
+        <div class="social-row" style="margin-top:18px">
+          <a href="${s.social.instagram}" target="_blank" rel="noopener" aria-label="اینستاگرام">${icon('instagram')}</a>
+          <a href="${s.social.telegram}" target="_blank" rel="noopener" aria-label="تلگرام">${icon('telegram')}</a>
+          <a href="${s.social.whatsapp}" target="_blank" rel="noopener" aria-label="واتس‌اپ">${icon('whatsapp')}</a>
         </div>`;
 
       document.getElementById('contact-form').addEventListener('submit', e => {
@@ -71,8 +97,58 @@
         });
         localStorage.setItem('maghzdaneh_msgs', JSON.stringify(msgs));
         e.target.reset();
-        toast('پیام شما ثبت شد — به‌زودی پاسخ می‌دهیم 🌿');
+        toast('پیام شما ثبت شد — همکاران ما به‌زودی پاسخ می‌دهند');
       });
+
+      const statusLabels = {
+        new: 'ثبت شده — در انتظار بررسی',
+        processing: 'در حال آماده‌سازی و بسته‌بندی',
+        done: 'تکمیل و ارسال شده',
+        canceled: 'لغو شده',
+      };
+
+      document.getElementById('track-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const code = document.getElementById('track-code').value.trim().toUpperCase();
+        const out = document.getElementById('track-result');
+        if (!code) {
+          out.innerHTML = '<p style="color:var(--c-accent-light);font-size:var(--fs-sm)">لطفاً کد پیگیری سفارش یا عرضه را وارد کنید.</p>';
+          return;
+        }
+        const orders = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
+        const offers = JSON.parse(localStorage.getItem('maghzdaneh_offers') || '[]');
+        const foundOrder = orders.find(o => (o.id || '').toUpperCase() === code);
+        const foundOffer = offers.find(o => (o.id || '').toUpperCase() === code);
+
+        if (foundOrder) {
+          out.innerHTML = `
+            <div style="padding:16px;border-radius:var(--r-md);background:var(--c-canvas-2);border:1px solid var(--c-line-strong);font-size:var(--fs-sm);line-height:1.9">
+              <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+                <strong class="ltr" style="color:var(--c-primary-light)">${escHtml(foundOrder.id)}</strong>
+                <span style="color:var(--c-accent-light);font-weight:800">${escHtml(statusLabels[foundOrder.status] || foundOrder.status)}</span>
+              </div>
+              <div>خریدار: <b>${escHtml(foundOrder.customer && foundOrder.customer.name)}</b> · تاریخ ثبت: ${new Date(foundOrder.date).toLocaleString('fa-IR')}</div>
+              <div>اقلام: ${(foundOrder.items || []).map(i => `${escHtml(i.name)} (${fmt(i.qty)} کیلو)`).join('، ')}</div>
+              <div>مبلغ کل: <b class="num" style="color:var(--c-primary-light)">${faToman(foundOrder.totals ? foundOrder.totals.grand : 0)}</b></div>
+            </div>`;
+          return;
+        }
+        if (foundOffer) {
+          out.innerHTML = `
+            <div style="padding:16px;border-radius:var(--r-md);background:var(--c-canvas-2);border:1px solid var(--c-line-strong);font-size:var(--fs-sm);line-height:1.9">
+              <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+                <strong class="ltr" style="color:var(--c-accent-light)">${escHtml(foundOffer.id)}</strong>
+                <span style="color:var(--c-primary-light);font-weight:800">پیشنهاد عرضه ثبت شده</span>
+              </div>
+              <div>عرضه‌کننده: <b>${escHtml(foundOffer.seller)}</b> · محصول: ${escHtml(foundOffer.type)} (${fmt(foundOffer.amountKg)} کیلو)</div>
+              <div>تاریخ ثبت: ${new Date(foundOffer.date).toLocaleString('fa-IR')}</div>
+            </div>`;
+          return;
+        }
+        out.innerHTML = `<p style="color:var(--c-text-soft);font-size:var(--fs-sm)">سفارشی با کد <b class="ltr">${escHtml(code)}</b> در حافظه این دستگاه یافت نشد. اگر سفارش را از دستگاه دیگری ثبت کرده‌اید، برای استعلام آنی با <b class="ltr">${escHtml(s.phone)}</b> تماس بگیرید.</p>`;
+      });
+
+      if (window.MGZ) MGZ.init();
     });
   </script>
 </body>

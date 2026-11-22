@@ -3,403 +3,916 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>پنل مدیریت مغزدانه</title>
-  <meta name="robots" content="noindex, nofollow">
+  <title>استودیوی مدیریت محتوا و فروشگاه | مغزدانه</title>
+  <meta name="description" content="پنل مدیریت زنده محتوای تمام بخش‌های سایت، محصولات، قیمت‌های پلکانی، سفارش‌ها و مشتریان مغزدانه.">
+  <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
-  <style>
-    /* admin-specific */
-    .admin-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 0; }
-    .admin-top h1 { font-size: var(--fs-lg); }
-    .admin-user { margin-inline-start: auto; font-size: var(--fs-sm); color: var(--c-text-soft); }
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; border-bottom: 2px solid var(--c-line); padding-bottom: 0; }
-    .tab-btn {
-      padding: 10px 18px; font-weight: 800; font-size: var(--fs-sm); color: var(--c-text-soft);
-      border-bottom: 3px solid transparent; margin-bottom: -2px;
-    }
-    .tab-btn.active { color: var(--c-primary-dark); border-bottom-color: var(--c-primary); }
-    .admin-card { background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: 20px; margin-bottom: 18px; }
-    .admin-card h3 { margin-bottom: 12px; font-size: var(--fs-md); }
-    .order-card { border-inline-start: 4px solid var(--c-accent); }
-    .order-card.new { border-inline-start-color: var(--c-primary); }
-    .status-badge { display: inline-block; border-radius: 99px; padding: 2px 12px; font-size: var(--fs-xs); font-weight: 800; background: #e8f3ec; color: var(--c-primary-dark); }
-    .status-badge.done { background: #e2e8f0; color: var(--c-text-soft); }
-    .status-badge.canceled { background: #fdecea; color: var(--c-danger); }
-    pre.code {
-      background: #14261c; color: #d7ecd f; color: #d7ecdf; padding: 14px; border-radius: var(--r-md);
-      font-size: var(--fs-xs); overflow-x: auto; direction: ltr; text-align: left; line-height: 1.6;
-      font-family: ui-monospace, monospace; max-height: 420px; overflow-y: auto;
-    }
-    .prod-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--c-line); flex-wrap: wrap; }
-    .prod-row:last-child { border-bottom: none; }
-    .prod-row img { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; }
-    .prod-row .p-name { font-weight: 800; font-size: var(--fs-sm); min-width: 200px; }
-    .prod-row .p-prices { font-size: var(--fs-xs); color: var(--c-text-soft); }
-    .prod-row .spacer { margin-inline-start: auto; display: flex; gap: 6px; }
-    .icon-btn { border: 1.5px solid var(--c-line); border-radius: 8px; padding: 6px 12px; font-size: var(--fs-xs); font-weight: 700; background: #fff; }
-    .icon-btn:hover { border-color: var(--c-primary); color: var(--c-primary-dark); }
-    .icon-btn.danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
-    .login-box { max-width: 480px; margin: 60px auto; background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: 34px; text-align: center; }
-    .login-box img { width: 60px; margin-bottom: 12px; }
-    .login-box p { font-size: var(--fs-sm); color: var(--c-text-soft); margin: 10px 0 20px; }
-    .warn { background: #fff8e6; border: 1px solid #f1df9a; color: #8a6d1a; border-radius: var(--r-md); padding: 12px 16px; font-size: var(--fs-sm); margin-bottom: 18px; line-height: 1.8; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px,100%), 1fr)); gap: 14px; margin-bottom: 20px; }
-    .stat { background: #fff; border: 1px solid var(--c-line); border-radius: var(--r-md); padding: 16px; text-align: center; }
-    .stat .v { font-size: var(--fs-xl); font-weight: 900; color: var(--c-primary-dark); }
-    .stat .l { font-size: var(--fs-xs); color: var(--c-text-soft); }
-  </style>
+  <link rel="stylesheet" href="assets/css/main.css?v=8">
+  <link rel="stylesheet" href="assets/css/fx.css?v=8">
 </head>
 <body>
-  <header class="site-header" style="position:static">
-    <div class="container header-row">
-      <a class="brand" href="index.html">
-        <img src="assets/img/logo.svg" alt="" width="44" height="44">
-        <span><span class="brand-name">مغزدانه — پنل مدیریت</span><br>
-        <span class="brand-sub">دیتابیس زنده روی گیت‌هاب</span></span>
-      </a>
-      <div class="header-actions">
-        <a class="btn btn-outline" href="index.html" style="font-size:var(--fs-xs)">مشاهده سایت ←</a>
-      </div>
-    </div>
-  </header>
+  <header class="site-header" id="site-header"></header>
 
-  <!-- ============ LOGIN ============ -->
-  <div class="container" id="login-view" style="display:none">
-    <div class="login-box">
-      <img src="assets/img/logo.svg" alt="">
-      <h2 style="font-size:var(--fs-lg)">ورود مدیر</h2>
-      <p>برای مدیریت محصولات، قیمت‌ها و سفارش‌ها، یک <b>Personal Access Token</b> گیت‌هاب با دسترسی <span class="ltr" style="direction:ltr">repo</span> وارد کنید.</p>
-      <div class="field" style="text-align:right">
-        <label for="token-input">توکن گیت‌هاب (ghp_…)</label>
-        <input id="token-input" type="password" placeholder="ghp_xxxxxxxxxxxx" style="direction:ltr;text-align:left">
-        <span class="hint">توکن فقط در مرورگر شما ذخیره می‌شود و به هیچ سروری ارسال نمی‌گردد. برای امنیت بیشتر، توکن را محدود به همین ریپو بسازید.</span>
+  <main class="studio-wrap">
+    <!-- Loading -->
+    <div id="adm-loading" class="auth-gate-card">
+      <h2>در حال بررسی دسترسی مدیریت...</h2>
+      <p>لطفاً چند لحظه شکیبا باشید.</p>
+    </div>
+
+    <!-- Sign-In Gate -->
+    <section id="adm-guest" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
+      <span class="band-kicker">استودیوی مدیریت زنده مغزدانه</span>
+      <h2>ورود مدیر سایت</h2>
+      <p>
+        برای ویرایش زنده تمام متن‌ها و بخش‌های صفحه اول، صفحات داخلی، محصولات، قیمت‌های پلکانی، سفارش‌ها و مشتریان، با حساب گوگل مدیر وارد شوید.
+      </p>
+      <button type="button" class="btn-google" id="btn-adm-signin">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.71-4.95 3.71-8.7z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09L2.18 7.07C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.71-2.88c-.98.66-2.23 1.06-3.57 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        </svg>
+        <span>ورود مدیر با حساب گوگل</span>
+      </button>
+    </section>
+
+    <!-- Unauthorized State -->
+    <section id="adm-denied" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
+      <span class="band-kicker" style="color:var(--c-danger)">عدم دسترسی مدیریت</span>
+      <h2>این حساب دسترسی ادمین ندارد</h2>
+      <p id="adm-denied-info"></p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-primary btn-sm" href="account.html">رفتن به حساب کاربری</a>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-adm-switch">تعویض حساب گوگل</button>
       </div>
-      <button class="btn btn-primary" id="login-btn" style="width:100%;margin-top:16px">ورود به پنل</button>
-      <p id="login-err" style="color:var(--c-danger);font-size:var(--fs-xs);margin-top:10px"></p>
+    </section>
+
+    <!-- Full Admin CMS Studio -->
+    <div id="adm-studio" hidden>
+      <div class="studio-hero">
+        <div>
+          <span class="band-kicker">MAGHZDANEH LIVE CMS · دیتابیس ابری زنده</span>
+          <h1>استودیوی مدیریت محتوا و فروشگاه</h1>
+          <p id="adm-user-meta">تمامی تغییرات پس از ذخیره، بلافاصله برای تمام بازدیدکنندگان سایت اعمال می‌شود.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-outline btn-sm" href="index.html">مشاهده زنده صفحه اول</a>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-adm-signout">خروج</button>
+        </div>
+      </div>
+
+      <!-- KPI Overview -->
+      <div class="kpi-strip">
+        <div class="kpi-box"><div class="k-label">محصولات ابری</div><div class="k-val" id="kpi-products">۰</div></div>
+        <div class="kpi-box"><div class="k-label">کل سفارش‌ها</div><div class="k-val" id="kpi-orders">۰</div></div>
+        <div class="kpi-box"><div class="k-label">سفارش‌های جدید</div><div class="k-val" id="kpi-new-orders" style="color:var(--lux-gold)">۰</div></div>
+        <div class="kpi-box"><div class="k-label">مشتریان ثبت‌نام‌شده</div><div class="k-val" id="kpi-users">۰</div></div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="studio-tabs" role="tablist" aria-label="بخش‌های مدیریت">
+        <button type="button" class="studio-tab active" data-atab="home-cms">محتوای صفحه اول</button>
+        <button type="button" class="studio-tab" data-atab="brand-pages">برندینگ و صفحات داخلی</button>
+        <button type="button" class="studio-tab" data-atab="catalog">محصولات و قیمت پلکانی</button>
+        <button type="button" class="studio-tab" data-atab="orders">سفارش‌ها و عرضه‌ها</button>
+        <button type="button" class="studio-tab" data-atab="users">مشتریان و مدیران</button>
+      </nav>
+
+      <!-- ================= TAB 1: HOME PAGE LIVE CMS ================= -->
+      <section id="atab-home-cms">
+        <form id="home-cms-form">
+          <div class="studio-panel">
+            <div class="studio-panel-head">
+              <div>
+                <h2>۱. تیتر اصلی و دکمه‌های صفحه اول</h2>
+                <p>متن افتتاحیه کنار پسته واقعی در نمای اول سایت</p>
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm">ذخیره و انتشار صفحه اول</button>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="hc-kicker">خط بالای تیتر (Kicker)</label><input id="hc-kicker" maxlength="140"></div>
+              <div class="field"><label for="hc-title">تیتر اصلی (H1)</label><input id="hc-title" maxlength="200"></div>
+              <div class="field form-full"><label for="hc-sub">زیرتیتر کوتاه</label><input id="hc-sub" maxlength="600"></div>
+              <div class="field"><label for="hc-cta1-lbl">متن دکمه اول</label><input id="hc-cta1-lbl" maxlength="80"></div>
+              <div class="field"><label for="hc-cta1-href">لینک دکمه اول</label><input id="hc-cta1-href" class="ltr" maxlength="200"></div>
+              <div class="field"><label for="hc-cta2-lbl">متن لینک دوم</label><input id="hc-cta2-lbl" maxlength="80"></div>
+              <div class="field"><label for="hc-cta2-href">لینک دوم</label><input id="hc-cta2-href" class="ltr" maxlength="200"></div>
+            </div>
+          </div>
+
+          <div class="studio-panel">
+            <div class="studio-panel-head">
+              <div>
+                <h2>۲. پنج پردهٔ سکانس سه‌بعدی پسته (از بسته و پوست قرمز تا مغز سبز خالص)</h2>
+                <p>متن هر ۵ مرحله هنگام اسکرول یا پخش خودکار در صفحه ورودی سایت تغییر می‌کند.</p>
+              </div>
+            </div>
+            <div class="stage-editor-grid" id="stages-editor"></div>
+          </div>
+
+          <div class="studio-panel">
+            <div class="studio-panel-head">
+              <div>
+                <h2>۳. بخش «سه انتخاب شاخص» (گزیده فصل)</h2>
+                <p>دقیقاً ۳ محصول شاخص برای نمایش مینیمال در صفحه اول انتخاب کنید.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="hc-fk">برچسب بالای بخش</label><input id="hc-fk" maxlength="120"></div>
+              <div class="field"><label for="hc-ft">عنوان بخش</label><input id="hc-ft" maxlength="160"></div>
+              <div class="field"><label for="hc-f1">محصول شاخص اول</label><select id="hc-f1"></select></div>
+              <div class="field"><label for="hc-f2">محصول شاخص دوم</label><select id="hc-f2"></select></div>
+              <div class="field"><label for="hc-f3">محصول شاخص سوم</label><select id="hc-f3"></select></div>
+            </div>
+          </div>
+
+          <div class="studio-panel">
+            <div class="studio-panel-head">
+              <div>
+                <h2>۴. بخش داستان اصالت و تصویر ادیتوریال</h2>
+                <p>بخش پایانی صفحه اول بالای فوتر</p>
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm">ذخیره تمام بخش‌های صفحه اول</button>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="hc-ck">برچسب بالای بخش</label><input id="hc-ck" maxlength="120"></div>
+              <div class="field"><label for="hc-ct">تیتر بخش اصالت</label><input id="hc-ct" maxlength="200"></div>
+              <div class="field form-full"><label for="hc-cb">متن توضیحی کوتاه</label><textarea id="hc-cb" rows="3" maxlength="1200"></textarea></div>
+              <div class="field form-full"><label for="hc-ci">آدرس تصویر ادیتوریال</label><input id="hc-ci" class="ltr" maxlength="300"></div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ================= TAB 2: BRANDING & INNER PAGES CMS ================= -->
+      <section id="atab-brand-pages" hidden>
+        <form id="branding-cms-form" class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>تنظیمات برند، تماس و تعرفه ارسال</h2>
+              <p>در هدر، فوتر، سبد خرید و صفحه تسویه‌حساب اعمال می‌شود.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">ذخیره تنظیمات برند</button>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label for="br-name">نام برند</label><input id="br-name" maxlength="80"></div>
+            <div class="field"><label for="br-tag">شعار کوتاه</label><input id="br-tag" maxlength="240"></div>
+            <div class="field form-full"><label for="br-ann">متن نوار اعلان بالای سایت</label><input id="br-ann" maxlength="240"></div>
+            <div class="field"><label for="br-phone">تلفن ثابت</label><input id="br-phone" class="ltr" maxlength="40"></div>
+            <div class="field"><label for="br-mobile">شماره همراه / واتس‌اپ</label><input id="br-mobile" class="ltr" maxlength="40"></div>
+            <div class="field"><label for="br-email">ایمیل فروش</label><input id="br-email" class="ltr" maxlength="120"></div>
+            <div class="field"><label for="br-work">ساعت پاسخگویی</label><input id="br-work" maxlength="120"></div>
+            <div class="field form-full"><label for="br-addr">نشانی فروشگاه / دفتر</label><input id="br-addr" maxlength="240"></div>
+            <div class="field"><label for="br-ship">هزینه ارسال ثابت (تومان)</label><input id="br-ship" type="number" min="0" step="1000"></div>
+            <div class="field"><label for="br-free">سقف ارسال رایگان (تومان)</label><input id="br-free" type="number" min="0" step="100000"></div>
+            <div class="field form-full"><label for="br-heavy">یادداشت ارسال بار عمده</label><input id="br-heavy" maxlength="300"></div>
+          </div>
+        </form>
+
+        <form id="pages-cms-form" class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>محتوای صفحات داخلی (درباره ما، خرید عمده و سوالات متداول)</h2>
+              <p>ویرایش زنده تیترها و متن‌های صفحات راهنما و فروش عمده</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">ذخیره محتوای صفحات</button>
+          </div>
+          <div class="form-grid">
+            <div class="field form-full"><label for="pg-about-t">تیتر صفحه «داستان ما»</label><input id="pg-about-t" maxlength="200"></div>
+            <div class="field form-full"><label for="pg-about-b">متن صفحه «داستان ما»</label><textarea id="pg-about-b" rows="4" maxlength="3000"></textarea></div>
+            <div class="field form-full"><label for="pg-wh-t">تیتر صفحه «خرید عمده»</label><input id="pg-wh-t" maxlength="200"></div>
+            <div class="field form-full"><label for="pg-wh-b">توضیح صفحه «خرید عمده»</label><textarea id="pg-wh-b" rows="3" maxlength="2000"></textarea></div>
+          </div>
+
+          <div style="margin-top:26px;padding-top:20px;border-top:1px solid var(--lux-line)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <h3 style="font-size:1rem;color:var(--lux-ivory)">سوالات متداول (FAQ)</h3>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-add-faq">+ افزودن سوال جدید</button>
+            </div>
+            <div id="faq-editor-list" style="display:grid;gap:12px"></div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ================= TAB 3: LIVE PRODUCT CATALOG ================= -->
+      <section id="atab-catalog" hidden>
+        <div class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>مدیریت زنده محصولات و قیمت پلکانی</h2>
+              <p>هر تغییری که اینجا ذخیره کنید، بلافاصله در کاتالوگ، صفحه محصول و سبد خرید اعمال می‌شود.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button type="button" class="btn btn-outline btn-sm" id="btn-seed-products">انتقال ۲۰ محصول پایه به دیتابیس ابری</button>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-open-new-prod">+ افزودن محصول جدید</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="shop">
+              <thead>
+                <tr>
+                  <th>محصول</th>
+                  <th>دسته</th>
+                  <th>خرده (تومان)</th>
+                  <th>نیم‌عمده ۵+</th>
+                  <th>عمده ۲۵+</th>
+                  <th>موجودی (کیلو)</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody id="adm-products-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: ORDERS & SUPPLY OFFERS ================= -->
+      <section id="atab-orders" hidden>
+        <div class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>سفارش‌های مشتریان</h2>
+              <p>تغییر وضعیت سفارش بلافاصله در پنل کاربری مشتری نمایش داده می‌شود.</p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-reload-orders">به‌روزرسانی</button>
+          </div>
+          <div id="adm-orders-wrap"></div>
+        </div>
+
+        <div class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>پیشنهادهای عرضه بار از باغداران و تأمین‌کنندگان</h2>
+              <p>درخواست‌های ثبت‌شده در صفحه «عرضه محصول»</p>
+            </div>
+          </div>
+          <div id="adm-supply-wrap"></div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: CUSTOMERS & ADMINS ================= -->
+      <section id="atab-users" hidden>
+        <div class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>مشتریان ثبت‌نام‌شده</h2>
+              <p>لیست کاربران عضو‌شده با نوع خریدار و شهر</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="shop">
+              <thead>
+                <tr>
+                  <th>نام</th>
+                  <th>ایمیل</th>
+                  <th>تلفن همراه</th>
+                  <th>نوع خریدار</th>
+                  <th>شهر / استان</th>
+                  <th>شناسه (UID)</th>
+                </tr>
+              </thead>
+              <tbody id="adm-users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="studio-panel">
+          <div class="studio-panel-head">
+            <div>
+              <h2>مدیریت دسترسی ادمین‌ها</h2>
+              <p>مدیر اصلی سامانه به‌صورت پیش‌فرض تأیید شده است؛ در صورت نیاز می‌توانید مدیران همکار اضافه کنید.</p>
+            </div>
+          </div>
+          <form id="add-admin-form" class="form-grid" style="margin-bottom:20px">
+            <div class="field"><label for="na-uid">شناسه کاربری (UID)</label><input id="na-uid" class="ltr" required placeholder="شناسه UID کاربر از جدول بالا"></div>
+            <div class="field"><label for="na-email">ایمیل گوگل همکار</label><input id="na-email" type="email" class="ltr" required placeholder="colleague@gmail.com"></div>
+            <div class="field" style="justify-content:flex-end"><button type="submit" class="btn btn-primary btn-sm">اعطای دسترسی مدیر</button></div>
+          </form>
+          <div id="admins-list"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Product Add/Edit Modal -->
+  <div class="modal-back" id="prod-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pm-title" style="max-width:640px">
+      <h3 id="pm-title">محصول جدید</h3>
+      <form id="prod-form" class="form-grid">
+        <input type="hidden" id="pm-editing-id">
+        <div class="field"><label for="pm-id">شناسه یکتا (انگلیسی)</label><input id="pm-id" class="ltr" required placeholder="maghz-akbari-new"></div>
+        <div class="field"><label for="pm-name">نام محصول</label><input id="pm-name" required maxlength="160"></div>
+        <div class="field">
+          <label for="pm-cat">دسته‌بندی</label>
+          <select id="pm-cat">
+            <option value="pistachio-kernel">مغز پسته</option>
+            <option value="pistachio-slice">خلال و پودر پسته</option>
+            <option value="almond-kernel">مغز بادام</option>
+            <option value="walnut-kernel">مغز گردو</option>
+            <option value="in-shell">پسته باپوسته</option>
+          </select>
+        </div>
+        <div class="field"><label for="pm-origin">خاستگاه (مثلاً رفسنجان)</label><input id="pm-origin" maxlength="80" value="رفسنجان"></div>
+        <div class="field"><label for="pm-grade">گرید کیفیت</label><input id="pm-grade" maxlength="80" value="ممتاز صادراتی"></div>
+        <div class="field"><label for="pm-badge">برچسب کوتاه (اختیاری)</label><input id="pm-badge" maxlength="40" placeholder="مثلاً: تازه‌برشته"></div>
+        <div class="field"><label for="pm-p1">قیمت خرده (تومان/کیلو)</label><input id="pm-p1" type="number" min="0" required></div>
+        <div class="field"><label for="pm-p2">قیمت نیم‌عمده ۵+ (تومان/کیلو)</label><input id="pm-p2" type="number" min="0" required></div>
+        <div class="field"><label for="pm-p3">قیمت عمده ۲۵+ (تومان/کیلو)</label><input id="pm-p3" type="number" min="0" required></div>
+        <div class="field"><label for="pm-stock">موجودی (کیلوگرم)</label><input id="pm-stock" type="number" min="0" value="100" required></div>
+        <div class="field form-full"><label for="pm-img">مسیر تصویر محصول</label><input id="pm-img" class="ltr" value="assets/img/maghz-pistachio-akbari.jpg" required></div>
+        <div class="field form-full"><label for="pm-desc">توضیحات محصول</label><textarea id="pm-desc" rows="3" maxlength="1200"></textarea></div>
+        <div class="form-full" style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn btn-outline btn-sm" id="pm-close">انصراف</button>
+          <button type="submit" class="btn btn-primary btn-sm">ذخیره محصول</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- ============ PANEL ============ -->
-  <div class="container" id="panel-view" style="display:none">
-    <div class="admin-top">
-      <h1>داشبورد مدیریت</h1>
-      <span class="admin-user">👤 <span id="who"></span></span>
-      <button class="icon-btn danger" id="logout-btn">خروج</button>
-    </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="orders">📋 سفارش‌ها</button>
-      <button class="tab-btn" data-tab="products">🥜 محصولات و قیمت‌ها</button>
-      <button class="tab-btn" data-tab="settings">⚙️ تنظیمات سایت</button>
-      <button class="tab-btn" data-tab="raw">📦 دیتابیس خام (JSON)</button>
-    </div>
-
-    <!-- orders -->
-    <div id="tab-orders" class="tab-pane">
-      <div class="stats" id="order-stats"></div>
-      <div id="orders-list">
-        <div class="empty"><p>در حال بارگذاری سفارش‌ها…</p></div>
-      </div>
-    </div>
-
-    <!-- products -->
-    <div id="tab-products" class="tab-pane" style="display:none">
-      <div class="warn">⚠️ هر تغییر، مستقیماً <b>data/db.json</b> ریپوی گیت‌هاب را به‌روز می‌کند (یک کامیت می‌سازد) و بلافاصله روی سایت زنده اعمال می‌شود. تاریخ «به‌روزرسانی قیمت» هم خودکار عوض می‌شود.</div>
-      <div class="admin-card">
-        <h3>افزودن محصول جدید</h3>
-        <div class="form-grid">
-          <div class="field"><label>نام محصول *</label><input id="np-name"></div>
-          <div class="field"><label>دسته</label><select id="np-cat"></select></div>
-          <div class="field"><label>مبدأ</label><input id="np-origin" placeholder="مثلاً رفسنجان"></div>
-          <div class="field"><label>گرید</label><input id="np-grade" placeholder="مثلاً ممتاز"></div>
-          <div class="field"><label>قیمت خرده (تومان/کیلو) *</label><input id="np-retail" type="number" min="0" inputmode="numeric"></div>
-          <div class="field"><label>قیمت نیم‌عمده *</label><input id="np-semi" type="number" min="0" inputmode="numeric"></div>
-          <div class="field"><label>قیمت عمده *</label><input id="np-whole" type="number" min="0" inputmode="numeric"></div>
-          <div class="field"><label>موجودی (کیلو)</label><input id="np-stock" type="number" min="0" value="100" inputmode="numeric"></div>
-          <div class="field"><label>نام فایل تصویر (از assets/img)</label><input id="np-img" value="assets/img/maghz-pistachio-premium.jpg" style="direction:ltr;text-align:left"></div>
-          <div class="field form-full"><label>توضیح</label><textarea id="np-desc" rows="2"></textarea></div>
-        </div>
-        <button class="btn btn-primary" id="add-prod-btn" style="margin-top:14px">افزودن و کامیت</button>
-      </div>
-      <div class="admin-card">
-        <h3>ویرایش سریع قیمت و موجودی</h3>
-        <div id="prod-list"></div>
-      </div>
-    </div>
-
-    <!-- settings -->
-    <div id="tab-settings" class="tab-pane" style="display:none">
-      <div class="warn">⚠️ تغییر تنظیمات مستقیماً روی فوتر، تماس‌ها و قوانین ارسال همه صفحات اثر می‌گذارد.</div>
-      <div class="admin-card">
-        <h3>اطلاعات تماس و فروش</h3>
-        <div class="form-grid" id="settings-form"></div>
-        <button class="btn btn-primary" id="save-settings" style="margin-top:14px">ذخیره تنظیمات و کامیت</button>
-      </div>
-    </div>
-
-    <!-- raw -->
-    <div id="tab-raw" class="tab-pane" style="display:none">
-      <div class="admin-card">
-        <h3>data/db.json — ویرایش مستقیم (پیشرفته)</h3>
-        <p style="font-size:var(--fs-sm);color:var(--c-text-soft);margin-bottom:12px">محتوا بعد از «اعتبارسنجی و کامیت» با یک کامیت روی برنچ main نوشته می‌شود. اگر JSON نامعتبر باشد، نوشته نمی‌شود.</p>
-        <textarea id="raw-json" rows="22" style="width:100%;font-family:ui-monospace,monospace;font-size:var(--fs-xs);direction:ltr;text-align:left;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px" spellcheck="false"></textarea>
-        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="raw-save">اعتبارسنجی و کامیت</button>
-          <button class="btn btn-outline" id="raw-reload">بارگذاری مجدد از گیت‌هاب</button>
-        </div>
-        <p id="raw-msg" style="font-size:var(--fs-xs);margin-top:10px"></p>
+  <!-- Confirmation Modal -->
+  <div class="modal-back" id="adm-confirm">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="ac-title">تأیید عملیات</h3>
+      <p id="ac-text" style="color:var(--c-text-soft);font-size:0.9rem;margin-bottom:22px"></p>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" class="btn btn-outline btn-sm" id="ac-no">انصراف</button>
+        <button type="button" class="btn btn-primary btn-sm" id="ac-yes">تأیید</button>
       </div>
     </div>
   </div>
 
-  <script src="assets/js/ghdb.js"></script>
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=8"></script>
   <script>
-    let DB = null;
+    let liveProducts = [];
+    let faqDraft = [];
+    let confirmCb = null;
 
-    /* ---------- auth ---------- */
-    async function tryLogin(token) {
-      GHDB.setToken(token);
-      try {
-        const who = await GHDB.checkAuth();
-        localStorage.setItem('maghzdaneh_gh_user', who);
-        return who;
-      } catch (e) {
-        GHDB.setToken('');
-        throw e;
-      }
+    const BUYER_FA = { retail: 'خرده‌فروشی', confectionery: 'قنادی / کارگاهی', wholesale: 'خریدار عمده' };
+
+    function admConfirm(title, text) {
+      return new Promise(resolve => {
+        confirmCb = resolve;
+        document.getElementById('ac-title').textContent = title;
+        document.getElementById('ac-text').textContent = text;
+        document.getElementById('adm-confirm').classList.add('open');
+      });
     }
-
-    async function init() {
-      const savedUser = localStorage.getItem('maghzdaneh_gh_user');
-      if (GHDB.hasToken() && savedUser) {
-        document.getElementById('login-view').style.display = 'none';
-        document.getElementById('panel-view').style.display = 'block';
-        document.getElementById('who').textContent = savedUser;
-        await loadPanel();
-      } else {
-        document.getElementById('login-view').style.display = 'block';
-      }
-    }
-
-    document.getElementById('login-btn').onclick = async () => {
-      const t = document.getElementById('token-input').value.trim();
-      const err = document.getElementById('login-err');
-      if (!t) { err.textContent = 'توکن را وارد کنید'; return; }
-      err.textContent = '';
-      document.getElementById('login-btn').disabled = true;
-      try {
-        const who = await tryLogin(t);
-        location.reload();
-      } catch (e) {
-        err.textContent = 'ورود ناموفق: ' + (e.status === 401 ? 'توکن نامعتبر است' : e.message);
-      } finally {
-        document.getElementById('login-btn').disabled = false;
-      }
+    document.getElementById('ac-no').onclick = () => {
+      document.getElementById('adm-confirm').classList.remove('open');
+      if (confirmCb) confirmCb(false);
     };
-    document.getElementById('logout-btn').onclick = () => {
-      GHDB.setToken('');
-      localStorage.removeItem('maghzdaneh_gh_user');
-      location.reload();
+    document.getElementById('ac-yes').onclick = () => {
+      document.getElementById('adm-confirm').classList.remove('open');
+      if (confirmCb) confirmCb(true);
     };
 
-    /* ---------- tabs ---------- */
-    document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
-      document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      document.querySelectorAll('.tab-pane').forEach(p => (p.style.display = 'none'));
-      document.getElementById('tab-' + b.dataset.tab).style.display = 'block';
+    /* ---------- Tabs ---------- */
+    document.querySelectorAll('[data-atab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.atab;
+        document.querySelectorAll('[data-atab]').forEach(b => b.classList.toggle('active', b.dataset.atab === target));
+        ['home-cms', 'brand-pages', 'catalog', 'orders', 'users'].forEach(id => {
+          document.getElementById('atab-' + id).hidden = id !== target;
+        });
+      });
     });
 
-    /* ---------- data ---------- */
-    async function loadPanel() {
-      DB = await GHDB.fetchDB();
-      renderProducts();
-      renderSettings();
-      document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
-      loadOrders();
+    /* ---------- Home CMS Editor ---------- */
+    const STAGE_NAMES = ['پسته بسته', 'خندانی طبیعی', 'جدایی پوسته', 'پوست‌گیری قرمز', 'مغز سبز خالص'];
+    const STAGE_INDICES = ['۰۱', '۰۲', '۰۳', '۰۴', '۰۵'];
+
+    function renderStageEditors(stages) {
+      const box = document.getElementById('stages-editor');
+      const list = Array.isArray(stages) && stages.length === 5 ? stages : window.MgzCloud.DEFAULT_HOME_CMS.stages;
+      box.innerHTML = list.map((s, i) => `
+        <div class="stage-editor-card">
+          <h4>پرده ${s.index || STAGE_INDICES[i]} — ${STAGE_NAMES[i] || ''}</h4>
+          <div class="field"><label>برچسب نوار پایین</label><input data-st-label="${i}" value="${(s.label || '').replace(/"/g, '&quot;')}" maxlength="40"></div>
+          <div class="field"><label>خط بالای تیتر</label><input data-st-kicker="${i}" value="${(s.kicker || '').replace(/"/g, '&quot;')}" maxlength="120"></div>
+          <div class="field"><label>تیتر پرده</label><input data-st-title="${i}" value="${(s.title || '').replace(/"/g, '&quot;')}" maxlength="160"></div>
+          <div class="field"><label>زیرتیتر پرده</label><input data-st-sub="${i}" value="${(s.subtitle || '').replace(/"/g, '&quot;')}" maxlength="280"></div>
+        </div>`).join('');
     }
 
-    /* ---------- orders ---------- */
-    async function loadOrders() {
-      const list = document.getElementById('orders-list');
-      try {
-        const files = await GHDB.listOrders();
-        if (!files.length) {
-          list.innerHTML = '<div class="empty"><div class="big">📭</div><p><b>هنوز سفارشی ثبت نشده است.</b></p><p style="margin-top:8px">سفارش‌های جدید به‌صورت فایل JSON در پوشه data/orders ریپو ثبت می‌شوند و همین‌جا نمایش داده می‌شوند.</p></div>';
-          document.getElementById('order-stats').innerHTML = '';
-          return;
-        }
-        const orders = [];
-        for (const f of files.slice(0, 30)) {
-          try { orders.push(await GHDB.readOrder(f.path)); } catch {}
-        }
-        orders.sort((a, b) => new Date(b.date) - new Date(a.date));
-        const newCount = orders.filter(o => o.status === 'new').length;
-        const revenue = orders.filter(o => o.status !== 'canceled').reduce((s, o) => s + (o.totals ? o.totals.grand : 0), 0);
-        document.getElementById('order-stats').innerHTML = `
-          <div class="stat"><div class="v">${orders.length.toLocaleString('fa-IR')}</div><div class="l">کل سفارش‌ها</div></div>
-          <div class="stat"><div class="v">${newCount.toLocaleString('fa-IR')}</div><div class="l">در انتظار پردازش</div></div>
-          <div class="stat"><div class="v">${revenue.toLocaleString('fa-IR')}</div><div class="l">ارزش سفارش‌ها (تومان)</div></div>`;
+    function populateFeaturedSelects(selectedIds) {
+      const pool = liveProducts.length ? liveProducts : (APP.db?.products || []);
+      const opts = pool.map(p => `<option value="${p.id}">${p.name} (${p.origin})</option>`).join('');
+      ['hc-f1', 'hc-f2', 'hc-f3'].forEach((elId, idx) => {
+        const sel = document.getElementById(elId);
+        sel.innerHTML = opts;
+        if (selectedIds && selectedIds[idx]) sel.value = selectedIds[idx];
+      });
+    }
 
-        list.innerHTML = orders.map(o => `
-          <div class="admin-card order-card ${o.status}">
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-              <b>${o.id}</b>
-              <span class="status-badge ${o.status}">${({new:'جدید',processing:'در حال پردازش',done:'تکمیل شده',canceled:'لغو شده'})[o.status] || o.status}</span>
-              <span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${new Date(o.date).toLocaleString('fa-IR')}</span>
-              <span style="margin-inline-start:auto;font-weight:900;color:var(--c-primary-dark)">${(o.totals ? o.totals.grand : 0).toLocaleString('fa-IR')} تومان</span>
+    async function loadHomeCMSForm() {
+      const cms = await window.MgzCloud.getSiteContent('home');
+      document.getElementById('hc-kicker').value = cms.kicker || '';
+      document.getElementById('hc-title').value = cms.title || '';
+      document.getElementById('hc-sub').value = cms.subtitle || '';
+      document.getElementById('hc-cta1-lbl').value = cms.primaryCtaLabel || '';
+      document.getElementById('hc-cta1-href').value = cms.primaryCtaHref || '';
+      document.getElementById('hc-cta2-lbl').value = cms.secondaryCtaLabel || '';
+      document.getElementById('hc-cta2-href').value = cms.secondaryCtaHref || '';
+      document.getElementById('hc-fk').value = cms.featuredKicker || '';
+      document.getElementById('hc-ft').value = cms.featuredTitle || '';
+      document.getElementById('hc-ck').value = cms.craftKicker || '';
+      document.getElementById('hc-ct').value = cms.craftTitle || '';
+      document.getElementById('hc-cb').value = cms.craftBody || '';
+      document.getElementById('hc-ci').value = cms.craftImage || '';
+      renderStageEditors(cms.stages);
+      populateFeaturedSelects(cms.featuredIds || []);
+    }
+
+    document.getElementById('home-cms-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const stages = [0, 1, 2, 3, 4].map(i => ({
+        index: STAGE_INDICES[i],
+        label: document.querySelector(`[data-st-label="${i}"]`).value.trim(),
+        kicker: document.querySelector(`[data-st-kicker="${i}"]`).value.trim(),
+        title: document.querySelector(`[data-st-title="${i}"]`).value.trim(),
+        subtitle: document.querySelector(`[data-st-sub="${i}"]`).value.trim(),
+      }));
+      try {
+        await window.MgzCloud.saveSiteContent('home', {
+          kicker: document.getElementById('hc-kicker').value.trim(),
+          title: document.getElementById('hc-title').value.trim(),
+          subtitle: document.getElementById('hc-sub').value.trim(),
+          primaryCtaLabel: document.getElementById('hc-cta1-lbl').value.trim(),
+          primaryCtaHref: document.getElementById('hc-cta1-href').value.trim(),
+          secondaryCtaLabel: document.getElementById('hc-cta2-lbl').value.trim(),
+          secondaryCtaHref: document.getElementById('hc-cta2-href').value.trim(),
+          stages,
+          featuredKicker: document.getElementById('hc-fk').value.trim(),
+          featuredTitle: document.getElementById('hc-ft').value.trim(),
+          featuredIds: [
+            document.getElementById('hc-f1').value,
+            document.getElementById('hc-f2').value,
+            document.getElementById('hc-f3').value,
+          ].filter(Boolean),
+          craftKicker: document.getElementById('hc-ck').value.trim(),
+          craftTitle: document.getElementById('hc-ct').value.trim(),
+          craftBody: document.getElementById('hc-cb').value.trim(),
+          craftImage: document.getElementById('hc-ci').value.trim(),
+        });
+        toast('تغییرات صفحه اول با موفقیت منتشر شد');
+      } catch (err) {
+        console.error(err);
+        toast('خطا در ذخیره محتوای صفحه اول');
+      }
+    });
+
+    /* ---------- Branding & Pages CMS ---------- */
+    function renderFaqEditors() {
+      const box = document.getElementById('faq-editor-list');
+      box.innerHTML = faqDraft.map((item, i) => `
+        <div class="stage-editor-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h4>سوال ${fmt(i + 1)}</h4>
+            <button type="button" class="rm-btn" data-rm-faq="${i}">حذف</button>
+          </div>
+          <div class="field"><label>متن سوال</label><input data-faq-q="${i}" value="${(item.q || '').replace(/"/g, '&quot;')}"></div>
+          <div class="field"><label>پاسخ</label><textarea data-faq-a="${i}" rows="2">${item.a || ''}</textarea></div>
+        </div>`).join('');
+      box.querySelectorAll('[data-rm-faq]').forEach(btn => {
+        btn.onclick = () => {
+          syncFaqDraftFromInputs();
+          faqDraft.splice(+btn.dataset.rmFaq, 1);
+          renderFaqEditors();
+        };
+      });
+    }
+
+    function syncFaqDraftFromInputs() {
+      faqDraft = faqDraft.map((_, i) => ({
+        q: (document.querySelector(`[data-faq-q="${i}"]`)?.value || '').trim(),
+        a: (document.querySelector(`[data-faq-a="${i}"]`)?.value || '').trim(),
+      }));
+    }
+
+    document.getElementById('btn-add-faq').addEventListener('click', () => {
+      syncFaqDraftFromInputs();
+      faqDraft.push({ q: '', a: '' });
+      renderFaqEditors();
+    });
+
+    async function loadBrandingAndPagesForms() {
+      const [br, pg] = await Promise.all([
+        window.MgzCloud.getSiteContent('branding'),
+        window.MgzCloud.getSiteContent('pages'),
+      ]);
+      document.getElementById('br-name').value = br.siteName || '';
+      document.getElementById('br-tag').value = br.tagline || '';
+      document.getElementById('br-ann').value = br.announcement || '';
+      document.getElementById('br-phone').value = br.phone || '';
+      document.getElementById('br-mobile').value = br.mobile || '';
+      document.getElementById('br-email').value = br.email || '';
+      document.getElementById('br-work').value = br.worktime || '';
+      document.getElementById('br-addr').value = br.address || '';
+      document.getElementById('br-ship').value = br.flatShippingCost ?? 95000;
+      document.getElementById('br-free').value = br.freeShippingOver ?? 5000000;
+      document.getElementById('br-heavy').value = br.heavyShippingNote || '';
+
+      document.getElementById('pg-about-t').value = pg.aboutTitle || '';
+      document.getElementById('pg-about-b').value = pg.aboutBody || '';
+      document.getElementById('pg-wh-t').value = pg.wholesaleTitle || '';
+      document.getElementById('pg-wh-b').value = pg.wholesaleBody || '';
+      faqDraft = Array.isArray(pg.faqItems) ? pg.faqItems.map(x => ({ ...x })) : [];
+      renderFaqEditors();
+    }
+
+    document.getElementById('branding-cms-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await window.MgzCloud.saveSiteContent('branding', {
+          siteName: document.getElementById('br-name').value.trim(),
+          tagline: document.getElementById('br-tag').value.trim(),
+          announcement: document.getElementById('br-ann').value.trim(),
+          phone: document.getElementById('br-phone').value.trim(),
+          mobile: document.getElementById('br-mobile').value.trim(),
+          email: document.getElementById('br-email').value.trim(),
+          worktime: document.getElementById('br-work').value.trim(),
+          address: document.getElementById('br-addr').value.trim(),
+          flatShippingCost: Number(document.getElementById('br-ship').value || 0),
+          freeShippingOver: Number(document.getElementById('br-free').value || 0),
+          heavyShippingNote: document.getElementById('br-heavy').value.trim(),
+        });
+        toast('تنظیمات برند و ارسال ذخیره شد');
+      } catch {
+        toast('خطا در ذخیره تنظیمات برند');
+      }
+    });
+
+    document.getElementById('pages-cms-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      syncFaqDraftFromInputs();
+      try {
+        await window.MgzCloud.saveSiteContent('pages', {
+          aboutTitle: document.getElementById('pg-about-t').value.trim(),
+          aboutBody: document.getElementById('pg-about-b').value.trim(),
+          wholesaleTitle: document.getElementById('pg-wh-t').value.trim(),
+          wholesaleBody: document.getElementById('pg-wh-b').value.trim(),
+          faqItems: faqDraft.filter(f => f.q.length > 0),
+        });
+        toast('محتوای صفحات داخلی ذخیره شد');
+      } catch {
+        toast('خطا در ذخیره صفحات داخلی');
+      }
+    });
+
+    /* ---------- Live Product Catalog ---------- */
+    async function loadProductsTable() {
+      liveProducts = await window.MgzCloud.getLiveProducts();
+      document.getElementById('kpi-products').textContent = fmt(liveProducts.length);
+      const tbody = document.getElementById('adm-products-tbody');
+      if (!liveProducts.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--lux-soft)">هنوز محصولی در دیتابیس ابری ذخیره نشده است. روی دکمه «انتقال ۲۰ محصول پایه» کلیک کنید تا کاتالوگ فوری فعال شود.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = liveProducts.map(p => `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="${p.img}" alt="${p.name}">
+              <div>
+                <strong style="color:#fff">${p.name}</strong>
+                <div style="font-size:0.75rem;color:var(--lux-muted)">${p.origin} · ${p.grade}</div>
+              </div>
             </div>
-            <div style="font-size:var(--fs-sm);margin-top:10px;line-height:2">
-              👤 ${o.customer ? o.customer.name : o.seller || '—'}
-              · 📞 <span style="direction:ltr;display:inline-block">${o.customer ? o.customer.phone : o.phone || ''}</span>
-              ${o.customer ? `<br>📍 ${o.customer.province || ''} ${o.customer.city || ''} — ${o.customer.address || ''}` : ''}
-              ${o.items ? `<br>🛒 ${o.items.map(i => `${i.name} × ${i.qty} کیلو`).join('، ')}` : ''}
-              ${o.type ? `<br>🌾 عرضه: ${o.type} — حدود ${o.amountKg} کیلو` : ''}
-              ${o.note ? `<br>📝 ${o.note}` : ''}
-              ${o.desc ? `<br>📝 ${o.desc}` : ''}
+          </td>
+          <td style="font-size:0.8rem">${catName(p.category)}</td>
+          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-r="${p.id}" value="${p.prices.retail}"></td>
+          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-s="${p.id}" value="${p.prices.semi}"></td>
+          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-w="${p.id}" value="${p.prices.wholesale}"></td>
+          <td><input class="ltr" style="width:76px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-st="${p.id}" value="${p.stock}"></td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-primary btn-sm" data-save-p="${p.id}">ذخیره</button>
+              <button type="button" class="btn btn-outline btn-sm" data-edit-p="${p.id}">ویرایش</button>
+              <button type="button" class="rm-btn" data-del-p="${p.id}">حذف</button>
+            </div>
+          </td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('[data-save-p]').forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.saveP;
+          const p = liveProducts.find(x => x.id === id);
+          if (!p) return;
+          try {
+            await window.MgzCloud.saveProduct({
+              ...p,
+              retailPrice: Number(document.querySelector(`[data-qp-r="${id}"]`).value || 0),
+              semiPrice: Number(document.querySelector(`[data-qp-s="${id}"]`).value || 0),
+              wholesalePrice: Number(document.querySelector(`[data-qp-w="${id}"]`).value || 0),
+              stock: Number(document.querySelector(`[data-qp-st="${id}"]`).value || 0),
+            });
+            toast(`قیمت و موجودی «${p.name}» ذخیره شد`);
+          } catch {
+            toast('خطا در ذخیره محصول');
+          }
+        };
+      });
+
+      tbody.querySelectorAll('[data-edit-p]').forEach(btn => {
+        btn.onclick = () => openProductModal(liveProducts.find(x => x.id === btn.dataset.editP));
+      });
+
+      tbody.querySelectorAll('[data-del-p]').forEach(btn => {
+        btn.onclick = async () => {
+          const p = liveProducts.find(x => x.id === btn.dataset.delP);
+          if (!p) return;
+          const ok = await admConfirm('حذف محصول', `آیا از حذف «${p.name}» از دیتابیس ابری مطمئن هستید؟`);
+          if (!ok) return;
+          try {
+            await window.MgzCloud.deleteProduct(p.id);
+            toast('محصول حذف شد');
+            await loadProductsTable();
+          } catch {
+            toast('خطا در حذف محصول');
+          }
+        };
+      });
+    }
+
+    function openProductModal(p = null) {
+      document.getElementById('pm-title').textContent = p ? `ویرایش: ${p.name}` : 'افزودن محصول جدید';
+      document.getElementById('pm-editing-id').value = p ? p.id : '';
+      document.getElementById('pm-id').value = p ? p.id : '';
+      document.getElementById('pm-id').disabled = Boolean(p);
+      document.getElementById('pm-name').value = p ? p.name : '';
+      document.getElementById('pm-cat').value = p ? p.category : 'pistachio-kernel';
+      document.getElementById('pm-origin').value = p ? p.origin : 'رفسنجان';
+      document.getElementById('pm-grade').value = p ? p.grade : 'ممتاز صادراتی';
+      document.getElementById('pm-badge').value = p ? (p.badge || '') : '';
+      document.getElementById('pm-p1').value = p ? p.prices.retail : 1450000;
+      document.getElementById('pm-p2').value = p ? p.prices.semi : 1320000;
+      document.getElementById('pm-p3').value = p ? p.prices.wholesale : 1210000;
+      document.getElementById('pm-stock').value = p ? p.stock : 100;
+      document.getElementById('pm-img').value = p ? p.img : 'assets/img/maghz-pistachio-akbari.jpg';
+      document.getElementById('pm-desc').value = p ? (p.desc || '') : '';
+      document.getElementById('prod-modal').classList.add('open');
+    }
+
+    document.getElementById('btn-open-new-prod').onclick = () => openProductModal(null);
+    document.getElementById('pm-close').onclick = () => document.getElementById('prod-modal').classList.remove('open');
+
+    document.getElementById('prod-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await window.MgzCloud.saveProduct({
+          id: document.getElementById('pm-editing-id').value || document.getElementById('pm-id').value.trim(),
+          name: document.getElementById('pm-name').value.trim(),
+          category: document.getElementById('pm-cat').value,
+          origin: document.getElementById('pm-origin').value.trim(),
+          grade: document.getElementById('pm-grade').value.trim(),
+          badge: document.getElementById('pm-badge').value.trim(),
+          retailPrice: Number(document.getElementById('pm-p1').value || 0),
+          semiPrice: Number(document.getElementById('pm-p2').value || 0),
+          wholesalePrice: Number(document.getElementById('pm-p3').value || 0),
+          stock: Number(document.getElementById('pm-stock').value || 0),
+          img: document.getElementById('pm-img').value.trim(),
+          desc: document.getElementById('pm-desc').value.trim(),
+        });
+        document.getElementById('prod-modal').classList.remove('open');
+        toast('محصول در دیتابیس ابری ذخیره شد');
+        await loadProductsTable();
+        populateFeaturedSelects([
+          document.getElementById('hc-f1').value,
+          document.getElementById('hc-f2').value,
+          document.getElementById('hc-f3').value,
+        ]);
+      } catch (err) {
+        console.error(err);
+        toast('خطا در ذخیره محصول');
+      }
+    });
+
+    document.getElementById('btn-seed-products').addEventListener('click', async () => {
+      const ok = await admConfirm('انتقال کاتالوگ پایه', 'تمامی محصولات فایل پایه (data/db.json) به دیتابیس ابری Firestore منتقل می‌شوند. ادامه می‌دهید؟');
+      if (!ok) return;
+      try {
+        const res = await fetch('data/db.json', { cache: 'no-cache' });
+        const json = await res.json();
+        await window.MgzCloud.seedProductsFromJson(json.products || []);
+        toast('محصولات پایه با موفقیت به دیتابیس ابری منتقل شدند');
+        await loadProductsTable();
+        await loadHomeCMSForm();
+      } catch (err) {
+        console.error(err);
+        toast('خطا در انتقال محصولات پایه');
+      }
+    });
+
+    /* ---------- Orders & Supply Offers ---------- */
+    async function loadOrdersAndSupply() {
+      const [orders, offers] = await Promise.all([
+        window.MgzCloud.listAllOrders().catch(() => []),
+        window.MgzCloud.listAllSupplyOffers().catch(() => []),
+      ]);
+      document.getElementById('kpi-orders').textContent = fmt(orders.length);
+      document.getElementById('kpi-new-orders').textContent = fmt(orders.filter(o => o.status === 'new').length);
+
+      const ow = document.getElementById('adm-orders-wrap');
+      if (!orders.length) {
+        ow.innerHTML = '<div class="empty"><p>هنوز سفارش آنلاینی ثبت نشده است.</p></div>';
+      } else {
+        ow.innerHTML = orders.map(o => `
+          <div class="order-card">
+            <div class="order-card-top">
+              <div>
+                <strong class="ltr" style="color:#fff">${o.orderCode || o.id}</strong>
+                <span style="margin-inline-start:12px;color:var(--lux-soft);font-size:0.84rem">${o.customerName || ''} · <span class="ltr">${o.customerPhone || ''}</span></span>
+              </div>
+              <select data-ord-status="${o.id}" style="padding:6px 10px;background:var(--lux-surface);border:1px solid var(--lux-line-strong);border-radius:8px;color:#fff;font-size:0.82rem">
+                <option value="new" ${o.status === 'new' ? 'selected' : ''}>ثبت جدید</option>
+                <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>در حال آماده‌سازی</option>
+                <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>ارسال‌شده</option>
+                <option value="done" ${o.status === 'done' ? 'selected' : ''}>تحویل‌شده</option>
+                <option value="canceled" ${o.status === 'canceled' ? 'selected' : ''}>لغوشده</option>
+              </select>
+            </div>
+            <div style="font-size:0.84rem;color:var(--lux-soft);margin-bottom:8px">
+              ${(o.items || []).map(it => `${it.name} (${fmt(it.qty)} کیلو)`).join(' · ')}
+            </div>
+            <div style="font-size:0.82rem;color:var(--lux-muted)">
+              نشانی: ${o.province || ''} ${o.city || ''} — ${o.address || ''} · <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal || 0)}</strong>
             </div>
           </div>`).join('');
-      } catch (e) {
-        list.innerHTML = `<div class="empty"><p>خطا در خواندن سفارش‌ها: ${e.message}</p></div>`;
+
+        ow.querySelectorAll('[data-ord-status]').forEach(sel => {
+          sel.onchange = async () => {
+            try {
+              await window.MgzCloud.updateOrderStatus(sel.dataset.ordStatus, sel.value);
+              toast('وضعیت سفارش به‌روزرسانی شد');
+              loadOrdersAndSupply();
+            } catch {
+              toast('خطا در تغییر وضعیت سفارش');
+            }
+          };
+        });
+      }
+
+      const sw = document.getElementById('adm-supply-wrap');
+      if (!offers.length) {
+        sw.innerHTML = '<div class="empty"><p>پیشنهاد عرضه‌ای ثبت نشده است.</p></div>';
+      } else {
+        sw.innerHTML = offers.map(s => `
+          <div class="order-card">
+            <div class="order-card-top">
+              <div>
+                <strong style="color:#fff">${s.sellerName || ''}</strong>
+                <span style="margin-inline-start:10px;color:var(--lux-soft);font-size:0.84rem">${s.productType || ''} · ${fmt(s.amountKg || 0)} کیلو (${s.origin || ''})</span>
+              </div>
+              <select data-sup-status="${s.id}" style="padding:6px 10px;background:var(--lux-surface);border:1px solid var(--lux-line-strong);border-radius:8px;color:#fff;font-size:0.82rem">
+                <option value="new" ${s.status === 'new' ? 'selected' : ''}>جدید</option>
+                <option value="reviewed" ${s.status === 'reviewed' ? 'selected' : ''}>بررسی‌شده</option>
+                <option value="approved" ${s.status === 'approved' ? 'selected' : ''}>تأیید خرید</option>
+                <option value="rejected" ${s.status === 'rejected' ? 'selected' : ''}>رد شده</option>
+              </select>
+            </div>
+            <div style="font-size:0.83rem;color:var(--lux-muted)">تماس: <span class="ltr">${s.phone || ''}</span> · ${s.description || ''}</div>
+          </div>`).join('');
+        sw.querySelectorAll('[data-sup-status]').forEach(sel => {
+          sel.onchange = async () => {
+            try {
+              await window.MgzCloud.updateSupplyOfferStatus(sel.dataset.supStatus, sel.value);
+              toast('وضعیت پیشنهاد عرضه ذخیره شد');
+            } catch {
+              toast('خطا در ذخیره وضعیت');
+            }
+          };
+        });
       }
     }
 
-    /* ---------- products ---------- */
-    function renderProducts() {
-      document.getElementById('np-cat').innerHTML = DB.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      document.getElementById('prod-list').innerHTML = DB.products.map((p, i) => `
-        <div class="prod-row">
-          <img src="${p.img}" alt="">
-          <span class="p-name">${p.name}</span>
-          <span class="p-prices">خرده: <input type="number" value="${p.prices.retail}" data-p="${i}" data-f="retail" style="width:110px"> · نیم‌عمده: <input type="number" value="${p.prices.semi}" data-p="${i}" data-f="semi" style="width:110px"> · عمده: <input type="number" value="${p.prices.wholesale}" data-p="${i}" data-f="wholesale" style="width:110px"> (تومان/کیلو)</span>
-          <span class="p-prices">موجودی: <input type="number" value="${p.stock}" data-p="${i}" data-f="stock" style="width:80px"> کیلو</span>
-          <span class="spacer">
-            <button class="icon-btn" data-open="${p.id}">مشاهده در سایت</button>
-            <button class="icon-btn danger" data-del="${i}">حذف</button>
-          </span>
-        </div>`).join('');
+    document.getElementById('btn-reload-orders').onclick = loadOrdersAndSupply;
 
-      document.querySelectorAll('#prod-list [data-open]').forEach(b =>
-        b.onclick = () => window.open('product.html?id=' + b.dataset.open, '_blank'));
-      document.querySelectorAll('#prod-list [data-del]').forEach(b => b.onclick = async () => {
-        const p = DB.products[+b.dataset.del];
-        if (!confirm(`محصول «${p.name}» حذف شود؟ این عمل یک کامیت روی گیت‌هاب می‌سازد.`)) return;
-        DB.products.splice(+b.dataset.del, 1);
-        await commitDB(`حذف محصول: ${p.name}`);
+    /* ---------- Customers & Admins ---------- */
+    async function loadUsersAndAdmins() {
+      const [users, admins] = await Promise.all([
+        window.MgzCloud.listAllCustomers().catch(() => []),
+        window.MgzCloud.listAdmins().catch(() => []),
+      ]);
+      document.getElementById('kpi-users').textContent = fmt(users.length);
+      const ut = document.getElementById('adm-users-tbody');
+      ut.innerHTML = users.length
+        ? users.map(u => `
+            <tr>
+              <td><strong style="color:#fff">${u.fullName || '—'}</strong></td>
+              <td class="ltr" style="font-size:0.82rem">${u.email || '—'}</td>
+              <td class="ltr">${u.phone || '—'}</td>
+              <td>${BUYER_FA[u.buyerType] || 'خرده‌فروشی'}</td>
+              <td>${[u.province, u.city].filter(Boolean).join('، ') || '—'}</td>
+              <td class="ltr" style="font-size:0.75rem;color:var(--lux-muted)">${u.id}</td>
+            </tr>`).join('')
+        : '<tr><td colspan="6" style="text-align:center;color:var(--lux-muted);padding:24px">هنوز مشتری ثبت‌نام نکرده است.</td></tr>';
+
+      const al = document.getElementById('admins-list');
+      al.innerHTML = `
+        <div class="order-card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <div><strong class="ltr" style="color:var(--lux-gold)">${window.MgzCloud.BOOTSTRAPPED_ADMIN_EMAIL}</strong> <span style="font-size:0.8rem;color:var(--lux-soft)">· مدیر اصلی سامانه</span></div>
+        </div>
+        ${admins.map(a => `
+          <div class="order-card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div><strong class="ltr" style="color:#fff">${a.email || a.id}</strong> <span class="ltr" style="font-size:0.75rem;color:var(--lux-muted)">(${a.id})</span></div>
+            <button type="button" class="rm-btn" data-rm-adm="${a.id}">لغو دسترسی</button>
+          </div>`).join('')}`;
+
+      al.querySelectorAll('[data-rm-adm]').forEach(btn => {
+        btn.onclick = async () => {
+          const ok = await admConfirm('لغو دسترسی مدیر', 'دسترسی مدیریت این کاربر حذف شود؟');
+          if (!ok) return;
+          try {
+            await window.MgzCloud.removeAdmin(btn.dataset.rmAdm);
+            toast('دسترسی مدیر حذف شد');
+            loadUsersAndAdmins();
+          } catch {
+            toast('خطا در حذف مدیر');
+          }
+        };
       });
-
-      // جمع‌آوری تغییرات و ذخیره
-      let saveBtn = document.getElementById('save-prices-btn');
-      if (!saveBtn) {
-        saveBtn = document.createElement('button');
-        saveBtn.id = 'save-prices-btn';
-        saveBtn.className = 'btn btn-gold';
-        saveBtn.style.marginTop = '14px';
-        saveBtn.textContent = 'ذخیره همه تغییرات قیمت‌ها و کامیت';
-        saveBtn.onclick = savePriceEdits;
-        document.getElementById('prod-list').after(saveBtn);
-      }
     }
 
-    async function savePriceEdits() {
-      document.querySelectorAll('#prod-list input[data-p]').forEach(inp => {
-        const p = DB.products[+inp.dataset.p];
-        const v = parseFloat(inp.value);
-        if (isNaN(v)) return;
-        if (inp.dataset.f === 'stock') p.stock = Math.round(v);
-        else p.prices[inp.dataset.f] = Math.round(v);
-      });
-      await commitDB('بروزرسانی قیمت‌ها و موجودی محصولات');
-    }
-
-    document.getElementById('add-prod-btn').onclick = async () => {
-      const name = document.getElementById('np-name').value.trim();
-      const retail = +document.getElementById('np-retail').value;
-      const semi = +document.getElementById('np-semi').value;
-      const whole = +document.getElementById('np-whole').value;
-      if (!name || !retail || !semi || !whole) { alert('نام و سه قیمت الزامی است'); return; }
-      DB.products.push({
-        id: 'p-' + Date.now().toString(36),
-        name,
-        category: document.getElementById('np-cat').value,
-        origin: document.getElementById('np-origin').value.trim() || '—',
-        grade: document.getElementById('np-grade').value.trim() || 'درجه یک',
-        img: document.getElementById('np-img').value.trim() || 'assets/img/maghz-pistachio-premium.jpg',
-        desc: document.getElementById('np-desc').value.trim() || name,
-        specs: ['به‌روزرسانی توسط مدیر'],
-        uses: ['مصرف عمومی'],
-        stock: +document.getElementById('np-stock').value || 0,
-        prices: { retail: Math.round(retail), semi: Math.round(semi), wholesale: Math.round(whole) },
-        badge: '',
-        rating: 4.5,
-        sold: 0
-      });
-      await commitDB(`افزودن محصول جدید: ${name}`);
-      document.getElementById('np-name').value = '';
-      document.getElementById('np-desc').value = '';
-    };
-
-    /* ---------- settings ---------- */
-    const SETTINGS_FIELDS = [
-      ['name', 'نام سایت'], ['tagline', 'شعار'], ['phone', 'تلفن'], ['mobile', 'موبایل'],
-      ['email', 'ایمیل'], ['address', 'آدرس'], ['worktime', 'ساعت کاری'],
-    ];
-    function renderSettings() {
-      document.getElementById('settings-form').innerHTML = SETTINGS_FIELDS.map(([k, l]) => `
-        <div class="field"><label>${l}</label><input data-s="${k}" value="${DB.site[k] || ''}"></div>`).join('') + `
-        <div class="field"><label>هزینه ارسال ثابت (تومان)</label><input type="number" data-s="flat_cost" value="${DB.site.shipping.flat_cost}"></div>
-        <div class="field"><label>سقف ارسال رایگان (تومان)</label><input type="number" data-s="free_over" value="${DB.site.shipping.free_over}"></div>
-        <div class="field form-full"><label>توضیح ارسال بار سنگین</label><textarea data-s="heavy_note" rows="2">${DB.site.shipping.heavy_note}</textarea></div>`;
-    }
-    document.getElementById('save-settings').onclick = async () => {
-      document.querySelectorAll('#settings-form [data-s]').forEach(inp => {
-        const k = inp.dataset.s;
-        const v = isNaN(+inp.value) || inp.value.trim() === '' ? inp.value : +inp.value;
-        if (k === 'flat_cost' || k === 'free_over' || k === 'heavy_note') DB.site.shipping[k] = v;
-        else DB.site[k] = v;
-      });
-      await commitDB('بروزرسانی تنظیمات سایت');
-    };
-
-    /* ---------- raw json ---------- */
-    document.getElementById('raw-save').onclick = async () => {
-      const msg = document.getElementById('raw-msg');
+    document.getElementById('add-admin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
       try {
-        const parsed = JSON.parse(document.getElementById('raw-json').value);
-        DB = parsed;
-        await commitDB('ویرایش مستقیم db.json');
-        msg.style.color = 'var(--c-success)';
-        msg.textContent = '✓ اعتبارسنجی شد و روی گیت‌هاب ذخیره شد.';
-      } catch (e) {
-        msg.style.color = 'var(--c-danger)';
-        msg.textContent = 'JSON نامعتبر: ' + e.message;
+        await window.MgzCloud.addAdmin(
+          document.getElementById('na-uid').value.trim(),
+          document.getElementById('na-email').value.trim()
+        );
+        document.getElementById('na-uid').value = '';
+        document.getElementById('na-email').value = '';
+        toast('مدیر جدید اضافه شد');
+        loadUsersAndAdmins();
+      } catch {
+        toast('خطا در افزودن مدیر');
       }
-    };
-    document.getElementById('raw-reload').onclick = async () => {
-      DB = await GHDB.fetchDB();
-      document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
-      renderProducts(); renderSettings();
-      toast('از گیت‌هاب بازخوانی شد');
-    };
+    });
 
-    /* ---------- commit ---------- */
-    async function commitDB(message) {
-      DB.site.price_date = new Date().toISOString().slice(0, 10);
-      toast('در حال کامیت روی گیت‌هاب…');
-      try {
-        await GHDB.saveDB(DB, message);
-        toast('✓ ذخیره شد — سایت به‌روز شد');
-        renderProducts();
-        renderSettings();
-        document.getElementById('raw-json').value = JSON.stringify(DB, null, 2);
-      } catch (e) {
-        alert('خطا در ذخیره روی گیت‌هاب: ' + e.message);
+    /* ---------- Auth & Bootstrap ---------- */
+    async function onAdminAuth(user) {
+      document.getElementById('adm-loading').hidden = true;
+      if (!user) {
+        document.getElementById('adm-guest').hidden = false;
+        document.getElementById('adm-denied').hidden = true;
+        document.getElementById('adm-studio').hidden = true;
+        return;
       }
+
+      const isAdm = await window.MgzCloud.checkIsAdmin(user);
+      if (!isAdm) {
+        document.getElementById('adm-guest').hidden = true;
+        document.getElementById('adm-denied').hidden = false;
+        document.getElementById('adm-studio').hidden = true;
+        document.getElementById('adm-denied-info').innerHTML =
+          `شما با ایمیل <strong class="ltr">${user.email || '—'}</strong> (شناسه: <code class="ltr">${user.uid}</code>) وارد شده‌اید که در فهرست مدیران مجاز ثبت نشده است.`;
+        return;
+      }
+
+      document.getElementById('adm-guest').hidden = true;
+      document.getElementById('adm-denied').hidden = true;
+      document.getElementById('adm-studio').hidden = false;
+      document.getElementById('adm-user-meta').textContent = `واردشده به عنوان مدیر: ${user.displayName || ''} (${user.email})`;
+
+      await loadProductsTable();
+      await Promise.all([
+        loadHomeCMSForm(),
+        loadBrandingAndPagesForms(),
+        loadOrdersAndSupply(),
+        loadUsersAndAdmins(),
+      ]);
     }
 
-    init();
+    document.getElementById('btn-adm-signin').onclick = async () => {
+      try {
+        await window.MgzCloud.signInWithGoogle();
+      } catch {
+        toast('ورود با حساب گوگل انجام نشد');
+      }
+    };
+    document.getElementById('btn-adm-switch').onclick = async () => {
+      await window.MgzCloud.signOutUser();
+      await window.MgzCloud.signInWithGoogle();
+    };
+    document.getElementById('btn-adm-signout').onclick = async () => {
+      await window.MgzCloud.signOutUser();
+      toast('خروج انجام شد');
+    };
+
+    boot('admin').then(() => {
+      if (window.MgzCloud) {
+        window.MgzCloud.onAuth(onAdminAuth);
+      } else {
+        document.getElementById('adm-loading').hidden = true;
+        document.getElementById('adm-guest').hidden = false;
+      }
+    });
   </script>
 </body>
 </html>

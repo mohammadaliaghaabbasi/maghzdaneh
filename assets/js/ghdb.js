@@ -1,15 +1,12 @@
-/* ============================================================
-   مغزدانه — ghdb.js
-   لایه دیتابیس مبتنی بر گیت‌هاب:
-   - خواندن عمومی: data/db.json از GitHub Pages (بدون توکن)
-   - نوشتن ادمین: ویرایش db.json و ثبت سفارش‌ها با Contents API
-     (توکن فقط داخل پنل ادمین وارد می‌شود و در localStorage می‌ماند؛
-      هرگز در کد هاردکد نمی‌شود)
-   ============================================================ */
+/* ==========================================================================
+   مغزدانه — ghdb.js (Phase 3)
+   لایه دیتابیس مبتنی بر گیت‌هاب (GitHub Contents API):
+   - خواندن عمومی از data/db.json
+   - نوشتن ادمین (محصولات، تنظیمات، تغییر وضعیت سفارش، ثبت سفارش و پیشنهاد عرضه)
+   - توکن فقط در localStorage مرورگر مدیر می‌ماند و هرگز هاردکد نمی‌شود
+   ========================================================================== */
 
 const GHDB = (() => {
-  // ---------- config (public part) ----------
-  // این مقادیر فقط برای خواندن عمومی هستند؛ نوشتن نیاز به توکن ادمین دارد.
   const CFG = {
     owner: 'mohammadaliaghaabbasi',
     repo: 'maghzdaneh',
@@ -19,10 +16,9 @@ const GHDB = (() => {
   };
   const LS_KEY = 'maghzdaneh_gh_token';
 
-  const api = (path) => `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/${path}`;
-  const raw = (path) => `https://raw.githubusercontent.com/${CFG.owner}/${CFG.repo}/${CFG.branch}/${path}?t=${Date.now()}`;
+  const api = path => `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/${path}`;
+  const raw = path => `https://raw.githubusercontent.com/${CFG.owner}/${CFG.repo}/${CFG.branch}/${path}?t=${Date.now()}`;
 
-  // ---------- token ----------
   function getToken() { return localStorage.getItem(LS_KEY) || ''; }
   function setToken(t) { t ? localStorage.setItem(LS_KEY, t) : localStorage.removeItem(LS_KEY); }
   function hasToken() { return !!getToken(); }
@@ -39,14 +35,16 @@ const GHDB = (() => {
     return res.json();
   }
 
-  // ---------- read (public) ----------
   async function fetchDB() {
-    const res = await fetch(raw(CFG.dbPath), { cache: 'no-store' });
-    if (!res.ok) throw new Error('db.json fetch failed: ' + res.status);
-    return res.json();
+    try {
+      const res = await fetch(raw(CFG.dbPath), { cache: 'no-store' });
+      if (res.ok) return res.json();
+    } catch {}
+    const localRes = await fetch(CFG.dbPath, { cache: 'no-store' });
+    if (!localRes.ok) throw new Error('db.json fetch failed: ' + localRes.status);
+    return localRes.json();
   }
 
-  // ---------- write helpers ----------
   async function getFile(path) {
     return ghFetch(api('contents/' + path + '?ref=' + CFG.branch));
   }
@@ -64,33 +62,36 @@ const GHDB = (() => {
     });
   }
 
-  // ---------- products & settings (admin) ----------
   async function saveDB(dbObj, message) {
     return putFile(CFG.dbPath, dbObj, message || 'update: db.json از پنل مدیریت مغزدانه');
   }
 
-  // ---------- orders ----------
   function orderPath(order) {
-    const d = new Date(order.date);
+    const d = new Date(order.date || Date.now());
     const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
     return `${CFG.ordersDir}/${ym}/${order.id}.json`;
   }
 
-  // ثبت سفارش: نیازمند توکن است. اگر توکن نبود (خریدار عادی)،
-  // fallback به ذخیره محلی در checkout انجام شده است.
-  async function submitOrder(order) {
+  async function submitOrder(payload) {
     if (!hasToken()) return false;
     try {
-      await putFile(orderPath(order), order, `order: ${order.id} — ${order.customer.name} — ${order.totals.grand.toLocaleString('fa-IR')} تومان`);
+      const isOffer = payload.kind === 'supply-offer';
+      const commitMsg = isOffer
+        ? `supply: ${payload.id} — ${payload.seller || 'عرضه‌کننده'} — ${payload.type || ''} (${payload.amountKg || 0} کیلو)`
+        : `order: ${payload.id} — ${(payload.customer && payload.customer.name) || 'خریدار'} — ${Number((payload.totals && payload.totals.grand) || 0).toLocaleString('fa-IR')} تومان`;
+      await putFile(orderPath(payload), payload, commitMsg);
       return true;
     } catch (e) {
-      console.warn('order submit failed:', e);
+      console.warn('GHDB submitOrder failed:', e);
       return false;
     }
   }
 
+  async function updateOrder(path, orderObj, message) {
+    return putFile(path, orderObj, message || `status: ${orderObj.id} → ${orderObj.status}`);
+  }
+
   async function listOrders() {
-    // فهرست ماه‌های موجود
     const months = [];
     const now = new Date();
     for (let i = 0; i < 6; i++) {
@@ -100,7 +101,9 @@ const GHDB = (() => {
     const out = [];
     for (const m of months) {
       const files = await ghFetch(api(`contents/${CFG.ordersDir}/${m}?ref=${CFG.branch}`)).catch(() => []);
-      for (const f of files) out.push(f);
+      if (Array.isArray(files)) {
+        for (const f of files) out.push(f);
+      }
     }
     return out;
   }
@@ -108,15 +111,16 @@ const GHDB = (() => {
   async function readOrder(path) {
     const meta = await ghFetch(api('contents/' + path + '?ref=' + CFG.branch));
     const bin = atob(meta.content.replace(/\n/g, ''));
-    return JSON.parse(decodeURIComponent(escape(bin)));
+    const parsed = JSON.parse(decodeURIComponent(escape(bin)));
+    parsed._path = path;
+    return parsed;
   }
 
-  // ---------- admin auth check ----------
   async function checkAuth() {
     if (!hasToken()) throw new Error('no-token');
     const u = await ghFetch('https://api.github.com/user');
     return u.login;
   }
 
-  return { CFG, getToken, setToken, hasToken, fetchDB, saveDB, submitOrder, listOrders, readOrder, checkAuth };
+  return { CFG, getToken, setToken, hasToken, fetchDB, saveDB, submitOrder, updateOrder, listOrders, readOrder, checkAuth };
 })();

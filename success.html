@@ -5,25 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سفارش ثبت شد | مغزدانه</title>
   <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#07100b">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/fx.css">
+  <style>
+    .receipt-card {
+      margin-top: 24px;
+      text-align: right;
+      background: var(--c-canvas-2);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-lg);
+      padding: 20px;
+    }
+    .receipt-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--c-line);
+      font-size: var(--fs-sm);
+    }
+    .receipt-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: var(--fs-sm);
+      border-bottom: 1px solid var(--c-line);
+    }
+    .receipt-item:last-of-type { border-bottom: none; }
+    .receipt-meta {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--c-line);
+      font-size: var(--fs-xs);
+      color: var(--c-text-soft);
+      display: grid;
+      gap: 6px;
+    }
+    .receipt-notice {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--r-md);
+      background: var(--c-accent-soft);
+      border: 1px solid rgba(224, 178, 69, 0.3);
+      color: var(--c-accent-light);
+      font-size: var(--fs-xs);
+      line-height: 1.85;
+      text-align: right;
+    }
+    @media print {
+      .site-header, .site-footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #111 !important; }
+      .success-box, .receipt-card {
+        background: #fff !important;
+        color: #111 !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+      }
+      .success-box *, .receipt-card * { color: #111 !important; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <section>
     <div class="container">
-      <div class="success-box">
-        <div class="tick">✓</div>
-        <h1 style="font-size:var(--fs-xl);margin-bottom:10px">سفارش شما ثبت شد!</h1>
-        <p style="color:var(--c-text-soft);margin-bottom:6px">کد پیگیری سفارش:</p>
-        <p style="font-size:var(--fs-lg);font-weight:900;color:var(--c-primary-dark);direction:ltr" id="order-id"></p>
-        <p style="margin-top:10px" id="msg"></p>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px">
+      <div class="success-box" style="max-width:680px">
+        <div class="tick" id="tick-ico"></div>
+        <h1 style="font-size:var(--fs-xl);color:#fff;margin-bottom:8px">سفارش شما ثبت شد</h1>
+        <p style="color:var(--c-text-soft);font-size:var(--fs-sm);margin-bottom:4px">کد پیگیری سفارش:</p>
+        <p style="font-size:var(--fs-lg);font-weight:900;color:var(--c-primary-light);letter-spacing:0.04em" class="ltr num" id="order-id">—</p>
+        <div id="msg"></div>
+        <div id="receipt-wrap"></div>
+        <div class="no-print" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">
           <a class="btn btn-primary" href="catalog.html">ادامه خرید</a>
-          <button class="btn btn-outline" onclick="window.print()">چاپ رسید</button>
+          <button type="button" class="btn btn-outline" id="print-btn">چاپ رسید</button>
+          <a class="btn btn-ghost" href="contact.html#track">پیگیری سفارش</a>
         </div>
       </div>
     </div>
@@ -34,14 +98,74 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/motion.js"></script>
   <script>
+    function escHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     boot('').then(db => {
+      document.getElementById('tick-ico').innerHTML = icon('check');
+      document.getElementById('print-btn').addEventListener('click', () => window.print());
+
       const params = new URLSearchParams(location.search);
-      document.getElementById('order-id').textContent = params.get('order') || '—';
-      const total = params.get('total');
-      const local = params.get('local') === '1';
-      document.getElementById('msg').innerHTML = local
-        ? `⚠️ اتصال به سرور برقرار نشد و سفارش روی همین دستگاه ذخیره شد. لطفاً برای تأیید نهایی با شماره <b class="ltr" style="direction:ltr">${db.site.phone}</b> تماس بگیرید و کد پیگیری را اعلام کنید.`
-        : `مبلغ قابل پرداخت: <b>${fmt(total)} تومان</b> — لینک پرداخت درگاه ${db.site.payment.gateway} تا چند دقیقه آینده برای شما پیامک می‌شود. برای پیگیری سفارش با <b style="direction:ltr">${db.site.phone}</b> در تماس باشید.`;
+      const oid = params.get('order') || '';
+      const totalParam = params.get('total');
+      const isLocal = params.get('local') === '1';
+
+      document.getElementById('order-id').textContent = oid || '—';
+
+      const storedOrders = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
+      const order = storedOrders.find(o => o.id === oid) || null;
+      const grand = order && order.totals ? order.totals.grand : Number(totalParam || 0);
+
+      const payLabels = {
+        online: `درگاه آنلاین (${db.site.payment.gateway})`,
+        card: 'کارت‌به‌کارت بانکی',
+        cod: 'پرداخت در محل (تهران)'
+      };
+
+      document.getElementById('msg').innerHTML = isLocal
+        ? `<div class="receipt-notice">سفارش شما با موفقیت در حافظه این دستگاه ثبت شد. به دلیل نبود اتصال مستقیم به مخزن سفارش، لطفاً برای هماهنگی سریع ارسال با شماره <b class="ltr">${escHtml(db.site.phone)}</b> تماس بگیرید و کد پیگیری <b class="ltr">${escHtml(oid)}</b> را اعلام کنید.</div>`
+        : `<p style="margin-top:12px;color:var(--c-text-soft);font-size:var(--fs-sm);line-height:1.9">مبلغ قابل پرداخت: <b style="color:#fff" class="num">${faToman(grand)}</b> — پیامک تأیید و هماهنگی پرداخت (${escHtml(db.site.payment.gateway)}) به‌زودی ارسال می‌شود. تلفن پشتیبانی: <b class="ltr" style="color:var(--c-accent-light)">${escHtml(db.site.phone)}</b></p>`;
+
+      if (order) {
+        const itemsHtml = (order.items || []).map(it => `
+          <div class="receipt-item">
+            <div>
+              <strong style="color:#fff">${escHtml(it.name)}</strong>
+              <div style="font-size:var(--fs-xs);color:var(--c-text-soft)">${escHtml(tierLabel(it.tier))} · ${fmt(it.qty)} کیلوگرم × ${fmt(it.unit)} ت</div>
+            </div>
+            <strong class="num" style="color:var(--c-primary-light);white-space:nowrap">${faToman(it.total)}</strong>
+          </div>`).join('');
+
+        document.getElementById('receipt-wrap').innerHTML = `
+          <div class="receipt-card">
+            <div class="receipt-head">
+              <strong style="color:#fff">جزئیات رسید سفارش</strong>
+              <span style="color:var(--c-text-soft);font-size:var(--fs-xs)">${new Date(order.date).toLocaleString('fa-IR')}</span>
+            </div>
+            ${itemsHtml}
+            <div class="sum-row" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--c-line)">
+              <span>جمع اقلام (${fmt(order.totals ? order.totals.totalKg : 0)} کیلوگرم)</span>
+              <span>${faToman(order.totals ? order.totals.subtotal : grand)}</span>
+            </div>
+            <div class="sum-row">
+              <span>هزینه ارسال</span>
+              <span>${order.totals && order.totals.shipping === 0 ? 'رایگان' : faToman(order.totals ? order.totals.shipping : 0)}</span>
+            </div>
+            <div class="sum-row total">
+              <span>مبلغ نهایی</span>
+              <span>${faToman(grand)}</span>
+            </div>
+            <div class="receipt-meta">
+              <div><b style="color:#fff">تحویل‌گیرنده:</b> ${escHtml(order.customer && order.customer.name)} · <span class="ltr">${escHtml(order.customer && order.customer.phone)}</span></div>
+              <div><b style="color:#fff">نشانی:</b> ${escHtml(order.customer && order.customer.province)}، ${escHtml(order.customer && order.customer.city)} — ${escHtml(order.customer && order.customer.address)}</div>
+              <div><b style="color:#fff">روش پرداخت:</b> ${escHtml(payLabels[order.payment] || order.payment || '—')}</div>
+              ${order.note ? `<div><b style="color:#fff">یادداشت:</b> ${escHtml(order.note)}</div>` : ''}
+            </div>
+          </div>`;
+      }
+      if (window.MGZ) MGZ.init();
     });
   </script>
 </body>
