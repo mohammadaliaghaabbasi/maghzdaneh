@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>سازندهٔ جعبه هدیه و پک سازمانی | مغزدانه</title>
+  <meta name="description" content="طراحی آنلاین جعبه هدیه لوکس و پک سازمانی مغز پسته، بادام و گردو با انتخاب نوع جعبه، ترکیب ۳ تا ۶ مغز و کارت تبریک اختصاصی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container page-head-row">
+      <div>
+        <span class="sec-label">هدیهٔ اصیل ایرانی و پک‌های تشریفاتی سازمانی</span>
+        <h1>سازندهٔ جعبه هدیه و پک سازمانی</h1>
+        <p>نوع جعبه، ترکیب ۳ تا ۶ مغز ممتاز و متن کارت تبریک یا لوگوی سازمان خود را انتخاب کنید؛ قیمت کل لحظه‌ای محاسبه می‌شود.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-outline" href="catalog.html">فروشگاه مرکزی ←</a>
+        <a class="btn btn-outline" href="wholesale.html">سفارش عمده سازمانی</a>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="gift-layout" style="display:grid;gap:28px;grid-template-columns:minmax(0, 1.5fr) minmax(0, 0.95fr);align-items:start">
+        <div style="display:grid;gap:22px">
+          <!-- Step 1: Container -->
+          <div class="contact-card">
+            <h3>۱. انتخاب نوع جعبه و بسته‌بندی</h3>
+            <div class="variant-grid" id="gift-containers" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))"></div>
+          </div>
+
+          <!-- Step 2: Slot Count & Nuts Selection -->
+          <div class="contact-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+              <h3 style="margin-bottom:0">۲. چیدمان خانه‌های جعبه (۳ تا ۶ نوع مغز)</h3>
+              <div style="display:flex;gap:6px" id="slot-counts"></div>
+            </div>
+            <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">برای هر خانه محصول دلخواه و وزن (۲۰۰، ۳۰۰ یا ۵۰۰ گرم) را تنظیم کنید:</p>
+            <div id="gift-slots" style="display:grid;gap:12px"></div>
+          </div>
+
+          <!-- Step 3: Card & Corporate Branding -->
+          <div class="contact-card">
+            <h3>۳. کارت تبریک و سفارشی‌سازی سازمانی (اختیاری)</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="gf-title">عنوان جعبه / نام شرکت یا هدیه‌دهنده</label>
+                <input id="gf-title" placeholder="مثلاً: از طرف گروه مهندسی سپهر">
+              </div>
+              <div class="field">
+                <label for="gf-qty">تعداد جعبه</label>
+                <input id="gf-qty" type="number" min="1" max="500" value="1">
+                <span class="hint">برای سفارش‌های بالای ۲۰ عدد، ۱۰٪ تخفیف پک سازمانی لحاظ می‌شود.</span>
+              </div>
+              <div class="field form-full">
+                <label for="gf-msg">متن کارت تبریک (چاپ روی مقوای کارتی طلاکوب)</label>
+                <textarea id="gf-msg" rows="2" placeholder="مثلاً: با آرزوی سالی سرشار از برکت و تندرستی…"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Preview & Summary -->
+        <aside class="cart-summary" id="gift-summary"></aside>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js"></script>
+  <script>
+    const CONTAINERS = [
+      { id: 'emerald-tin', name: 'قوطی فلزی زمردی طلاکوب', desc: 'محافظ نور و رطوبت، مناسب هدیه خانوادگی و نوروزی', price: 185000, img: 'assets/img/maghz-pistachio-akbari.jpg' },
+      { id: 'walnut-wood', name: 'جعبهٔ چوبی منبت‌کاری‌شده', desc: 'چوب گردوی طبیعی با قفل برنجی و تقسیم‌کننده مخمل', price: 420000, img: 'assets/img/maghz-walnut-tooyserkan.jpg' },
+      { id: 'vip-corp', name: 'پک تشریفاتی سازمانی VIP', desc: 'جعبه هاردباکس مشکی‌طلایی + چاپ لوگوی شرکت + کارت', price: 320000, img: 'assets/img/maghz-pistachio-kaleghouchi.jpg' },
+    ];
+
+    boot('gifts').then(db => {
+      const prods = db.products.filter(p => p.source !== 'vendor');
+      const catalog = prods.length >= 4 ? prods : db.products;
+
+      let selContainer = CONTAINERS[0];
+      let slotCount = 4;
+      let slots = [];
+
+      function initSlots(n) {
+        slotCount = n;
+        const next = [];
+        for (let i = 0; i < n; i++) {
+          const prev = slots[i];
+          const fallbackProd = catalog[i % catalog.length];
+          next.push(prev || { prodId: fallbackProd.id, grams: 250 });
+        }
+        slots = next;
+      }
+      initSlots(4);
+
+      function renderContainers() {
+        document.getElementById('gift-containers').innerHTML = CONTAINERS.map(c => `
+          <button type="button" class="variant-btn ${selContainer.id === c.id ? 'active' : ''}" data-cid="${c.id}" style="padding:14px">
+            <strong style="font-size:0.86rem">${c.name}</strong>
+            <small style="margin-top:4px;line-height:1.6">${c.desc}</small>
+            <small style="color:var(--c-accent-light);margin-top:6px;font-weight:800">+ ${faToman(c.price)}</small>
+          </button>`).join('');
+        document.querySelectorAll('[data-cid]').forEach(b => {
+          b.onclick = () => {
+            selContainer = CONTAINERS.find(x => x.id === b.dataset.cid) || CONTAINERS[0];
+            renderAll();
+          };
+        });
+      }
+
+      function renderSlotCounts() {
+        document.getElementById('slot-counts').innerHTML = [3, 4, 5, 6].map(n => `
+          <button type="button" class="preset-btn ${slotCount === n ? 'active' : ''}" data-sc="${n}">${fmt(n)} خانه</button>
+        `).join('');
+        document.querySelectorAll('[data-sc]').forEach(b => {
+          b.onclick = () => { initSlots(+b.dataset.sc); renderAll(); };
+        });
+      }
+
+      function renderSlots() {
+        document.getElementById('gift-slots').innerHTML = slots.map((s, idx) => `
+          <div style="display:grid;grid-template-columns:36px minmax(0,1fr) 128px;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--c-line);border-radius:10px;background:var(--c-canvas-2)">
+            <span class="ch-num" style="width:30px;height:30px;font-size:0.78rem">${fmt(idx + 1)}</span>
+            <select data-slot-prod="${idx}" style="border:1px solid var(--c-line-strong);border-radius:8px;padding:8px 10px;background:var(--c-surface);color:#fff;font-size:var(--fs-xs)">
+              ${catalog.map(p => `<option value="${esc(p.id)}" ${p.id === s.prodId ? 'selected' : ''}>${esc(p.name)} (${fmt(p.prices.retail)} ت/کیلو)</option>`).join('')}
+            </select>
+            <select data-slot-gram="${idx}" style="border:1px solid var(--c-line-strong);border-radius:8px;padding:8px 10px;background:var(--c-surface);color:var(--c-accent-light);font-size:var(--fs-xs);font-weight:700">
+              ${[200, 250, 300, 500].map(g => `<option value="${g}" ${s.grams === g ? 'selected' : ''}>${fmt(g)} گرم</option>`).join('')}
+            </select>
+          </div>`).join('');
+
+        document.querySelectorAll('[data-slot-prod]').forEach(sel => {
+          sel.onchange = () => { slots[+sel.dataset.slotProd].prodId = sel.value; renderSummary(); };
+        });
+        document.querySelectorAll('[data-slot-gram]').forEach(sel => {
+          sel.onchange = () => { slots[+sel.dataset.slotGram].grams = +sel.value; renderSummary(); };
+        });
+      }
+
+      function computeGift() {
+        const boxQty = Math.max(1, Math.min(500, Math.round(Number(document.getElementById('gf-qty').value) || 1)));
+        let nutsTotal = 0;
+        let totalGrams = 0;
+        const lines = slots.map(s => {
+          const p = byId(s.prodId) || catalog[0];
+          const cost = Math.round((p.prices.retail * s.grams) / 1000);
+          nutsTotal += cost;
+          totalGrams += s.grams;
+          return { name: p.name, grams: s.grams, cost };
+        });
+        const rawBoxPrice = selContainer.price + nutsTotal;
+        const corpDisc = boxQty >= 20 ? Math.round(rawBoxPrice * 0.1) : 0;
+        const unitBoxPrice = rawBoxPrice - corpDisc;
+        return { boxQty, lines, totalGrams, rawBoxPrice, corpDisc, unitBoxPrice, grand: unitBoxPrice * boxQty };
+      }
+
+      function renderSummary() {
+        const g = computeGift();
+        const title = document.getElementById('gf-title').value.trim();
+        const msg = document.getElementById('gf-msg').value.trim();
+        document.getElementById('gift-summary').innerHTML = `
+          <h3>پیش‌نمایش پک هدیهٔ شما</h3>
+          <div style="border-radius:12px;overflow:hidden;border:1px solid var(--c-line);margin-bottom:14px">
+            <img src="${esc(selContainer.img)}" alt="${esc(selContainer.name)}" style="width:100%;height:150px;object-fit:cover;display:block">
+          </div>
+          <div class="sum-row"><span>نوع جعبه</span><span>${esc(selContainer.name)}</span></div>
+          <div class="sum-row"><span>وزن خالص مغزها</span><span>${fmt(g.totalGrams)} گرم (${fmt(Math.round(g.totalGrams / 10) / 100)} کیلو)</span></div>
+          <div style="margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--c-canvas-2);border:1px solid var(--c-line);font-size:var(--fs-xs);line-height:1.85">
+            ${g.lines.map((l, i) => `<div style="display:flex;justify-content:space-between;gap:8px"><span>${fmt(i + 1)}. ${esc(l.name)} (${fmt(l.grams)} گرم)</span><strong class="num">${fmt(l.cost)}</strong></div>`).join('')}
+          </div>
+          ${g.corpDisc > 0 ? `<div class="sum-row" style="color:var(--c-primary-light)"><span>تخفیف سازمانی (۲۰+ جعبه · ۱۰٪)</span><span>− ${faToman(g.corpDisc)} / جعبه</span></div>` : ''}
+          <div class="sum-row"><span>قیمت هر جعبه</span><span>${faToman(g.unitBoxPrice)}</span></div>
+          <div class="sum-row"><span>تعداد</span><span>${fmt(g.boxQty)} جعبه</span></div>
+          <div class="sum-row total"><span>جمع نهایی</span><span>${faToman(g.grand)}</span></div>
+          <button type="button" class="btn btn-primary" id="gift-add-btn" style="width:100%;margin-top:14px">${icon('cart')} افزودن پک هدیه به سبد خرید</button>
+          <button type="button" class="btn btn-outline" id="gift-inv-btn" style="width:100%;margin-top:10px">${icon('receipt')} صدور پیش‌فاکتور سازمانی (PDF)</button>
+        `;
+
+        const summaryDesc = `${selContainer.name} · ${g.lines.map(l => `${l.name} (${l.grams}g)`).join(' + ')}${title ? ` · نام: ${title}` : ''}${msg ? ` · کارت: ${msg.slice(0, 60)}` : ''}`;
+
+        document.getElementById('gift-add-btn').onclick = () => {
+          addCustomToCart({
+            kind: 'gift-box',
+            name: `جعبه هدیه سفارشی (${fmt(slotCount)} مغز · ${selContainer.name})`,
+            qty: g.boxQty,
+            unitPrice: g.unitBoxPrice,
+            weightKg: Math.round((g.totalGrams / 1000) * 100) / 100,
+            variantLabel: summaryDesc,
+            img: selContainer.img,
+          }, true);
+        };
+
+        document.getElementById('gift-inv-btn').onclick = () => {
+          openInvoiceModal({
+            title: 'پیش‌فاکتور رسمی پک هدیه سازمانی',
+            items: [{
+              name: `جعبه هدیه سفارشی (${fmt(slotCount)} مغز)`,
+              variantLabel: summaryDesc,
+              tierLabel: g.boxQty >= 20 ? 'پک سازمانی (۱۰٪ تخفیف)' : 'جعبه هدیه',
+              qty: g.boxQty,
+              unitText: 'جعبه',
+              unitPrice: g.unitBoxPrice,
+              lineTotal: g.grand,
+            }],
+            subtotal: g.grand,
+            discount: 0,
+            shipCost: g.grand >= db.site.shipping.free_over ? 0 : db.site.shipping.flat_cost,
+          });
+        };
+      }
+
+      function renderAll() {
+        renderContainers();
+        renderSlotCounts();
+        renderSlots();
+        renderSummary();
+      }
+
+      ['gf-title', 'gf-qty', 'gf-msg'].forEach(id => {
+        document.getElementById(id).addEventListener('input', renderSummary);
+      });
+
+      renderAll();
+      if (window.MGZ) MGZ.init();
+    });
+  </script>
+  <style>
+    @media (max-width: 920px) { .gift-layout { grid-template-columns: 1fr !important; } }
+  </style>
+</body>
+</html>

@@ -2,72 +2,147 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>گالری و فروشگاه مغزها | مغزدانه — مغز پسته، بادام و گردوی دست‌اول</title>
-  <meta name="description" content="فروشگاه تخصصی مغز پسته اکبری، فندقی، کله‌قوچی، خلال سبز، بادام و گردوی دست‌اول با قیمت پلکانی شفاف برای خرید خانگی، قنادی و عمده.">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css?v=10">
-  <link rel="stylesheet" href="assets/css/fx.css?v=10">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>فروشگاه و گالری مغزها | مغزدانه</title>
+  <meta name="description" content="فروشگاه تخصصی مغز پسته اکبری، خلال سبز قزوین، بادام و گردو — با تفکیک شفاف عرضه مستقیم مغزدانه و غرفه‌های مستقل باغداران.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
   <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
+  <!-- Compact Storefront Header + Price Tier Control -->
   <div class="page-head">
     <div class="container page-head-row">
       <div>
-        <span class="sec-label">برداشت تازه ۱۴۰۵ · سورتینگ مستقیم کارگاه</span>
-        <h1>گالری تخصصی مغزها</h1>
-        <p>گزیدهٔ دست‌اول باغ‌های رفسنجان، قزوین و تویسرکان؛ با تغییر پله خرید، تعرفه تمام اقلام به‌صورت لحظه‌ای محاسبه می‌شود.</p>
+        <span class="sec-label">برداشت تازه ۱۴۰۵ · ارسال مستقیم از مبدأ</span>
+        <h1>فروشگاه تخصصی مغزدانه</h1>
+        <p>مغز پسته اکبری رفسنجان، خلال سبز قزوین، بادام و گردو — با قیمت پلکانی شفاف برای خرید خانگی، نیم‌عمده و عمده.</p>
       </div>
       <div id="catalog-tier-switcher"></div>
     </div>
   </div>
 
-  <section>
+  <!-- Clean 4-Door Quick Access Ecosystem Strip -->
+  <nav class="shop-hub-strip" aria-label="دسترسی سریع بخش‌های سایت">
     <div class="container">
-      <!-- Curated 3-Plate Highlight Strip (Shown on full catalog view before filtering) -->
-      <div class="curated-band" id="curated-band">
-        <div class="curated-head">
+      <div class="shop-hub-grid">
+        <a class="shop-hub-link" href="gifts.html">
           <div>
-            <span class="band-kicker" id="cms-featured-kicker">گزیدهٔ فصل</span>
-            <h2 id="cms-featured-title">سه انتخاب شاخص مغزدانه</h2>
+            <strong>جعبه هدیه و پک سازمانی</strong>
+            <span>طراحی آنلاین با ۳ تا ۶ مغز و کارت تبریک</span>
           </div>
-          <span class="curated-note">بسته‌بندی وکیوم و برشته‌کاری روزانه همان روز سفارش</span>
-        </div>
-        <div class="signature-grid" id="signature-grid"></div>
+          <i aria-hidden="true">←</i>
+        </a>
+        <a class="shop-hub-link" href="vendors.html">
+          <div>
+            <strong>بازارچهٔ غرفه‌های فروشندگان</strong>
+            <span>خرید مستقیم از غرفه‌های مستقل باغداران</span>
+          </div>
+          <i aria-hidden="true">←</i>
+        </a>
+        <a class="shop-hub-link" href="seller.html">
+          <div>
+            <strong>پنل مدیریت غرفه (فروشندگان)</strong>
+            <span>افتتاح و مدیریت غرفه در بازارچهٔ مغزدانه</span>
+          </div>
+          <i aria-hidden="true">←</i>
+        </a>
+        <a class="shop-hub-link" href="wholesale.html">
+          <div>
+            <strong>خرید عمده، نرخ روز و نمونه</strong>
+            <span>بستهٔ نمونه ۵ گرید، نرخ بورس و اشتراک ماهانه</span>
+          </div>
+          <i aria-hidden="true">←</i>
+        </a>
       </div>
+    </div>
+  </nav>
 
-      <!-- Filter & Search Architecture -->
-      <div class="chips" id="cat-chips" role="tablist" aria-label="فیلتر دسته‌بندی"></div>
+  <!-- Structured 2-Column Storefront: Sticky Filter Sidebar + Immediate Product Grid -->
+  <section style="padding-block:clamp(28px, 4vw, 48px)">
+    <div class="container">
+      <div class="shop-layout">
+        <!-- Right Sticky Filter Sidebar -->
+        <aside class="shop-sidebar" aria-label="فیلترهای فروشگاه">
+          <div class="sidebar-block">
+            <span class="sidebar-title">جستجو</span>
+            <div class="field">
+              <input type="search" id="q" placeholder="نام مغز، گرید، مبدأ یا غرفه…" aria-label="جستجوی محصول">
+            </div>
+          </div>
 
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px">
-        <div class="field" style="flex:1;min-width:220px;max-width:380px">
-          <input type="search" id="q" placeholder="جستجو در نام، مبدأ یا کاربرد… (اکبری، خلال، تویسرکان)" aria-label="جستجوی محصول">
-        </div>
-        <div class="field" style="min-width:170px">
-          <select id="origin-filter" aria-label="فیلتر مبدأ برداشت">
-            <option value="all">همه مناطق برداشت</option>
-          </select>
-        </div>
-        <div class="field" style="min-width:170px">
-          <select id="sort" aria-label="ترتیب نمایش">
-            <option value="popular">منتخب مغزدانه</option>
-            <option value="cheap">ارزان‌ترین</option>
-            <option value="exp">گران‌ترین</option>
-            <option value="rating">بالاترین گرید</option>
-          </select>
-        </div>
-        <span style="font-size:var(--fs-sm);color:var(--c-text-muted);margin-inline-start:auto" id="count" class="num"></span>
-      </div>
+          <div class="sidebar-block">
+            <span class="sidebar-title">نوع عرضه‌کننده</span>
+            <div class="sidebar-list" id="source-list" role="tablist" aria-label="فیلتر عرضه‌کننده">
+              <button type="button" class="sidebar-btn active" data-src="all">
+                <span>همه عرضه‌ها</span>
+                <span class="sb-count" id="src-cnt-all">۰</span>
+              </button>
+              <button type="button" class="sidebar-btn" data-src="house">
+                <span>فروشگاه مرکزی مغزدانه</span>
+                <span class="sb-count" id="src-cnt-house">۰</span>
+              </button>
+              <button type="button" class="sidebar-btn" data-src="vendor">
+                <span>بازارچهٔ غرفه‌های فروشندگان</span>
+                <span class="sb-count" id="src-cnt-vendor">۰</span>
+              </button>
+            </div>
+          </div>
 
-      <div class="grid" id="grid"></div>
-      <div class="empty" id="empty" style="display:none">
-        <div class="big" id="empty-ico"></div>
-        <p style="color:#fff;font-weight:800">محصولی با این فیلترها پیدا نشد</p>
-        <p style="margin:8px 0 16px;font-size:var(--fs-sm)">عبارت جستجو را تغییر دهید یا فیلترها را پاک کنید.</p>
-        <button type="button" class="btn btn-outline btn-sm" id="reset-filters">نمایش همه محصولات</button>
+          <div class="sidebar-block">
+            <span class="sidebar-title">دسته‌بندی محصولات</span>
+            <div class="sidebar-list" id="cat-list" role="tablist" aria-label="فیلتر دسته‌بندی"></div>
+          </div>
+
+          <div class="sidebar-block">
+            <span class="sidebar-title">منطقه برداشت</span>
+            <div class="field">
+              <select id="origin-filter" aria-label="فیلتر مبدأ برداشت">
+                <option value="all">همه مناطق برداشت</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline btn-sm" id="reset-filters-side" style="width:100%" hidden>پاک کردن همه فیلترها</button>
+        </aside>
+
+        <!-- Left Main Catalog Area -->
+        <div class="shop-main">
+          <div class="shop-toolbar">
+            <div class="shop-toolbar-meta">
+              <span class="shop-toolbar-title" id="active-heading">همه محصولات</span>
+              <span class="shop-toolbar-count" id="count"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <label for="sort" style="font-size:var(--fs-xs);color:var(--c-text-muted)">مرتب‌سازی:</label>
+              <select id="sort" class="shop-sort-select" aria-label="ترتیب نمایش">
+                <option value="popular">منتخب مغزدانه</option>
+                <option value="cheap">ارزان‌ترین</option>
+                <option value="exp">گران‌ترین</option>
+                <option value="rating">بالاترین گرید</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid" id="grid"></div>
+
+          <div class="empty" id="empty" style="display:none">
+            <div class="big" id="empty-ico"></div>
+            <p style="color:#fff;font-weight:800">محصولی با این فیلترها پیدا نشد</p>
+            <p style="margin:8px 0 16px;font-size:var(--fs-sm)">عبارت جستجو را تغییر دهید یا فیلترها را پاک کنید.</p>
+            <button type="button" class="btn btn-outline btn-sm" id="reset-filters">نمایش همه محصولات</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -82,11 +157,11 @@
         <div class="craft-copy">
           <span class="band-kicker" id="cms-craft-kicker">اصالتِ دست‌اول</span>
           <h2 id="craft-heading">یک زنجیرهٔ کوتاه؛ از بنه تا میز شما.</h2>
-          <p id="cms-craft-body">ما انباردار نیستیم. هر محموله مستقیماً از باغدار منتخب رفسنجان، قزوین و تویسرکان به کارگاه سورتینگ می‌آید و همان روز ثبت سفارش بسته‌بندی می‌شود.</p>
+          <p id="cms-craft-body">ما انباردار نیستیم. هر محموله مستقیماً از باغدار منتخب رفسنجان، قزوین و تویسرکان به کارگاه سورتینگ می‌آید و همان‌روز ثبت سفارش بسته‌بندی می‌شود.</p>
           <div class="craft-links">
             <a class="lux-btn-primary" href="wholesale.html">محاسبه‌گر خرید عمده</a>
             <a class="lux-link-quiet" href="about.html">داستان مغزدانه</a>
-            <a class="lux-link-quiet" href="supply.html">عرضه مستقیم از باغدار</a>
+            <a class="lux-link-quiet" href="articles.html">مجله و مقالات</a>
           </div>
           <div class="provenance-pillars">
             <div class="prov-item">
@@ -109,118 +184,118 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js?v=10"></script>
+  <script src="assets/js/app.js?v=19"></script>
   <script src="assets/js/motion.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
     let filterCat = params.get('cat') || 'all';
-    let featuredIds = ['maghz-akbari-premium', 'khall-qazvin', 'maghz-gerdoo-lux'];
+    let filterSource = params.get('source') || 'all';
 
     boot('catalog').then(db => {
       document.getElementById('empty-ico').innerHTML = icon('search');
       renderTierSwitcher(document.getElementById('catalog-tier-switcher'));
 
-      const origins = [...new Set(db.products.map(p => p.origin))];
+      const origins = [...new Set(db.products.map(p => p.origin).filter(Boolean))];
       const originSel = document.getElementById('origin-filter');
-      originSel.innerHTML = `<option value="all">همه مناطق برداشت</option>` + origins.map(o => `<option value="${o}">${o}</option>`).join('');
+      originSel.innerHTML = `<option value="all">همه مناطق برداشت</option>` + origins.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
 
-      const chips = [{ id: 'all', name: 'همه محصولات' }, ...db.categories];
+      const categories = [{ id: 'all', name: 'همه دسته‌ها' }, ...db.categories];
 
-      function renderCuratedPlates() {
-        const grid = document.getElementById('signature-grid');
-        if (!grid) return;
-        let items = featuredIds.map(id => db.products.find(p => p.id === id)).filter(Boolean);
-        if (items.length < 3) {
-          const extras = db.products.filter(p => !items.some(x => x.id === p.id));
-          items = [...items, ...extras].slice(0, 3);
-        } else {
-          items = items.slice(0, 3);
-        }
+      document.getElementById('src-cnt-all').textContent = fmt(db.products.length);
+      document.getElementById('src-cnt-house').textContent = fmt(db.products.filter(p => p.source !== 'vendor').length);
+      document.getElementById('src-cnt-vendor').textContent = fmt(db.products.filter(p => p.source === 'vendor').length);
 
-        grid.innerHTML = items.map(p => `
-          <a class="plate" href="product.html?id=${p.id}">
-            <div class="plate-media">
-              <img src="${p.img}" alt="${p.name}" loading="lazy" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'${p.name}')">
-            </div>
-            <div class="plate-meta">${p.origin || 'رفسنجان'} · ${p.grade || 'ممتاز'}</div>
-            <h3 class="plate-title">${p.name}</h3>
-            <div class="plate-price">${fmt(priceFor(p, APP.tier))} <span>تومان / کیلو (${tierLabel(APP.tier)})</span></div>
-          </a>`).join('');
+      function syncSourceBtns() {
+        document.querySelectorAll('#source-list [data-src]').forEach(b => {
+          b.classList.toggle('active', b.dataset.src === filterSource);
+        });
       }
 
-      function renderChips() {
-        document.getElementById('cat-chips').innerHTML = chips.map(c => {
-          const cnt = c.id === 'all' ? db.products.length : db.products.filter(p => p.category === c.id).length;
-          return `<button type="button" role="tab" aria-selected="${filterCat === c.id}" class="chip ${filterCat === c.id ? 'active' : ''}" data-cat="${c.id}">
-            ${c.id === 'all' ? '' : icon(CAT_ICON_MAP[c.id] || 'kernel')}
-            <span>${c.name}</span>
-            <small class="num" style="opacity:0.7">(${fmt(cnt)})</small>
+      document.querySelectorAll('#source-list [data-src]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterSource = btn.dataset.src;
+          syncSourceBtns();
+          renderCategories();
+          render();
+        });
+      });
+
+      function sourcePool() {
+        if (filterSource === 'house') return db.products.filter(p => p.source !== 'vendor');
+        if (filterSource === 'vendor') return db.products.filter(p => p.source === 'vendor');
+        return db.products;
+      }
+
+      function renderCategories() {
+        const pool = sourcePool();
+        const catWrap = document.getElementById('cat-list');
+        catWrap.innerHTML = categories.map(c => {
+          const cnt = c.id === 'all' ? pool.length : pool.filter(p => p.category === c.id).length;
+          return `<button type="button" role="tab" aria-selected="${filterCat === c.id}" class="sidebar-btn ${filterCat === c.id ? 'active' : ''}" data-cat="${esc(c.id)}">
+            <span>${esc(c.name)}</span>
+            <span class="sb-count">${fmt(cnt)}</span>
           </button>`;
         }).join('');
-        document.querySelectorAll('#cat-chips .chip').forEach(b => {
+        catWrap.querySelectorAll('[data-cat]').forEach(b => {
           b.onclick = () => {
             filterCat = b.dataset.cat;
-            renderChips();
+            renderCategories();
             render();
           };
         });
       }
 
+      function resetAllFilters() {
+        filterSource = 'all';
+        filterCat = 'all';
+        document.getElementById('q').value = '';
+        originSel.value = 'all';
+        document.getElementById('sort').value = 'popular';
+        syncSourceBtns();
+        renderCategories();
+        render();
+      }
+
       function render() {
         const q = (document.getElementById('q').value || '').trim();
         const origin = originSel.value;
-        const curatedBand = document.getElementById('curated-band');
-        if (curatedBand) {
-          curatedBand.hidden = filterCat !== 'all' || origin !== 'all' || q.length > 0;
-        }
+        const hasFilters = filterSource !== 'all' || filterCat !== 'all' || origin !== 'all' || q.length > 0;
+        document.getElementById('reset-filters-side').hidden = !hasFilters;
 
-        let list = db.products.filter(p => filterCat === 'all' || p.category === filterCat);
+        const catObj = categories.find(c => c.id === filterCat);
+        const srcName = filterSource === 'house' ? 'عرضه رسمی مغزدانه' : filterSource === 'vendor' ? 'غرفه‌های فروشندگان' : '';
+        const headingParts = [];
+        if (catObj && filterCat !== 'all') headingParts.push(catObj.name);
+        if (srcName) headingParts.push(srcName);
+        document.getElementById('active-heading').textContent = headingParts.length ? headingParts.join(' · ') : 'همه محصولات فروشگاه';
+
+        let list = sourcePool().filter(p => filterCat === 'all' || p.category === filterCat);
         if (origin !== 'all') list = list.filter(p => p.origin === origin);
-        if (q) list = list.filter(p => (p.name + ' ' + p.desc + ' ' + p.origin + ' ' + p.grade + ' ' + (p.uses || []).join(' ')).includes(q));
+        if (q) list = list.filter(p => (p.name + ' ' + (p.desc || '') + ' ' + (p.origin || '') + ' ' + (p.vendorName || '') + ' ' + (p.uses || []).join(' ')).includes(q));
 
         const sort = document.getElementById('sort').value;
         const price = p => priceFor(p, APP.tier);
         if (sort === 'cheap') list.sort((a, b) => price(a) - price(b));
         else if (sort === 'exp') list.sort((a, b) => price(b) - price(a));
-        else if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
-        else list.sort((a, b) => b.sold - a.sold);
+        else if (sort === 'rating') list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        else list.sort((a, b) => (b.sold || 0) - (a.sold || 0));
 
-        document.getElementById('count').textContent = list.length ? `${fmt(list.length)} محصول` : '۰ محصول';
+        document.getElementById('count').textContent = list.length ? `${fmt(list.length)} محصول موجود` : '۰ محصول';
         document.getElementById('empty').style.display = list.length ? 'none' : 'block';
         document.getElementById('grid').innerHTML = list.map(productCard).join('');
         bindAddButtons(document.getElementById('grid'));
-        renderCuratedPlates();
         if (window.MGZ) MGZ.init();
       }
 
       document.getElementById('q').addEventListener('input', render);
       originSel.addEventListener('change', render);
       document.getElementById('sort').addEventListener('change', render);
-      document.getElementById('reset-filters').addEventListener('click', () => {
-        filterCat = 'all';
-        document.getElementById('q').value = '';
-        originSel.value = 'all';
-        document.getElementById('sort').value = 'popular';
-        renderChips();
-        render();
-      });
+      document.getElementById('reset-filters').addEventListener('click', resetAllFilters);
+      document.getElementById('reset-filters-side').addEventListener('click', resetAllFilters);
       document.addEventListener('tier:changed', render);
 
-      // Hydrate curated section & orchard provenance from Firestore CMS
-      if (window.MgzCloud) {
-        window.MgzCloud.subscribeSiteContent('home', (cms) => {
-          if (cms.featuredKicker) document.getElementById('cms-featured-kicker').textContent = cms.featuredKicker;
-          if (cms.featuredTitle) document.getElementById('cms-featured-title').textContent = cms.featuredTitle;
-          if (Array.isArray(cms.featuredIds) && cms.featuredIds.length) featuredIds = cms.featuredIds;
-          if (cms.craftKicker) document.getElementById('cms-craft-kicker').textContent = cms.craftKicker;
-          if (cms.craftTitle) document.getElementById('craft-heading').textContent = cms.craftTitle;
-          if (cms.craftBody) document.getElementById('cms-craft-body').textContent = cms.craftBody;
-          if (cms.craftImage) document.getElementById('cms-craft-img').src = cms.craftImage;
-          renderCuratedPlates();
-        });
-      }
-
-      renderChips();
+      syncSourceBtns();
+      renderCategories();
       render();
     });
   </script>

@@ -2,22 +2,28 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>سوالات متداول | مغزدانه</title>
-  <meta name="description" content="پاسخ سوال‌های رایج درباره خرید مغز پسته، بادام و گردو: قیمت‌ها، خرید عمده، ارسال، بسته‌بندی و مرجوعی.">
-  <meta name="theme-color" content="#07100b">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>سؤالات متداول | مغزدانه</title>
+  <meta name="description" content="پاسخ سؤال‌های رایج دربارهٔ خرید مغز پسته، بادام و گردو: قیمت‌ها، خرید عمده، ارسال، بسته‌بندی و مرجوعی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
     <div class="container">
-      <span class="sec-label">FAQ — راهنمای خریداران</span>
-      <h1>سوالات متداول</h1>
+      <span class="sec-label">راهنمای خریداران و پاسخ‌ها</span>
+      <h1>سؤالات متداول</h1>
       <p>پاسخ شفاف به پرتکرارترین پرسش‌ها درباره گرید مغزها، قیمت پلکانی، بسته‌بندی، ارسال و ضمانت مرجوعی.</p>
     </div>
   </div>
@@ -25,7 +31,7 @@
   <section>
     <div class="container" style="max-width:860px">
       <div class="field" style="margin-bottom:22px">
-        <label for="faq-q">جستجو در سوالات</label>
+        <label for="faq-q">جست‌وجو در سؤالات</label>
         <input id="faq-q" type="search" placeholder="مثلاً ارسال رایگان، انس پسته، مرجوعی، فاکتور رسمی، نگهداری…">
       </div>
 
@@ -33,7 +39,7 @@
 
       <div class="empty" style="margin-top:28px">
         <div class="big" id="faq-help-ico"></div>
-        <p style="color:#fff;font-weight:800">پاسخ سوال‌تان را پیدا نکردید؟</p>
+        <p style="color:#fff;font-weight:800">پاسخ سؤالتان را پیدا نکردید؟</p>
         <p style="font-size:var(--fs-sm);margin-top:6px">کارشناسان فروش خرده و عمده همه‌روزه پاسخگوی شما هستند.</p>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
           <a class="btn btn-primary btn-sm" href="contact.html">تماس با مغزدانه</a>
@@ -45,8 +51,8 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js?v=11"></script>
   <script>
     boot('faq').then(async db => {
       document.getElementById('faq-help-ico').innerHTML = icon('phone');
@@ -54,11 +60,13 @@
       const searchEl = document.getElementById('faq-q');
 
       let faqSource = db.faq || [];
-      if (window.MgzCloud) {
-        const pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
-        if (pg && Array.isArray(pg.faqItems) && pg.faqItems.length) {
-          faqSource = pg.faqItems;
-        }
+      let pg = null;
+      try { const r = await fetch('/api/cms/pages'); if (r.ok) pg = (await r.json()).data; } catch {}
+      if (!pg && window.MgzCloud) {
+        pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
+      }
+      if (pg && Array.isArray(pg.faqItems) && pg.faqItems.length) {
+        faqSource = pg.faqItems;
       }
 
       function renderFaq(query) {
@@ -68,7 +76,7 @@
           : faqSource;
 
         if (!items.length) {
-          listEl.innerHTML = `<div class="empty"><p>سوالی با عبارت «${q}» پیدا نشد. عبارت دیگری امتحان کنید یا از صفحه تماس بپرسید.</p></div>`;
+          listEl.innerHTML = `<div class="empty"><p>سؤالی با عبارت «${q}» پیدا نشد. عبارت دیگری امتحان کنید یا از صفحهٔ تماس بپرسید.</p></div>`;
           return;
         }
         listEl.innerHTML = items.map((f, i) => `

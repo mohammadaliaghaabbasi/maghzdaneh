@@ -2,310 +2,715 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>استودیوی مدیریت محتوا و فروشگاه | مغزدانه</title>
-  <meta name="description" content="پنل مدیریت زنده محتوای تمام بخش‌های سایت، محصولات، قیمت‌های پلکانی، سفارش‌ها و مشتریان مغزدانه.">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>داشبورد اجرایی و کنسول مدیریت | مغزدانه</title>
+  <meta name="description" content="داشبورد تخصصی مدیریت مغزدانه: پایش فروش و کیف پول کاربران، شارژ و تعدیل دستی حساب‌ها، پاسخگویی به تیکت‌ها، مدیریت سفارش‌ها، غرفه‌ها، محصولات و محتوای سه‌بعدی.">
   <meta name="robots" content="noindex,nofollow">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css?v=8">
-  <link rel="stylesheet" href="assets/css/fx.css?v=8">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
-  <main class="studio-wrap">
-    <!-- Loading -->
-    <div id="adm-loading" class="auth-gate-card">
-      <h2>در حال بررسی دسترسی مدیریت...</h2>
-      <p>لطفاً چند لحظه شکیبا باشید.</p>
+  <main>
+    <!-- Auth / Gate Container -->
+    <div id="adm-gate-wrap" class="studio-wrap">
+      <div id="adm-loading" class="auth-gate-card">
+        <h2>در حال بررسی وضعیت پنل مدیریت...</h2>
+        <p>لطفاً چند لحظه شکیبا باشید.</p>
+      </div>
+
+      <!-- First-Run Admin Username & Password Claim Form -->
+      <section id="adm-claim" class="auth-hub-card" hidden>
+        <div class="auth-hub-head">
+          <span class="band-kicker">راه‌اندازی امن اولیه مدیر سایت</span>
+          <h1>تعیین نام کاربری و رمز عبور مدیر</h1>
+          <p>هنوز رمز عبوری برای مدیر تنظیم نشده است. یک نام کاربری و رمز عبور امن (حداقل ۸ کاراکتر) انتخاب کنید تا فوراً وارد داشبورد اجرایی شوید.</p>
+        </div>
+        <div class="auth-msg" id="claim-msg"></div>
+        <form id="adm-claim-form" class="form-grid">
+          <div class="field form-full">
+            <label for="cl-user">نام کاربری مدیر (انگلیسی) *</label>
+            <input id="cl-user" class="ltr" required minlength="3" maxlength="40" value="admin" placeholder="admin" style="text-align:right">
+          </div>
+          <div class="field form-full">
+            <label for="cl-pass">رمز عبور مدیر (حداقل ۸ کاراکتر) *</label>
+            <input id="cl-pass" type="password" class="ltr" required minlength="8" placeholder="حداقل ۸ کاراکتر امن" style="text-align:right">
+          </div>
+          <div class="form-full">
+            <button type="submit" class="btn btn-primary" style="width:100%">ثبت رمز مدیر و ورود به داشبورد</button>
+          </div>
+        </form>
+        <div class="auth-divider">یا ورود با حساب گوگل مدیر</div>
+        <button type="button" class="btn-google" id="btn-adm-google-1"><span>ورود مدیر با حساب گوگل</span></button>
+      </section>
+
+      <!-- Standard Admin Username & Password Login Form -->
+      <section id="adm-login" class="auth-hub-card" hidden>
+        <div class="auth-hub-head">
+          <span class="band-kicker">کنسول مدیریت مغزدانه</span>
+          <h1>ورود مدیر با نام کاربری و رمز عبور</h1>
+          <p>برای دسترسی به داشبورد تحلیلی، امور مالی و کیف پول، تیکت‌ها، غرفه‌ها، محصولات و محتوای سایت وارد شوید.</p>
+        </div>
+        <div class="auth-msg" id="login-msg"></div>
+        <form id="adm-login-form" class="form-grid">
+          <div class="field form-full">
+            <label for="lg-user">نام کاربری مدیر</label>
+            <input id="lg-user" class="ltr" required placeholder="admin" style="text-align:right">
+          </div>
+          <div class="field form-full">
+            <label for="lg-pass">رمز عبور مدیر</label>
+            <input id="lg-pass" type="password" class="ltr" required placeholder="••••••••" style="text-align:right">
+          </div>
+          <div class="form-full">
+            <button type="submit" class="btn btn-primary" style="width:100%">ورود به داشبورد مدیریت</button>
+          </div>
+        </form>
+        <div class="auth-divider">یا ورود با حساب گوگل مدیر</div>
+        <button type="button" class="btn-google" id="btn-adm-google-2"><span>ورود مدیر با حساب گوگل</span></button>
+      </section>
     </div>
 
-    <!-- Sign-In Gate -->
-    <section id="adm-guest" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
-      <span class="band-kicker">استودیوی مدیریت زنده مغزدانه</span>
-      <h2>ورود مدیر سایت</h2>
-      <p>
-        برای ویرایش زنده تمام متن‌ها و بخش‌های صفحه اول، صفحات داخلی، محصولات، قیمت‌های پلکانی، سفارش‌ها و مشتریان، با حساب گوگل مدیر وارد شوید.
-      </p>
-      <button type="button" class="btn-google" id="btn-adm-signin">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.71-4.95 3.71-8.7z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09L2.18 7.07C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.71-2.88c-.98.66-2.23 1.06-3.57 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        </svg>
-        <span>ورود مدیر با حساب گوگل</span>
-      </button>
-    </section>
-
-    <!-- Unauthorized State -->
-    <section id="adm-denied" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
-      <span class="band-kicker" style="color:var(--c-danger)">عدم دسترسی مدیریت</span>
-      <h2>این حساب دسترسی ادمین ندارد</h2>
-      <p id="adm-denied-info"></p>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <a class="btn btn-primary btn-sm" href="account.html">رفتن به حساب کاربری</a>
-        <button type="button" class="btn btn-outline btn-sm" id="btn-adm-switch">تعویض حساب گوگل</button>
-      </div>
-    </section>
-
-    <!-- Full Admin CMS Studio -->
-    <div id="adm-studio" hidden>
-      <div class="studio-hero">
-        <div>
-          <span class="band-kicker">MAGHZDANEH LIVE CMS · دیتابیس ابری زنده</span>
-          <h1>استودیوی مدیریت محتوا و فروشگاه</h1>
-          <p id="adm-user-meta">تمامی تغییرات پس از ذخیره، بلافاصله برای تمام بازدیدکنندگان سایت اعمال می‌شود.</p>
+    <!-- Full Executive Admin Dashboard Shell -->
+    <div id="adm-studio" class="dash-shell" hidden>
+      <!-- RTL Sticky 264px Sidebar -->
+      <aside class="dash-sidebar" aria-label="منوی پنل مدیریت">
+        <div class="dash-profile-head">
+          <span class="dash-profile-kicker">کنسول اجرایی مغزدانه</span>
+          <div class="dash-profile-name" id="adm-user-name">مدیر ارشد</div>
+          <div class="dash-profile-sub">دسترسی کامل مالی، بازارچه و مدیریت محتوا</div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <a class="btn btn-outline btn-sm" href="index.html">مشاهده زنده صفحه اول</a>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-adm-signout">خروج</button>
+
+        <nav class="dash-nav-group" aria-label="تحلیل و عملیات">
+          <div class="dash-nav-label">تحلیل و عملیات</div>
+          <button type="button" class="dash-nav-btn active" data-aview="overview">
+            <span>داشبورد مدیریتی</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="finance">
+            <span>مالی، کیف پول و شارژ دستی</span>
+            <span class="dash-nav-count" id="anav-tx">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="orders">
+            <span>مدیریت سفارش‌ها</span>
+            <span class="dash-nav-count" id="anav-orders">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="tickets">
+            <span>تیکت‌های پشتیبانی</span>
+            <span class="dash-nav-count" id="anav-tickets">۰</span>
+          </button>
+        </nav>
+
+        <nav class="dash-nav-group" aria-label="بازارچه و کاربران">
+          <div class="dash-nav-label">بازارچه، تخفیف و تسویه</div>
+          <button type="button" class="dash-nav-btn" data-aview="catalog">
+            <span>محصولات و انبار</span>
+            <span class="dash-nav-count" id="anav-prods">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="vendors">
+            <span>غرفه‌ها و عرضه عمده</span>
+            <span class="dash-nav-count" id="anav-vendors">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="payouts">
+            <span>تسویه غرفه‌داران</span>
+            <span class="dash-nav-count" id="anav-payouts">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="coupons">
+            <span>کدهای تخفیف</span>
+            <span class="dash-nav-count" id="anav-coupons">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="community">
+            <span>دیدگاه، پرسش و اشتراک</span>
+            <span class="dash-nav-count" id="anav-community">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="users">
+            <span>کاربران و کیف پول</span>
+            <span class="dash-nav-count" id="anav-users">۰</span>
+          </button>
+        </nav>
+
+        <nav class="dash-nav-group" aria-label="محتوا و پیکربندی">
+          <div class="dash-nav-label">محتوا و امنیت</div>
+          <button type="button" class="dash-nav-btn" data-aview="home-cms">
+            <span>محتوای سه‌بعدی صفحه اول</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="articles">
+            <span>مجله و مقالات</span>
+            <span class="dash-nav-count" id="anav-articles">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="branding">
+            <span>تنظیمات برند و سایت</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="audit">
+            <span>گزارش فعالیت‌ها (Audit)</span>
+          </button>
+          <a class="dash-nav-btn" href="brand.html" style="text-decoration:none">
+            <span>کتابچه لوگو و تایپوگرافی</span>
+            <span class="dash-nav-count">برداری</span>
+          </a>
+        </nav>
+
+        <div class="dash-sidebar-foot">
+          <a class="btn btn-outline btn-sm" href="index.html" style="width:100%;justify-content:center">نمای سه‌بعدی صفحه اول</a>
+          <a class="btn btn-outline btn-sm" href="catalog.html" style="width:100%;justify-content:center">مشاهده فروشگاه</a>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-adm-signout" style="width:100%;justify-content:center">خروج مدیر</button>
         </div>
-      </div>
+      </aside>
 
-      <!-- KPI Overview -->
-      <div class="kpi-strip">
-        <div class="kpi-box"><div class="k-label">محصولات ابری</div><div class="k-val" id="kpi-products">۰</div></div>
-        <div class="kpi-box"><div class="k-label">کل سفارش‌ها</div><div class="k-val" id="kpi-orders">۰</div></div>
-        <div class="kpi-box"><div class="k-label">سفارش‌های جدید</div><div class="k-val" id="kpi-new-orders" style="color:var(--lux-gold)">۰</div></div>
-        <div class="kpi-box"><div class="k-label">مشتریان ثبت‌نام‌شده</div><div class="k-val" id="kpi-users">۰</div></div>
-      </div>
+      <!-- Main Executive Workspace -->
+      <div class="dash-main">
+        <div class="dash-topbar">
+          <div>
+            <div class="dash-breadcrumb" id="a-breadcrumb">کنسول مدیریت مغزدانه / داشبورد مدیریتی</div>
+            <h1 id="a-page-title">داشبورد مدیریتی</h1>
+          </div>
+          <div class="dash-topbar-actions">
+            <button type="button" class="btn btn-gold btn-sm" id="btn-top-wallet">+ شارژ دستی کاربر</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-new-prod-top">+ محصول رسمی</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-reload-all">به‌روزرسانی</button>
+          </div>
+        </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="studio-tabs" role="tablist" aria-label="بخش‌های مدیریت">
-        <button type="button" class="studio-tab active" data-atab="home-cms">محتوای صفحه اول</button>
-        <button type="button" class="studio-tab" data-atab="brand-pages">برندینگ و صفحات داخلی</button>
-        <button type="button" class="studio-tab" data-atab="catalog">محصولات و قیمت پلکانی</button>
-        <button type="button" class="studio-tab" data-atab="orders">سفارش‌ها و عرضه‌ها</button>
-        <button type="button" class="studio-tab" data-atab="users">مشتریان و مدیران</button>
-      </nav>
+        <!-- VIEW 1: EXECUTIVE OVERVIEW -->
+        <section id="aview-overview" style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-kpi-grid">
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">کل فروش ثبت‌شده</span>
+              <strong class="dash-kpi-value" id="akpi-rev" style="color:var(--lux-emerald)">۰ تومان</strong>
+              <span class="dash-kpi-sub" id="akpi-kg">وزن کل فروخته‌شده: ۰ کیلوگرم</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">مانده کیف پول کاربران</span>
+              <strong class="dash-kpi-value" id="akpi-wallet" style="color:var(--lux-gold)">۰ تومان</strong>
+              <span class="dash-kpi-sub" id="akpi-topups">کل شارژها: ۰ تومان</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">سفارش‌های در انتظار</span>
+              <strong class="dash-kpi-value" id="akpi-pending">۰</strong>
+              <span class="dash-kpi-sub" id="akpi-orders-total">از مجموع ۰ سفارش ثبت‌شده</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">پشتیبانی و بازارچه</span>
+              <strong class="dash-kpi-value" id="akpi-tickets">۰ تیکت باز</strong>
+              <span class="dash-kpi-sub" id="akpi-vendors-sub">۰ غرفه فعال · ۰ کاربر</span>
+            </div>
+          </div>
 
-      <!-- ================= TAB 1: HOME PAGE LIVE CMS ================= -->
-      <section id="atab-home-cms">
-        <form id="home-cms-form">
-          <div class="studio-panel">
-            <div class="studio-panel-head">
+          <div class="dash-split-2">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>روند ۷ روزه فروش و شارژ کیف پول</h2>
+                  <p>مقایسه روزانه درآمد سفارش‌ها با ورودی شارژ کیف پول‌ها (تومان)</p>
+                </div>
+                <div style="display:flex;gap:14px;font-size:0.76rem;color:var(--lux-soft)">
+                  <span><b style="color:var(--lux-emerald)">■</b> فروش</span>
+                  <span><b style="color:var(--lux-gold)">■</b> شارژ کیف پول</span>
+                </div>
+              </div>
+              <div class="chart-svg-wrap" id="adm-chart-wrap"></div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>توزیع کالاها بر اساس دسته‌بندی</h2>
+                  <p>ترکیب انبار رسمی مغزدانه و غرفه‌های فروشندگان</p>
+                </div>
+              </div>
+              <div class="bar-list" id="adm-cat-bars"></div>
+            </div>
+          </div>
+
+          <div class="dash-split-even">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>صف اقدام و هشدارهای عملیاتی</h2>
+                  <p>موارد نیازمند بررسی مدیر با دسترسی یک‌کلیک</p>
+                </div>
+              </div>
+              <div class="ops-list" id="adm-ops-alerts"></div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>آخرین تراکنش‌های مالی سامانه</h2>
+                  <p>شارژ کیف پول کاربران، پرداخت‌های آنلاین و تعدیل‌های مدیر</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" data-jump-aview="finance">دفترکل مالی</button>
+              </div>
+              <div class="ops-list" id="adm-ov-tx"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: FINANCE, WALLETS & MANUAL CREDIT/DEBIT -->
+        <section id="aview-finance" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-kpi-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">کل شارژهای ثبت‌شده</span>
+              <strong class="dash-kpi-value" id="fkpi-topups" style="color:var(--lux-emerald)">۰ تومان</strong>
+              <span class="dash-kpi-sub">شارژ آنلاین کاربران + شارژ دستی مدیر</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">پرداخت‌های انجام‌شده از کیف پول</span>
+              <strong class="dash-kpi-value" id="fkpi-wpay">۰ تومان</strong>
+              <span class="dash-kpi-sub">سفارش‌های تسویه‌شده از اعتبار داخلی</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">جمع تعهد موجودی کیف پول کاربران</span>
+              <strong class="dash-kpi-value" id="fkpi-liab" style="color:var(--lux-gold)">۰ تومان</strong>
+              <span class="dash-kpi-sub">مجموع مانده فعلی حساب همه مشتریان</span>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
               <div>
-                <h2>۱. تیتر اصلی و دکمه‌های صفحه اول</h2>
-                <p>متن افتتاحیه کنار پسته واقعی در نمای اول سایت</p>
+                <h2>شارژ یا کسر دستی کیف پول کاربر</h2>
+                <p>ثبت واریز بانکی، هدیه وفاداری، بازگشت وجه یا تعدیل اعتباری با درج خودکار در دفترکل</p>
+              </div>
+            </div>
+            <form id="adm-wallet-form" class="form-grid">
+              <div class="field">
+                <label for="aw-user">انتخاب کاربر *</label>
+                <select id="aw-user" required></select>
+              </div>
+              <div class="field">
+                <label for="aw-dir">نوع عملیات مالی *</label>
+                <select id="aw-dir">
+                  <option value="credit">افزایش موجودی (شارژ دستی / هدیه)</option>
+                  <option value="debit">کسر اعتباری (تسویه / اصلاح)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="aw-amt">مبلغ (تومان) *</label>
+                <input id="aw-amt" type="number" class="ltr" min="10000" max="1000000000" step="10000" value="500000" required style="text-align:right">
+              </div>
+              <div class="field form-full">
+                <label for="aw-note">شرح سند مالی *</label>
+                <input id="aw-note" maxlength="220" placeholder="مثلاً: تأیید حواله بانکی یا اعتبار تشویقی">
+              </div>
+              <div class="form-full" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div class="topup-presets" data-preset-target="aw-amt" style="max-width:460px;flex:1">
+                  <button type="button" class="topup-preset-btn" data-amt="100000">۱۰۰ هزار</button>
+                  <button type="button" class="topup-preset-btn active" data-amt="500000">۵۰۰ هزار</button>
+                  <button type="button" class="topup-preset-btn" data-amt="1000000">۱ میلیون</button>
+                  <button type="button" class="topup-preset-btn" data-amt="5000000">۵ میلیون</button>
+                </div>
+                <button type="submit" class="btn btn-gold" id="aw-submit-btn">ثبت عملیات مالی در دفترکل</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>دفترکل جامع تراکنش‌های مالی</h2>
+                <p>گزارش کامل تمام گردش‌های مالی کیف پول کاربران</p>
+              </div>
+              <div class="dash-seg" id="adm-tx-seg">
+                <button type="button" class="active" data-atxf="all">همه</button>
+                <button type="button" data-atxf="topup">شارژ کاربر</button>
+                <button type="button" data-atxf="order_payment">پرداخت سفارش</button>
+                <button type="button" data-atxf="admin_credit">شارژ مدیر</button>
+                <button type="button" data-atxf="admin_debit">کسر مدیر</button>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>کد تراکنش</th>
+                    <th>کاربر</th>
+                    <th>نوع</th>
+                    <th>شرح و روش</th>
+                    <th>مبلغ</th>
+                    <th>مانده نهایی</th>
+                    <th>تاریخ</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-tx-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: ORDERS -->
+        <section id="aview-orders" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>مدیریت سفارش‌های مشتریان</h2>
+                <p>تغییر زنده وضعیت سفارش‌های رسمی و بازارچه</p>
+              </div>
+              <div class="dash-seg" id="adm-ord-seg">
+                <button type="button" class="active" data-aordf="all">همه</button>
+                <button type="button" data-aordf="pending">در انتظار</button>
+                <button type="button" data-aordf="shipped">ارسال‌شده</button>
+                <button type="button" data-aordf="done">تحویل‌شده</button>
+              </div>
+            </div>
+            <div id="adm-orders-wrap" style="display:flex;flex-direction:column;gap:14px"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: SUPPORT TICKETS -->
+        <section id="aview-tickets" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تیکت‌های پشتیبانی مشتریان</h2>
+                <p>پاسخ مستقیم به مکاتبات مشتریان، تغییر وضعیت و بستن تیکت‌ها</p>
+              </div>
+              <div class="dash-seg" id="adm-tkt-seg">
+                <button type="button" class="active" data-atktf="all">همه</button>
+                <button type="button" data-atktf="open">باز</button>
+                <button type="button" data-atktf="answered">پاسخ داده‌شده</button>
+                <button type="button" data-atktf="closed">بسته‌شده</button>
+              </div>
+            </div>
+            <div id="adm-tickets-wrap"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: HOUSE CATALOG & INVENTORY -->
+        <section id="aview-catalog" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>محصولات رسمی مغزدانه، قیمت پلکانی و انبار</h2>
+                <p>ویرایش سریع قیمت خرده، نیم‌عمده، عمده و موجودی هر محصول</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-new-prod">+ افزودن محصول رسمی</button>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>محصول</th>
+                    <th>خرده</th>
+                    <th>نیم‌عمده ۵+</th>
+                    <th>عمده ۲۵+</th>
+                    <th>موجودی (کیلو)</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: VENDORS & ORCHARD SUPPLY OFFERS -->
+        <section id="aview-vendors" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>غرفه‌های شخصی فروشندگان و باغداران</h2>
+                <p>تأیید هویت غرفه‌ها، فعال‌سازی یا تعلیق نمایش عمومی</p>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>نام غرفه و مدیر</th>
+                    <th>شهر مبدأ</th>
+                    <th>کالاها</th>
+                    <th>نشان تأیید</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-vendors-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>درخواست‌های عرضه مستقیم بار باغداران</h2>
+                <p>پیشنهادهای فروش بار عمده ثبت‌شده در فرم عرضه مستقیم</p>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>باغدار / تأمین‌کننده</th>
+                    <th>نوع محصول</th>
+                    <th>حجم پیشنهادی</th>
+                    <th>مبدأ</th>
+                    <th>قیمت پیشنهادی</th>
+                    <th>تاریخ</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-supply-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 7: USERS DIRECTORY & WALLET JUMP -->
+        <section id="aview-users" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>کاربران ثبت‌نام‌شده و موجودی کیف پول</h2>
+                <p>مشاهده اعضای سامانه و دسترسی مستقیم برای شارژ یا تعدیل کیف پول هر کاربر</p>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>نام کامل</th>
+                    <th>نام کاربری / موبایل</th>
+                    <th>روش عضویت</th>
+                    <th>موجودی کیف پول</th>
+                    <th>تعداد سفارش</th>
+                    <th>عملیات مالی</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-users-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 8: HOME 3D CMS -->
+        <section id="aview-home-cms" hidden>
+          <form id="home-cms-form" class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>ویرایش تیترها و ۵ پردهٔ سه‌بعدی صفحه اول</h2>
+                <p>متن هر ۵ مرحله باز شدن پسته و دکمه ورود به سایت را زنده تغییر دهید.</p>
               </div>
               <button type="submit" class="btn btn-primary btn-sm">ذخیره و انتشار صفحه اول</button>
             </div>
             <div class="form-grid">
-              <div class="field"><label for="hc-kicker">خط بالای تیتر (Kicker)</label><input id="hc-kicker" maxlength="140"></div>
+              <div class="field"><label for="hc-kicker">برچسب بالای تیتر</label><input id="hc-kicker" maxlength="140"></div>
               <div class="field"><label for="hc-title">تیتر اصلی (H1)</label><input id="hc-title" maxlength="200"></div>
-              <div class="field form-full"><label for="hc-sub">زیرتیتر کوتاه</label><input id="hc-sub" maxlength="600"></div>
-              <div class="field"><label for="hc-cta1-lbl">متن دکمه اول</label><input id="hc-cta1-lbl" maxlength="80"></div>
-              <div class="field"><label for="hc-cta1-href">لینک دکمه اول</label><input id="hc-cta1-href" class="ltr" maxlength="200"></div>
-              <div class="field"><label for="hc-cta2-lbl">متن لینک دوم</label><input id="hc-cta2-lbl" maxlength="80"></div>
-              <div class="field"><label for="hc-cta2-href">لینک دوم</label><input id="hc-cta2-href" class="ltr" maxlength="200"></div>
-            </div>
-          </div>
-
-          <div class="studio-panel">
-            <div class="studio-panel-head">
-              <div>
-                <h2>۲. پنج پردهٔ سکانس سه‌بعدی پسته (از بسته و پوست قرمز تا مغز سبز خالص)</h2>
-                <p>متن هر ۵ مرحله هنگام اسکرول یا پخش خودکار در صفحه ورودی سایت تغییر می‌کند.</p>
-              </div>
+              <div class="field form-full"><label for="hc-sub">زیرتیتر افتتاحیه</label><input id="hc-sub" maxlength="400"></div>
+              <div class="field"><label for="hc-cta1-lbl">متن دکمه ورود</label><input id="hc-cta1-lbl" maxlength="80"></div>
+              <div class="field"><label for="hc-cta1-href">نشانی دکمهٔ ورود</label><input id="hc-cta1-href" class="ltr" maxlength="140"></div>
             </div>
             <div class="stage-editor-grid" id="stages-editor"></div>
-          </div>
-
-          <div class="studio-panel">
-            <div class="studio-panel-head">
-              <div>
-                <h2>۳. بخش «سه انتخاب شاخص» (گزیده فصل)</h2>
-                <p>دقیقاً ۳ محصول شاخص برای نمایش مینیمال در صفحه اول انتخاب کنید.</p>
-              </div>
-            </div>
-            <div class="form-grid">
-              <div class="field"><label for="hc-fk">برچسب بالای بخش</label><input id="hc-fk" maxlength="120"></div>
-              <div class="field"><label for="hc-ft">عنوان بخش</label><input id="hc-ft" maxlength="160"></div>
-              <div class="field"><label for="hc-f1">محصول شاخص اول</label><select id="hc-f1"></select></div>
-              <div class="field"><label for="hc-f2">محصول شاخص دوم</label><select id="hc-f2"></select></div>
-              <div class="field"><label for="hc-f3">محصول شاخص سوم</label><select id="hc-f3"></select></div>
-            </div>
-          </div>
-
-          <div class="studio-panel">
-            <div class="studio-panel-head">
-              <div>
-                <h2>۴. بخش داستان اصالت و تصویر ادیتوریال</h2>
-                <p>بخش پایانی صفحه اول بالای فوتر</p>
-              </div>
-              <button type="submit" class="btn btn-primary btn-sm">ذخیره تمام بخش‌های صفحه اول</button>
-            </div>
-            <div class="form-grid">
-              <div class="field"><label for="hc-ck">برچسب بالای بخش</label><input id="hc-ck" maxlength="120"></div>
-              <div class="field"><label for="hc-ct">تیتر بخش اصالت</label><input id="hc-ct" maxlength="200"></div>
-              <div class="field form-full"><label for="hc-cb">متن توضیحی کوتاه</label><textarea id="hc-cb" rows="3" maxlength="1200"></textarea></div>
-              <div class="field form-full"><label for="hc-ci">آدرس تصویر ادیتوریال</label><input id="hc-ci" class="ltr" maxlength="300"></div>
-            </div>
-          </div>
-        </form>
-      </section>
-
-      <!-- ================= TAB 2: BRANDING & INNER PAGES CMS ================= -->
-      <section id="atab-brand-pages" hidden>
-        <form id="branding-cms-form" class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>تنظیمات برند، تماس و تعرفه ارسال</h2>
-              <p>در هدر، فوتر، سبد خرید و صفحه تسویه‌حساب اعمال می‌شود.</p>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">ذخیره تنظیمات برند</button>
-          </div>
-          <div class="form-grid">
-            <div class="field"><label for="br-name">نام برند</label><input id="br-name" maxlength="80"></div>
-            <div class="field"><label for="br-tag">شعار کوتاه</label><input id="br-tag" maxlength="240"></div>
-            <div class="field form-full"><label for="br-ann">متن نوار اعلان بالای سایت</label><input id="br-ann" maxlength="240"></div>
-            <div class="field"><label for="br-phone">تلفن ثابت</label><input id="br-phone" class="ltr" maxlength="40"></div>
-            <div class="field"><label for="br-mobile">شماره همراه / واتس‌اپ</label><input id="br-mobile" class="ltr" maxlength="40"></div>
-            <div class="field"><label for="br-email">ایمیل فروش</label><input id="br-email" class="ltr" maxlength="120"></div>
-            <div class="field"><label for="br-work">ساعت پاسخگویی</label><input id="br-work" maxlength="120"></div>
-            <div class="field form-full"><label for="br-addr">نشانی فروشگاه / دفتر</label><input id="br-addr" maxlength="240"></div>
-            <div class="field"><label for="br-ship">هزینه ارسال ثابت (تومان)</label><input id="br-ship" type="number" min="0" step="1000"></div>
-            <div class="field"><label for="br-free">سقف ارسال رایگان (تومان)</label><input id="br-free" type="number" min="0" step="100000"></div>
-            <div class="field form-full"><label for="br-heavy">یادداشت ارسال بار عمده</label><input id="br-heavy" maxlength="300"></div>
-          </div>
-        </form>
-
-        <form id="pages-cms-form" class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>محتوای صفحات داخلی (درباره ما، خرید عمده و سوالات متداول)</h2>
-              <p>ویرایش زنده تیترها و متن‌های صفحات راهنما و فروش عمده</p>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">ذخیره محتوای صفحات</button>
-          </div>
-          <div class="form-grid">
-            <div class="field form-full"><label for="pg-about-t">تیتر صفحه «داستان ما»</label><input id="pg-about-t" maxlength="200"></div>
-            <div class="field form-full"><label for="pg-about-b">متن صفحه «داستان ما»</label><textarea id="pg-about-b" rows="4" maxlength="3000"></textarea></div>
-            <div class="field form-full"><label for="pg-wh-t">تیتر صفحه «خرید عمده»</label><input id="pg-wh-t" maxlength="200"></div>
-            <div class="field form-full"><label for="pg-wh-b">توضیح صفحه «خرید عمده»</label><textarea id="pg-wh-b" rows="3" maxlength="2000"></textarea></div>
-          </div>
-
-          <div style="margin-top:26px;padding-top:20px;border-top:1px solid var(--lux-line)">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <h3 style="font-size:1rem;color:var(--lux-ivory)">سوالات متداول (FAQ)</h3>
-              <button type="button" class="btn btn-outline btn-sm" id="btn-add-faq">+ افزودن سوال جدید</button>
-            </div>
-            <div id="faq-editor-list" style="display:grid;gap:12px"></div>
-          </div>
-        </form>
-      </section>
-
-      <!-- ================= TAB 3: LIVE PRODUCT CATALOG ================= -->
-      <section id="atab-catalog" hidden>
-        <div class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>مدیریت زنده محصولات و قیمت پلکانی</h2>
-              <p>هر تغییری که اینجا ذخیره کنید، بلافاصله در کاتالوگ، صفحه محصول و سبد خرید اعمال می‌شود.</p>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button type="button" class="btn btn-outline btn-sm" id="btn-seed-products">انتقال ۲۰ محصول پایه به دیتابیس ابری</button>
-              <button type="button" class="btn btn-primary btn-sm" id="btn-open-new-prod">+ افزودن محصول جدید</button>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table class="shop">
-              <thead>
-                <tr>
-                  <th>محصول</th>
-                  <th>دسته</th>
-                  <th>خرده (تومان)</th>
-                  <th>نیم‌عمده ۵+</th>
-                  <th>عمده ۲۵+</th>
-                  <th>موجودی (کیلو)</th>
-                  <th>عملیات</th>
-                </tr>
-              </thead>
-              <tbody id="adm-products-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= TAB 4: ORDERS & SUPPLY OFFERS ================= -->
-      <section id="atab-orders" hidden>
-        <div class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>سفارش‌های مشتریان</h2>
-              <p>تغییر وضعیت سفارش بلافاصله در پنل کاربری مشتری نمایش داده می‌شود.</p>
-            </div>
-            <button type="button" class="btn btn-outline btn-sm" id="btn-reload-orders">به‌روزرسانی</button>
-          </div>
-          <div id="adm-orders-wrap"></div>
-        </div>
-
-        <div class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>پیشنهادهای عرضه بار از باغداران و تأمین‌کنندگان</h2>
-              <p>درخواست‌های ثبت‌شده در صفحه «عرضه محصول»</p>
-            </div>
-          </div>
-          <div id="adm-supply-wrap"></div>
-        </div>
-      </section>
-
-      <!-- ================= TAB 5: CUSTOMERS & ADMINS ================= -->
-      <section id="atab-users" hidden>
-        <div class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>مشتریان ثبت‌نام‌شده</h2>
-              <p>لیست کاربران عضو‌شده با نوع خریدار و شهر</p>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table class="shop">
-              <thead>
-                <tr>
-                  <th>نام</th>
-                  <th>ایمیل</th>
-                  <th>تلفن همراه</th>
-                  <th>نوع خریدار</th>
-                  <th>شهر / استان</th>
-                  <th>شناسه (UID)</th>
-                </tr>
-              </thead>
-              <tbody id="adm-users-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="studio-panel">
-          <div class="studio-panel-head">
-            <div>
-              <h2>مدیریت دسترسی ادمین‌ها</h2>
-              <p>مدیر اصلی سامانه به‌صورت پیش‌فرض تأیید شده است؛ در صورت نیاز می‌توانید مدیران همکار اضافه کنید.</p>
-            </div>
-          </div>
-          <form id="add-admin-form" class="form-grid" style="margin-bottom:20px">
-            <div class="field"><label for="na-uid">شناسه کاربری (UID)</label><input id="na-uid" class="ltr" required placeholder="شناسه UID کاربر از جدول بالا"></div>
-            <div class="field"><label for="na-email">ایمیل گوگل همکار</label><input id="na-email" type="email" class="ltr" required placeholder="colleague@gmail.com"></div>
-            <div class="field" style="justify-content:flex-end"><button type="submit" class="btn btn-primary btn-sm">اعطای دسترسی مدیر</button></div>
           </form>
-          <div id="admins-list"></div>
-        </div>
-      </section>
+        </section>
+
+        <!-- VIEW 9: ARTICLES CMS -->
+        <section id="aview-articles" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>مدیریت مقالات مجله مغزدانه</h2>
+                <p>انتشار مقالات جدید یا ویرایش و حذف مطالب مجله</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-new-article">+ انتشار مقاله جدید</button>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>عنوان مقاله</th>
+                    <th>دسته‌بندی</th>
+                    <th>نویسنده</th>
+                    <th>تاریخ</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-articles-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 10: BRANDING -->
+        <section id="aview-branding" hidden>
+          <form id="branding-form" class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تنظیمات برند، تماس و نوار اعلان</h2>
+                <p>در سراسر سایت، هدر و فوتر اعمال می‌شود.</p>
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm">ذخیره تنظیمات برند</button>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="br-name">نام برند</label><input id="br-name" maxlength="80"></div>
+              <div class="field"><label for="br-tag">شعار سایت</label><input id="br-tag" maxlength="200"></div>
+              <div class="field form-full"><label for="br-ann">متن نوار اعلان بالا</label><input id="br-ann" maxlength="240"></div>
+              <div class="field"><label for="br-phone">تلفن تماس</label><input id="br-phone" class="ltr" maxlength="40"></div>
+              <div class="field"><label for="br-mobile">موبایل / واتس‌اپ</label><input id="br-mobile" class="ltr" maxlength="40"></div>
+              <div class="field form-full"><label for="br-addr">نشانی فروشگاه</label><input id="br-addr" maxlength="240"></div>
+            </div>
+          </form>
+        </section>
+
+        <!-- VIEW 11: COUPONS MANAGER -->
+        <section id="aview-coupons" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>ایجاد کد تخفیف جدید</h2>
+                <p>کدهای درصدی (تا ۸۰٪) یا مبلغ ثابت همراه حداقل مبلغ سفارش و سقف تخفیف</p>
+              </div>
+            </div>
+            <form id="adm-coupon-form" class="form-grid">
+              <div class="field"><label for="cp-code">کد تخفیف (حروف انگلیسی) *</label><input id="cp-code" class="ltr" required maxlength="30" placeholder="NOWRUZ15" style="text-align:right"></div>
+              <div class="field">
+                <label for="cp-type">نوع تخفیف</label>
+                <select id="cp-type">
+                  <option value="percent">درصدی (٪)</option>
+                  <option value="fixed">مبلغ ثابت (تومان)</option>
+                </select>
+              </div>
+              <div class="field"><label for="cp-val">مقدار (درصد یا تومان) *</label><input id="cp-val" type="number" class="ltr" required min="1" value="10" style="text-align:right"></div>
+              <div class="field"><label for="cp-min">حداقل مبلغ سبد (تومان)</label><input id="cp-min" type="number" class="ltr" min="0" value="500000" style="text-align:right"></div>
+              <div class="field"><label for="cp-max">سقف تخفیف (تومان)</label><input id="cp-max" type="number" class="ltr" min="0" value="1000000" style="text-align:right"></div>
+              <div class="field"><label for="cp-note">توضیح کوتاه برای مشتری</label><input id="cp-note" maxlength="140" placeholder="مثلاً: تخفیف ویژه مشتریان وفادار"></div>
+              <div class="form-full"><button type="submit" class="btn btn-gold btn-sm">+ ایجاد کد تخفیف</button></div>
+            </form>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><div><h2>کدهای تخفیف ثبت‌شده</h2><p>فعال/غیرفعال‌سازی یا حذف کدها</p></div></div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead><tr><th>کد</th><th>میزان تخفیف</th><th>حداقل خرید / سقف</th><th>استفاده</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+                <tbody id="adm-coupons-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 12: SELLER PAYOUTS -->
+        <section id="aview-payouts" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>درخواست‌های تسویه حساب غرفه‌داران (شبا)</h2>
+                <p>بررسی شماره شبا، تأیید واریز یا رد درخواست‌های برداشت درآمد غرفه‌ها</p>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead><tr><th>نام غرفه</th><th>شماره شبا</th><th>مبلغ (تومان)</th><th>تاریخ ثبت</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+                <tbody id="adm-payouts-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 13: REVIEWS, Q&A, SUBSCRIPTIONS & ALERTS -->
+        <section id="aview-community" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-card">
+            <div class="dash-card-head"><div><h2>دیدگاه‌های مشتریان روی محصولات</h2><p>تأیید نمایش عمومی، مخفی‌سازی یا حذف دیدگاه‌ها</p></div></div>
+            <div id="adm-reviews-list" style="display:flex;flex-direction:column;gap:12px"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><div><h2>پرسش‌های فنی مشتریان دربارهٔ محصولات</h2><p>پاسخ مستقیم کارشناس مغزدانه که زیر صفحهٔ محصول نمایش داده می‌شود</p></div></div>
+            <div id="adm-qa-list" style="display:flex;flex-direction:column;gap:12px"></div>
+          </div>
+          <div class="dash-split-even">
+            <div class="dash-card">
+              <div class="dash-card-head"><div><h2>اشتراک‌های دوره‌ای ثبت‌شده</h2><p>تأمین منظم مشتریان با ۵٪ تخفیف</p></div></div>
+              <div class="dash-table-wrap">
+                <table class="dash-table">
+                  <thead><tr><th>مشتری</th><th>محصول و وزن</th><th>دوره</th><th>وضعیت</th></tr></thead>
+                  <tbody id="adm-subs-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-head"><div><h2>هشدارهای قیمت و موجودی</h2><p>درخواست‌های اطلاع‌رسانی مشتریان</p></div></div>
+              <div class="dash-table-wrap">
+                <table class="dash-table">
+                  <thead><tr><th>محصول</th><th>موبایل</th><th>نوع</th><th>نرخ هدف</th></tr></thead>
+                  <tbody id="adm-alerts-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 14: ADMIN AUDIT LOG -->
+        <section id="aview-audit" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>گزارش ممیزی و فعالیت‌های مدیریت (Audit Log)</h2>
+                <p>ثبت تمام تغییرات مالی، وضعیت سفارش‌ها، تسویه‌ها، غرفه‌ها و کدهای تخفیف</p>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead><tr><th>زمان</th><th>مدیر</th><th>عملیات</th><th>جزئیات</th></tr></thead>
+                <tbody id="adm-audit-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 
-  <!-- Product Add/Edit Modal -->
+  <!-- Article Add/Edit Modal -->
+  <div class="modal-back" id="art-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:680px">
+      <h3 id="am-title">انتشار مقاله جدید</h3>
+      <form id="art-form" class="form-grid">
+        <input type="hidden" id="am-id">
+        <div class="field form-full"><label for="am-heading">عنوان مقاله *</label><input id="am-heading" required maxlength="200"></div>
+        <div class="field"><label for="am-slug">نشانی اینترنتی (حروف انگلیسی)</label><input id="am-slug" class="ltr" maxlength="80" placeholder="pistachio-guide"></div>
+        <div class="field">
+          <label for="am-cat">دسته‌بندی</label>
+          <select id="am-cat">
+            <option value="راهنمای خرید">راهنمای خرید</option>
+            <option value="قنادی و آشپزی">قنادی و آشپزی</option>
+            <option value="نگهداری و سلامت">نگهداری و سلامت</option>
+            <option value="بازار و صادرات">بازار و صادرات</option>
+          </select>
+        </div>
+        <div class="field"><label for="am-author">نویسنده</label><input id="am-author" value="تحریریه تخصصی مغزدانه" maxlength="80"></div>
+        <div class="field"><label for="am-mins">زمان مطالعه (دقیقه)</label><input id="am-mins" type="number" min="1" max="40" value="5"></div>
+        <div class="field form-full">
+          <label for="am-cover">تصویر جلد مقاله</label>
+          <select id="am-cover">
+            <option value="src/assets/images/article_pistachio_grading_1795350767749.jpg">سورتینگ پسته اکبری رفسنجان</option>
+            <option value="src/assets/images/article_green_slivers_1795350767949.jpg">خلال پسته سبز قزوین</option>
+            <option value="src/assets/images/vendor_orchard_harvest_1795350768215.jpg">برداشت باغ پسته</option>
+            <option value="src/assets/images/editorial_orchard_craft_1795339905141.jpg">نمای استودیویی مغز پسته</option>
+          </select>
+        </div>
+        <div class="field form-full"><label for="am-excerpt">چکیده کوتاه مقاله *</label><textarea id="am-excerpt" rows="2" required maxlength="360"></textarea></div>
+        <div class="field form-full"><label for="am-body">متن کامل مقاله (هر پاراگراف در یک خط جدید) *</label><textarea id="am-body" rows="6" required></textarea></div>
+        <div class="form-full" style="display:flex;gap:10px;justify-content:flex-end">
+          <button type="button" class="btn btn-outline btn-sm" id="am-close">انصراف</button>
+          <button type="submit" class="btn btn-primary btn-sm">انتشار مقاله</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- House Product Modal -->
   <div class="modal-back" id="prod-modal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pm-title" style="max-width:640px">
-      <h3 id="pm-title">محصول جدید</h3>
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:640px">
+      <h3 id="pm-title">افزودن محصول رسمی</h3>
       <form id="prod-form" class="form-grid">
-        <input type="hidden" id="pm-editing-id">
-        <div class="field"><label for="pm-id">شناسه یکتا (انگلیسی)</label><input id="pm-id" class="ltr" required placeholder="maghz-akbari-new"></div>
-        <div class="field"><label for="pm-name">نام محصول</label><input id="pm-name" required maxlength="160"></div>
+        <input type="hidden" id="pm-id">
+        <div class="field form-full"><label for="pm-name">نام محصول *</label><input id="pm-name" required maxlength="160"></div>
         <div class="field">
           <label for="pm-cat">دسته‌بندی</label>
           <select id="pm-cat">
@@ -313,19 +718,18 @@
             <option value="pistachio-slice">خلال و پودر پسته</option>
             <option value="almond-kernel">مغز بادام</option>
             <option value="walnut-kernel">مغز گردو</option>
-            <option value="in-shell">پسته باپوسته</option>
+            <option value="in-shell">پسته و گردوی پوست‌دار</option>
           </select>
         </div>
-        <div class="field"><label for="pm-origin">خاستگاه (مثلاً رفسنجان)</label><input id="pm-origin" maxlength="80" value="رفسنجان"></div>
-        <div class="field"><label for="pm-grade">گرید کیفیت</label><input id="pm-grade" maxlength="80" value="ممتاز صادراتی"></div>
-        <div class="field"><label for="pm-badge">برچسب کوتاه (اختیاری)</label><input id="pm-badge" maxlength="40" placeholder="مثلاً: تازه‌برشته"></div>
-        <div class="field"><label for="pm-p1">قیمت خرده (تومان/کیلو)</label><input id="pm-p1" type="number" min="0" required></div>
-        <div class="field"><label for="pm-p2">قیمت نیم‌عمده ۵+ (تومان/کیلو)</label><input id="pm-p2" type="number" min="0" required></div>
-        <div class="field"><label for="pm-p3">قیمت عمده ۲۵+ (تومان/کیلو)</label><input id="pm-p3" type="number" min="0" required></div>
-        <div class="field"><label for="pm-stock">موجودی (کیلوگرم)</label><input id="pm-stock" type="number" min="0" value="100" required></div>
-        <div class="field form-full"><label for="pm-img">مسیر تصویر محصول</label><input id="pm-img" class="ltr" value="assets/img/maghz-pistachio-akbari.jpg" required></div>
-        <div class="field form-full"><label for="pm-desc">توضیحات محصول</label><textarea id="pm-desc" rows="3" maxlength="1200"></textarea></div>
-        <div class="form-full" style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <div class="field"><label for="pm-origin">مبدأ</label><input id="pm-origin" value="رفسنجان" maxlength="80"></div>
+        <div class="field"><label for="pm-grade">گرید</label><input id="pm-grade" value="ممتاز صادراتی" maxlength="80"></div>
+        <div class="field"><label for="pm-stock">موجودی (کیلو)</label><input id="pm-stock" type="number" min="0" value="100"></div>
+        <div class="field"><label for="pm-p1">قیمت خرده</label><input id="pm-p1" type="number" min="0" required value="1490000"></div>
+        <div class="field"><label for="pm-p2">قیمت نیم‌عمده ۵+</label><input id="pm-p2" type="number" min="0" required value="1360000"></div>
+        <div class="field"><label for="pm-p3">قیمت عمده ۲۵+</label><input id="pm-p3" type="number" min="0" required value="1250000"></div>
+        <div class="field"><label for="pm-img">مسیر تصویر</label><input id="pm-img" class="ltr" value="assets/img/maghz-pistachio-akbari.jpg"></div>
+        <div class="field form-full"><label for="pm-desc">توضیحات</label><textarea id="pm-desc" rows="3" maxlength="1000"></textarea></div>
+        <div class="form-full" style="display:flex;gap:10px;justify-content:flex-end">
           <button type="button" class="btn btn-outline btn-sm" id="pm-close">انصراف</button>
           <button type="submit" class="btn btn-primary btn-sm">ذخیره محصول</button>
         </div>
@@ -333,403 +737,457 @@
     </div>
   </div>
 
-  <!-- Confirmation Modal -->
-  <div class="modal-back" id="adm-confirm">
-    <div class="modal" role="dialog" aria-modal="true">
-      <h3 id="ac-title">تأیید عملیات</h3>
-      <p id="ac-text" style="color:var(--c-text-soft);font-size:0.9rem;margin-bottom:22px"></p>
-      <div style="display:flex;gap:10px;justify-content:flex-end">
-        <button type="button" class="btn btn-outline btn-sm" id="ac-no">انصراف</button>
-        <button type="button" class="btn btn-primary btn-sm" id="ac-yes">تأیید</button>
-      </div>
-    </div>
-  </div>
-
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js?v=8"></script>
+  <script src="assets/js/app.js?v=19"></script>
   <script>
-    let liveProducts = [];
-    let faqDraft = [];
-    let confirmCb = null;
+    const STAGE_DEFAULTS = [
+      { index: '۰۱', label: 'پوستهٔ بسته', kicker: '۰۱ · دست‌چین رفسنجان', title: 'رازی در دلِ صدف.', subtitle: 'دست‌چین باغ‌های رفسنجان؛ هنوز در حصار طبیعت.' },
+      { index: '۰۲', label: 'لبخند طبیعی', kicker: '۰۲ · خندانی آفتابی', title: 'صدف، خود لبخند می‌زند.', subtitle: 'پوسته زیر آفتاب می‌شکافد و عطرِ تازه آزاد می‌شود.' },
+      { index: '۰۳', label: 'جامهٔ ارغوانی', kicker: '۰۳ · مغزکنی تازه', title: 'پوسته می‌افتد؛ یاقوت می‌درخشد.', subtitle: 'مغزِ یک‌تکه در جامهٔ نازکِ ارغوانی، بی‌کوچک‌ترین آسیب.' },
+      { index: '۰۴', label: 'پوست‌گیری آرام', kicker: '۰۴ · آشکارشدن زمرد', title: 'پردهٔ سرخ کنار می‌رود.', subtitle: 'پوستهٔ ارغوانی آرام می‌ریزد و سبزِ ناب سر برمی‌آورد.' },
+      { index: '۰۵', label: 'زمردِ ناب', kicker: '۰۵ · جوهرِ مغزدانه', title: 'اینک، زمردِ خالص.', subtitle: 'ناب‌ترین مغزهای ایران، آمادهٔ انتخابِ شما.' },
+    ];
 
-    const BUYER_FA = { retail: 'خرده‌فروشی', confectionery: 'قنادی / کارگاهی', wholesale: 'خریدار عمده' };
-
-    function admConfirm(title, text) {
-      return new Promise(resolve => {
-        confirmCb = resolve;
-        document.getElementById('ac-title').textContent = title;
-        document.getElementById('ac-text').textContent = text;
-        document.getElementById('adm-confirm').classList.add('open');
-      });
-    }
-    document.getElementById('ac-no').onclick = () => {
-      document.getElementById('adm-confirm').classList.remove('open');
-      if (confirmCb) confirmCb(false);
+    const AVIEW_META = {
+      overview: 'داشبورد مدیریتی',
+      finance: 'مالی، کیف پول و شارژ دستی',
+      orders: 'مدیریت سفارش‌ها',
+      tickets: 'تیکت‌های پشتیبانی',
+      catalog: 'محصولات و انبار',
+      vendors: 'غرفه‌ها و عرضه عمده',
+      payouts: 'تسویه غرفه‌داران',
+      coupons: 'کدهای تخفیف',
+      community: 'دیدگاه‌ها، پرسش‌ها و اشتراک‌ها',
+      users: 'کاربران و کیف پول',
+      'home-cms': 'محتوای سه‌بعدی صفحه اول',
+      articles: 'مجله و مقالات',
+      branding: 'تنظیمات برند و سایت',
+      audit: 'گزارش فعالیت‌ها (Audit)',
     };
-    document.getElementById('ac-yes').onclick = () => {
-      document.getElementById('adm-confirm').classList.remove('open');
-      if (confirmCb) confirmCb(true);
-    };
 
-    /* ---------- Tabs ---------- */
-    document.querySelectorAll('[data-atab]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.atab;
-        document.querySelectorAll('[data-atab]').forEach(b => b.classList.toggle('active', b.dataset.atab === target));
-        ['home-cms', 'brand-pages', 'catalog', 'orders', 'users'].forEach(id => {
-          document.getElementById('atab-' + id).hidden = id !== target;
+    const TX_TYPE_FA = { topup: 'شارژ کاربر', order_payment: 'پرداخت سفارش', admin_credit: 'شارژ مدیر', admin_debit: 'کسر مدیر', refund: 'بازگشت وجه' };
+    const TKT_STATUS_FA = { open: 'باز', answered: 'پاسخ داده‌شده', closed: 'بسته‌شده' };
+    const TKT_STATUS_CLS = { open: 'st-warn', answered: 'st-ok', closed: 'st-muted' };
+
+    let overview = null;
+    let admTxFilter = 'all';
+    let admOrdFilter = 'all';
+    let admTktFilter = 'all';
+
+    function faDate(iso) {
+      if (!iso) return '—';
+      try { return new Date(iso).toLocaleDateString('fa-IR', { year: 'numeric', month: 'short', day: 'numeric' }); }
+      catch { return '—'; }
+    }
+
+    function showBoxMsg(id, text, ok = false) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!text) { el.className = 'auth-msg'; el.textContent = ''; return; }
+      el.textContent = text;
+      el.className = 'auth-msg ' + (ok ? 'ok' : 'err');
+    }
+
+    function switchAdminView(key) {
+      if (!AVIEW_META[key]) key = 'overview';
+      document.querySelectorAll('[data-aview]').forEach(b => b.classList.toggle('active', b.dataset.aview === key));
+      Object.keys(AVIEW_META).forEach(k => {
+        const el = document.getElementById('aview-' + k);
+        if (el) el.hidden = k !== key;
+      });
+      document.getElementById('a-breadcrumb').textContent = `کنسول مدیریت مغزدانه / ${AVIEW_META[key]}`;
+      document.getElementById('a-page-title').textContent = AVIEW_META[key];
+    }
+
+    document.querySelectorAll('[data-aview]').forEach(btn => {
+      btn.addEventListener('click', () => switchAdminView(btn.dataset.aview));
+    });
+    document.querySelectorAll('[data-jump-aview]').forEach(btn => {
+      btn.addEventListener('click', () => switchAdminView(btn.dataset.jumpAview));
+    });
+    document.getElementById('btn-top-wallet').addEventListener('click', () => switchAdminView('finance'));
+
+    // Preset buttons inside admin manual wallet form
+    document.querySelectorAll('.topup-presets').forEach(group => {
+      const targetId = group.dataset.presetTarget;
+      group.querySelectorAll('.topup-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.topup-preset-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const inp = document.getElementById(targetId);
+          if (inp) inp.value = btn.dataset.amt;
         });
       });
     });
 
-    /* ---------- Home CMS Editor ---------- */
-    const STAGE_NAMES = ['پسته بسته', 'خندانی طبیعی', 'جدایی پوسته', 'پوست‌گیری قرمز', 'مغز سبز خالص'];
-    const STAGE_INDICES = ['۰۱', '۰۲', '۰۳', '۰۴', '۰۵'];
+    /* ---------- Admin Gate ---------- */
+    async function checkAdminGate() {
+      const status = await apiFetch('/api/admin/status').catch(() => ({ configured: false, authenticated: false }));
+      document.getElementById('adm-loading').hidden = true;
 
-    function renderStageEditors(stages) {
-      const box = document.getElementById('stages-editor');
-      const list = Array.isArray(stages) && stages.length === 5 ? stages : window.MgzCloud.DEFAULT_HOME_CMS.stages;
-      box.innerHTML = list.map((s, i) => `
-        <div class="stage-editor-card">
-          <h4>پرده ${s.index || STAGE_INDICES[i]} — ${STAGE_NAMES[i] || ''}</h4>
-          <div class="field"><label>برچسب نوار پایین</label><input data-st-label="${i}" value="${(s.label || '').replace(/"/g, '&quot;')}" maxlength="40"></div>
-          <div class="field"><label>خط بالای تیتر</label><input data-st-kicker="${i}" value="${(s.kicker || '').replace(/"/g, '&quot;')}" maxlength="120"></div>
-          <div class="field"><label>تیتر پرده</label><input data-st-title="${i}" value="${(s.title || '').replace(/"/g, '&quot;')}" maxlength="160"></div>
-          <div class="field"><label>زیرتیتر پرده</label><input data-st-sub="${i}" value="${(s.subtitle || '').replace(/"/g, '&quot;')}" maxlength="280"></div>
-        </div>`).join('');
-    }
-
-    function populateFeaturedSelects(selectedIds) {
-      const pool = liveProducts.length ? liveProducts : (APP.db?.products || []);
-      const opts = pool.map(p => `<option value="${p.id}">${p.name} (${p.origin})</option>`).join('');
-      ['hc-f1', 'hc-f2', 'hc-f3'].forEach((elId, idx) => {
-        const sel = document.getElementById(elId);
-        sel.innerHTML = opts;
-        if (selectedIds && selectedIds[idx]) sel.value = selectedIds[idx];
-      });
-    }
-
-    async function loadHomeCMSForm() {
-      const cms = await window.MgzCloud.getSiteContent('home');
-      document.getElementById('hc-kicker').value = cms.kicker || '';
-      document.getElementById('hc-title').value = cms.title || '';
-      document.getElementById('hc-sub').value = cms.subtitle || '';
-      document.getElementById('hc-cta1-lbl').value = cms.primaryCtaLabel || '';
-      document.getElementById('hc-cta1-href').value = cms.primaryCtaHref || '';
-      document.getElementById('hc-cta2-lbl').value = cms.secondaryCtaLabel || '';
-      document.getElementById('hc-cta2-href').value = cms.secondaryCtaHref || '';
-      document.getElementById('hc-fk').value = cms.featuredKicker || '';
-      document.getElementById('hc-ft').value = cms.featuredTitle || '';
-      document.getElementById('hc-ck').value = cms.craftKicker || '';
-      document.getElementById('hc-ct').value = cms.craftTitle || '';
-      document.getElementById('hc-cb').value = cms.craftBody || '';
-      document.getElementById('hc-ci').value = cms.craftImage || '';
-      renderStageEditors(cms.stages);
-      populateFeaturedSelects(cms.featuredIds || []);
-    }
-
-    document.getElementById('home-cms-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const stages = [0, 1, 2, 3, 4].map(i => ({
-        index: STAGE_INDICES[i],
-        label: document.querySelector(`[data-st-label="${i}"]`).value.trim(),
-        kicker: document.querySelector(`[data-st-kicker="${i}"]`).value.trim(),
-        title: document.querySelector(`[data-st-title="${i}"]`).value.trim(),
-        subtitle: document.querySelector(`[data-st-sub="${i}"]`).value.trim(),
-      }));
-      try {
-        await window.MgzCloud.saveSiteContent('home', {
-          kicker: document.getElementById('hc-kicker').value.trim(),
-          title: document.getElementById('hc-title').value.trim(),
-          subtitle: document.getElementById('hc-sub').value.trim(),
-          primaryCtaLabel: document.getElementById('hc-cta1-lbl').value.trim(),
-          primaryCtaHref: document.getElementById('hc-cta1-href').value.trim(),
-          secondaryCtaLabel: document.getElementById('hc-cta2-lbl').value.trim(),
-          secondaryCtaHref: document.getElementById('hc-cta2-href').value.trim(),
-          stages,
-          featuredKicker: document.getElementById('hc-fk').value.trim(),
-          featuredTitle: document.getElementById('hc-ft').value.trim(),
-          featuredIds: [
-            document.getElementById('hc-f1').value,
-            document.getElementById('hc-f2').value,
-            document.getElementById('hc-f3').value,
-          ].filter(Boolean),
-          craftKicker: document.getElementById('hc-ck').value.trim(),
-          craftTitle: document.getElementById('hc-ct').value.trim(),
-          craftBody: document.getElementById('hc-cb').value.trim(),
-          craftImage: document.getElementById('hc-ci').value.trim(),
-        });
-        toast('تغییرات صفحه اول با موفقیت منتشر شد');
-      } catch (err) {
-        console.error(err);
-        toast('خطا در ذخیره محتوای صفحه اول');
-      }
-    });
-
-    /* ---------- Branding & Pages CMS ---------- */
-    function renderFaqEditors() {
-      const box = document.getElementById('faq-editor-list');
-      box.innerHTML = faqDraft.map((item, i) => `
-        <div class="stage-editor-card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <h4>سوال ${fmt(i + 1)}</h4>
-            <button type="button" class="rm-btn" data-rm-faq="${i}">حذف</button>
-          </div>
-          <div class="field"><label>متن سوال</label><input data-faq-q="${i}" value="${(item.q || '').replace(/"/g, '&quot;')}"></div>
-          <div class="field"><label>پاسخ</label><textarea data-faq-a="${i}" rows="2">${item.a || ''}</textarea></div>
-        </div>`).join('');
-      box.querySelectorAll('[data-rm-faq]').forEach(btn => {
-        btn.onclick = () => {
-          syncFaqDraftFromInputs();
-          faqDraft.splice(+btn.dataset.rmFaq, 1);
-          renderFaqEditors();
-        };
-      });
-    }
-
-    function syncFaqDraftFromInputs() {
-      faqDraft = faqDraft.map((_, i) => ({
-        q: (document.querySelector(`[data-faq-q="${i}"]`)?.value || '').trim(),
-        a: (document.querySelector(`[data-faq-a="${i}"]`)?.value || '').trim(),
-      }));
-    }
-
-    document.getElementById('btn-add-faq').addEventListener('click', () => {
-      syncFaqDraftFromInputs();
-      faqDraft.push({ q: '', a: '' });
-      renderFaqEditors();
-    });
-
-    async function loadBrandingAndPagesForms() {
-      const [br, pg] = await Promise.all([
-        window.MgzCloud.getSiteContent('branding'),
-        window.MgzCloud.getSiteContent('pages'),
-      ]);
-      document.getElementById('br-name').value = br.siteName || '';
-      document.getElementById('br-tag').value = br.tagline || '';
-      document.getElementById('br-ann').value = br.announcement || '';
-      document.getElementById('br-phone').value = br.phone || '';
-      document.getElementById('br-mobile').value = br.mobile || '';
-      document.getElementById('br-email').value = br.email || '';
-      document.getElementById('br-work').value = br.worktime || '';
-      document.getElementById('br-addr').value = br.address || '';
-      document.getElementById('br-ship').value = br.flatShippingCost ?? 95000;
-      document.getElementById('br-free').value = br.freeShippingOver ?? 5000000;
-      document.getElementById('br-heavy').value = br.heavyShippingNote || '';
-
-      document.getElementById('pg-about-t').value = pg.aboutTitle || '';
-      document.getElementById('pg-about-b').value = pg.aboutBody || '';
-      document.getElementById('pg-wh-t').value = pg.wholesaleTitle || '';
-      document.getElementById('pg-wh-b').value = pg.wholesaleBody || '';
-      faqDraft = Array.isArray(pg.faqItems) ? pg.faqItems.map(x => ({ ...x })) : [];
-      renderFaqEditors();
-    }
-
-    document.getElementById('branding-cms-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        await window.MgzCloud.saveSiteContent('branding', {
-          siteName: document.getElementById('br-name').value.trim(),
-          tagline: document.getElementById('br-tag').value.trim(),
-          announcement: document.getElementById('br-ann').value.trim(),
-          phone: document.getElementById('br-phone').value.trim(),
-          mobile: document.getElementById('br-mobile').value.trim(),
-          email: document.getElementById('br-email').value.trim(),
-          worktime: document.getElementById('br-work').value.trim(),
-          address: document.getElementById('br-addr').value.trim(),
-          flatShippingCost: Number(document.getElementById('br-ship').value || 0),
-          freeShippingOver: Number(document.getElementById('br-free').value || 0),
-          heavyShippingNote: document.getElementById('br-heavy').value.trim(),
-        });
-        toast('تنظیمات برند و ارسال ذخیره شد');
-      } catch {
-        toast('خطا در ذخیره تنظیمات برند');
-      }
-    });
-
-    document.getElementById('pages-cms-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      syncFaqDraftFromInputs();
-      try {
-        await window.MgzCloud.saveSiteContent('pages', {
-          aboutTitle: document.getElementById('pg-about-t').value.trim(),
-          aboutBody: document.getElementById('pg-about-b').value.trim(),
-          wholesaleTitle: document.getElementById('pg-wh-t').value.trim(),
-          wholesaleBody: document.getElementById('pg-wh-b').value.trim(),
-          faqItems: faqDraft.filter(f => f.q.length > 0),
-        });
-        toast('محتوای صفحات داخلی ذخیره شد');
-      } catch {
-        toast('خطا در ذخیره صفحات داخلی');
-      }
-    });
-
-    /* ---------- Live Product Catalog ---------- */
-    async function loadProductsTable() {
-      liveProducts = await window.MgzCloud.getLiveProducts();
-      document.getElementById('kpi-products').textContent = fmt(liveProducts.length);
-      const tbody = document.getElementById('adm-products-tbody');
-      if (!liveProducts.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--lux-soft)">هنوز محصولی در دیتابیس ابری ذخیره نشده است. روی دکمه «انتقال ۲۰ محصول پایه» کلیک کنید تا کاتالوگ فوری فعال شود.</td></tr>`;
+      if (status.authenticated) {
+        document.getElementById('adm-gate-wrap').hidden = true;
+        document.getElementById('adm-studio').hidden = false;
+        document.getElementById('adm-user-name').textContent = `مدیر: ${status.username}`;
+        await loadAdminOverview();
         return;
       }
-      tbody.innerHTML = liveProducts.map(p => `
-        <tr>
-          <td>
-            <div style="display:flex;align-items:center;gap:10px">
-              <img src="${p.img}" alt="${p.name}">
-              <div>
-                <strong style="color:#fff">${p.name}</strong>
-                <div style="font-size:0.75rem;color:var(--lux-muted)">${p.origin} · ${p.grade}</div>
-              </div>
-            </div>
-          </td>
-          <td style="font-size:0.8rem">${catName(p.category)}</td>
-          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-r="${p.id}" value="${p.prices.retail}"></td>
-          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-s="${p.id}" value="${p.prices.semi}"></td>
-          <td><input class="ltr" style="width:105px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-w="${p.id}" value="${p.prices.wholesale}"></td>
-          <td><input class="ltr" style="width:76px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px" type="number" data-qp-st="${p.id}" value="${p.stock}"></td>
-          <td>
-            <div style="display:flex;gap:6px">
-              <button type="button" class="btn btn-primary btn-sm" data-save-p="${p.id}">ذخیره</button>
-              <button type="button" class="btn btn-outline btn-sm" data-edit-p="${p.id}">ویرایش</button>
-              <button type="button" class="rm-btn" data-del-p="${p.id}">حذف</button>
-            </div>
-          </td>
-        </tr>`).join('');
 
-      tbody.querySelectorAll('[data-save-p]').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.saveP;
-          const p = liveProducts.find(x => x.id === id);
-          if (!p) return;
-          try {
-            await window.MgzCloud.saveProduct({
-              ...p,
-              retailPrice: Number(document.querySelector(`[data-qp-r="${id}"]`).value || 0),
-              semiPrice: Number(document.querySelector(`[data-qp-s="${id}"]`).value || 0),
-              wholesalePrice: Number(document.querySelector(`[data-qp-w="${id}"]`).value || 0),
-              stock: Number(document.querySelector(`[data-qp-st="${id}"]`).value || 0),
-            });
-            toast(`قیمت و موجودی «${p.name}» ذخیره شد`);
-          } catch {
-            toast('خطا در ذخیره محصول');
-          }
-        };
-      });
-
-      tbody.querySelectorAll('[data-edit-p]').forEach(btn => {
-        btn.onclick = () => openProductModal(liveProducts.find(x => x.id === btn.dataset.editP));
-      });
-
-      tbody.querySelectorAll('[data-del-p]').forEach(btn => {
-        btn.onclick = async () => {
-          const p = liveProducts.find(x => x.id === btn.dataset.delP);
-          if (!p) return;
-          const ok = await admConfirm('حذف محصول', `آیا از حذف «${p.name}» از دیتابیس ابری مطمئن هستید؟`);
-          if (!ok) return;
-          try {
-            await window.MgzCloud.deleteProduct(p.id);
-            toast('محصول حذف شد');
-            await loadProductsTable();
-          } catch {
-            toast('خطا در حذف محصول');
-          }
-        };
-      });
+      document.getElementById('adm-gate-wrap').hidden = false;
+      document.getElementById('adm-studio').hidden = true;
+      document.getElementById('adm-claim').hidden = status.configured;
+      document.getElementById('adm-login').hidden = !status.configured;
     }
 
-    function openProductModal(p = null) {
-      document.getElementById('pm-title').textContent = p ? `ویرایش: ${p.name}` : 'افزودن محصول جدید';
-      document.getElementById('pm-editing-id').value = p ? p.id : '';
-      document.getElementById('pm-id').value = p ? p.id : '';
-      document.getElementById('pm-id').disabled = Boolean(p);
-      document.getElementById('pm-name').value = p ? p.name : '';
-      document.getElementById('pm-cat').value = p ? p.category : 'pistachio-kernel';
-      document.getElementById('pm-origin').value = p ? p.origin : 'رفسنجان';
-      document.getElementById('pm-grade').value = p ? p.grade : 'ممتاز صادراتی';
-      document.getElementById('pm-badge').value = p ? (p.badge || '') : '';
-      document.getElementById('pm-p1').value = p ? p.prices.retail : 1450000;
-      document.getElementById('pm-p2').value = p ? p.prices.semi : 1320000;
-      document.getElementById('pm-p3').value = p ? p.prices.wholesale : 1210000;
-      document.getElementById('pm-stock').value = p ? p.stock : 100;
-      document.getElementById('pm-img').value = p ? p.img : 'assets/img/maghz-pistachio-akbari.jpg';
-      document.getElementById('pm-desc').value = p ? (p.desc || '') : '';
-      document.getElementById('prod-modal').classList.add('open');
-    }
-
-    document.getElementById('btn-open-new-prod').onclick = () => openProductModal(null);
-    document.getElementById('pm-close').onclick = () => document.getElementById('prod-modal').classList.remove('open');
-
-    document.getElementById('prod-form').addEventListener('submit', async (e) => {
+    document.getElementById('adm-claim-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      showBoxMsg('claim-msg', '');
       try {
-        await window.MgzCloud.saveProduct({
-          id: document.getElementById('pm-editing-id').value || document.getElementById('pm-id').value.trim(),
-          name: document.getElementById('pm-name').value.trim(),
-          category: document.getElementById('pm-cat').value,
-          origin: document.getElementById('pm-origin').value.trim(),
-          grade: document.getElementById('pm-grade').value.trim(),
-          badge: document.getElementById('pm-badge').value.trim(),
-          retailPrice: Number(document.getElementById('pm-p1').value || 0),
-          semiPrice: Number(document.getElementById('pm-p2').value || 0),
-          wholesalePrice: Number(document.getElementById('pm-p3').value || 0),
-          stock: Number(document.getElementById('pm-stock').value || 0),
-          img: document.getElementById('pm-img').value.trim(),
-          desc: document.getElementById('pm-desc').value.trim(),
+        const res = await apiFetch('/api/admin/claim', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.getElementById('cl-user').value.trim(),
+            password: document.getElementById('cl-pass').value,
+          }),
         });
-        document.getElementById('prod-modal').classList.remove('open');
-        toast('محصول در دیتابیس ابری ذخیره شد');
-        await loadProductsTable();
-        populateFeaturedSelects([
-          document.getElementById('hc-f1').value,
-          document.getElementById('hc-f2').value,
-          document.getElementById('hc-f3').value,
-        ]);
+        if (res && res.token) APP._adminToken = res.token;
+        toast('حساب مدیر با موفقیت ایجاد شد');
+        await checkAdminGate();
       } catch (err) {
-        console.error(err);
-        toast('خطا در ذخیره محصول');
+        showBoxMsg('claim-msg', err.message || 'خطا در ایجاد حساب مدیر');
       }
     });
 
-    document.getElementById('btn-seed-products').addEventListener('click', async () => {
-      const ok = await admConfirm('انتقال کاتالوگ پایه', 'تمامی محصولات فایل پایه (data/db.json) به دیتابیس ابری Firestore منتقل می‌شوند. ادامه می‌دهید؟');
-      if (!ok) return;
+    document.getElementById('adm-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showBoxMsg('login-msg', '');
       try {
-        const res = await fetch('data/db.json', { cache: 'no-cache' });
-        const json = await res.json();
-        await window.MgzCloud.seedProductsFromJson(json.products || []);
-        toast('محصولات پایه با موفقیت به دیتابیس ابری منتقل شدند');
-        await loadProductsTable();
-        await loadHomeCMSForm();
+        const res = await apiFetch('/api/admin/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.getElementById('lg-user').value.trim(),
+            password: document.getElementById('lg-pass').value,
+          }),
+        });
+        if (res && res.token) APP._adminToken = res.token;
+        toast('ورود مدیر با موفقیت انجام شد');
+        await checkAdminGate();
       } catch (err) {
-        console.error(err);
-        toast('خطا در انتقال محصولات پایه');
+        showBoxMsg('login-msg', err.message || 'نام کاربری یا رمز عبور اشتباه است');
       }
     });
 
-    /* ---------- Orders & Supply Offers ---------- */
-    async function loadOrdersAndSupply() {
-      const [orders, offers] = await Promise.all([
-        window.MgzCloud.listAllOrders().catch(() => []),
-        window.MgzCloud.listAllSupplyOffers().catch(() => []),
-      ]);
-      document.getElementById('kpi-orders').textContent = fmt(orders.length);
-      document.getElementById('kpi-new-orders').textContent = fmt(orders.filter(o => o.status === 'new').length);
+    const handleGoogleAdmin = async () => {
+      if (!window.MgzCloud) { toast('سرویس گوگل در دسترس نیست'); return; }
+      try {
+        const u = await window.MgzCloud.signInWithGoogle();
+        const isAdm = await window.MgzCloud.checkIsAdmin(u);
+        if (!isAdm) { toast('این حساب گوگل دسترسی مدیریت ندارد'); return; }
+        toast('ورود مدیر گوگل تأیید شد — برای مدیریت سرور از فرم نام کاربری و رمز عبور استفاده کنید');
+      } catch {
+        toast('ورود با گوگل انجام نشد');
+      }
+    };
+    document.getElementById('btn-adm-google-1').addEventListener('click', handleGoogleAdmin);
+    document.getElementById('btn-adm-google-2').addEventListener('click', handleGoogleAdmin);
 
-      const ow = document.getElementById('adm-orders-wrap');
-      if (!orders.length) {
-        ow.innerHTML = '<div class="empty"><p>هنوز سفارش آنلاینی ثبت نشده است.</p></div>';
-      } else {
-        ow.innerHTML = orders.map(o => `
-          <div class="order-card">
-            <div class="order-card-top">
-              <div>
-                <strong class="ltr" style="color:#fff">${o.orderCode || o.id}</strong>
-                <span style="margin-inline-start:12px;color:var(--lux-soft);font-size:0.84rem">${o.customerName || ''} · <span class="ltr">${o.customerPhone || ''}</span></span>
-              </div>
-              <select data-ord-status="${o.id}" style="padding:6px 10px;background:var(--lux-surface);border:1px solid var(--lux-line-strong);border-radius:8px;color:#fff;font-size:0.82rem">
+    document.getElementById('btn-adm-signout').addEventListener('click', async () => {
+      await apiFetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
+      APP._adminToken = null;
+      APP.serverAdmin = null;
+      APP.isAdmin = false;
+      toast('از پنل مدیریت خارج شدید');
+      await checkAdminGate();
+    });
+
+    /* ---------- Load Full Admin Executive Overview ---------- */
+    async function loadAdminOverview() {
+      overview = await apiFetch('/api/admin/overview');
+      const an = overview.analytics || {};
+
+      // Sidebar badges
+      document.getElementById('anav-tx').textContent = fmt((overview.transactions || []).length);
+      document.getElementById('anav-orders').textContent = fmt(an.pendingOrdersCount || 0);
+      document.getElementById('anav-tickets').textContent = fmt(an.openTicketsCount || 0);
+      document.getElementById('anav-prods').textContent = fmt((overview.houseProducts || []).length);
+      document.getElementById('anav-vendors').textContent = fmt((overview.vendors || []).length);
+      document.getElementById('anav-payouts').textContent = fmt((overview.payouts || []).filter(p => p.status === 'pending').length);
+      document.getElementById('anav-coupons').textContent = fmt((overview.coupons || []).filter(c => c.active).length);
+      const unansweredQa = (overview.questions || []).filter(q => !q.answer).length;
+      document.getElementById('anav-community').textContent = fmt(unansweredQa || (overview.reviews || []).length);
+      document.getElementById('anav-users').textContent = fmt((overview.users || []).length);
+      document.getElementById('anav-articles').textContent = fmt((overview.articles || []).length);
+
+      // Executive Overview KPIs
+      document.getElementById('akpi-rev').textContent = faToman(an.totalRevenue || 0);
+      document.getElementById('akpi-kg').textContent = `وزن کل فروخته‌شده: ${fmt(an.totalKgSold || 0)} کیلوگرم`;
+      document.getElementById('akpi-wallet').textContent = faToman(an.walletLiability || 0);
+      document.getElementById('akpi-topups').textContent = `کل شارژها: ${faToman(an.totalTopups || 0)}`;
+      document.getElementById('akpi-pending').textContent = fmt(an.pendingOrdersCount || 0);
+      document.getElementById('akpi-orders-total').textContent = `از مجموع ${fmt((overview.orders || []).length)} سفارش ثبت‌شده`;
+      document.getElementById('akpi-tickets').textContent = `${fmt(an.openTicketsCount || 0)} تیکت باز`;
+      document.getElementById('akpi-vendors-sub').textContent = `${fmt(an.activeVendorsCount || 0)} غرفه فعال · ${fmt((overview.users || []).length)} کاربر`;
+
+      // Finance KPIs
+      document.getElementById('fkpi-topups').textContent = faToman(an.totalTopups || 0);
+      document.getElementById('fkpi-wpay').textContent = faToman(an.totalWalletPayments || 0);
+      document.getElementById('fkpi-liab').textContent = faToman(an.walletLiability || 0);
+
+      renderAdminChart(an.dailySeries || []);
+      renderCategoryBars(an.categoryBreakdown || []);
+      renderOpsAlerts(an);
+      renderOverviewRecentTx();
+
+      renderFinanceUserSelect();
+      renderAdminTxTable();
+      renderOrdersList();
+      renderAdminTickets();
+      renderProductsTable();
+      renderVendorsTable();
+      renderSupplyTable();
+      renderCouponsTable();
+      renderPayoutsTable();
+      renderCommunityViews();
+      renderAuditTable();
+      renderUsersTable();
+      renderHomeCmsEditor();
+      renderArticlesTable();
+      renderBrandingForm();
+    }
+
+    function renderAdminChart(series) {
+      const wrap = document.getElementById('adm-chart-wrap');
+      if (!series.length) {
+        wrap.innerHTML = '<div style="padding:24px;color:var(--lux-muted);font-size:0.84rem">داده‌ای ثبت نشده است.</div>';
+        return;
+      }
+      const maxVal = Math.max(100000, ...series.flatMap(d => [d.revenue || 0, d.topup || 0]));
+      const W = 560, H = 200, padL = 14, padR = 14, padT = 18, padB = 34;
+      const chartH = H - padT - padB;
+      const groupW = (W - padL - padR) / series.length;
+      const barW = Math.min(20, groupW * 0.28);
+
+      const gridLines = [0, 0.33, 0.66, 1].map(f => {
+        const y = padT + chartH * (1 - f);
+        return `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="rgba(244,242,236,0.08)" stroke-width="1" />`;
+      }).join('');
+
+      const bars = series.map((d, i) => {
+        const cx = padL + groupW * i + groupW / 2;
+        const hRev = Math.max(d.revenue > 0 ? 6 : 2, ((d.revenue || 0) / maxVal) * chartH);
+        const hTop = Math.max(d.topup > 0 ? 6 : 2, ((d.topup || 0) / maxVal) * chartH);
+        return `
+          <g>
+            <rect x="${(cx - barW - 2).toFixed(1)}" y="${(padT + chartH - hRev).toFixed(1)}" width="${barW.toFixed(1)}" height="${hRev.toFixed(1)}" rx="3" fill="${d.revenue > 0 ? '#6fd195' : 'rgba(111,209,149,0.16)'}">
+              <title>فروش ${esc(d.label)}: ${faToman(d.revenue || 0)}</title>
+            </rect>
+            <rect x="${(cx + 2).toFixed(1)}" y="${(padT + chartH - hTop).toFixed(1)}" width="${barW.toFixed(1)}" height="${hTop.toFixed(1)}" rx="3" fill="${d.topup > 0 ? '#d6b569' : 'rgba(214,181,105,0.16)'}">
+              <title>شارژ ${esc(d.label)}: ${faToman(d.topup || 0)}</title>
+            </rect>
+            <text x="${cx.toFixed(1)}" y="${H - 10}" text-anchor="middle" fill="#9ea8a1" font-size="11" font-family="Vazirmatn,sans-serif">${esc(d.label)}</text>
+          </g>`;
+      }).join('');
+
+      wrap.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="نمودار ۷ روزه فروش و شارژ کیف پول">${gridLines}${bars}</svg>`;
+    }
+
+    function renderCategoryBars(cats) {
+      const box = document.getElementById('adm-cat-bars');
+      if (!cats.length) { box.innerHTML = '<div style="color:var(--lux-muted);font-size:0.84rem">کالایی یافت نشد.</div>'; return; }
+      box.innerHTML = cats.map(c => `
+        <div class="bar-row">
+          <div class="bar-row-head">
+            <span>${esc(c.label)}</span>
+            <strong>${fmt(c.count)} قلم (${fmt(c.pct)}٪)</strong>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.max(5, c.pct)}%"></div></div>
+        </div>`).join('');
+    }
+
+    function renderOpsAlerts(an) {
+      const box = document.getElementById('adm-ops-alerts');
+      const rows = [];
+      if ((an.openTicketsCount || 0) > 0) {
+        rows.push({
+          title: `${fmt(an.openTicketsCount)} تیکت پشتیبانی در انتظار پاسخ`,
+          sub: 'پاسخگویی سریع باعث افزایش اعتماد خریداران عمده و خرد می‌شود',
+          cls: 'st-warn',
+          btn: 'پاسخ به تیکت‌ها',
+          view: 'tickets',
+        });
+      }
+      if ((an.pendingOrdersCount || 0) > 0) {
+        rows.push({
+          title: `${fmt(an.pendingOrdersCount)} سفارش در صف آماده‌سازی و ارسال`,
+          sub: 'بررسی وضعیت پرداخت و ثبت ارسال مرسوله',
+          cls: 'st-warn',
+          btn: 'مدیریت سفارش‌ها',
+          view: 'orders',
+        });
+      }
+      if ((overview.supplyOffers || []).length > 0) {
+        rows.push({
+          title: `${fmt(overview.supplyOffers.length)} پیشنهاد عرضه مستقیم باغداران`,
+          sub: 'بار پیشنهادی برای خرید مستقیم کارگاهی',
+          cls: 'st-ok',
+          btn: 'مشاهده پیشنهادها',
+          view: 'vendors',
+        });
+      }
+      (an.lowStockProducts || []).forEach(p => {
+        rows.push({
+          title: `هشدار موجودی کم: ${p.name}`,
+          sub: `موجودی فعلی تنها ${fmt(p.stock)} کیلوگرم است`,
+          cls: 'st-danger',
+          btn: 'تنظیم انبار',
+          view: 'catalog',
+        });
+      });
+
+      if (!rows.length) {
+        box.innerHTML = '<div class="ops-row"><span class="st-ok">همه شاخص‌های عملیاتی در وضعیت پایدار قرار دارند.</span></div>';
+        return;
+      }
+
+      box.innerHTML = rows.slice(0, 6).map(r => `
+        <div class="ops-row">
+          <div>
+            <div class="${r.cls}">${esc(r.title)}</div>
+            <div style="font-size:0.76rem;color:var(--lux-muted)">${esc(r.sub)}</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" data-ops-jump="${r.view}">${esc(r.btn)}</button>
+        </div>`).join('');
+
+      box.querySelectorAll('[data-ops-jump]').forEach(b => {
+        b.onclick = () => switchAdminView(b.dataset.opsJump);
+      });
+    }
+
+    function renderOverviewRecentTx() {
+      const box = document.getElementById('adm-ov-tx');
+      const list = (overview.transactions || []).slice(0, 5);
+      if (!list.length) {
+        box.innerHTML = '<div style="padding:18px 0;color:var(--lux-muted);font-size:0.84rem">هنوز تراکنش کیف پولی ثبت نشده است.</div>';
+        return;
+      }
+      box.innerHTML = list.map(t => {
+        const pos = Number(t.amount) >= 0;
+        return `
+          <div class="ops-row">
+            <div>
+              <strong style="color:#fff">${esc(t.userName)}</strong>
+              <span style="color:var(--lux-muted);font-size:0.78rem;margin-inline-start:6px">${esc(TX_TYPE_FA[t.type] || t.type)}</span>
+              <div style="font-size:0.74rem;color:var(--lux-muted)"><span class="ltr">${esc(t.refCode)}</span> · ${faDate(t.createdAt)}</div>
+            </div>
+            <div style="text-align:left">
+              <div class="${pos ? 'st-ok' : 'st-danger'}">${pos ? '+' : ''}${faToman(t.amount)}</div>
+              <div style="font-size:0.73rem;color:var(--lux-muted)">مانده: ${faToman(t.balanceAfter)}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    /* ---------- Finance: Manual Wallet Credit/Debit & Global Ledger ---------- */
+    function renderFinanceUserSelect(preselectUid = '') {
+      const sel = document.getElementById('aw-user');
+      const users = overview.users || [];
+      if (!users.length) {
+        sel.innerHTML = '<option value="">هنوز کاربری ثبت‌نام نکرده است</option>';
+        return;
+      }
+      const prevVal = preselectUid || sel.value;
+      sel.innerHTML = users.map(u => `
+        <option value="${esc(u.id)}" ${u.id === prevVal ? 'selected' : ''}>
+          ${esc(u.fullName)} (${esc(u.phone || u.username || u.email || 'کاربر')}) — موجودی: ${faToman(u.walletBalance || 0)}
+        </option>`).join('');
+    }
+
+    document.getElementById('adm-wallet-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uid = document.getElementById('aw-user').value;
+      if (!uid) { toast('ابتدا یک کاربر را انتخاب کنید'); return; }
+      const btn = document.getElementById('aw-submit-btn');
+      btn.disabled = true;
+      try {
+        await apiFetch(`/api/admin/users/${encodeURIComponent(uid)}/wallet`, {
+          method: 'POST',
+          body: JSON.stringify({
+            direction: document.getElementById('aw-dir').value,
+            amount: Number(document.getElementById('aw-amt').value),
+            note: document.getElementById('aw-note').value.trim(),
+          }),
+        });
+        document.getElementById('aw-note').value = '';
+        toast('عملیات مالی کیف پول با موفقیت ثبت شد');
+        await loadAdminOverview();
+      } catch (err) {
+        toast(err.message || 'خطا در ثبت عملیات مالی');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    document.querySelectorAll('#adm-tx-seg button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        admTxFilter = btn.dataset.atxf;
+        document.querySelectorAll('#adm-tx-seg button').forEach(b => b.classList.toggle('active', b.dataset.atxf === admTxFilter));
+        renderAdminTxTable();
+      });
+    });
+
+    function renderAdminTxTable() {
+      const tbody = document.getElementById('adm-tx-tbody');
+      const list = (overview.transactions || []).filter(t => admTxFilter === 'all' || t.type === admTxFilter);
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--lux-muted)">تراکنشی در این فیلتر یافت نشد.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(t => {
+        const pos = Number(t.amount) >= 0;
+        return `
+          <tr>
+            <td class="ltr"><strong>${esc(t.refCode)}</strong></td>
+            <td><strong>${esc(t.userName)}</strong></td>
+            <td><span class="${pos ? 'st-ok' : 'st-danger'}">${esc(TX_TYPE_FA[t.type] || t.type)}</span></td>
+            <td>${esc(t.note || '—')}<div style="font-size:0.74rem;color:var(--lux-muted)">${esc(t.method || '')}</div></td>
+            <td class="${pos ? 'st-ok' : 'st-danger'}">${pos ? '+' : ''}${faToman(t.amount)}</td>
+            <td><strong>${faToman(t.balanceAfter)}</strong></td>
+            <td>${faDate(t.createdAt)}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    /* ---------- Orders Management ---------- */
+    document.querySelectorAll('#adm-ord-seg button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        admOrdFilter = btn.dataset.aordf;
+        document.querySelectorAll('#adm-ord-seg button').forEach(b => b.classList.toggle('active', b.dataset.aordf === admOrdFilter));
+        renderOrdersList();
+      });
+    });
+
+    function renderOrdersList() {
+      const wrap = document.getElementById('adm-orders-wrap');
+      const list = (overview.orders || []).filter(o => {
+        if (admOrdFilter === 'all') return true;
+        if (admOrdFilter === 'pending') return o.status === 'new' || o.status === 'processing';
+        return o.status === admOrdFilter;
+      });
+      if (!list.length) {
+        wrap.innerHTML = '<div class="empty"><p>سفارشی در این بخش ثبت نشده است.</p></div>';
+        return;
+      }
+      wrap.innerHTML = list.map(o => `
+        <div class="order-card" style="margin:0">
+          <div class="order-card-top">
+            <div>
+              <strong class="ltr" style="color:#fff">${esc(o.orderCode)}</strong> · ${esc(o.customerName)} (<span class="ltr">${esc(o.customerPhone)}</span>)
+              <span style="margin-inline-start:10px;font-size:0.78rem" class="${o.paid ? 'st-ok' : 'st-warn'}">${o.paid ? 'پرداخت‌شده (کیف پول)' : esc(o.payment || 'درگاه آنلاین')}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-outline btn-sm" data-adm-inv="${esc(o.id)}">فاکتور رسمی (PDF)</button>
+              <select data-ord-st="${esc(o.id)}" style="padding:6px 10px;background:var(--lux-bg-2);border:1px solid var(--lux-line-strong);border-radius:8px;color:#fff;font-size:0.82rem">
                 <option value="new" ${o.status === 'new' ? 'selected' : ''}>ثبت جدید</option>
                 <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>در حال آماده‌سازی</option>
                 <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>ارسال‌شده</option>
@@ -737,182 +1195,637 @@
                 <option value="canceled" ${o.status === 'canceled' ? 'selected' : ''}>لغوشده</option>
               </select>
             </div>
-            <div style="font-size:0.84rem;color:var(--lux-soft);margin-bottom:8px">
-              ${(o.items || []).map(it => `${it.name} (${fmt(it.qty)} کیلو)`).join(' · ')}
-            </div>
-            <div style="font-size:0.82rem;color:var(--lux-muted)">
-              نشانی: ${o.province || ''} ${o.city || ''} — ${o.address || ''} · <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal || 0)}</strong>
-            </div>
-          </div>`).join('');
+          </div>
+          <div style="font-size:0.84rem;color:var(--lux-soft)">${(o.items || []).map(i => `${esc(i.name)} × ${fmt(i.qty)} ${i.kind ? 'بسته' : 'کیلو'}${i.variantLabel ? ` (${esc(i.variantLabel)})` : ''}`).join(' · ')}</div>
+          <div style="font-size:0.82rem;color:var(--lux-muted);margin-top:6px">
+            ${esc(o.province)} ${esc(o.city)} — ${esc(o.address)} · <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal)}</strong>${o.couponCode ? ` · کد تخفیف: <strong class="ltr">${esc(o.couponCode)}</strong>` : ''}
+          </div>
+        </div>`).join('');
 
-        ow.querySelectorAll('[data-ord-status]').forEach(sel => {
-          sel.onchange = async () => {
-            try {
-              await window.MgzCloud.updateOrderStatus(sel.dataset.ordStatus, sel.value);
-              toast('وضعیت سفارش به‌روزرسانی شد');
-              loadOrdersAndSupply();
-            } catch {
-              toast('خطا در تغییر وضعیت سفارش');
-            }
-          };
-        });
-      }
-
-      const sw = document.getElementById('adm-supply-wrap');
-      if (!offers.length) {
-        sw.innerHTML = '<div class="empty"><p>پیشنهاد عرضه‌ای ثبت نشده است.</p></div>';
-      } else {
-        sw.innerHTML = offers.map(s => `
-          <div class="order-card">
-            <div class="order-card-top">
-              <div>
-                <strong style="color:#fff">${s.sellerName || ''}</strong>
-                <span style="margin-inline-start:10px;color:var(--lux-soft);font-size:0.84rem">${s.productType || ''} · ${fmt(s.amountKg || 0)} کیلو (${s.origin || ''})</span>
-              </div>
-              <select data-sup-status="${s.id}" style="padding:6px 10px;background:var(--lux-surface);border:1px solid var(--lux-line-strong);border-radius:8px;color:#fff;font-size:0.82rem">
-                <option value="new" ${s.status === 'new' ? 'selected' : ''}>جدید</option>
-                <option value="reviewed" ${s.status === 'reviewed' ? 'selected' : ''}>بررسی‌شده</option>
-                <option value="approved" ${s.status === 'approved' ? 'selected' : ''}>تأیید خرید</option>
-                <option value="rejected" ${s.status === 'rejected' ? 'selected' : ''}>رد شده</option>
-              </select>
-            </div>
-            <div style="font-size:0.83rem;color:var(--lux-muted)">تماس: <span class="ltr">${s.phone || ''}</span> · ${s.description || ''}</div>
-          </div>`).join('');
-        sw.querySelectorAll('[data-sup-status]').forEach(sel => {
-          sel.onchange = async () => {
-            try {
-              await window.MgzCloud.updateSupplyOfferStatus(sel.dataset.supStatus, sel.value);
-              toast('وضعیت پیشنهاد عرضه ذخیره شد');
-            } catch {
-              toast('خطا در ذخیره وضعیت');
-            }
-          };
-        });
-      }
-    }
-
-    document.getElementById('btn-reload-orders').onclick = loadOrdersAndSupply;
-
-    /* ---------- Customers & Admins ---------- */
-    async function loadUsersAndAdmins() {
-      const [users, admins] = await Promise.all([
-        window.MgzCloud.listAllCustomers().catch(() => []),
-        window.MgzCloud.listAdmins().catch(() => []),
-      ]);
-      document.getElementById('kpi-users').textContent = fmt(users.length);
-      const ut = document.getElementById('adm-users-tbody');
-      ut.innerHTML = users.length
-        ? users.map(u => `
-            <tr>
-              <td><strong style="color:#fff">${u.fullName || '—'}</strong></td>
-              <td class="ltr" style="font-size:0.82rem">${u.email || '—'}</td>
-              <td class="ltr">${u.phone || '—'}</td>
-              <td>${BUYER_FA[u.buyerType] || 'خرده‌فروشی'}</td>
-              <td>${[u.province, u.city].filter(Boolean).join('، ') || '—'}</td>
-              <td class="ltr" style="font-size:0.75rem;color:var(--lux-muted)">${u.id}</td>
-            </tr>`).join('')
-        : '<tr><td colspan="6" style="text-align:center;color:var(--lux-muted);padding:24px">هنوز مشتری ثبت‌نام نکرده است.</td></tr>';
-
-      const al = document.getElementById('admins-list');
-      al.innerHTML = `
-        <div class="order-card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-          <div><strong class="ltr" style="color:var(--lux-gold)">${window.MgzCloud.BOOTSTRAPPED_ADMIN_EMAIL}</strong> <span style="font-size:0.8rem;color:var(--lux-soft)">· مدیر اصلی سامانه</span></div>
-        </div>
-        ${admins.map(a => `
-          <div class="order-card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-            <div><strong class="ltr" style="color:#fff">${a.email || a.id}</strong> <span class="ltr" style="font-size:0.75rem;color:var(--lux-muted)">(${a.id})</span></div>
-            <button type="button" class="rm-btn" data-rm-adm="${a.id}">لغو دسترسی</button>
-          </div>`).join('')}`;
-
-      al.querySelectorAll('[data-rm-adm]').forEach(btn => {
-        btn.onclick = async () => {
-          const ok = await admConfirm('لغو دسترسی مدیر', 'دسترسی مدیریت این کاربر حذف شود؟');
-          if (!ok) return;
-          try {
-            await window.MgzCloud.removeAdmin(btn.dataset.rmAdm);
-            toast('دسترسی مدیر حذف شد');
-            loadUsersAndAdmins();
-          } catch {
-            toast('خطا در حذف مدیر');
-          }
+      wrap.querySelectorAll('[data-adm-inv]').forEach(btn => {
+        btn.onclick = () => {
+          const ord = (overview.orders || []).find(x => x.id === btn.dataset.admInv);
+          if (ord) openInvoiceModal(ord);
+        };
+      });
+      wrap.querySelectorAll('[data-ord-st]').forEach(sel => {
+        sel.onchange = async () => {
+          await apiFetch(`/api/admin/orders/${encodeURIComponent(sel.dataset.ordSt)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: sel.value }),
+          });
+          toast('وضعیت سفارش ذخیره شد');
+          await loadAdminOverview();
         };
       });
     }
 
-    document.getElementById('add-admin-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        await window.MgzCloud.addAdmin(
-          document.getElementById('na-uid').value.trim(),
-          document.getElementById('na-email').value.trim()
-        );
-        document.getElementById('na-uid').value = '';
-        document.getElementById('na-email').value = '';
-        toast('مدیر جدید اضافه شد');
-        loadUsersAndAdmins();
-      } catch {
-        toast('خطا در افزودن مدیر');
-      }
+    /* ---------- Admin Support Tickets ---------- */
+    document.querySelectorAll('#adm-tkt-seg button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        admTktFilter = btn.dataset.atktf;
+        document.querySelectorAll('#adm-tkt-seg button').forEach(b => b.classList.toggle('active', b.dataset.atktf === admTktFilter));
+        renderAdminTickets();
+      });
     });
 
-    /* ---------- Auth & Bootstrap ---------- */
-    async function onAdminAuth(user) {
-      document.getElementById('adm-loading').hidden = true;
-      if (!user) {
-        document.getElementById('adm-guest').hidden = false;
-        document.getElementById('adm-denied').hidden = true;
-        document.getElementById('adm-studio').hidden = true;
+    function renderAdminTickets() {
+      const wrap = document.getElementById('adm-tickets-wrap');
+      const list = (overview.tickets || []).filter(t => admTktFilter === 'all' || t.status === admTktFilter);
+      if (!list.length) {
+        wrap.innerHTML = '<div style="padding:26px;text-align:center;color:var(--lux-muted);font-size:0.86rem">تیکتی در این بخش وجود ندارد.</div>';
         return;
       }
+      wrap.innerHTML = list.map(t => `
+        <div class="ticket-row">
+          <div class="ticket-head">
+            <div>
+              <strong class="ltr" style="color:var(--lux-gold)">${esc(t.code)}</strong>
+              <strong style="color:#fff;margin-inline-start:8px">${esc(t.subject)}</strong>
+              <span style="font-size:0.78rem;color:var(--lux-muted);margin-inline-start:8px">${esc(t.userName)} (<span class="ltr">${esc(t.userPhone || '—')}</span>) · ${esc(t.category)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="${TKT_STATUS_CLS[t.status] || 'st-muted'}" style="font-size:0.8rem">${esc(TKT_STATUS_FA[t.status] || t.status)}</span>
+              <button type="button" class="btn btn-outline btn-sm" data-tkt-toggle="${esc(t.id)}" data-next="${t.status === 'closed' ? 'open' : 'closed'}">
+                ${t.status === 'closed' ? 'بازگشایی' : 'بستن تیکت'}
+              </button>
+            </div>
+          </div>
+          <div class="ticket-msgs">
+            ${(t.messages || []).map(m => `
+              <div class="ticket-bubble ${m.sender === 'admin' ? 'from-admin' : ''}">
+                <div class="ticket-bubble-meta">
+                  <strong>${esc(m.senderName)}</strong>
+                  <span>${faDate(m.createdAt)}</span>
+                </div>
+                <div>${esc(m.text)}</div>
+              </div>`).join('')}
+          </div>
+          <form class="adm-tkt-reply" data-tkt-id="${esc(t.id)}" style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+            <input required maxlength="1500" placeholder="پاسخ رسمی پشتیبانی مغزدانه را بنویسید..." style="flex:1;min-width:220px;padding:9px 12px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:8px;color:#fff;font-size:0.84rem">
+            <button type="submit" class="btn btn-primary btn-sm">ارسال پاسخ مدیر</button>
+          </form>
+        </div>`).join('');
 
-      const isAdm = await window.MgzCloud.checkIsAdmin(user);
-      if (!isAdm) {
-        document.getElementById('adm-guest').hidden = true;
-        document.getElementById('adm-denied').hidden = false;
-        document.getElementById('adm-studio').hidden = true;
-        document.getElementById('adm-denied-info').innerHTML =
-          `شما با ایمیل <strong class="ltr">${user.email || '—'}</strong> (شناسه: <code class="ltr">${user.uid}</code>) وارد شده‌اید که در فهرست مدیران مجاز ثبت نشده است.`;
-        return;
-      }
+      wrap.querySelectorAll('.adm-tkt-reply').forEach(form => {
+        form.onsubmit = async (e) => {
+          e.preventDefault();
+          const inp = form.querySelector('input');
+          const text = inp.value.trim();
+          if (!text) return;
+          await apiFetch(`/api/admin/tickets/${encodeURIComponent(form.dataset.tktId)}/reply`, {
+            method: 'POST',
+            body: JSON.stringify({ text }),
+          });
+          toast('پاسخ مدیر با موفقیت ارسال شد');
+          await loadAdminOverview();
+        };
+      });
 
-      document.getElementById('adm-guest').hidden = true;
-      document.getElementById('adm-denied').hidden = true;
-      document.getElementById('adm-studio').hidden = false;
-      document.getElementById('adm-user-meta').textContent = `واردشده به عنوان مدیر: ${user.displayName || ''} (${user.email})`;
-
-      await loadProductsTable();
-      await Promise.all([
-        loadHomeCMSForm(),
-        loadBrandingAndPagesForms(),
-        loadOrdersAndSupply(),
-        loadUsersAndAdmins(),
-      ]);
+      wrap.querySelectorAll('[data-tkt-toggle]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/tickets/${encodeURIComponent(btn.dataset.tktToggle)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: btn.dataset.next }),
+          });
+          toast('وضعیت تیکت تغییر کرد');
+          await loadAdminOverview();
+        };
+      });
     }
 
-    document.getElementById('btn-adm-signin').onclick = async () => {
-      try {
-        await window.MgzCloud.signInWithGoogle();
-      } catch {
-        toast('ورود با حساب گوگل انجام نشد');
-      }
-    };
-    document.getElementById('btn-adm-switch').onclick = async () => {
-      await window.MgzCloud.signOutUser();
-      await window.MgzCloud.signInWithGoogle();
-    };
-    document.getElementById('btn-adm-signout').onclick = async () => {
-      await window.MgzCloud.signOutUser();
-      toast('خروج انجام شد');
-    };
+    /* ---------- House Products ---------- */
+    function renderProductsTable() {
+      const tbody = document.getElementById('adm-products-tbody');
+      const list = overview.houseProducts || [];
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="${esc(safeImgUrl(p.img))}" alt="${esc(p.name)}" style="width:42px;height:42px;border-radius:8px;object-fit:cover">
+              <div>
+                <strong>${esc(p.name)}</strong>
+                <div style="font-size:0.74rem;color:var(--lux-muted)">${esc(p.origin)}${Number(p.stock) <= 35 ? ' · <span class="st-danger">موجودی کم</span>' : ''}</div>
+              </div>
+            </div>
+          </td>
+          <td><input class="ltr" style="width:96px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" data-r="${esc(p.id)}" value="${p.prices.retail}"></td>
+          <td><input class="ltr" style="width:96px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" data-s="${esc(p.id)}" value="${p.prices.semi}"></td>
+          <td><input class="ltr" style="width:96px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" data-w="${esc(p.id)}" value="${p.prices.wholesale}"></td>
+          <td><input class="ltr" style="width:72px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" data-st="${esc(p.id)}" value="${p.stock}"></td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-primary btn-sm" data-save-p="${esc(p.id)}">ذخیره</button>
+              <button type="button" class="rm-btn" data-del-p="${esc(p.id)}">حذف</button>
+            </div>
+          </td>
+        </tr>`).join('');
 
-    boot('admin').then(() => {
-      if (window.MgzCloud) {
-        window.MgzCloud.onAuth(onAdminAuth);
-      } else {
-        document.getElementById('adm-loading').hidden = true;
-        document.getElementById('adm-guest').hidden = false;
+      tbody.querySelectorAll('[data-save-p]').forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.saveP;
+          const p = list.find(x => x.id === id);
+          if (!p) return;
+          await apiFetch('/api/admin/products', {
+            method: 'POST',
+            body: JSON.stringify({
+              ...p,
+              retailPrice: Number(document.querySelector(`[data-r="${id}"]`).value),
+              semiPrice: Number(document.querySelector(`[data-s="${id}"]`).value),
+              wholesalePrice: Number(document.querySelector(`[data-w="${id}"]`).value),
+              stock: Number(document.querySelector(`[data-st="${id}"]`).value),
+            }),
+          });
+          toast(`قیمت و موجودی «${p.name}» ذخیره شد`);
+          await loadAdminOverview();
+        };
+      });
+      tbody.querySelectorAll('[data-del-p]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/products/${encodeURIComponent(btn.dataset.delP)}`, { method: 'DELETE' });
+          toast('محصول حذف شد');
+          await loadAdminOverview();
+        };
+      });
+    }
+
+    const openNewProdModal = () => {
+      document.getElementById('pm-id').value = '';
+      document.getElementById('pm-name').value = '';
+      document.getElementById('prod-modal').classList.add('open');
+    };
+    document.getElementById('btn-new-prod').onclick = openNewProdModal;
+    document.getElementById('btn-new-prod-top').onclick = openNewProdModal;
+    document.getElementById('pm-close').onclick = () => document.getElementById('prod-modal').classList.remove('open');
+
+    document.getElementById('prod-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await apiFetch('/api/admin/products', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: document.getElementById('pm-id').value || undefined,
+          name: document.getElementById('pm-name').value.trim(),
+          category: document.getElementById('pm-cat').value,
+          origin: document.getElementById('pm-origin').value.trim(),
+          grade: document.getElementById('pm-grade').value.trim(),
+          stock: Number(document.getElementById('pm-stock').value || 0),
+          retailPrice: Number(document.getElementById('pm-p1').value || 0),
+          semiPrice: Number(document.getElementById('pm-p2').value || 0),
+          wholesalePrice: Number(document.getElementById('pm-p3').value || 0),
+          img: document.getElementById('pm-img').value.trim(),
+          desc: document.getElementById('pm-desc').value.trim(),
+        }),
+      });
+      document.getElementById('prod-modal').classList.remove('open');
+      toast('محصول ذخیره شد');
+      await loadAdminOverview();
+    });
+
+    /* ---------- Vendors & Orchard Supply Offers ---------- */
+    function renderVendorsTable() {
+      const tbody = document.getElementById('adm-vendors-tbody');
+      const vProds = overview.vendorProducts || [];
+      tbody.innerHTML = (overview.vendors || []).map(v => {
+        const cnt = vProds.filter(p => p.vendorId === v.id).length;
+        const vr = v.verificationRequest;
+        return `
+        <tr>
+          <td><strong>${esc(v.name)}</strong><div style="font-size:0.75rem;color:var(--lux-muted)">${esc(v.ownerName)} · <span class="ltr">${esc(v.phone)}</span></div></td>
+          <td>${esc(v.city)}</td>
+          <td>${fmt(cnt)} کالا</td>
+          <td>
+            <span class="${v.verified ? 'st-ok' : vr && vr.status === 'pending' ? 'st-warn' : 'st-muted'}">${v.verified ? '✓ تأییدشده' : vr && vr.status === 'pending' ? 'درخواست در انتظار' : 'عادی'}</span>
+            ${vr && vr.nationalId ? `<div style="font-size:0.72rem;color:var(--lux-muted);margin-top:3px">کد ملی: <span class="ltr">${esc(vr.nationalId)}</span> · ${esc(vr.docNote || '')}</div>` : ''}
+          </td>
+          <td><span class="${v.status === 'active' ? 'st-ok' : 'st-danger'}">${v.status === 'active' ? 'فعال' : 'معلق'}</span></td>
+          <td>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <a class="btn btn-outline btn-sm" href="vendors.html?shop=${encodeURIComponent(v.slug)}">نمایش</a>
+              <button type="button" class="btn btn-outline btn-sm" data-ver-v="${esc(v.id)}" data-val="${!v.verified}">${v.verified ? 'لغو تأیید' : 'تأیید غرفه'}</button>
+              <button type="button" class="btn btn-outline btn-sm" data-st-v="${esc(v.id)}" data-val="${v.status === 'active' ? 'paused' : 'active'}">${v.status === 'active' ? 'تعلیق' : 'فعال‌سازی'}</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+
+      tbody.querySelectorAll('[data-ver-v]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/vendors/${encodeURIComponent(btn.dataset.verV)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ verified: btn.dataset.val === 'true' }),
+          });
+          toast('نشان تأیید غرفه به‌روزرسانی شد');
+          await loadAdminOverview();
+        };
+      });
+      tbody.querySelectorAll('[data-st-v]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/vendors/${encodeURIComponent(btn.dataset.stV)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: btn.dataset.val }),
+          });
+          toast('وضعیت غرفه تغییر کرد');
+          await loadAdminOverview();
+        };
+      });
+    }
+
+    function renderSupplyTable() {
+      const tbody = document.getElementById('adm-supply-tbody');
+      const list = overview.supplyOffers || [];
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--lux-muted)">هنوز درخواست عرضه مستقیم باغداری ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(s => `
+        <tr>
+          <td><strong>${esc(s.sellerName)}</strong><div class="ltr" style="font-size:0.75rem;color:var(--lux-muted)">${esc(s.phone)}</div></td>
+          <td>${esc(s.productType)}</td>
+          <td>${fmt(s.amountKg)} کیلوگرم</td>
+          <td>${esc(s.origin || '—')}</td>
+          <td>${esc(s.priceExpect || 'توافقی')}</td>
+          <td>${faDate(s.createdAt)}</td>
+        </tr>`).join('');
+    }
+
+    /* ---------- Users Table with 1-Click Wallet Jump ---------- */
+    function renderUsersTable() {
+      const tbody = document.getElementById('adm-users-tbody');
+      const users = overview.users || [];
+      const orders = overview.orders || [];
+      if (!users.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--lux-muted)">هنوز کاربری ثبت‌نام نکرده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = users.map(u => {
+        const ordCnt = orders.filter(o => o.userId === u.id).length;
+        return `
+        <tr>
+          <td><strong>${esc(u.fullName)}</strong><div style="font-size:0.74rem;color:var(--lux-muted)">${esc(u.email || '')}</div></td>
+          <td class="ltr">${esc(u.phone || u.username || '—')}</td>
+          <td>${u.authMethod === 'otp' ? 'موبایل (کد یک‌بارمصرف)' : 'نام کاربری / رمز'}</td>
+          <td class="st-ok">${faToman(u.walletBalance || 0)}</td>
+          <td>${fmt(ordCnt)} سفارش</td>
+          <td><button type="button" class="btn btn-gold btn-sm" data-jump-uwallet="${esc(u.id)}">شارژ / تعدیل کیف پول</button></td>
+        </tr>`;
+      }).join('');
+
+      tbody.querySelectorAll('[data-jump-uwallet]').forEach(btn => {
+        btn.onclick = () => {
+          renderFinanceUserSelect(btn.dataset.jumpUwallet);
+          switchAdminView('finance');
+        };
+      });
+    }
+
+    /* ---------- Home 3D CMS ---------- */
+    function renderHomeCmsEditor() {
+      const cms = (overview.cms && overview.cms.home) || {};
+      const stages = Array.isArray(cms.stages) && cms.stages.length === 5 ? cms.stages : STAGE_DEFAULTS;
+      document.getElementById('hc-kicker').value = cms.kicker || STAGE_DEFAULTS[0].kicker;
+      document.getElementById('hc-title').value = cms.title || STAGE_DEFAULTS[0].title;
+      document.getElementById('hc-sub').value = cms.subtitle || STAGE_DEFAULTS[0].subtitle;
+      document.getElementById('hc-cta1-lbl').value = cms.primaryCtaLabel || 'ورود به فروشگاه مغزدانه';
+      document.getElementById('hc-cta1-href').value = cms.primaryCtaHref || 'catalog.html';
+
+      document.getElementById('stages-editor').innerHTML = stages.map((s, i) => `
+        <div class="stage-editor-card">
+          <h4>پرده ${esc(s.index || STAGE_DEFAULTS[i].index)}</h4>
+          <div class="field"><label>برچسب نوار پایین</label><input data-st-label="${i}" value="${esc(s.label)}"></div>
+          <div class="field"><label>خط بالا</label><input data-st-kicker="${i}" value="${esc(s.kicker)}"></div>
+          <div class="field"><label>تیتر پرده</label><input data-st-title="${i}" value="${esc(s.title)}"></div>
+          <div class="field"><label>زیرتیتر</label><input data-st-sub="${i}" value="${esc(s.subtitle)}"></div>
+        </div>`).join('');
+    }
+
+    document.getElementById('home-cms-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const stages = [0, 1, 2, 3, 4].map(i => ({
+        index: STAGE_DEFAULTS[i].index,
+        label: document.querySelector(`[data-st-label="${i}"]`).value.trim(),
+        kicker: document.querySelector(`[data-st-kicker="${i}"]`).value.trim(),
+        title: document.querySelector(`[data-st-title="${i}"]`).value.trim(),
+        subtitle: document.querySelector(`[data-st-sub="${i}"]`).value.trim(),
+      }));
+      await apiFetch('/api/admin/cms/home', {
+        method: 'PUT',
+        body: JSON.stringify({
+          kicker: document.getElementById('hc-kicker').value.trim(),
+          title: document.getElementById('hc-title').value.trim(),
+          subtitle: document.getElementById('hc-sub').value.trim(),
+          primaryCtaLabel: document.getElementById('hc-cta1-lbl').value.trim(),
+          primaryCtaHref: document.getElementById('hc-cta1-href').value.trim(),
+          stages,
+        }),
+      });
+      toast('تغییرات صفحه اول با موفقیت منتشر شد');
+    });
+
+    /* ---------- Articles Table & Modal ---------- */
+    function renderArticlesTable() {
+      const tbody = document.getElementById('adm-articles-tbody');
+      const list = overview.articles || [];
+      tbody.innerHTML = list.map(a => `
+        <tr>
+          <td><strong>${esc(a.title)}</strong><div style="font-size:0.74rem;color:var(--lux-muted)" class="ltr">${esc(a.slug)}</div></td>
+          <td>${esc(a.category)}</td>
+          <td>${esc(a.author)}</td>
+          <td>${esc(a.publishedAt)}</td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <a class="btn btn-outline btn-sm" href="articles.html?slug=${encodeURIComponent(a.slug)}">مشاهده</a>
+              <button type="button" class="btn btn-outline btn-sm" data-edit-art="${esc(a.id)}">ویرایش</button>
+              <button type="button" class="rm-btn" data-del-art="${esc(a.id)}">حذف</button>
+            </div>
+          </td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('[data-edit-art]').forEach(btn => {
+        btn.onclick = () => openArticleModal(list.find(x => x.id === btn.dataset.editArt));
+      });
+      tbody.querySelectorAll('[data-del-art]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/articles/${encodeURIComponent(btn.dataset.delArt)}`, { method: 'DELETE' });
+          toast('مقاله حذف شد');
+          await loadAdminOverview();
+        };
+      });
+    }
+
+    function openArticleModal(a = null) {
+      document.getElementById('am-title').textContent = a ? 'ویرایش مقاله' : 'انتشار مقاله جدید';
+      document.getElementById('am-id').value = a ? a.id : '';
+      document.getElementById('am-heading').value = a ? a.title : '';
+      document.getElementById('am-slug').value = a ? a.slug : '';
+      document.getElementById('am-cat').value = a ? a.category : 'راهنمای خرید';
+      document.getElementById('am-author').value = a ? a.author : 'تحریریه تخصصی مغزدانه';
+      document.getElementById('am-mins').value = a ? (a.readMinutes || 5) : 5;
+      document.getElementById('am-cover').value = a ? a.coverImage : 'src/assets/images/article_pistachio_grading_1795350767749.jpg';
+      document.getElementById('am-excerpt').value = a ? a.excerpt : '';
+      document.getElementById('am-body').value = a ? (Array.isArray(a.body) ? a.body.join('\n\n') : a.body) : '';
+      document.getElementById('art-modal').classList.add('open');
+    }
+    document.getElementById('btn-new-article').onclick = () => openArticleModal(null);
+    document.getElementById('am-close').onclick = () => document.getElementById('art-modal').classList.remove('open');
+
+    document.getElementById('art-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await apiFetch('/api/admin/articles', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: document.getElementById('am-id').value || undefined,
+          title: document.getElementById('am-heading').value.trim(),
+          slug: document.getElementById('am-slug').value.trim(),
+          category: document.getElementById('am-cat').value,
+          author: document.getElementById('am-author').value.trim(),
+          readMinutes: Number(document.getElementById('am-mins').value || 5),
+          coverImage: document.getElementById('am-cover').value,
+          excerpt: document.getElementById('am-excerpt').value.trim(),
+          body: document.getElementById('am-body').value.trim(),
+        }),
+      });
+      document.getElementById('art-modal').classList.remove('open');
+      toast('مقاله با موفقیت منتشر شد');
+      await loadAdminOverview();
+    });
+
+    /* ---------- Branding ---------- */
+    function renderBrandingForm() {
+      const br = (overview.cms && overview.cms.branding) || (APP.db && APP.db.site) || {};
+      document.getElementById('br-name').value = br.siteName || br.name || 'مغزدانه';
+      document.getElementById('br-tag').value = br.tagline || '';
+      document.getElementById('br-ann').value = br.announcement || '';
+      document.getElementById('br-phone').value = br.phone || '';
+      document.getElementById('br-mobile').value = br.mobile || '';
+      document.getElementById('br-addr').value = br.address || '';
+    }
+
+    document.getElementById('branding-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await apiFetch('/api/admin/cms/branding', {
+        method: 'PUT',
+        body: JSON.stringify({
+          siteName: document.getElementById('br-name').value.trim(),
+          tagline: document.getElementById('br-tag').value.trim(),
+          announcement: document.getElementById('br-ann').value.trim(),
+          phone: document.getElementById('br-phone').value.trim(),
+          mobile: document.getElementById('br-mobile').value.trim(),
+          address: document.getElementById('br-addr').value.trim(),
+        }),
+      });
+      toast('تنظیمات برند ذخیره شد');
+    });
+
+    /* ---------- Coupons, Payouts, Community & Audit Renderers ---------- */
+    function renderCouponsTable() {
+      const tbody = document.getElementById('adm-coupons-tbody');
+      const list = overview.coupons || [];
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--lux-muted)">کد تخفیفی ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(c => `
+        <tr>
+          <td class="ltr"><strong style="color:var(--lux-gold)">${esc(c.code)}</strong><div style="font-size:0.73rem;color:var(--lux-muted);direction:rtl">${esc(c.note || '')}</div></td>
+          <td>${c.type === 'percent' ? `${fmt(c.value)}٪` : faToman(c.value)}</td>
+          <td style="font-size:0.8rem">حداقل: ${faToman(c.minSubtotal || 0)}${c.maxDiscount ? ` · سقف: ${faToman(c.maxDiscount)}` : ''}</td>
+          <td>${fmt(c.usedCount || 0)} بار</td>
+          <td><span class="${c.active ? 'st-ok' : 'st-danger'}">${c.active ? 'فعال' : 'غیرفعال'}</span></td>
+          <td>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-outline btn-sm" data-cp-tog="${esc(c.id)}" data-act="${!c.active}">${c.active ? 'غیرفعال' : 'فعال‌سازی'}</button>
+              <button type="button" class="rm-btn" data-cp-del="${esc(c.id)}">حذف</button>
+            </div>
+          </td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('[data-cp-tog]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/coupons/${encodeURIComponent(btn.dataset.cpTog)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ active: btn.dataset.act === 'true' }),
+          });
+          toast('وضعیت کد تخفیف تغییر کرد');
+          await loadAdminOverview();
+        };
+      });
+      tbody.querySelectorAll('[data-cp-del]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/coupons/${encodeURIComponent(btn.dataset.cpDel)}`, { method: 'DELETE' });
+          toast('کد تخفیف حذف شد');
+          await loadAdminOverview();
+        };
+      });
+    }
+
+    document.getElementById('adm-coupon-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiFetch('/api/admin/coupons', {
+          method: 'POST',
+          body: JSON.stringify({
+            code: document.getElementById('cp-code').value.trim(),
+            type: document.getElementById('cp-type').value,
+            value: Number(document.getElementById('cp-val').value || 0),
+            minSubtotal: Number(document.getElementById('cp-min').value || 0),
+            maxDiscount: Number(document.getElementById('cp-max').value || 0),
+            note: document.getElementById('cp-note').value.trim(),
+          }),
+        });
+        e.target.reset();
+        toast('کد تخفیف جدید ساخته شد');
+        await loadAdminOverview();
+      } catch (err) {
+        toast(err.message || 'خطا در ایجاد کد تخفیف');
       }
     });
+
+    function renderPayoutsTable() {
+      const tbody = document.getElementById('adm-payouts-tbody');
+      const list = overview.payouts || [];
+      const stFa = { pending: 'در انتظار واریز', paid: 'واریزشده ✓', rejected: 'ردشده' };
+      const stCls = { pending: 'st-warn', paid: 'st-ok', rejected: 'st-danger' };
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--lux-muted)">هنوز درخواست تسویه‌ای از غرفه‌داران ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td><strong>${esc(p.vendorName)}</strong></td>
+          <td class="ltr">${esc(p.shaba)}</td>
+          <td class="st-ok">${faToman(p.amount)}</td>
+          <td>${faDate(p.createdAt)}</td>
+          <td><span class="${stCls[p.status] || 'st-muted'}">${esc(stFa[p.status] || p.status)}</span></td>
+          <td>
+            <div style="display:flex;gap:6px">
+              ${p.status !== 'paid' ? `<button type="button" class="btn btn-primary btn-sm" data-po-st="${esc(p.id)}" data-val="paid">تأیید واریز</button>` : ''}
+              ${p.status === 'pending' ? `<button type="button" class="rm-btn" data-po-st="${esc(p.id)}" data-val="rejected">رد</button>` : ''}
+            </div>
+          </td>
+        </tr>`).join('');
+
+      tbody.querySelectorAll('[data-po-st]').forEach(btn => {
+        btn.onclick = async () => {
+          await apiFetch(`/api/admin/payouts/${encodeURIComponent(btn.dataset.poSt)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: btn.dataset.val }),
+          });
+          toast('وضعیت تسویه به‌روزرسانی شد');
+          await loadAdminOverview();
+        };
+      });
+    }
+
+    function renderCommunityViews() {
+      // Reviews
+      const revBox = document.getElementById('adm-reviews-list');
+      const revs = overview.reviews || [];
+      revBox.innerHTML = revs.length ? revs.map(r => `
+        <div class="order-card" style="margin:0">
+          <div class="order-card-top">
+            <div>
+              <strong style="color:#fff">${esc(r.userName)}</strong>
+              <span style="font-size:0.78rem;color:var(--lux-muted);margin-inline-start:8px">محصول: <span class="ltr">${esc(r.productId)}</span> · امتیاز ${fmt(r.rating)}/۵</span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <span class="${r.approved !== false ? 'st-ok' : 'st-warn'}" style="font-size:0.78rem">${r.approved !== false ? 'منتشرشده' : 'مخفی'}</span>
+              <button type="button" class="btn btn-outline btn-sm" data-rv-tog="${esc(r.id)}" data-app="${r.approved === false}">${r.approved !== false ? 'مخفی‌کردن' : 'انتشار'}</button>
+              <button type="button" class="rm-btn" data-rv-del="${esc(r.id)}">حذف</button>
+            </div>
+          </div>
+          <p style="font-size:0.85rem;color:var(--lux-soft)">${esc(r.text)}</p>
+        </div>`).join('') : '<div style="color:var(--lux-muted);font-size:0.84rem">دیدگاهی ثبت نشده است.</div>';
+
+      revBox.querySelectorAll('[data-rv-tog]').forEach(b => {
+        b.onclick = async () => {
+          await apiFetch(`/api/admin/reviews/${encodeURIComponent(b.dataset.rvTog)}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ approved: b.dataset.app === 'true' }),
+          });
+          toast('وضعیت دیدگاه تغییر کرد');
+          await loadAdminOverview();
+        };
+      });
+      revBox.querySelectorAll('[data-rv-del]').forEach(b => {
+        b.onclick = async () => {
+          await apiFetch(`/api/admin/reviews/${encodeURIComponent(b.dataset.rvDel)}`, { method: 'DELETE' });
+          toast('دیدگاه حذف شد');
+          await loadAdminOverview();
+        };
+      });
+
+      // Questions
+      const qaBox = document.getElementById('adm-qa-list');
+      const qas = overview.questions || [];
+      qaBox.innerHTML = qas.length ? qas.map(q => `
+        <div class="order-card" style="margin:0">
+          <div class="order-card-top">
+            <div><strong style="color:#fff">${esc(q.authorName)}</strong> · <span class="ltr" style="font-size:0.78rem;color:var(--lux-muted)">${esc(q.productId)}</span></div>
+            <span class="${q.answer ? 'st-ok' : 'st-warn'}" style="font-size:0.78rem">${q.answer ? 'پاسخ داده‌شده' : 'در انتظار پاسخ'}</span>
+          </div>
+          <p style="font-size:0.86rem;color:var(--lux-ivory);margin-bottom:8px">${esc(q.question)}</p>
+          ${q.answer ? `<div style="font-size:0.82rem;color:var(--lux-emerald);margin-bottom:8px">پاسخ فعلی: ${esc(q.answer)}</div>` : ''}
+          <form class="adm-qa-form" data-qa-id="${esc(q.id)}" style="display:flex;gap:8px;flex-wrap:wrap">
+            <input required maxlength="1000" placeholder="پاسخ تخصصی مغزدانه را بنویسید..." style="flex:1;min-width:200px;padding:8px 12px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:8px;color:#fff;font-size:0.84rem">
+            <button type="submit" class="btn btn-primary btn-sm">ثبت پاسخ</button>
+          </form>
+        </div>`).join('') : '<div style="color:var(--lux-muted);font-size:0.84rem">پرسشی ثبت نشده است.</div>';
+
+      qaBox.querySelectorAll('.adm-qa-form').forEach(f => {
+        f.onsubmit = async (ev) => {
+          ev.preventDefault();
+          const answer = f.querySelector('input').value.trim();
+          if (!answer) return;
+          await apiFetch(`/api/admin/questions/${encodeURIComponent(f.dataset.qaId)}/answer`, {
+            method: 'POST',
+            body: JSON.stringify({ answer }),
+          });
+          toast('پاسخ کارشناس منتشر شد');
+          await loadAdminOverview();
+        };
+      });
+
+      // Subscriptions & Price Alerts
+      const sTbody = document.getElementById('adm-subs-tbody');
+      const subs = overview.subscriptions || [];
+      sTbody.innerHTML = subs.length ? subs.map(s => `
+        <tr>
+          <td><strong>${esc(s.customerName)}</strong><div class="ltr" style="font-size:0.74rem;color:var(--lux-muted)">${esc(s.phone)}</div></td>
+          <td>${esc(s.productName)} (${fmt(s.qtyKg)} کیلو)</td>
+          <td>هر ${fmt(s.intervalDays)} روز</td>
+          <td><span class="${s.status === 'active' ? 'st-ok' : 'st-warn'}">${esc(s.status)}</span></td>
+        </tr>`).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--lux-muted);padding:18px">اشتراکی ثبت نشده است.</td></tr>';
+
+      const aTbody = document.getElementById('adm-alerts-tbody');
+      const alerts = overview.priceAlerts || [];
+      aTbody.innerHTML = alerts.length ? alerts.map(a => `
+        <tr>
+          <td><strong>${esc(a.productName)}</strong></td>
+          <td class="ltr">${esc(a.phone)}</td>
+          <td>${a.alertType === 'stock' ? 'موجودی' : 'افت قیمت'}</td>
+          <td>${a.targetPrice ? faToman(a.targetPrice) : '—'}</td>
+        </tr>`).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--lux-muted);padding:18px">هشداری ثبت نشده است.</td></tr>';
+    }
+
+    function renderAuditTable() {
+      const tbody = document.getElementById('adm-audit-tbody');
+      const logs = overview.auditLogs || [];
+      if (!logs.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--lux-muted)">هنوز فعالیتی در گزارش ممیزی ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td style="font-size:0.78rem;color:var(--lux-muted)">${faDate(l.createdAt)}</td>
+          <td class="ltr"><strong>${esc(l.actor)}</strong></td>
+          <td><span class="st-ok">${esc(l.action)}</span></td>
+          <td style="font-size:0.83rem;color:var(--lux-soft)">${esc(l.detail)}</td>
+        </tr>`).join('');
+    }
+
+    document.getElementById('btn-reload-all').addEventListener('click', loadAdminOverview);
+
+    boot('admin').then(checkAdminGate);
   </script>
 </body>
 </html>

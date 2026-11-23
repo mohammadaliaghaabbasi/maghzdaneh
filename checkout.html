@@ -2,23 +2,29 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>تسویه‌حساب | مغزدانه</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
-  <meta name="theme-color" content="#07100b">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
     <div class="container">
-      <span class="sec-label">ثبت امن و بدون اصطکاک</span>
+      <span class="sec-label">ثبت سفارش سریع و مطمئن</span>
       <h1>تسویه‌حساب</h1>
-      <p>اطلاعات خریدار، نشانی ارسال و روش پرداخت را کامل کنید؛ رسید و کد پیگیری بلافاصله صادر می‌شود.</p>
+      <p>اطلاعات خریدار، نشانی ارسال، کد تخفیف و روش پرداخت را کامل کنید؛ رسید و کد پیگیری بلافاصله صادر می‌شود.</p>
     </div>
   </div>
 
@@ -37,9 +43,9 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/motion.js"></script>
-  <script src="assets/js/ghdb.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js?v=12"></script>
+  <script src="assets/js/ghdb.js?v=12"></script>
   <script>
     boot('').then(db => {
       const area = document.getElementById('co-area');
@@ -50,7 +56,7 @@
             <div class="empty">
               <div class="big">${icon('cart')}</div>
               <p style="color:#fff;font-weight:800">سبدی برای تسویه وجود ندارد</p>
-              <a class="btn btn-primary" href="catalog.html" style="margin-top:16px">رفتن به کاتالوگ</a>
+              <a class="btn btn-primary" href="catalog.html" style="margin-top:16px">رفتن به فروشگاه</a>
             </div>`;
           return;
         }
@@ -78,7 +84,7 @@
                   <select id="f-ship">
                     <option value="tipax">تیپاکس (۲–۴ روز کاری)</option>
                     <option value="post">پست پیشتاز (۳–۵ روز کاری)</option>
-                    <option value="tehran-courier" ${!db.site.shipping.tehran_same_day ? 'disabled' : ''}>پیک تهران (همان روز — فقط تهران)</option>
+                    <option value="tehran-courier" ${!db.site.shipping.tehran_same_day ? 'disabled' : ''}>پیک تهران (همان‌روز — فقط تهران)</option>
                   </select>
                 </div>
               </div>
@@ -87,13 +93,29 @@
             <div class="contact-card">
               <h3>۳. روش پرداخت و یادداشت</h3>
               <div class="pay-methods">
-                ${db.site.payment.methods.map((m, i) => `
-                  <label class="pay-opt ${i === 0 ? 'sel' : ''}">
-                    <input type="radio" name="pay" value="${i}" ${i === 0 ? 'checked' : ''}>
+                ${APP.serverUser ? (() => {
+                  const bal = Math.max(0, Math.round(Number(APP.serverUser.walletBalance) || 0));
+                  const enough = bal >= t.grand;
+                  return `
+                  <label class="pay-opt ${enough ? 'sel' : ''}" style="${enough ? '' : 'opacity:0.78'}">
+                    <input type="radio" name="pay" value="wallet" ${enough ? 'checked' : ''} ${enough ? '' : 'disabled'}>
+                    <span style="display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;flex-wrap:wrap">
+                      <span><strong>پرداخت آنی از کیف پول مغزدانه</strong> (موجودی: <b class="${enough ? 'st-ok' : 'st-warn'}">${faToman(bal)}</b>)</span>
+                      ${enough ? '<span class="st-ok" style="font-size:0.78rem">تسویه فوری</span>' : `<a href="account.html#wallet" style="color:var(--c-accent-light);font-size:0.78rem;font-weight:700">موجودی کافی نیست — شارژ کیف پول ←</a>`}
+                    </span>
+                  </label>`;
+                })() : ''}
+                ${db.site.payment.methods.map((m, i) => {
+                  const walletDefault = Boolean(APP.serverUser && (Number(APP.serverUser.walletBalance) || 0) >= t.grand);
+                  const isSel = !walletDefault && i === 0;
+                  return `
+                  <label class="pay-opt ${isSel ? 'sel' : ''}">
+                    <input type="radio" name="pay" value="${i}" ${isSel ? 'checked' : ''}>
                     <span>${m}</span>
-                  </label>`).join('')}
+                  </label>`;
+                }).join('')}
               </div>
-              <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">پس از ثبت سفارش، لینک پرداخت آنلاین (درگاه ${db.site.payment.gateway}) برای شما پیامک می‌شود. سفارش‌های کارت‌به‌کارت پس از تأیید واریز پردازش می‌شوند.</p>
+              <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">${APP.serverUser ? 'سفارش‌های پرداخت‌شده با کیف پول بلافاصله وارد صف آماده‌سازی می‌شوند.' : 'برای پرداخت آنی از کیف پول، ابتدا <a href="account.html?next=checkout.html" style="color:var(--c-accent-light)">وارد حساب کاربری</a> شوید.'} لینک درگاه ${db.site.payment.gateway} برای سایر روش‌ها پیامک می‌شود.</p>
               <div class="field" style="margin-top:16px">
                 <label for="f-note">یادداشت سفارش (اختیاری)</label>
                 <textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا درخواست صورت‌حساب رسمی برای قنادی"></textarea>
@@ -104,15 +126,27 @@
           <aside class="cart-summary">
             <h3>خلاصه سفارش</h3>
             ${APP.cart.map(it => {
-              const p = byId(it.id);
-              if (!p) return '';
-              const u = p.prices[it.tier] || p.prices.retail;
-              return `<div class="sum-row"><span>${p.name} × ${fmt(it.qty)} کیلو</span><span>${fmt(Math.round(u * it.qty))}</span></div>`;
+              const meta = cartItemMeta(it);
+              if (!meta) return '';
+              const u = cartItemUnit(it);
+              return `<div class="sum-row"><span>${esc(meta.name)} × ${fmt(it.qty)} ${meta.unitLabel}${it.variantLabel ? `<br><small style="color:var(--c-accent-light)">${esc(it.variantLabel)}</small>` : ''}</span><span class="num">${fmt(Math.round(u * it.qty))}</span></div>`;
             }).join('')}
             <div class="sum-row"><span>وزن کل</span><span>${fmt(t.totalKg)} کیلوگرم</span></div>
+            <div class="sum-row"><span>جمع کالاها</span><span>${faToman(t.subtotal)}</span></div>
+            ${t.discount > 0 ? `<div class="sum-row" style="color:var(--c-primary-light)"><span>کد تخفیف (${esc(t.couponCode)})</span><span>− ${faToman(t.discount)}</span></div>` : ''}
             <div class="sum-row"><span>هزینه ارسال</span><span>${t.shipCost ? faToman(t.shipCost) : 'رایگان'}</span></div>
             <div class="sum-row total"><span>قابل پرداخت</span><span>${faToman(t.grand)}</span></div>
+
+            <div class="coupon-box">
+              <label for="co-coupon-inp" style="font-size:var(--fs-xs);font-weight:800;color:var(--c-accent-light)">کد تخفیف</label>
+              <div class="coupon-row">
+                <input id="co-coupon-inp" class="ltr" value="${esc((APP.coupon && APP.coupon.code) || '')}" placeholder="MAGHZ10">
+                <button type="button" class="btn btn-outline btn-sm" id="co-apply-coupon">اعمال</button>
+              </div>
+            </div>
+
             <button class="btn btn-primary" type="submit" style="width:100%;margin-top:16px" id="submit-btn">ثبت نهایی سفارش</button>
+            <button type="button" class="btn btn-outline btn-sm" id="co-proforma" style="width:100%;margin-top:10px">${icon('receipt')} پیش‌فاکتور رسمی (PDF)</button>
             <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">با ثبت سفارش، <a href="legal.html">قوانین فروش</a> مغزدانه را می‌پذیرید.</p>
           </aside>
         </form>`;
@@ -122,11 +156,33 @@
           r.closest('.pay-opt').classList.add('sel');
         }));
 
+        document.getElementById('co-proforma').onclick = () => openInvoiceModal();
+
+        document.getElementById('co-apply-coupon').onclick = async () => {
+          const code = document.getElementById('co-coupon-inp').value.trim();
+          if (!code) { clearCoupon(); return; }
+          try {
+            const res = await apiFetch('/api/coupons/validate', {
+              method: 'POST',
+              body: JSON.stringify({ code, subtotal: t.subtotal }),
+            });
+            setCoupon({ ...res.coupon, discount: res.discount });
+            toast(`کد تخفیف «${res.coupon.code}» اعمال شد`);
+          } catch (err) {
+            clearCoupon();
+            toast(err.message || 'کد تخفیف معتبر نیست');
+          }
+        };
+
         document.getElementById('co-form').addEventListener('submit', async e => {
           e.preventDefault();
           const btn = document.getElementById('submit-btn');
           btn.disabled = true;
           btn.textContent = 'در حال ثبت سفارش…';
+          const selectedPayVal = document.querySelector('input[name="pay"]:checked').value;
+          const isWalletPay = selectedPayVal === 'wallet';
+          const liveT = cartTotals();
+
           const order = {
             id: 'MD-' + Date.now().toString(36).toUpperCase(),
             date: new Date().toISOString(),
@@ -140,22 +196,80 @@
               postal: document.getElementById('f-post').value.trim(),
             },
             shipping: document.getElementById('f-ship').selectedOptions[0].textContent,
-            payment: db.site.payment.methods[+document.querySelector('input[name="pay"]:checked').value],
+            payment: isWalletPay ? 'پرداخت آنلاین از کیف پول مغزدانه' : db.site.payment.methods[+selectedPayVal],
+            paymentMethod: isWalletPay ? 'wallet' : 'gateway',
+            couponCode: liveT.couponCode || '',
+            discountAmount: liveT.discount || 0,
             note: document.getElementById('f-note').value.trim(),
             items: APP.cart.map(it => {
-              const p = byId(it.id);
-              const u = p.prices[it.tier] || p.prices.retail;
-              return { id: p.id, name: p.name, tier: it.tier, qty: it.qty, unit: u, unitPrice: u, lineTotal: Math.round(u * it.qty), total: Math.round(u * it.qty) };
+              const custom = isCustomCartItem(it);
+              const p = custom ? null : byId(it.id);
+              const u = cartItemUnit(it);
+              return {
+                id: it.id,
+                kind: it.kind || null,
+                name: custom ? it.name : p.name,
+                tier: it.tier || 'retail',
+                qty: it.qty,
+                weightKg: custom ? Number(it.weightKg || 0.5) : Number(it.qty || 1),
+                variantDelta: Number(it.variantDelta || 0),
+                variantLabel: it.variantLabel || '',
+                unit: u,
+                unitPrice: u,
+                lineTotal: Math.round(u * it.qty),
+                total: Math.round(u * it.qty),
+                vendorId: (p && p.vendorId) || null,
+                vendorName: (p && p.vendorName) || 'فروشگاه مرکزی مغزدانه',
+              };
             }),
-            totals: { subtotal: t.subtotal, shipping: t.shipCost, totalKg: t.totalKg, grand: t.grand },
-            status: 'new',
+            totals: {
+              subtotal: liveT.subtotal,
+              discount: liveT.discount,
+              shipping: liveT.shipCost,
+              totalKg: liveT.totalKg,
+              grand: liveT.grand,
+            },
+            status: isWalletPay ? 'processing' : 'new',
           };
+
+          let savedRemote = false;
+          let finalGrand = liveT.grand;
+          try {
+            const res = await apiFetch('/api/orders', {
+              method: 'POST',
+              body: JSON.stringify({
+                orderCode: order.id,
+                customer: order.customer,
+                shipping: order.shipping,
+                payment: order.payment,
+                paymentMethod: order.paymentMethod,
+                couponCode: order.couponCode,
+                note: order.note,
+                items: order.items,
+                totals: order.totals,
+              }),
+            });
+            if (res && res.ok) {
+              savedRemote = true;
+              if (res.order && typeof res.order.grandTotal === 'number') finalGrand = res.order.grandTotal;
+              if (APP.serverUser && typeof res.walletBalance === 'number') {
+                APP.serverUser.walletBalance = res.walletBalance;
+              }
+            }
+          } catch (err) {
+            if (isWalletPay) {
+              toast(err.message || 'خطا در پرداخت از کیف پول');
+              btn.disabled = false;
+              btn.textContent = 'ثبت نهایی سفارش';
+              return;
+            }
+            console.error(err);
+          }
 
           const local = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
           local.push(order);
           localStorage.setItem('maghzdaneh_orders', JSON.stringify(local));
 
-          let savedRemote = false;
           try {
             if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
               await window.MgzCloud.createOrder({
@@ -168,13 +282,13 @@
                 address: order.customer.address,
                 note: order.note,
                 items: order.items,
-                subtotal: t.subtotal,
-                shippingCost: t.shipCost,
-                grandTotal: t.grand,
-                totalKg: t.totalKg,
+                subtotal: liveT.subtotal,
+                shippingCost: liveT.shipCost,
+                grandTotal: finalGrand,
+                totalKg: liveT.totalKg,
               });
               savedRemote = true;
-            } else {
+            } else if (!savedRemote && window.GHDB) {
               savedRemote = await GHDB.submitOrder(order);
             }
           } catch (err) {
@@ -182,22 +296,20 @@
           }
 
           APP.cart = [];
+          clearCoupon();
           saveCart();
-          location.href = `success.html?order=${encodeURIComponent(order.id)}&total=${t.grand}${savedRemote ? '' : '&local=1'}`;
+          location.href = `success.html?order=${encodeURIComponent(order.id)}&total=${finalGrand}${savedRemote ? '' : '&local=1'}`;
         });
 
-        // Autofill from authenticated customer profile in Firestore
-        if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
-          window.MgzCloud.getMyProfile(window.MgzCloud.getCurrentUser().uid).then(prof => {
-            if (!prof) return;
-            if (prof.fullName && !document.getElementById('f-name').value) document.getElementById('f-name').value = prof.fullName;
-            if (prof.phone && !document.getElementById('f-phone').value) document.getElementById('f-phone').value = prof.phone;
-            if (prof.email && !document.getElementById('f-email').value) document.getElementById('f-email').value = prof.email;
-            if (prof.province && !document.getElementById('f-prov').value) document.getElementById('f-prov').value = prof.province;
-            if (prof.city && !document.getElementById('f-city').value) document.getElementById('f-city').value = prof.city;
-            if (prof.address && !document.getElementById('f-addr').value) document.getElementById('f-addr').value = prof.address;
-            if (prof.postalCode && !document.getElementById('f-post').value) document.getElementById('f-post').value = prof.postalCode;
-          }).catch(() => {});
+        const su = APP.serverUser;
+        if (su) {
+          if (su.fullName && !document.getElementById('f-name').value) document.getElementById('f-name').value = su.fullName;
+          if (su.phone && !document.getElementById('f-phone').value) document.getElementById('f-phone').value = su.phone;
+          if (su.email && !document.getElementById('f-email').value) document.getElementById('f-email').value = su.email;
+          if (su.province && !document.getElementById('f-prov').value) document.getElementById('f-prov').value = su.province;
+          if (su.city && !document.getElementById('f-city').value) document.getElementById('f-city').value = su.city;
+          if (su.address && !document.getElementById('f-addr').value) document.getElementById('f-addr').value = su.address;
+          if (su.postalCode && !document.getElementById('f-post').value) document.getElementById('f-post').value = su.postalCode;
         }
       }
       render();

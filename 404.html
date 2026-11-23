@@ -2,14 +2,20 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>صفحه پیدا نشد | مغزدانه</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#07100b">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -18,7 +24,7 @@
     <div class="container">
       <div class="success-box">
         <div class="tick" id="nf-ico" style="background:rgba(226,100,90,0.12);border-color:rgba(226,100,90,0.4);color:var(--c-danger)"></div>
-        <span class="sec-label" style="justify-content:center;margin-bottom:8px">ERROR 404</span>
+        <span class="sec-label" style="justify-content:center;margin-bottom:8px">خطای ۴۰۴</span>
         <h1 style="font-size:var(--fs-xl);color:#fff;margin-bottom:10px">این صفحه پیدا نشد</h1>
         <p style="color:var(--c-text-soft);font-size:var(--fs-sm);line-height:1.85">
           نشانی واردشده تغییر کرده یا دیگر وجود ندارد. می‌توانید از صفحه اصلی یا کاتالوگ مغزها مسیرتان را ادامه دهید.
@@ -34,7 +40,7 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
   <script>
     boot('').then(() => {
       document.getElementById('nf-ico').innerHTML = icon('search');

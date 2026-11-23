@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" width="420" height="120" role="img" aria-label="لوگوتایپ و نشان رسمی برند مغزدانه">
+  <defs>
+    <radialGradient id="wm-bg" cx="50%" cy="35%" r="72%">
+      <stop offset="0%" stop-color="#112219"/>
+      <stop offset="68%" stop-color="#08120c"/>
+      <stop offset="100%" stop-color="#050a07"/>
+    </radialGradient>
+    <linearGradient id="wm-gold" x1="10%" y1="8%" x2="90%" y2="92%">
+      <stop offset="0%" stop-color="#f2dfa6"/>
+      <stop offset="48%" stop-color="#d6b569"/>
+      <stop offset="100%" stop-color="#9c7a35"/>
+    </linearGradient>
+    <linearGradient id="wm-gold-line" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d6b569" stop-opacity="0"/>
+      <stop offset="22%" stop-color="#e9cf89" stop-opacity="0.88"/>
+      <stop offset="78%" stop-color="#d6b569" stop-opacity="0.88"/>
+      <stop offset="100%" stop-color="#d6b569" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wm-emerald" x1="25%" y1="12%" x2="78%" y2="90%">
+      <stop offset="0%" stop-color="#96ebb6"/>
+      <stop offset="45%" stop-color="#4ec87d"/>
+      <stop offset="100%" stop-color="#1b5e37"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Right Side (RTL Start): Master Pistachio Octagonal Crest -->
+  <g transform="translate(306, 12) scale(0.8)">
+    <polygon points="36,6 84,6 114,36 114,84 84,114 36,114 6,84 6,36" fill="url(#wm-bg)" stroke="url(#wm-gold)" stroke-width="2.4"/>
+    <polygon points="39,12.5 81,12.5 107.5,39 107.5,81 81,107.5 39,107.5 12.5,81 12.5,39" fill="none" stroke="url(#wm-gold)" stroke-opacity="0.38" stroke-width="1"/>
+    <polygon points="60,21.5 64.2,25.7 60,29.9 55.8,25.7" fill="url(#wm-gold)"/>
+    <path d="M60 35.5 C68.5 43.2 72.5 55.2 69.2 68.5 C67.1 76.8 63.6 82.8 60 87.2 C56.4 82.8 52.9 76.8 50.8 68.5 C47.5 55.2 51.5 43.2 60 35.5 Z" fill="url(#wm-emerald)"/>
+    <path d="M60 95.5 C41.5 89.2 31.2 73.8 32.8 54.5 C33.9 42.4 39.8 34.4 45.2 31.2 C43.2 44.6 46.8 62.4 55.4 76.4 C57.3 79.5 58.9 82.2 60 84.5" fill="none" stroke="url(#wm-gold)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 95.5 C78.5 89.2 88.8 73.8 87.2 54.5 C86.1 42.4 80.2 34.4 74.8 31.2 C76.8 44.6 73.2 62.4 64.6 76.4 C62.7 79.5 61.1 82.2 60 84.5" fill="none" stroke="url(#wm-gold)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Vertical Gold Hairline Divider -->
+  <line x1="286" y1="24" x2="286" y2="96" stroke="url(#wm-gold)" stroke-opacity="0.34" stroke-width="1"/>
+
+  <!-- Bespoke Persian Calligraphic Wordmark Lockup -->
+  <text
+    x="264"
+    y="63"
+    text-anchor="end"
+    direction="rtl"
+    fill="#f4f2ec"
+    font-family="'Amiri', 'Vazirmatn', Georgia, serif"
+    font-size="48"
+    font-weight="700"
+  >مغزدانه</text>
+
+  <!-- Sculptural Gold Kashideh Underline + Center Diamond -->
+  <line x1="56" y1="79" x2="264" y2="79" stroke="url(#wm-gold-line)" stroke-width="1.2"/>
+  <polygon points="160,75.5 163.5,79 160,82.5 156.5,79" fill="url(#wm-gold)"/>
+
+  <!-- Heritage Sub-Signature -->
+  <text
+    x="264"
+    y="100"
+    text-anchor="end"
+    direction="rtl"
+    fill="#d6b569"
+    font-family="'Vazirmatn', system-ui, sans-serif"
+    font-size="11.5"
+    font-weight="600"
+    letter-spacing="0.4"
+  >اصالت مغز ایرانی · بنیان‌گذاری ۱۳۷۵</text>
+</svg>

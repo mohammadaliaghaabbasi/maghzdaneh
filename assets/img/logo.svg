@@ -1,22 +1,93 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="نشان مغزدانه">
   <defs>
-    <linearGradient id="mgz-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#13261b"/>
-      <stop offset="1" stop-color="#07100b"/>
+    <radialGradient id="mgz-bg" cx="50%" cy="35%" r="72%">
+      <stop offset="0%" stop-color="#112219"/>
+      <stop offset="68%" stop-color="#08120c"/>
+      <stop offset="100%" stop-color="#050a07"/>
+    </radialGradient>
+    <linearGradient id="mgz-gold" x1="14%" y1="8%" x2="86%" y2="92%">
+      <stop offset="0%" stop-color="#f2dfa6"/>
+      <stop offset="46%" stop-color="#d6b569"/>
+      <stop offset="100%" stop-color="#9c7a35"/>
     </linearGradient>
-    <linearGradient id="mgz-kernel" x1="0.2" y1="0" x2="0.8" y2="1">
-      <stop offset="0" stop-color="#7be8a3"/>
-      <stop offset="0.55" stop-color="#3da867"/>
-      <stop offset="1" stop-color="#1e633b"/>
+    <linearGradient id="mgz-gold-soft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ebd392" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#b48f42" stop-opacity="0.28"/>
     </linearGradient>
-    <linearGradient id="mgz-gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f3cf76"/>
-      <stop offset="1" stop-color="#b8861e"/>
+    <linearGradient id="mgz-emerald" x1="25%" y1="12%" x2="78%" y2="90%">
+      <stop offset="0%" stop-color="#96ebb6"/>
+      <stop offset="45%" stop-color="#4ec87d"/>
+      <stop offset="100%" stop-color="#1b5e37"/>
+    </linearGradient>
+    <linearGradient id="mgz-emerald-light" x1="20%" y1="8%" x2="65%" y2="75%">
+      <stop offset="0%" stop-color="#d5f9e2" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#4ec87d" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#mgz-bg)" stroke="url(#mgz-gold)" stroke-width="2"/>
-  <path d="M32 11 C43 14 49.5 23.5 47.5 36 C45.5 47.5 38 53 32 53 C26 53 18.5 47.5 16.5 36 C14.5 23.5 21 14 32 11 Z" fill="url(#mgz-kernel)"/>
-  <path d="M32 15 C37.5 19.5 40.5 27.5 38.8 37 C37.3 45 34 49 32 50" fill="none" stroke="#0d2417" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M31.5 15 C26 20 23.5 28 25 37 C26.3 44.5 29.5 49 31.5 50" fill="none" stroke="#a6f5c2" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
-  <circle cx="32" cy="11" r="2" fill="url(#mgz-gold)"/>
+
+  <!-- Chamfered Persian Octagonal Medallion -->
+  <polygon
+    points="36,6 84,6 114,36 114,84 84,114 36,114 6,84 6,36"
+    fill="url(#mgz-bg)"
+    stroke="url(#mgz-gold)"
+    stroke-width="2.2"
+    stroke-linejoin="miter"
+  />
+  <!-- Fine Inner Architectural Hairline -->
+  <polygon
+    points="39,12.5 81,12.5 107.5,39 107.5,81 81,107.5 39,107.5 12.5,81 12.5,39"
+    fill="none"
+    stroke="url(#mgz-gold-soft)"
+    stroke-width="0.9"
+  />
+
+  <!-- Crown Diamond Dot (Persian Calligraphic Noghteh) -->
+  <polygon points="60,21.5 64.2,25.7 60,29.9 55.8,25.7" fill="url(#mgz-gold)"/>
+
+  <!-- Living Emerald Pistachio Kernel Heart (Center Cleft) -->
+  <path
+    d="M60 35.5 C68.5 43.2 72.5 55.2 69.2 68.5 C67.1 76.8 63.6 82.8 60 87.2 C56.4 82.8 52.9 76.8 50.8 68.5 C47.5 55.2 51.5 43.2 60 35.5 Z"
+    fill="url(#mgz-emerald)"
+  />
+  <!-- Kernel Botanical Specular Facet -->
+  <path
+    d="M60 37.5 C65.2 44.5 67.2 54.4 64.8 65.5 C63.6 71.2 61.8 75.5 60 79 C59.4 69 59.4 50 60 37.5 Z"
+    fill="url(#mgz-emerald-light)"
+  />
+  <!-- Subtle Central Kernel Groove -->
+  <path
+    d="M60 40.5 L60 80.5"
+    stroke="#0c351e"
+    stroke-opacity="0.34"
+    stroke-width="1.15"
+    stroke-linecap="round"
+  />
+
+  <!-- Left Split Pistachio Shell Petal (Sculptural Tulip Curve) -->
+  <path
+    d="M60 95.5 C41.5 89.2 31.2 73.8 32.8 54.5 C33.9 42.4 39.8 34.4 45.2 31.2 C43.2 44.6 46.8 62.4 55.4 76.4 C57.3 79.5 58.9 82.2 60 84.5"
+    fill="none"
+    stroke="url(#mgz-gold)"
+    stroke-width="3.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Right Split Pistachio Shell Petal (Symmetrical Smiling Curve) -->
+  <path
+    d="M60 95.5 C78.5 89.2 88.8 73.8 87.2 54.5 C86.1 42.4 80.2 34.4 74.8 31.2 C76.8 44.6 73.2 62.4 64.6 76.4 C62.7 79.5 61.1 82.2 60 84.5"
+    fill="none"
+    stroke="url(#mgz-gold)"
+    stroke-width="3.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Fine Inner Shell Rim Accent -->
+  <path
+    d="M45.2 31.2 C38.8 46.2 40.2 72.2 60 91.5 C79.8 72.2 81.2 46.2 74.8 31.2"
+    fill="none"
+    stroke="#f2dfa6"
+    stroke-opacity="0.35"
+    stroke-width="0.95"
+    stroke-linecap="round"
+  />
 </svg>

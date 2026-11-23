@@ -1,14 +1,68 @@
 {
+  "id": "/",
   "name": "مغزدانه — بازار تخصصی مغز پسته، بادام و گردو",
   "short_name": "مغزدانه",
-  "description": "خرید و فروش تخصصی مغز پسته، بادام و گردو — خرده‌فروشی، نیم‌عمده و عمده با قیمت پلکانی شفاف",
-  "start_url": "index.html",
-  "display": "standalone",
-  "dir": "rtl",
+  "description": "مرجع تخصصی خرید و فروش خرده، نیم‌عمده و عمده مغز پسته، بادام و گردو؛ عرضه مستقیم از باغداران رفسنجان و بازارچه غرفه‌های فروشندگان.",
   "lang": "fa",
-  "background_color": "#07100b",
-  "theme_color": "#07100b",
+  "dir": "rtl",
+  "start_url": "/catalog.html?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#060907",
+  "theme_color": "#060907",
+  "categories": ["shopping", "food", "business"],
   "icons": [
-    { "src": "assets/img/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    {
+      "src": "/assets/img/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "فروشگاه مرکزی",
+      "short_name": "فروشگاه",
+      "url": "/catalog.html",
+      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "غرفه‌های فروشندگان",
+      "short_name": "غرفه‌ها",
+      "url": "/vendors.html",
+      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "سبد خرید",
+      "short_name": "سبد خرید",
+      "url": "/cart.html",
+      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "حساب کاربری",
+      "short_name": "حساب من",
+      "url": "/account.html",
+      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }

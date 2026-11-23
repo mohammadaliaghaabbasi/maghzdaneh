@@ -2,14 +2,20 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>درباره مغزدانه | ما مغز را می‌شناسیم</title>
   <meta name="description" content="داستان مغزدانه: از بازار عمده مغز تا پلتفرم تخصصی خرید و فروش مغز پسته، بادام و گردو بدون واسطه.">
-  <meta name="theme-color" content="#07100b">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
   <style>
     .about-banner {
       border-radius: var(--r-xl);
@@ -51,7 +57,7 @@
 
   <div class="page-head">
     <div class="container">
-      <span class="sec-label">ABOUT MAGHZDANEH — داستان ما</span>
+      <span class="sec-label">داستان و استاندارد کیفیت مغزدانه</span>
       <h1>درباره مغزدانه</h1>
       <p>چرا یک بازار تخصصی، فقط برای مغز پسته، بادام و گردو؟</p>
     </div>
@@ -81,7 +87,7 @@
           <ul class="bullets">
             <li><b>خرید از مبدأ:</b> پسته از رفسنجان، دامغان و یزد؛ بادام از سامان و همدان؛ گردو از تویسرکان و ارومیه.</li>
             <li><b>مغزکنی و برشته‌کاری اختصاصی:</b> در کارگاه خودمان، تازه و مطابق سفارش روز.</li>
-            <li><b>آزمایش رطوبت و پرخوری:</b> هر محموله ورودی قبل از پذیرش نمونه‌گیری و کنترل کیفیت می‌شود.</li>
+            <li><b>آزمایش رطوبت، خندانی و درصد پُرمغزی:</b> هر محمولهٔ ورودی پیش از پذیرش نمونه‌گیری و کنترل کیفیت می‌شود.</li>
           </ul>
 
           <h2>چرا تمرکز ویژه روی مغز پسته؟</h2>
@@ -108,7 +114,7 @@
             اگر مغزی که از ما خریدید تازه نبود یا با گرید و توضیحات ثبت‌شده در سایت مطابقت نداشت، تا ۷ روز پس از دریافت مرجوع کنید و کل مبلغ سفارش همراه با هزینه برگشت را دریافت نمایید. اعتبار یک نام تخصصی در بازار با یک بسته بی‌کیفیت از دست می‌رود و ما این را با پوست و استخوان می‌دانیم.
           </p>
           <div style="display:grid;gap:10px;margin-top:20px">
-            <a class="btn btn-primary" href="catalog.html">مشاهده کاتالوگ مغزها</a>
+            <a class="btn btn-primary" href="catalog.html">مشاهده فروشگاه مغزدانه</a>
             <a class="btn btn-outline" href="wholesale.html">محاسبه‌گر خرید عمده</a>
             <a class="btn btn-ghost" href="supply.html">همکاری باغداران و بنه‌داران</a>
           </div>
@@ -119,21 +125,23 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js?v=11"></script>
   <script>
     boot('about').then(async () => {
       document.getElementById('pledge-ico').innerHTML = icon('shield');
-      if (window.MgzCloud) {
-        const pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
-        if (pg && pg.aboutTitle) {
-          const h1 = document.querySelector('.page-head h1');
-          if (h1) h1.textContent = pg.aboutTitle;
-        }
-        if (pg && pg.aboutBody) {
-          const p = document.querySelector('.page-head p');
-          if (p) p.textContent = pg.aboutBody;
-        }
+      let pg = null;
+      try { const r = await fetch('/api/cms/pages'); if (r.ok) pg = (await r.json()).data; } catch {}
+      if (!pg && window.MgzCloud) {
+        pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
+      }
+      if (pg && pg.aboutTitle) {
+        const h1 = document.querySelector('.page-head h1');
+        if (h1) h1.textContent = pg.aboutTitle;
+      }
+      if (pg && pg.aboutBody) {
+        const p = document.querySelector('.page-head p');
+        if (p) p.textContent = pg.aboutBody;
       }
       if (window.MGZ) MGZ.init();
     });

@@ -2,14 +2,20 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>سبد خرید | مغزدانه</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
-  <meta name="theme-color" content="#07100b">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -18,7 +24,7 @@
     <div class="container">
       <span class="sec-label">بررسی نهایی قبل از تسویه</span>
       <h1>سبد خرید شما</h1>
-      <p>وزن و پله خرید هر محصول را بررسی کنید؛ در صورت نزدیک شدن به سقف پله بعدی، پیشنهاد ارتقا به شما نمایش داده می‌شود.</p>
+      <p>وزن، پله خرید، کد تخفیف و پیش‌فاکتور رسمی را بررسی کنید؛ در صورت نزدیک شدن به سقف پله بعدی، پیشنهاد ارتقا نمایش داده می‌شود.</p>
     </div>
   </div>
 
@@ -30,10 +36,13 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js?v=11"></script>
   <script>
     boot('').then(db => {
+      let couponFeedback = '';
+      let couponError = false;
+
       function render() {
         const area = document.getElementById('cart-area');
         if (!APP.cart.length) {
@@ -41,56 +50,66 @@
             <div class="empty">
               <div class="big">${icon('cart')}</div>
               <p style="color:#fff;font-weight:800">سبد خرید شما خالی است</p>
-              <p style="margin:8px 0 20px;font-size:var(--fs-sm)">از کاتالوگ مغزها، محصول مورد نظرتان را از ۲۵۰ گرم تا ۲۵ کیلو انتخاب کنید.</p>
-              <a class="btn btn-primary" href="catalog.html">رفتن به کاتالوگ</a>
+              <p style="margin:8px 0 20px;font-size:var(--fs-sm)">از فروشگاه مرکزی یا سازندهٔ جعبه هدیه، محصول مورد نظرتان را انتخاب کنید.</p>
+              <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+                <a class="btn btn-primary" href="catalog.html">رفتن به فروشگاه</a>
+                <a class="btn btn-outline" href="gifts.html">ساخت جعبه هدیه</a>
+              </div>
             </div>`;
           return;
         }
 
         const ship = db.site.shipping;
         const rows = APP.cart.map((it, idx) => {
-          const p = byId(it.id);
-          if (!p) return '';
-          const unit = p.prices[it.tier] || p.prices.retail;
-          const minQ = tierMin(it.tier);
-          const step = it.tier === 'wholesale' ? 5 : it.tier === 'semi' ? 1 : 0.25;
+          const meta = cartItemMeta(it);
+          if (!meta) return '';
+          const custom = isCustomCartItem(it);
+          const p = custom ? null : byId(it.id);
+          const unit = cartItemUnit(it);
+          const minQ = custom ? 1 : tierMin(it.tier);
+          const step = custom ? 1 : it.tier === 'wholesale' ? 5 : it.tier === 'semi' ? 1 : 0.25;
           let upgradeHtml = '';
-          if (it.tier === 'retail' && it.qty >= 3) {
+          if (p && it.tier === 'retail' && it.qty >= 3) {
             const pct = Math.round((1 - p.prices.semi / p.prices.retail) * 100);
             upgradeHtml = `<div class="tier-upgrade-tip"><span>با ۵ کیلو ٪${fmt(pct)} تخفیف نیم‌عمده بگیرید</span><button type="button" data-upg="${idx}" data-to="semi">ارتقا به نیم‌عمده</button></div>`;
-          } else if (it.tier === 'semi' && it.qty >= 18) {
+          } else if (p && it.tier === 'semi' && it.qty >= 18) {
             const pct = Math.round((1 - p.prices.wholesale / p.prices.retail) * 100);
             upgradeHtml = `<div class="tier-upgrade-tip"><span>با ۲۵ کیلو ٪${fmt(pct)} تخفیف عمده بگیرید</span><button type="button" data-upg="${idx}" data-to="wholesale">ارتقا به عمده</button></div>`;
           }
+          const href = custom ? (it.kind === 'gift-box' ? 'gifts.html' : 'wholesale.html') : `product.html?id=${encodeURIComponent(it.id)}`;
           return `
           <tr>
-            <td><a href="product.html?id=${p.id}"><img src="${p.img}" alt="${p.name}" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'${p.name}')"></a></td>
+            <td><a href="${href}"><img src="${esc(safeImgUrl(meta.img))}" alt="${esc(meta.name)}" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'${esc(meta.name)}')"></a></td>
             <td>
-              <a href="product.html?id=${p.id}" style="color:#fff;font-weight:800">${p.name}</a><br>
-              <span style="color:var(--c-text-soft);font-size:var(--fs-xs)">پله: ${tierLabel(it.tier)} · حداقل ${fmt(minQ)} کیلو</span>
+              <a href="${href}" style="color:#fff;font-weight:800">${esc(meta.name)}</a><br>
+              <span style="color:var(--c-text-soft);font-size:var(--fs-xs)">
+                ${custom ? (it.kind === 'gift-box' ? 'پک هدیه سفارشی' : 'بسته نمونه ۵ گرید (قابل کسر از سفارش ۲۵+ کیلو)') : `پله: ${tierLabel(it.tier)} · حداقل ${fmt(minQ)} کیلو`}
+              </span>
+              ${it.variantLabel ? `<div style="color:var(--c-accent-light);font-size:0.75rem;margin-top:3px">${esc(it.variantLabel)}</div>` : ''}
               ${upgradeHtml}
             </td>
-            <td style="white-space:nowrap">${fmt(unit)}</td>
+            <td style="white-space:nowrap" class="num">${fmt(unit)}</td>
             <td style="min-width:136px">
               <div class="qty-box" style="max-width:144px">
                 <button type="button" data-dec="${idx}" data-step="${step}" aria-label="کاهش" ${it.qty <= minQ ? 'disabled style="opacity:0.35"' : ''}>−</button>
                 <input type="number" min="${minQ}" step="${step}" value="${it.qty}" data-q="${idx}" style="width:58px" aria-label="مقدار">
                 <button type="button" data-inc="${idx}" data-step="${step}" aria-label="افزایش">+</button>
               </div>
+              <div style="font-size:0.7rem;color:var(--c-text-muted);margin-top:3px">${meta.unitLabel}</div>
             </td>
-            <td style="font-weight:900;white-space:nowrap;color:var(--c-primary-light)">${fmt(Math.round(unit * it.qty))}</td>
+            <td style="font-weight:900;white-space:nowrap;color:var(--c-primary-light)" class="num">${fmt(Math.round(unit * it.qty))}</td>
             <td><button type="button" class="rm-btn" data-rm="${idx}" aria-label="حذف">${icon('trash')}</button></td>
           </tr>`;
         }).join('');
 
         const t = cartTotals();
-        const pct = Math.min(100, Math.round((t.subtotal / Math.max(1, t.freeOver)) * 100));
+        const pct = Math.min(100, Math.round((t.afterDiscount / Math.max(1, t.freeOver)) * 100));
 
         area.innerHTML = `
           <div style="display:grid;gap:24px;grid-template-columns:minmax(0, 2fr) minmax(0, 1fr);align-items:start" class="cart-layout">
             <div class="table-wrap">
               <table class="shop">
-                <thead><tr><th></th><th>محصول و پله</th><th>قیمت کیلو</th><th>وزن (کیلو)</th><th>جمع (تومان)</th><th></th></tr></thead>
+                <thead><tr><th></th><th>محصول، فرآوری و پله</th><th>قیمت واحد</th><th>مقدار</th><th>جمع (تومان)</th><th></th></tr></thead>
                 <tbody>${rows}</tbody>
               </table>
             </div>
@@ -98,12 +117,28 @@
               <h3>خلاصه سفارش</h3>
               <div class="sum-row"><span>مجموع وزن</span><span>${fmt(t.totalKg)} کیلوگرم</span></div>
               <div class="sum-row"><span>جمع کالاها</span><span>${faToman(t.subtotal)}</span></div>
+              ${t.discount > 0 ? `
+                <div class="sum-row" style="color:var(--c-primary-light)">
+                  <span>تخفیف (${esc(t.couponCode)}) <button type="button" id="rm-coupon" style="color:var(--c-danger);font-size:0.72rem;margin-right:4px">[حذف]</button></span>
+                  <span>− ${faToman(t.discount)}</span>
+                </div>` : ''}
               <div class="sum-row"><span>هزینه ارسال</span><span>${t.freeShip ? 'رایگان' : faToman(t.shipCost)}</span></div>
               <div class="ship-progress"><i style="width:${pct}%"></i></div>
               <div class="sum-row total"><span>قابل پرداخت</span><span>${faToman(t.grand)}</span></div>
-              ${!t.freeShip ? `<p class="free-ship-note">با ${faToman(t.freeOver - t.subtotal)} خرید بیشتر، ارسال رایگان می‌شود.</p>` : `<p class="free-ship-note" style="color:var(--c-primary-light)">سفارش شما مشمول ارسال رایگان است.</p>`}
-              ${t.totalKg > 10 ? `<p class="free-ship-note">${ship.heavy_note}</p>` : ''}
-              <a class="btn btn-primary" href="checkout.html" style="width:100%;margin-top:16px">ادامه تسویه‌حساب</a>
+              ${!t.freeShip ? `<p class="free-ship-note">با ${faToman(t.freeOver - t.afterDiscount)} خرید بیشتر، ارسال رایگان می‌شود.</p>` : `<p class="free-ship-note" style="color:var(--c-primary-light)">سفارش شما مشمول ارسال رایگان است.</p>`}
+              ${t.totalKg > 10 ? `<p class="free-ship-note">${esc(ship.heavy_note)}</p>` : ''}
+
+              <div class="coupon-box">
+                <label for="coupon-inp" style="font-size:var(--fs-xs);font-weight:800;color:var(--c-accent-light)">کد تخفیف دارید؟</label>
+                <div class="coupon-row">
+                  <input id="coupon-inp" class="ltr" value="${esc((APP.coupon && APP.coupon.code) || '')}" placeholder="مثلاً MAGHZ10 یا BAHAR200">
+                  <button type="button" class="btn btn-outline btn-sm" id="apply-coupon">اعمال</button>
+                </div>
+                <div class="coupon-msg" style="color:${couponError ? 'var(--c-danger)' : 'var(--c-primary-light)'}">${esc(couponFeedback)}</div>
+              </div>
+
+              <a class="btn btn-primary" href="checkout.html" style="width:100%;margin-top:14px">ادامه تسویه‌حساب</a>
+              <button type="button" class="btn btn-outline" id="btn-proforma" style="width:100%;margin-top:10px">${icon('receipt')} صدور پیش‌فاکتور رسمی / چاپ PDF</button>
               <a class="btn btn-outline" href="catalog.html" style="width:100%;margin-top:10px">افزودن محصول بیشتر</a>
             </aside>
           </div>`;
@@ -113,6 +148,30 @@
         area.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => setCartItemQty(+b.dataset.inc, APP.cart[+b.dataset.inc].qty + parseFloat(b.dataset.step)));
         area.querySelectorAll('[data-q]').forEach(inp => inp.onchange = () => setCartItemQty(+inp.dataset.q, parseFloat(inp.value)));
         area.querySelectorAll('[data-upg]').forEach(b => b.onclick = () => upgradeCartItemTier(+b.dataset.upg, b.dataset.to));
+
+        const rmC = document.getElementById('rm-coupon');
+        if (rmC) rmC.onclick = () => { couponFeedback = ''; couponError = false; clearCoupon(); };
+
+        document.getElementById('apply-coupon').onclick = async () => {
+          const code = document.getElementById('coupon-inp').value.trim();
+          if (!code) { couponError = true; couponFeedback = 'کد تخفیف را وارد کنید.'; render(); return; }
+          try {
+            const res = await apiFetch('/api/coupons/validate', {
+              method: 'POST',
+              body: JSON.stringify({ code, subtotal: t.subtotal }),
+            });
+            couponError = false;
+            couponFeedback = `کد «${res.coupon.code}» با ${faToman(res.discount)} تخفیف اعمال شد.`;
+            setCoupon({ ...res.coupon, discount: res.discount });
+            toast(couponFeedback);
+          } catch (err) {
+            couponError = true;
+            couponFeedback = err.message || 'کد تخفیف معتبر نیست.';
+            clearCoupon();
+          }
+        };
+
+        document.getElementById('btn-proforma').onclick = () => openInvoiceModal();
       }
 
       render();

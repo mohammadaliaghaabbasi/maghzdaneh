@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>مجله و مقالات تخصصی خشکبار | مغزدانه</title>
+  <meta name="description" content="مقالات تخصصی تشخیص پسته خندان طبیعی از آب‌خندان، انتخاب خلال پسته قزوین، اصول علمی نگهداری مغزها و راهنمای خرید عمده و صادراتی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <!-- Magazine Listing View -->
+  <div id="articles-list-view">
+    <div class="page-head">
+      <div class="container page-head-row">
+        <div>
+          <span class="sec-label">دانش‌نامه تخصصی پسته، بادام و گردو</span>
+          <h1>مجله و مقالات مغزدانه</h1>
+          <p>راهنمای کارشناسی برای تشخیص کیفیت واقعی مغزها، انتخاب گرید مناسب قنادی، نگهداری اصولی بدون افت عطر و تحلیل بازار برداشت.</p>
+        </div>
+        <a class="btn btn-outline" href="catalog.html">رفتن به فروشگاه ←</a>
+      </div>
+    </div>
+
+    <section>
+      <div class="container">
+        <div class="chips" id="art-cats" role="tablist" aria-label="دسته‌بندی مقالات"></div>
+        <div id="art-lead-wrap"></div>
+        <div class="articles-grid" id="art-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Single Article Reader View (?slug=...) -->
+  <div id="article-reader-view" hidden>
+    <div class="page-head">
+      <div class="container">
+        <div class="article-reader">
+          <nav class="crumb" style="padding-top:0;padding-bottom:14px">
+            <a href="index.html">مغزدانه</a>
+            <span>›</span>
+            <a href="articles.html">مجله و مقالات</a>
+            <span>›</span>
+            <b id="ar-crumb">مقاله</b>
+          </nav>
+          <span class="sec-label" id="ar-cat">راهنمای خرید</span>
+          <h1 id="ar-title" style="font-size:clamp(1.65rem,3vw,2.45rem);line-height:1.35"></h1>
+          <p id="ar-meta" style="font-size:0.86rem;color:var(--lux-soft);margin-top:12px"></p>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="container">
+        <article class="article-reader">
+          <div class="article-reader-cover">
+            <img id="ar-cover" src="" alt="">
+          </div>
+          <div class="article-reader-body" id="ar-body"></div>
+          <div style="margin-top:36px;padding-top:24px;border-top:1px solid var(--lux-line);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+            <a class="btn btn-outline" href="articles.html">← بازگشت به همه مقالات</a>
+            <a class="btn btn-primary" href="catalog.html">مشاهده محصولات مرتبط در فروشگاه</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=19"></script>
+  <script>
+    const slug = new URLSearchParams(location.search).get('slug');
+    let allArticles = [];
+    let activeCat = 'all';
+
+    boot('articles').then(async () => {
+      if (slug) {
+        await renderArticleReader(slug);
+      } else {
+        await loadArticlesList();
+      }
+    });
+
+    async function loadArticlesList() {
+      try {
+        const res = await apiFetch('/api/articles');
+        allArticles = Array.isArray(res.articles) ? res.articles : [];
+        renderCategoryChips();
+        renderArticles();
+      } catch {
+        document.getElementById('art-grid').innerHTML = '<div class="empty" style="grid-column:1/-1"><p>خطا در دریافت مقالات.</p></div>';
+      }
+    }
+
+    function renderCategoryChips() {
+      const cats = ['all', ...new Set(allArticles.map(a => a.category).filter(Boolean))];
+      const wrap = document.getElementById('art-cats');
+      wrap.innerHTML = cats.map(c => `
+        <button type="button" role="tab" aria-selected="${activeCat === c}" class="chip ${activeCat === c ? 'active' : ''}" data-acat="${esc(c)}">
+          ${c === 'all' ? 'همه مقالات' : esc(c)}
+        </button>`).join('');
+      wrap.querySelectorAll('[data-acat]').forEach(btn => {
+        btn.onclick = () => {
+          activeCat = btn.dataset.acat;
+          renderCategoryChips();
+          renderArticles();
+        };
+      });
+    }
+
+    function renderArticles() {
+      const list = activeCat === 'all' ? allArticles : allArticles.filter(a => a.category === activeCat);
+      const leadWrap = document.getElementById('art-lead-wrap');
+      const grid = document.getElementById('art-grid');
+
+      if (!list.length) {
+        leadWrap.innerHTML = '';
+        grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>مقاله‌ای در این دسته ثبت نشده است.</p></div>';
+        return;
+      }
+
+      const lead = list.find(a => a.featured) || list[0];
+      const rest = list.filter(a => a.id !== lead.id);
+
+      leadWrap.innerHTML = `
+        <a class="article-lead" href="articles.html?slug=${encodeURIComponent(lead.slug)}">
+          <div class="article-lead-media">
+            <img src="${esc(safeImgUrl(lead.coverImage, 'src/assets/images/article_pistachio_grading_1795350767749.jpg'))}" alt="${esc(lead.title)}">
+          </div>
+          <div class="article-lead-body">
+            <div class="article-meta-line">
+              <span>${esc(lead.category)}</span>
+              <span>·</span>
+              <span>${fmt(lead.readMinutes || 5)} دقیقه مطالعه</span>
+              <span>·</span>
+              <span>${esc(lead.publishedAt || '')}</span>
+            </div>
+            <h2>${esc(lead.title)}</h2>
+            <p>${esc(lead.excerpt)}</p>
+            <span style="color:var(--lux-gold);font-weight:800;font-size:0.88rem">مطالعه کامل مقاله ←</span>
+          </div>
+        </a>`;
+
+      grid.innerHTML = rest.map(a => `
+        <a class="article-card" href="articles.html?slug=${encodeURIComponent(a.slug)}">
+          <div class="article-card-media">
+            <img src="${esc(safeImgUrl(a.coverImage, 'src/assets/images/article_green_slivers_1795350767949.jpg'))}" alt="${esc(a.title)}" loading="lazy">
+          </div>
+          <div class="article-card-body">
+            <div class="article-meta-line">
+              <span>${esc(a.category)}</span>
+              <span>·</span>
+              <span>${fmt(a.readMinutes || 5)} دقیقه</span>
+            </div>
+            <h3 class="article-card-title">${esc(a.title)}</h3>
+            <p class="article-card-excerpt">${esc(a.excerpt)}</p>
+            <div class="article-card-foot">
+              <span>${esc(a.author || 'تحریریه مغزدانه')}</span>
+              <span>${esc(a.publishedAt || '')}</span>
+            </div>
+          </div>
+        </a>`).join('');
+    }
+
+    async function renderArticleReader(articleSlug) {
+      document.getElementById('articles-list-view').hidden = true;
+      document.getElementById('article-reader-view').hidden = false;
+      try {
+        const { article } = await apiFetch(`/api/articles/${encodeURIComponent(articleSlug)}`);
+        document.title = `${article.title} | مجله مغزدانه`;
+        document.getElementById('ar-crumb').textContent = article.title;
+        document.getElementById('ar-cat').textContent = article.category || 'مقاله تخصصی';
+        document.getElementById('ar-title').textContent = article.title;
+        document.getElementById('ar-meta').textContent = `${article.author || 'تحریریه مغزدانه'} · ${fmt(article.readMinutes || 5)} دقیقه مطالعه · انتشار: ${article.publishedAt || ''}`;
+        document.getElementById('ar-cover').src = safeImgUrl(article.coverImage, 'src/assets/images/article_pistachio_grading_1795350767749.jpg');
+        document.getElementById('ar-cover').alt = article.title;
+        const paras = Array.isArray(article.body) ? article.body : [String(article.body || '')];
+        document.getElementById('ar-body').innerHTML = paras.map(p => `<p>${esc(p)}</p>`).join('');
+      } catch {
+        document.getElementById('ar-title').textContent = 'مقاله مورد نظر یافت نشد';
+      }
+    }
+  </script>
+</body>
+</html>

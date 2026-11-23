@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>بازارچهٔ غرفه‌های فروشندگان | مغزدانه</title>
+  <meta name="description" content="خرید مستقیم از بازارچهٔ غرفه‌های مستقل باغداران و کارگاه‌های خشکبار سراسر ایران با نشان احراز هویت و امکان پیام مستقیم به غرفه‌دار.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <!-- Directory View -->
+  <div id="vendors-directory-view">
+    <div class="page-head">
+      <div class="container page-head-row">
+        <div>
+          <span class="sec-label">بازارچهٔ مستقل باغداران و کارگاه‌های تخصصی</span>
+          <h1>بازارچهٔ غرفه‌های فروشندگان</h1>
+          <p>در اینجا غرفه‌های اختصاصی باغداران و کارگاه‌های معتبر را می‌بینید و مستقیم از خود تولیدکننده خرید می‌کنید. اگر خودتان تولیدکننده هستید، از «پنل مدیریت غرفهٔ من» غرفه‌تان را در همین بازارچه بسازید و مدیریت کنید.</p>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-gold" href="seller.html">ورود به پنل مدیریت غرفهٔ من ←</a>
+          <a class="btn btn-outline" href="catalog.html?source=house">فروشگاه مرکزی مغزدانه</a>
+        </div>
+      </div>
+    </div>
+
+    <section style="padding-block:clamp(28px, 4vw, 48px)">
+      <div class="container">
+        <!-- 3-Channel Clarity Guide -->
+        <div id="channel-guide-mount"></div>
+
+        <div class="curated-head">
+          <div>
+            <span class="band-kicker">غرفه‌های فعال بازارچه</span>
+            <h2>باغداران و کارگاه‌های منتخب</h2>
+          </div>
+          <span class="curated-note" id="vendors-count"></span>
+        </div>
+
+        <div class="vendors-grid" id="vendors-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Single Vendor Stall View (?shop=<slug>) -->
+  <div id="vendor-single-view" hidden>
+    <div class="page-head">
+      <div class="container">
+        <nav class="crumb" style="padding-top:0;padding-bottom:14px">
+          <a href="index.html">مغزدانه</a>
+          <span>›</span>
+          <a href="vendors.html">بازارچهٔ غرفه‌های فروشندگان</a>
+          <span>›</span>
+          <b id="vs-crumb-name">غرفه</b>
+        </nav>
+        <div class="vendor-banner-hero" style="margin-bottom:0">
+          <div class="vendor-banner-media">
+            <img id="vs-cover" src="" alt="">
+          </div>
+          <div class="vendor-banner-copy">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span class="band-kicker" id="vs-kicker">غرفهٔ مستقل بازارچه</span>
+              <span class="verified-tag" id="vs-verified-badge" hidden>✓ غرفهٔ تأییدشدهٔ مغزدانه</span>
+            </div>
+            <h1 id="vs-name" style="font-size:clamp(1.6rem,2.8vw,2.25rem);font-weight:900;color:#fff"></h1>
+            <p id="vs-bio"></p>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.84rem;color:var(--lux-soft)">
+              <span id="vs-owner"></span>
+              <span>·</span>
+              <span id="vs-city"></span>
+              <span id="vs-phone-wrap"></span>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+              <a class="btn btn-outline btn-sm" href="vendors.html">← بازگشت به همهٔ غرفه‌ها</a>
+              <a class="btn btn-primary btn-sm" href="#vendor-msg-section">پیام و استعلام به غرفه‌دار</a>
+              <a class="btn btn-gold btn-sm" href="seller.html">مدیریت غرفهٔ خودتان</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="container">
+        <div class="page-head-row" style="margin-bottom:28px">
+          <div>
+            <span class="band-kicker">محصولات عرضهٔ مستقیم این غرفه</span>
+            <h2 id="vs-products-title" style="font-size:var(--fs-lg);font-weight:900;color:#fff">کالاهای غرفه</h2>
+          </div>
+          <div id="vs-tier-switcher"></div>
+        </div>
+        <div class="grid" id="vs-products-grid"></div>
+        <div class="empty" id="vs-empty" hidden>
+          <p style="color:#fff;font-weight:800">این غرفه هنوز محصولی ثبت نکرده است</p>
+          <p style="margin:8px 0 16px;font-size:0.86rem">می‌توانید محصولات سایر غرفه‌ها یا فروشگاه مرکزی مغزدانه را ببینید.</p>
+          <a class="btn btn-primary btn-sm" href="catalog.html">مشاهده فروشگاه</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direct Messaging to Vendor -->
+    <section class="sec-alt" id="vendor-msg-section">
+      <div class="container">
+        <form class="contact-card" id="vendor-msg-form" style="max-width:740px">
+          <h3>ارسال پیام یا استعلام مستقیم به غرفه‌دار</h3>
+          <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">پیام شما مستقیماً در صندوق پیام‌های پنل مدیریت این غرفه ثبت می‌شود و پاسخ از سوی خود غرفه‌دار ارسال خواهد شد.</p>
+          <div class="form-grid">
+            <div class="field"><label for="vm-name">نام شما *</label><input id="vm-name" required placeholder="نام و نام خانوادگی"></div>
+            <div class="field"><label for="vm-phone">شماره تماس (برای پاسخ) *</label><input id="vm-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" class="ltr" style="text-align:right"></div>
+            <div class="field form-full"><label for="vm-body">متن پیام یا استعلام موجودی/قیمت عمده *</label><textarea id="vm-body" required rows="3" placeholder="مثلاً: لطفاً شرایط ارسال ۲۰ کیلو مغز پسته برداشت امسال را اعلام بفرمایید…"></textarea></div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm" style="margin-top:14px" id="vm-submit">ارسال پیام به غرفه‌دار</button>
+          <div id="vm-status" style="font-size:var(--fs-xs);color:var(--c-primary-light);margin-top:10px"></div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=19"></script>
+  <script>
+    const shopSlug = new URLSearchParams(location.search).get('shop');
+    let activeVendorId = null;
+
+    boot('vendors').then(async () => {
+      if (shopSlug) {
+        await renderSingleShop(shopSlug);
+      } else {
+        document.getElementById('channel-guide-mount').innerHTML = renderChannelGuideHtml('vendors');
+        await renderDirectory();
+      }
+    });
+
+    async function renderDirectory() {
+      const grid = document.getElementById('vendors-grid');
+      const countEl = document.getElementById('vendors-count');
+      try {
+        const res = await apiFetch('/api/vendors');
+        const vendors = Array.isArray(res.vendors) ? res.vendors : [];
+        countEl.textContent = `${fmt(vendors.length)} غرفهٔ فعال`;
+        if (!vendors.length) {
+          grid.innerHTML = `
+            <div class="empty" style="grid-column:1/-1">
+              <p style="color:#fff;font-weight:800">هنوز غرفه‌ای ثبت نشده است</p>
+              <a class="btn btn-primary btn-sm" href="seller.html" style="margin-top:14px">اولین غرفه را بسازید</a>
+            </div>`;
+          return;
+        }
+        grid.innerHTML = vendors.map(v => `
+          <a class="vendor-card" href="vendors.html?shop=${encodeURIComponent(v.slug)}">
+            <div class="vendor-card-cover">
+              <img src="${esc(safeImgUrl(v.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg'))}" alt="${esc(v.name)}" loading="lazy">
+            </div>
+            <div class="vendor-card-body">
+              <div class="vendor-card-meta" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+                <span>${esc(v.city)}</span>
+                ${v.verified ? '<span class="verified-tag">✓ غرفهٔ تأییدشده</span>' : ''}
+              </div>
+              <h3 class="vendor-card-title">${esc(v.name)}</h3>
+              <p class="vendor-card-bio">${esc(v.bio || v.specialty)}</p>
+              <div class="vendor-card-foot">
+                <span>تخصص: ${esc(v.specialty || 'خشکبار دست‌اول')}</span>
+                <strong style="color:var(--lux-emerald)">${fmt(v.productCount || 0)} محصول ←</strong>
+              </div>
+            </div>
+          </a>`).join('');
+      } catch {
+        grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>خطا در دریافت لیست غرفه‌ها.</p></div>';
+      }
+    }
+
+    async function renderSingleShop(slug) {
+      document.getElementById('vendors-directory-view').hidden = true;
+      document.getElementById('vendor-single-view').hidden = false;
+
+      try {
+        const res = await apiFetch(`/api/vendors/${encodeURIComponent(slug)}`);
+        const { vendor, products } = res;
+        activeVendorId = vendor.id;
+        document.title = `${vendor.name} | بازارچهٔ غرفه‌های مغزدانه`;
+        document.getElementById('vs-crumb-name').textContent = vendor.name;
+        document.getElementById('vs-cover').src = safeImgUrl(vendor.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg');
+        document.getElementById('vs-cover').alt = vendor.name;
+        document.getElementById('vs-kicker').textContent = 'غرفهٔ فروشنده در بازارچهٔ مغزدانه';
+        document.getElementById('vs-verified-badge').hidden = !vendor.verified;
+        document.getElementById('vs-name').textContent = vendor.name;
+        document.getElementById('vs-bio').textContent = vendor.bio || vendor.specialty || '';
+        document.getElementById('vs-owner').textContent = `مدیریت غرفه: ${vendor.ownerName || 'باغدار'}`;
+        document.getElementById('vs-city').textContent = `مبدأ: ${vendor.city}`;
+        if (vendor.phone) {
+          document.getElementById('vs-phone-wrap').innerHTML = `· تماس: <span class="ltr" style="color:var(--lux-gold)">${esc(vendor.phone)}</span>`;
+        }
+        document.getElementById('vs-products-title').textContent = `محصولات ${vendor.name} (${fmt(products.length)} کالا)`;
+
+        renderTierSwitcher(document.getElementById('vs-tier-switcher'));
+
+        const paint = () => {
+          const grid = document.getElementById('vs-products-grid');
+          const empty = document.getElementById('vs-empty');
+          if (!products.length) {
+            grid.innerHTML = '';
+            empty.hidden = false;
+            return;
+          }
+          empty.hidden = true;
+          grid.innerHTML = products.map(productCard).join('');
+          bindAddButtons(grid);
+        };
+        paint();
+        document.addEventListener('tier:changed', paint);
+
+        if (APP.serverUser) {
+          if (APP.serverUser.fullName) document.getElementById('vm-name').value = APP.serverUser.fullName;
+          if (APP.serverUser.phone) document.getElementById('vm-phone').value = APP.serverUser.phone;
+        }
+
+        document.getElementById('vendor-msg-form').addEventListener('submit', async e => {
+          e.preventDefault();
+          const btn = document.getElementById('vm-submit');
+          btn.disabled = true;
+          try {
+            await apiFetch(`/api/vendors/${encodeURIComponent(activeVendorId)}/message`, {
+              method: 'POST',
+              body: JSON.stringify({
+                senderName: document.getElementById('vm-name').value.trim(),
+                phone: document.getElementById('vm-phone').value.trim(),
+                body: document.getElementById('vm-body').value.trim(),
+              }),
+            });
+            document.getElementById('vm-body').value = '';
+            document.getElementById('vm-status').textContent = '✓ پیام شما با موفقیت در صندوق غرفه‌دار ثبت شد.';
+            toast('پیام شما به غرفه‌دار ارسال شد');
+          } catch (err) {
+            toast(err.message || 'خطا در ارسال پیام');
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      } catch {
+        document.getElementById('vs-name').textContent = 'غرفهٔ مورد نظر یافت نشد';
+        document.getElementById('vs-empty').hidden = false;
+      }
+    }
+  </script>
+</body>
+</html>

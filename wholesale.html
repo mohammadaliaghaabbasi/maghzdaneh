@@ -2,33 +2,95 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>خرید عمده مغزها با قیمت پلکانی | مغزدانه</title>
-  <meta name="description" content="خرید عمده و نیم‌عمده مغز پسته، بادام و گردو با قیمت پلکانی شفاف: از ۵ کیلو نیم‌عمده، از ۲۵ کیلو قیمت بورس مغز. مخصوص قنادی، آجیل‌فروشی، شیرینی‌فروشی و رستوران.">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/fx.css">
-  <meta name="theme-color" content="#07100b">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>خرید عمده، نرخ روز بازار و بستهٔ نمونه | مغزدانه</title>
+  <meta name="description" content="خرید عمده و نیم‌عمده مغز پسته، بادام و گردو با قیمت پلکانی شفاف، تابلوی نرخ روز بازار، بستهٔ نمونه ۵ گرید و اشتراک تأمین دوره‌ای ماهانه.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
   <div class="page-head">
+    <div class="container page-head-row">
+      <div>
+        <span class="sec-label">قیمت‌گذاری شفاف سازمانی، قنادی و صادراتی</span>
+        <h1>خرید عمده، نرخ روز و بستهٔ نمونه</h1>
+        <p>قیمت شما با وزن سفارش عوض می‌شود، نه با چانه‌زنی. نرخ لحظه‌ای بازار مغز را ببینید، بستهٔ نمونه ۵ گرید سفارش دهید یا قرارداد تأمین دوره‌ای ماهانه ببندید.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-outline" href="#sample-pack">بستهٔ نمونه ۵ گرید</a>
+        <a class="btn btn-outline" href="#subscription-sec">اشتراک ماهانه (۵٪ تخفیف)</a>
+        <a class="btn btn-outline" href="supply.html">فروش نقدی بار به مغزدانه ←</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= تابلوی نرخ روز بازار مغز ================= -->
+  <section>
     <div class="container">
-      <span class="sec-label">قیمت‌گذاری شفاف B2B و قنادی</span>
-      <h1>خرید عمده با قیمت پلکانی</h1>
-      <p>قیمت شما با وزن سفارش عوض می‌شود، نه با چانه‌زنی. پله‌ها از قبل شفاف است — مخصوص قنادی‌ها، آجیل‌فروشی‌ها، رستوران‌ها و صنایع غذایی.</p>
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">شاخص لحظه‌ای بورس رفسنجان و تویسرکان</span>
+        <h2>تابلوی نرخ روز بازار مغز</h2>
+        <p id="rates-updated">به‌روزرسانی امروز بر مبنای معاملات عمدهٔ ۲۵ کیلو به بالا — برای دریافت پیامک افت قیمت، هشدار ثبت کنید.</p>
+      </div>
+      <div class="table-wrap" data-reveal>
+        <table class="shop" id="market-rates-table">
+          <thead>
+            <tr>
+              <th>گرید شاخص</th>
+              <th>مبدأ</th>
+              <th>نرخ روز (تومان / کیلو)</th>
+              <th>تغییر نسبت به دیروز</th>
+              <th>هشدار قیمت</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="5" style="text-align:center;color:var(--c-text-muted)">در حال دریافت نرخ روز بازار…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- مودال ثبت هشدار افت قیمت نرخ روز -->
+  <div class="modal-back" id="rate-alert-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <h3 style="margin:0">ثبت هشدار تغییر قیمت بازار</h3>
+        <button type="button" class="drawer-close" id="ra-close" aria-label="بستن">×</button>
+      </div>
+      <p id="ra-desc" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px"></p>
+      <form id="ra-form" style="display:grid;gap:12px">
+        <input type="hidden" id="ra-id">
+        <input type="hidden" id="ra-name">
+        <div class="field">
+          <label for="ra-phone">شماره موبایل دریافت هشدار *</label>
+          <input id="ra-phone" class="ltr" required inputmode="tel" placeholder="09123456789" style="text-align:right">
+        </div>
+        <div class="field">
+          <label for="ra-target">نرخ هدف (تومان / کیلو)</label>
+          <input id="ra-target" type="number" class="ltr" min="10000" step="10000" style="text-align:right">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">ثبت هشدار نرخ بازار</button>
+      </form>
     </div>
   </div>
 
   <!-- ================= ماشین‌حساب زنده خرید عمده ================= -->
-  <section>
+  <section class="sec-alt">
     <div class="container">
       <div class="sec-head" data-reveal>
-        <span class="sec-label">ماشین‌حساب آنلاین صرفه‌جویی</span>
+        <span class="sec-label">ماشین‌حساب آنلاین و پیش‌فاکتور</span>
         <h2>محاسبه دقیق قیمت و سود خرید پلکانی</h2>
-        <p>محصول و وزن مورد نظرتان را انتخاب کنید تا پله خرید، قیمت هر کیلو و میزان صرفه‌جویی شما دقیق محاسبه شود.</p>
+        <p>محصول و وزن مورد نظرتان را انتخاب کنید تا پله خرید، قیمت هر کیلو، میزان صرفه‌جویی و پیش‌فاکتور رسمی آماده شود.</p>
       </div>
       <div class="calc-box" data-reveal>
         <div style="display:grid;gap:18px">
@@ -55,15 +117,69 @@
     </div>
   </section>
 
-  <!-- ================= کارت‌های سه پله ================= -->
-  <section class="sec-alt">
+  <!-- ================= سازنده بستهٔ نمونه ۵ گرید (۵ × ۱۰۰ گرم) ================= -->
+  <section id="sample-pack">
     <div class="container">
       <div class="sec-head" data-reveal>
-        <span class="sec-label">انتخاب پله فعال سایت</span>
-        <h2>سه پله، سه قیمت — بدون ابهام</h2>
-        <p>با انتخاب هر پله، قیمت کل کاتالوگ و صفحه اصلی فوراً روی آن پله تنظیم می‌شود.</p>
+        <span class="sec-label">تست کیفیت قبل از خرید عمده</span>
+        <h2>سفارش بستهٔ نمونهٔ ۵ گرید (۵ × ۱۰۰ گرم)</h2>
+        <p>پیش از سفارش ۲۵ کیلویی، ۵ گرید دلخواه را در پاکت‌های ۱۰۰ گرمی وکیوم‌شده تست کنید؛ <strong>کل هزینهٔ بستهٔ نمونه از اولین فاکتور عمدهٔ شما کسر می‌شود.</strong></p>
       </div>
-      <div class="tier-cards" id="tier-cards" data-reveal-stagger></div>
+      <div class="calc-box" data-reveal>
+        <div style="display:grid;gap:10px" id="sample-slots"></div>
+        <div class="calc-result" id="sample-summary"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= اشتراک تأمین دوره‌ای ماهانه ================= -->
+  <section class="sec-alt" id="subscription-sec">
+    <div class="container">
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">ویژه قنادی‌ها، کافه‌ها و مصرف منظم</span>
+        <h2>اشتراک تأمین دوره‌ای (با ۵٪ تخفیف فصلی)</h2>
+        <p>دوره ارسال (۱۵، ۳۰ یا ۶۰ روزه) و وزن ثابت ماهانه را ثبت کنید تا بدون دغدغهٔ نوسان قیمت و اتمام موجودی، بار تازه درب محل تحویل بگیرید.</p>
+      </div>
+      <form class="contact-card" id="sub-form" style="max-width:860px">
+        <div class="form-grid">
+          <div class="field">
+            <label for="sub-prod">محصول مورد اشتراک *</label>
+            <select id="sub-prod"></select>
+          </div>
+          <div class="field">
+            <label for="sub-weight">وزن در هر نوبت (کیلوگرم) *</label>
+            <input id="sub-weight" type="number" min="1" step="0.5" value="5" required>
+          </div>
+          <div class="field">
+            <label for="sub-interval">دورهٔ ارسال *</label>
+            <select id="sub-interval">
+              <option value="15">هر ۱۵ روز یک‌بار (دو نوبت در ماه)</option>
+              <option value="30" selected>هر ۳۰ روز یک‌بار (ماهانه)</option>
+              <option value="60">هر ۶۰ روز یک‌بار (دوماهانه)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sub-name">نام یا نام کسب‌وکار *</label>
+            <input id="sub-name" required placeholder="مثلاً: قنادی گلستان">
+          </div>
+          <div class="field">
+            <label for="sub-phone">شماره موبایل *</label>
+            <input id="sub-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" class="ltr" style="text-align:right">
+          </div>
+          <div class="field">
+            <label for="sub-city">شهر تحویل *</label>
+            <input id="sub-city" required placeholder="تهران">
+          </div>
+          <div class="field form-full">
+            <label for="sub-note">توضیحات بسته‌بندی یا زمان تحویل</label>
+            <input id="sub-note" placeholder="مثلاً: پاکت‌های ۵ کیلویی وکیوم، تحویل اول هر ماه">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px">
+          <span id="sub-est" style="font-size:var(--fs-sm);color:var(--c-primary-light);font-weight:800"></span>
+          <button type="submit" class="btn btn-primary">ثبت اشتراک دوره‌ای با ۵٪ تخفیف</button>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -72,7 +188,7 @@
     <div class="container">
       <div class="sec-head" data-reveal>
         <span class="sec-label">لیست قیمت روز</span>
-        <h2>جدول کامل قیمت پلکانی ۲۰ محصول</h2>
+        <h2>جدول کامل قیمت پلکانی محصولات</h2>
         <p>مقایسه مستقیم قیمت خرده، نیم‌عمده و عمده به‌همراه درصد صرفه‌جویی در خرید عمده.</p>
       </div>
       <div class="table-wrap" data-reveal>
@@ -93,41 +209,93 @@
     </div>
   </section>
 
-  <!-- ================= خدمات B2B ================= -->
+  <!-- ================= کارت‌های سه پله ================= -->
   <section class="sec-alt">
     <div class="container">
       <div class="sec-head" data-reveal>
-        <span class="sec-label">خدمات سازمانی و قنادی</span>
-        <h2>برای کسب‌وکار شما چه امکاناتی داریم؟</h2>
+        <span class="sec-label">انتخاب پله فعال سایت</span>
+        <h2>سه پله، سه قیمت — بدون ابهام</h2>
+        <p>با انتخاب هر پله، قیمت کل کاتالوگ فوراً روی آن پله تنظیم می‌شود.</p>
       </div>
-      <div class="features-grid" id="b2b-features" data-reveal-stagger></div>
+      <div class="tier-cards" id="tier-cards" data-reveal-stagger></div>
     </div>
   </section>
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script src="assets/js/motion.js?v=11"></script>
   <script>
     boot('wholesale').then(async db => {
-      if (window.MgzCloud) {
-        const pg = await window.MgzCloud.getSiteContent('pages').catch(() => null);
-        if (pg && pg.wholesaleTitle) {
-          const h1 = document.querySelector('.page-head h1');
-          if (h1) h1.textContent = pg.wholesaleTitle;
-        }
-        if (pg && pg.wholesaleBody) {
-          const p = document.querySelector('.page-head p');
-          if (p) p.textContent = pg.wholesaleBody;
-        }
+      // 0. Market Benchmark Rates Board
+      async function loadRates() {
+        try {
+          const data = await apiFetch('/api/market-rates');
+          if (data && data.updatedAt) {
+            document.getElementById('rates-updated').textContent =
+              `به‌روزرسانی: ${new Date(data.updatedAt).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' })} — مبنای معاملات عمده ۲۵+ کیلو در بازار رفسنجان و تویسرکان.`;
+          }
+          const tbody = document.querySelector('#market-rates-table tbody');
+          tbody.innerHTML = (data.rates || []).map(r => {
+            const pct = Number(r.changePct || 0);
+            const cls = pct > 0 ? 'rate-up' : pct < 0 ? 'rate-down' : 'rate-flat';
+            const arrow = pct > 0 ? `▲ +${fmt(pct)}٪` : pct < 0 ? `▼ ${fmt(pct)}٪` : '• بدون تغییر';
+            const unitPrice = Number(r.price || r.wholesalePrice || 0);
+            const region = r.region || r.origin || 'رفسنجان';
+            return `
+              <tr>
+                <td><strong style="color:#fff">${esc(r.name)}</strong><br><small style="color:var(--c-text-muted)">${esc(r.grade)}</small></td>
+                <td>${esc(region)}</td>
+                <td class="num" style="font-weight:900;color:var(--c-primary-light)">${faToman(unitPrice)}</td>
+                <td class="${cls} num">${arrow}</td>
+                <td><button type="button" class="btn btn-outline btn-sm" data-rate-alert="${esc(r.id)}" data-rate-name="${esc(r.name)}" data-rate-price="${unitPrice}">ثبت هشدار</button></td>
+              </tr>`;
+          }).join('');
+
+          const raModal = document.getElementById('rate-alert-modal');
+          tbody.querySelectorAll('[data-rate-alert]').forEach(btn => {
+            btn.onclick = () => {
+              document.getElementById('ra-id').value = btn.dataset.rateAlert;
+              document.getElementById('ra-name').value = btn.dataset.rateName;
+              document.getElementById('ra-desc').textContent = `محصول: ${btn.dataset.rateName} — نرخ فعلی ${faToman(btn.dataset.ratePrice)}`;
+              document.getElementById('ra-target').value = Math.round(Number(btn.dataset.ratePrice) * 0.95);
+              if (APP.serverUser && APP.serverUser.phone) document.getElementById('ra-phone').value = APP.serverUser.phone;
+              raModal.classList.add('open');
+            };
+          });
+        } catch {}
       }
-      // 1. Live Wholesale Calculator
+      const raModal = document.getElementById('rate-alert-modal');
+      document.getElementById('ra-close').onclick = () => raModal.classList.remove('open');
+      raModal.onclick = e => { if (e.target === raModal) raModal.classList.remove('open'); };
+      document.getElementById('ra-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/price-alerts', {
+            method: 'POST',
+            body: JSON.stringify({
+              productId: document.getElementById('ra-id').value,
+              productName: document.getElementById('ra-name').value,
+              phone: document.getElementById('ra-phone').value.trim(),
+              targetPrice: Number(document.getElementById('ra-target').value) || 0,
+              alertType: 'price',
+            }),
+          });
+          raModal.classList.remove('open');
+          toast(`هشدار افت قیمت برای «${document.getElementById('ra-name').value}» ثبت شد`);
+        } catch (err) {
+          toast(err.message || 'خطا در ثبت هشدار');
+        }
+      });
+      loadRates();
+
+      // 1. Live Wholesale Calculator + Proforma Invoice
       const prodSel = document.getElementById('calc-prod');
       const weightInp = document.getElementById('calc-weight');
       const weightLbl = document.getElementById('calc-weight-label');
       const resBox = document.getElementById('calc-result');
 
-      prodSel.innerHTML = db.products.map(p => `<option value="${p.id}">${p.name} (${p.origin})</option>`).join('');
+      prodSel.innerHTML = db.products.map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${esc(p.origin)})</option>`).join('');
 
       function updateCalc() {
         const p = byId(prodSel.value) || db.products[0];
@@ -146,20 +314,145 @@
           <div class="calc-row"><span>قیمت هر کیلو</span><strong class="num">${faToman(unit)}</strong></div>
           <div class="calc-row"><span>صرفه‌جویی نسبت به خرده</span><strong class="num" style="color:var(--c-accent-light)">${totalSavings > 0 ? faToman(totalSavings) + ' (٪' + fmt(savePct) + ')' : '—'}</strong></div>
           <div class="calc-row grand"><span>جمع کل سفارش</span><strong class="num">${faToman(total)}</strong></div>
-          ${kg > 10 ? `<p style="font-size:var(--fs-xs);color:var(--c-text-soft)">${db.site.shipping.heavy_note}</p>` : ''}
-          <button type="button" class="btn btn-primary" id="calc-add" style="width:100%;margin-top:6px">${icon('cart')} افزودن ${fmt(kg)} کیلو به سبد خرید</button>
-        `;
+          ${kg > 10 ? `<p style="font-size:var(--fs-xs);color:var(--c-text-soft)">${esc(db.site.shipping.heavy_note)}</p>` : ''}
+          <div style="display:grid;gap:8px;margin-top:6px">
+            <button type="button" class="btn btn-primary" id="calc-add" style="width:100%">${icon('cart')} افزودن ${fmt(kg)} کیلو به سبد خرید</button>
+            <button type="button" class="btn btn-outline btn-sm" id="calc-inv" style="width:100%">${icon('receipt')} صدور پیش‌فاکتور رسمی (PDF)</button>
+          </div>`;
         document.getElementById('calc-add').onclick = () => addToCart(p.id, kg, activeTier, true);
+        document.getElementById('calc-inv').onclick = () => {
+          openInvoiceModal({
+            title: 'پیش‌فاکتور رسمی خرید عمده',
+            items: [{
+              name: p.name,
+              variantLabel: `مبدأ ${p.origin} · گرید ${p.grade || ''}`,
+              tierLabel: tierLabel(activeTier),
+              qty: kg,
+              unitText: 'کیلوگرم',
+              unitPrice: unit,
+              lineTotal: total,
+            }],
+            subtotal: total,
+            discount: 0,
+            shipCost: total >= db.site.shipping.free_over ? 0 : db.site.shipping.flat_cost,
+          });
+        };
       }
-
       prodSel.addEventListener('change', updateCalc);
       weightInp.addEventListener('input', updateCalc);
       updateCalc();
 
-      // 2. Interactive Tier Cards (No page reload!)
+      // 2. Wholesale 5-Grade Sample Pack Builder (5 x 100g)
+      const sampleCatalog = db.products.slice(0, 24);
+      const sampleIds = [0, 1, 2, 3, 4].map(i => (sampleCatalog[i] || sampleCatalog[0]).id);
+
+      function renderSampleBuilder() {
+        document.getElementById('sample-slots').innerHTML = sampleIds.map((sid, idx) => `
+          <div style="display:grid;grid-template-columns:34px minmax(0,1fr) 74px;gap:10px;align-items:center">
+            <span class="ch-num" style="width:30px;height:30px;font-size:0.78rem">${fmt(idx + 1)}</span>
+            <select data-sp-idx="${idx}" style="border:1px solid var(--c-line-strong);border-radius:8px;padding:9px 10px;background:var(--c-canvas-2);color:#fff;font-size:var(--fs-xs)">
+              ${sampleCatalog.map(p => `<option value="${esc(p.id)}" ${p.id === sid ? 'selected' : ''}>${esc(p.name)} (${esc(p.origin)})</option>`).join('')}
+            </select>
+            <span style="font-size:var(--fs-xs);color:var(--c-accent-light);font-weight:700">۱۰۰ گرم</span>
+          </div>`).join('');
+
+        document.querySelectorAll('[data-sp-idx]').forEach(sel => {
+          sel.onchange = () => { sampleIds[+sel.dataset.spIdx] = sel.value; updateSampleSummary(); };
+        });
+        updateSampleSummary();
+      }
+
+      function updateSampleSummary() {
+        const picked = sampleIds.map(id => byId(id) || sampleCatalog[0]);
+        const packCost = Math.round(picked.reduce((s, p) => s + p.prices.wholesale * 0.1, 0) + 45000);
+        document.getElementById('sample-summary').innerHTML = `
+          <div class="calc-row"><span>وزن کل بستهٔ نمونه</span><strong>۵۰۰ گرم (۵ × ۱۰۰ گرم وکیوم)</strong></div>
+          <div class="calc-row"><span>تضمین اعتبار عمده</span><strong style="color:var(--c-primary-light)">۱۰۰٪ قابل کسر از سفارش ۲۵+ کیلو</strong></div>
+          <div class="calc-row grand"><span>هزینهٔ بستهٔ نمونه</span><strong class="num">${faToman(packCost)}</strong></div>
+          <button type="button" class="btn btn-primary" id="btn-add-sample" style="width:100%;margin-top:6px">${icon('cart')} افزودن بستهٔ نمونه ۵ گرید به سبد</button>`;
+
+        document.getElementById('btn-add-sample').onclick = () => {
+          addCustomToCart({
+            kind: 'sample-pack',
+            name: 'بستهٔ نمونهٔ ۵ گرید عمده (۵ × ۱۰۰ گرم)',
+            qty: 1,
+            unitPrice: packCost,
+            weightKg: 0.5,
+            variantLabel: picked.map(p => p.name).join(' · '),
+            img: picked[0].img,
+          }, true);
+        };
+      }
+      renderSampleBuilder();
+
+      // 3. Monthly Recurring Subscription
+      const subProdSel = document.getElementById('sub-prod');
+      subProdSel.innerHTML = db.products.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${fmt(p.prices.semi)} ت/کیلو</option>`).join('');
+      if (APP.serverUser) {
+        if (APP.serverUser.fullName) document.getElementById('sub-name').value = APP.serverUser.fullName;
+        if (APP.serverUser.phone) document.getElementById('sub-phone').value = APP.serverUser.phone;
+        if (APP.serverUser.city) document.getElementById('sub-city').value = APP.serverUser.city;
+      }
+
+      function updateSubEst() {
+        const p = byId(subProdSel.value) || db.products[0];
+        const w = Math.max(1, Number(document.getElementById('sub-weight').value) || 5);
+        const tier = w >= 25 ? 'wholesale' : w >= 5 ? 'semi' : 'retail';
+        const base = p.prices[tier] * w;
+        const discounted = Math.round(base * 0.95);
+        document.getElementById('sub-est').textContent = `برآورد هر نوبت ارسال (با ۵٪ تخفیف اشتراک): ${faToman(discounted)}`;
+      }
+      subProdSel.addEventListener('change', updateSubEst);
+      document.getElementById('sub-weight').addEventListener('input', updateSubEst);
+      updateSubEst();
+
+      document.getElementById('sub-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const p = byId(subProdSel.value) || db.products[0];
+        try {
+          await apiFetch('/api/subscriptions', {
+            method: 'POST',
+            body: JSON.stringify({
+              productId: p.id,
+              productName: p.name,
+              weightKg: Number(document.getElementById('sub-weight').value) || 5,
+              intervalDays: Number(document.getElementById('sub-interval').value) || 30,
+              customerName: document.getElementById('sub-name').value.trim(),
+              phone: document.getElementById('sub-phone').value.trim(),
+              city: document.getElementById('sub-city').value.trim(),
+              note: document.getElementById('sub-note').value.trim(),
+            }),
+          });
+          toast('اشتراک تأمین دوره‌ای شما با ۵٪ تخفیف ثبت شد — قابل مدیریت در حساب کاربری');
+          e.target.reset();
+          updateSubEst();
+        } catch (err) {
+          toast(err.message || 'خطا در ثبت اشتراک');
+        }
+      });
+
+      // 4. Full Price Table
+      document.querySelector('#price-table tbody').innerHTML = db.products.map(p => {
+        const w = p.prices.wholesale;
+        const r = p.prices.retail;
+        const save = Math.round((1 - w / r) * 100);
+        return `<tr>
+          <td><a href="product.html?id=${encodeURIComponent(p.id)}" style="color:#fff;font-weight:800">${esc(p.name)}</a><br><span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${esc(catName(p.category))} · ${esc(p.origin)}</span></td>
+          <td class="num">${fmt(r)}</td>
+          <td class="num">${fmt(p.prices.semi)}</td>
+          <td class="num" style="font-weight:900;color:var(--c-primary-light)">${fmt(w)}</td>
+          <td class="num" style="color:var(--c-accent-light);font-weight:800">٪${fmt(save)}</td>
+          <td><button type="button" class="btn btn-outline btn-sm" data-quick-whole="${esc(p.id)}">سفارش ۲۵ کیلو</button></td>
+        </tr>`;
+      }).join('');
+      document.querySelectorAll('[data-quick-whole]').forEach(b => {
+        b.onclick = () => addToCart(b.dataset.quickWhole, 25, 'wholesale', true);
+      });
+
+      // 5. Interactive Tier Cards
       const tierIcons = ['cart', 'box', 'scale'];
       const tierDescs = [
-        'خرید خانگی و مصرف شخصی؛ از ۲۵۰ گرم تا زیر ۵ کیلو با بسته‌بندی نوک‌زنی.',
+        'خرید خانگی و مصرف شخصی؛ از ۲۵۰ گرم تا زیر ۵ کیلو با بسته‌بندی وکیوم زیپ‌دار.',
         'قنادی، آجیل‌فروشی و رستوران؛ ۵ تا ۲۴ کیلو با تخفیف پلکانی فوری.',
         'فروشگاه‌ها، کارخانه‌ها و صادرات؛ ۲۵ کیلو به بالا با قیمت بورس مغز.'
       ];
@@ -184,38 +477,6 @@
         });
       }
       renderTierCards();
-
-      // 3. Full Price Table
-      document.querySelector('#price-table tbody').innerHTML = db.products.map(p => {
-        const w = p.prices.wholesale;
-        const r = p.prices.retail;
-        const save = Math.round((1 - w / r) * 100);
-        return `<tr>
-          <td><a href="product.html?id=${p.id}" style="color:#fff;font-weight:800">${p.name}</a><br><span style="font-size:var(--fs-xs);color:var(--c-text-soft)">${catName(p.category)} · ${p.origin}</span></td>
-          <td>${fmt(r)}</td>
-          <td>${fmt(p.prices.semi)}</td>
-          <td style="font-weight:900;color:var(--c-primary-light)">${fmt(w)}</td>
-          <td style="color:var(--c-accent-light);font-weight:800">٪${fmt(save)}</td>
-          <td><button type="button" class="btn btn-outline btn-sm" data-quick-whole="${p.id}">سفارش ۲۵ کیلو</button></td>
-        </tr>`;
-      }).join('');
-
-      document.querySelectorAll('[data-quick-whole]').forEach(b => {
-        b.onclick = () => addToCart(b.dataset.quickWhole, 25, 'wholesale', true);
-      });
-
-      // 4. B2B Features
-      const b2b = [
-        { ico: 'receipt', t: 'صورت‌حساب رسمی', d: 'برای همه سفارش‌های نیم‌عمده و عمده، فاکتور رسمی با ارزش افزوده صادر می‌شود.' },
-        { ico: 'tag', t: 'بسته‌بندی با برند شما', d: 'امکان الصاق برچسب اختصاصی فروشگاه یا قنادی شما روی بسته‌ها و سطل‌های عمده.' },
-        { ico: 'calendar', t: 'قرارداد تأمین دوره‌ای', d: 'تثبیت قیمت فصلی برای خریدهای منظم ماهانه تا بهای تمام‌شده شما قابل پیش‌بینی بماند.' },
-        { ico: 'truck', t: 'ارسال باربری با بارنامه', d: 'سفارش‌های بالای ۱۰ کیلو با باربری معتبر و بارنامه رسمی به سراسر کشور ارسال می‌شوند.' },
-      ];
-      document.getElementById('b2b-features').innerHTML = b2b.map(f => `
-        <div class="feature">
-          <span class="ico-wrap">${icon(f.ico)}</span>
-          <div><h3>${f.t}</h3><p>${f.d}</p></div>
-        </div>`).join('');
 
       if (window.MGZ) MGZ.init();
     });

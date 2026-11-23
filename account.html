@@ -2,373 +2,1667 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>حساب کاربری و سفارش‌ها | مغزدانه</title>
-  <meta name="description" content="ثبت‌نام، ویرایش پروفایل و نشانی ارسال، و پیگیری زنده سفارش‌های خرده و عمده در مغزدانه.">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css?v=8">
-  <link rel="stylesheet" href="assets/css/fx.css?v=8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>داشبورد کاربری، کیف پول و حساب | مغزدانه</title>
+  <meta name="description" content="داشبورد تخصصی مشتریان مغزدانه: شارژ آنلاین کیف پول، دفترکل تراکنش‌های مالی، پیگیری سفارش‌ها، دفترچه آدرس، علاقه‌مندی‌ها، تیکت پشتیبانی و مدیریت غرفه شخصی.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
 
-  <main class="studio-wrap">
-    <!-- Loading State -->
-    <div id="acc-loading" class="auth-gate-card">
-      <h2>در حال بررسی وضعیت حساب کاربری...</h2>
-      <p>لطفاً چند لحظه شکیبا باشید.</p>
+  <main>
+    <!-- Loading -->
+    <div id="acc-loading-wrap" class="studio-wrap">
+      <div id="acc-loading" class="auth-gate-card">
+        <h2>در حال بررسی وضعیت حساب کاربری...</h2>
+        <p>لطفاً چند لحظه شکیبا باشید.</p>
+      </div>
     </div>
 
-    <!-- Guest Sign-In / Registration Gate -->
-    <section id="acc-guest" class="auth-gate-card" hidden style="padding:clamp(28px,4vw,44px)">
-      <span class="band-kicker">عضویت و پورتال مشتریان مغزدانه</span>
-      <h2>ورود یا ثبت‌نام سریع</h2>
-      <p>
-        با حساب گوگل خود وارد شوید تا پروفایل خریدار (خرده، قنادی یا عمده)، نشانی‌های ارسال و سابقهٔ تمام سفارش‌های شما به‌صورت ایمن در فضای ابری ذخیره شود.
-      </p>
-      <button type="button" class="btn-google" id="btn-google-signin">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.71-4.95 3.71-8.7z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09L2.18 7.07C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.71-2.88c-.98.66-2.23 1.06-3.57 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        </svg>
-        <span>ادامه با حساب گوگل</span>
-      </button>
-      <p style="font-size:0.78rem;color:var(--lux-muted);margin-top:18px;margin-bottom:0">
-        پس از ورود، می‌توانید نوع خریدار و آدرس ارسال خود را تکمیل کنید تا در تسویه‌حساب به‌صورت خودکار پر شود.
-      </p>
-    </section>
+    <!-- Guest Multi-Method Auth Hub (Mobile OTP + Username/Password + Google) -->
+    <div id="acc-guest-wrap" class="studio-wrap" hidden>
+      <section id="acc-guest" class="auth-hub-card">
+        <div class="auth-hub-head">
+          <span class="band-kicker">پورتال یکپارچه مشتریان و فروشندگان</span>
+          <h1>ورود یا ثبت‌نام در مغزدانه</h1>
+          <p>روش دلخواه خود را برای ورود به داشبورد کاربری، کیف پول و غرفه شخصی انتخاب کنید.</p>
+        </div>
 
-    <!-- Authenticated Customer Dashboard -->
-    <div id="acc-dashboard" hidden>
-      <div class="studio-hero">
-        <div>
-          <span class="band-kicker">پورتال کاربری مغزدانه</span>
-          <h1 id="u-welcome">خوش آمدید</h1>
-          <p id="u-email-line"></p>
+        <div class="auth-method-tabs" role="tablist" aria-label="روش‌های ورود">
+          <button type="button" class="auth-method-btn active" data-method="otp">موبایل و رمز یک‌بارمصرف</button>
+          <button type="button" class="auth-method-btn" data-method="password">نام کاربری و رمز عبور</button>
+          <button type="button" class="auth-method-btn" data-method="google">حساب گوگل</button>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <a href="admin.html" id="u-admin-link" class="admin-banner-link" hidden>ورود به پنل مدیریت محتوا ←</a>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-signout">خروج از حساب</button>
+
+        <div class="auth-msg" id="auth-msg"></div>
+
+        <!-- Method 1: Mobile Phone + 6-Digit OTP -->
+        <div id="method-otp">
+          <form id="otp-req-form" class="form-grid">
+            <div class="field form-full">
+              <label for="otp-phone">شماره تلفن همراه</label>
+              <input id="otp-phone" class="ltr" inputmode="tel" required placeholder="09123456789" style="text-align:right">
+              <span class="hint">کد ۶ رقمی یک‌بارمصرف با اعتبار ۳ دقیقه برای شما صادر می‌شود.</span>
+            </div>
+            <div class="form-full">
+              <button type="submit" class="btn btn-primary" id="otp-send-btn" style="width:100%">دریافت کد تأیید یک‌بارمصرف</button>
+            </div>
+          </form>
+
+          <form id="otp-verify-form" class="form-grid" hidden>
+            <div class="form-full" id="otp-preview-wrap" hidden>
+              <div class="otp-preview-box">
+                <span>کد تأیید محیط آزمایشی (بدون پنل پیامک):</span>
+                <strong class="otp-preview-code" id="otp-preview-val">------</strong>
+              </div>
+            </div>
+            <div class="field form-full">
+              <label for="otp-code">کد تأیید ۶ رقمی</label>
+              <input id="otp-code" class="ltr" inputmode="numeric" maxlength="6" required placeholder="123456" style="text-align:center;letter-spacing:0.25em;font-weight:800">
+            </div>
+            <div class="field form-full">
+              <label for="otp-name">نام و نام خانوادگی (برای کاربران جدید)</label>
+              <input id="otp-name" maxlength="100" placeholder="مثلاً: علی محمدی">
+            </div>
+            <div class="form-full" style="display:flex;gap:10px">
+              <button type="submit" class="btn btn-primary" style="flex:1">تأیید کد و ورود</button>
+              <button type="button" class="btn btn-outline" id="otp-back-btn">ویرایش شماره</button>
+            </div>
+          </form>
         </div>
+
+        <!-- Method 2: Username / Email & Password (Login + Register + OTP Reset) -->
+        <div id="method-password" hidden>
+          <div class="auth-sub-toggle">
+            <button type="button" class="active" data-pwmode="login">ورود با رمز عبور</button>
+            <button type="button" data-pwmode="register">ثبت‌نام حساب جدید</button>
+            <button type="button" data-pwmode="reset">بازیابی رمز عبور</button>
+          </div>
+
+          <form id="pw-login-form" class="form-grid">
+            <div class="field form-full">
+              <label for="pw-id">نام کاربری، ایمیل یا شماره موبایل</label>
+              <input id="pw-id" class="ltr" required placeholder="username یا email@example.com" style="text-align:right">
+            </div>
+            <div class="field form-full">
+              <label for="pw-pass">رمز عبور</label>
+              <input id="pw-pass" type="password" class="ltr" required minlength="6" placeholder="••••••••" style="text-align:right">
+            </div>
+            <div class="form-full">
+              <button type="submit" class="btn btn-primary" style="width:100%">ورود به داشبورد کاربری</button>
+            </div>
+          </form>
+
+          <form id="pw-reg-form" class="form-grid" hidden>
+            <div class="field form-full">
+              <label for="rg-name">نام و نام خانوادگی *</label>
+              <input id="rg-name" required maxlength="120" placeholder="مثلاً: زهرا کریمی">
+            </div>
+            <div class="field">
+              <label for="rg-user">نام کاربری انگلیسی *</label>
+              <input id="rg-user" class="ltr" required maxlength="40" placeholder="zahra_k">
+            </div>
+            <div class="field">
+              <label for="rg-phone">شماره موبایل (اختیاری)</label>
+              <input id="rg-phone" class="ltr" inputmode="tel" placeholder="09123456789" style="text-align:right">
+            </div>
+            <div class="field form-full">
+              <label for="rg-email">ایمیل (اختیاری)</label>
+              <input id="rg-email" type="email" class="ltr" placeholder="you@example.com" style="text-align:right">
+            </div>
+            <div class="field form-full">
+              <label for="rg-pass">رمز عبور (حداقل ۸ کاراکتر) *</label>
+              <input id="rg-pass" type="password" class="ltr" required minlength="8" placeholder="حداقل ۸ حرف و عدد" style="text-align:right">
+            </div>
+            <div class="form-full">
+              <button type="submit" class="btn btn-primary" style="width:100%">ثبت‌نام و ورود</button>
+            </div>
+          </form>
+
+          <form id="pw-reset-form" class="form-grid" hidden>
+            <div class="field form-full">
+              <label for="rs-phone">شماره موبایل ثبت‌شده در حساب *</label>
+              <div style="display:flex;gap:8px">
+                <input id="rs-phone" class="ltr" inputmode="tel" required placeholder="09123456789" style="text-align:right;flex:1">
+                <button type="button" class="btn btn-outline btn-sm" id="rs-send-otp">ارسال کد</button>
+              </div>
+            </div>
+            <div class="form-full" id="rs-preview-wrap" hidden>
+              <div class="otp-preview-box">
+                <span>کد بازیابی (محیط آزمایشی):</span>
+                <strong class="otp-preview-code" id="rs-preview-val">------</strong>
+              </div>
+            </div>
+            <div class="field">
+              <label for="rs-code">کد ۶ رقمی یک‌بارمصرف *</label>
+              <input id="rs-code" class="ltr" inputmode="numeric" maxlength="6" required placeholder="123456" style="text-align:center;letter-spacing:0.2em">
+            </div>
+            <div class="field">
+              <label for="rs-newpass">رمز عبور جدید (حداقل ۶ کاراکتر) *</label>
+              <input id="rs-newpass" type="password" class="ltr" required minlength="6" placeholder="••••••••" style="text-align:right">
+            </div>
+            <div class="form-full">
+              <button type="submit" class="btn btn-gold" style="width:100%">تنظیم رمز عبور جدید</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Method 3: Google Login -->
+        <div id="method-google" hidden style="text-align:center">
+          <p style="font-size:0.88rem;color:var(--lux-soft);margin-bottom:20px;line-height:1.85">
+            ورود سریع با حساب گوگل بدون نیاز به ساخت رمز عبور جدید — اطلاعات شما به‌طور ایمن در فضای ابری همگام‌سازی می‌شود.
+          </p>
+          <button type="button" class="btn-google" id="btn-google-signin">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.71-4.95 3.71-8.7z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09L2.18 7.07C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.71-2.88c-.98.66-2.23 1.06-3.57 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            </svg>
+            <span>ادامه با حساب گوگل</span>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Authenticated Executive Customer Dashboard Shell -->
+    <div id="acc-dashboard" class="dash-shell" hidden>
+      <!-- RTL Sticky Sidebar -->
+      <aside class="dash-sidebar" aria-label="منوی داشبورد مشتری">
+        <div class="dash-profile-head">
+          <span class="dash-profile-kicker" id="u-method-kicker">پورتال کاربری مغزدانه</span>
+          <div class="dash-profile-name" id="u-welcome">خوش آمدید</div>
+          <div class="dash-profile-sub" id="u-meta-line"></div>
+          <div style="margin-top:8px;font-size:0.78rem;color:var(--lux-emerald)" id="u-tier-mini">سطح باشگاه: برنزی</div>
+        </div>
+
+        <nav class="dash-nav-group" aria-label="مدیریت حساب و مالی">
+          <div class="dash-nav-label">حساب و مالی</div>
+          <button type="button" class="dash-nav-btn active" data-cview="overview">
+            <span>پیشخوان کاربری</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="wallet">
+            <span>کیف پول و شارژ حساب</span>
+            <span class="dash-nav-count" id="nav-wallet-mini">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="orders">
+            <span>سفارش‌ها و پیگیری</span>
+            <span class="dash-nav-count" id="nav-orders-cnt">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="addresses">
+            <span>دفترچه آدرس‌ها</span>
+            <span class="dash-nav-count" id="nav-addr-cnt">۰</span>
+          </button>
+        </nav>
+
+        <nav class="dash-nav-group" aria-label="خدمات و تنظیمات">
+          <div class="dash-nav-label">خدمات و پروفایل</div>
+          <button type="button" class="dash-nav-btn" data-cview="subscriptions">
+            <span>اشتراک‌های دوره‌ای من</span>
+            <span class="dash-nav-count" id="nav-sub-cnt">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="favorites">
+            <span>علاقه‌مندی‌ها</span>
+            <span class="dash-nav-count" id="nav-fav-cnt">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="tickets">
+            <span>تیکت و پشتیبانی</span>
+            <span class="dash-nav-count" id="nav-tkt-cnt">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="profile">
+            <span>پروفایل و تغییر رمز عبور</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-cview="seller">
+            <span>پنل مدیریت غرفهٔ من</span>
+          </button>
+        </nav>
+
+        <div class="dash-sidebar-foot">
+          <a href="catalog.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">مشاهده فروشگاه</a>
+          <a href="admin.html" id="u-admin-link" class="admin-banner-link" style="justify-content:center" hidden>ورود به پنل مدیریت</a>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-signout" style="width:100%;justify-content:center">خروج از حساب</button>
+        </div>
+      </aside>
+
+      <!-- Main Dashboard Workspace -->
+      <div class="dash-main">
+        <div class="dash-topbar">
+          <div>
+            <div class="dash-breadcrumb" id="c-breadcrumb">پورتال مشتریان مغزدانه / پیشخوان کاربری</div>
+            <h1 id="c-page-title">پیشخوان کاربری</h1>
+          </div>
+          <div class="dash-topbar-actions">
+            <button type="button" class="btn btn-gold btn-sm" id="btn-quick-goto-wallet">+ شارژ کیف پول</button>
+            <a href="seller.html" class="btn btn-outline btn-sm">غرفه شخصی من</a>
+          </div>
+        </div>
+
+        <!-- VIEW 1: EXECUTIVE OVERVIEW -->
+        <section id="cview-overview" class="dash-view" style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-kpi-grid">
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">موجودی کیف پول</span>
+              <strong class="dash-kpi-value" id="ckpi-wallet" style="color:var(--lux-gold)">۰ تومان</strong>
+              <span class="dash-kpi-sub" id="ckpi-wallet-sub">قابل استفاده در تسویه‌حساب آنی</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">سفارش‌های ثبت‌شده</span>
+              <strong class="dash-kpi-value" id="ckpi-orders">۰</strong>
+              <span class="dash-kpi-sub" id="ckpi-orders-sub">۰ سفارش در جریان</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">مجموع خرید شما</span>
+              <strong class="dash-kpi-value" id="ckpi-spent" style="color:var(--lux-emerald)">۰ تومان</strong>
+              <span class="dash-kpi-sub" id="ckpi-kg-sub">وزن کل: ۰ کیلوگرم</span>
+            </div>
+            <div class="dash-kpi">
+              <span class="dash-kpi-label">باشگاه مشتریان مغزدانه</span>
+              <strong class="dash-kpi-value" id="ckpi-tier">برنزی</strong>
+              <span class="dash-kpi-sub" id="ckpi-points-sub">۰ امتیاز وفاداری</span>
+            </div>
+          </div>
+
+          <div class="dash-split-2">
+            <!-- 6-Month Spending & Top-Up SVG Chart + Loyalty Progress -->
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>گزارش ۶ ماهه خرید و شارژ حساب</h2>
+                  <p>مقایسه ماهانه مبالغ خرید و شارژ کیف پول (تومان)</p>
+                </div>
+                <div style="display:flex;gap:14px;font-size:0.76rem;color:var(--lux-soft)">
+                  <span><b style="color:var(--lux-emerald)">■</b> خرید</span>
+                  <span><b style="color:var(--lux-gold)">■</b> شارژ کیف پول</span>
+                </div>
+              </div>
+              <div class="chart-svg-wrap" id="cust-chart-wrap"></div>
+              <div class="bar-list" style="padding-top:12px;border-top:1px solid var(--lux-line)">
+                <div class="bar-row">
+                  <div class="bar-row-head">
+                    <span id="loyalty-progress-label">پیشرفت تا سطح نقره‌ای</span>
+                    <strong id="loyalty-progress-pct">۰٪</strong>
+                  </div>
+                  <div class="bar-track"><div class="bar-fill" id="loyalty-progress-bar" style="width:0%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instant Quick Top-Up Card -->
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>شارژ فوری کیف پول</h2>
+                  <p>افزایش آنی اعتبار برای خرید بدون درگاه در تسویه‌حساب</p>
+                </div>
+              </div>
+              <form id="quick-topup-form" style="display:flex;flex-direction:column;gap:14px">
+                <div class="topup-presets" data-preset-target="qt-amount">
+                  <button type="button" class="topup-preset-btn" data-amt="500000">۵۰۰ هزار</button>
+                  <button type="button" class="topup-preset-btn active" data-amt="1000000">۱ میلیون</button>
+                  <button type="button" class="topup-preset-btn" data-amt="2000000">۲ میلیون</button>
+                  <button type="button" class="topup-preset-btn" data-amt="5000000">۵ میلیون</button>
+                </div>
+                <div class="field">
+                  <label for="qt-amount">مبلغ دلخواه (تومان)</label>
+                  <input id="qt-amount" type="number" class="ltr" min="50000" max="500000000" step="10000" value="1000000" required style="text-align:right">
+                </div>
+                <div class="field">
+                  <label for="qt-method">درگاه و روش پرداخت</label>
+                  <select id="qt-method">
+                    <option value="درگاه آنلاین بانکی">درگاه آنلاین بانکی (شاپرک)</option>
+                    <option value="کارت‌به‌کارت فوری">کارت‌به‌کارت فوری</option>
+                    <option value="حواله پایا / ساتنا">حواله پایا / ساتنا (عمده)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-gold" id="qt-submit-btn" style="width:100%">شارژ آنی کیف پول</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="dash-split-even">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>آخرین سفارش‌ها</h2>
+                  <p>وضعیت لحظه‌ای سفارش‌های اخیر شما</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" data-jump-cview="orders">همه سفارش‌ها</button>
+              </div>
+              <div id="ov-recent-orders"></div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>آخرین تراکنش‌های مالی</h2>
+                  <p>سوابق شارژ و پرداخت‌های کیف پول</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" data-jump-cview="wallet">دفترکل کامل</button>
+              </div>
+              <div id="ov-recent-tx"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: WALLET & TOP-UP -->
+        <section id="cview-wallet" class="dash-view" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-split-2">
+            <div class="wallet-card-hero">
+              <div class="wallet-card-top">
+                <span class="wallet-card-brand">کیف پول اختصاصی مغزدانه</span>
+                <span class="wallet-card-id" id="w-card-id">MGZ-WALLET</span>
+              </div>
+              <div>
+                <div class="wallet-balance-label">موجودی قابل برداشت و خرید</div>
+                <div class="wallet-balance-amt" id="w-card-balance">۰ تومان</div>
+              </div>
+              <div class="wallet-card-foot">
+                <span id="w-card-total-topup">مجموع شارژها: ۰ تومان</span>
+                <a href="checkout.html" style="color:var(--lux-gold);font-weight:700">استفاده در تسویه‌حساب ←</a>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>افزایش موجودی کیف پول</h2>
+                  <p>حداقل ۵۰٬۰۰۰ تومان و حداکثر ۵۰۰٬۰۰۰٬۰۰۰ تومان در هر تراکنش</p>
+                </div>
+              </div>
+              <form id="wallet-topup-form" style="display:flex;flex-direction:column;gap:14px">
+                <div class="topup-presets" data-preset-target="wt-amount">
+                  <button type="button" class="topup-preset-btn" data-amt="500000">۵۰۰ هزار</button>
+                  <button type="button" class="topup-preset-btn" data-amt="1000000">۱ میلیون</button>
+                  <button type="button" class="topup-preset-btn active" data-amt="2000000">۲ میلیون</button>
+                  <button type="button" class="topup-preset-btn" data-amt="5000000">۵ میلیون</button>
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="wt-amount">مبلغ شارژ (تومان) *</label>
+                    <input id="wt-amount" type="number" class="ltr" min="50000" max="500000000" step="10000" value="2000000" required style="text-align:right">
+                  </div>
+                  <div class="field">
+                    <label for="wt-method">روش پرداخت</label>
+                    <select id="wt-method">
+                      <option value="درگاه آنلاین بانکی">درگاه آنلاین بانکی</option>
+                      <option value="کارت‌به‌کارت فوری">کارت‌به‌کارت فوری</option>
+                      <option value="حواله پایا / ساتنا">حواله پایا / ساتنا</option>
+                    </select>
+                  </div>
+                  <div class="field form-full">
+                    <label for="wt-note">بابت / یادداشت مالی (اختیاری)</label>
+                    <input id="wt-note" maxlength="180" placeholder="مثلاً: شارژ جهت خرید عمده مغز پسته">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="wt-submit-btn">تأیید و شارژ حساب</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>دفترکل تراکنش‌های مالی</h2>
+                <p>سابقه کامل و تغییرناپذیر کلیه واریزها، پرداخت‌های سفارش و تعدیل‌های مالی</p>
+              </div>
+              <div class="dash-seg" id="tx-filter-seg">
+                <button type="button" class="active" data-txf="all">همه</button>
+                <button type="button" data-txf="topup">شارژ حساب</button>
+                <button type="button" data-txf="order_payment">پرداخت سفارش</button>
+                <button type="button" data-txf="admin">تعدیل مدیریت</button>
+              </div>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>کد پیگیری</th>
+                    <th>نوع عملیات</th>
+                    <th>شرح</th>
+                    <th>روش</th>
+                    <th>مبلغ</th>
+                    <th>مانده پس از عملیات</th>
+                    <th>تاریخ</th>
+                  </tr>
+                </thead>
+                <tbody id="wallet-tx-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: ORDERS & TRACKER -->
+        <section id="cview-orders" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>سفارش‌ها و پیگیری مرسوله</h2>
+                <p>مسیر پردازش، بسته‌بندی و ارسال هر سفارش را مرحله‌به‌مرحله ببینید.</p>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <div class="dash-seg" id="ord-filter-seg">
+                  <button type="button" class="active" data-ordf="all">همه</button>
+                  <button type="button" data-ordf="active">در جریان</button>
+                  <button type="button" data-ordf="done">تحویل‌شده</button>
+                  <button type="button" data-ordf="canceled">لغوشده</button>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-refresh-orders">به‌روزرسانی</button>
+              </div>
+            </div>
+            <div id="orders-list" style="display:flex;flex-direction:column;gap:14px"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: SAVED ADDRESSES -->
+        <section id="cview-addresses" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-split-2">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>نشانی‌های ذخیره‌شده</h2>
+                  <p>نشانی پیش‌فرض به‌صورت خودکار در تسویه‌حساب اعمال می‌شود.</p>
+                </div>
+              </div>
+              <div id="addresses-list" style="display:flex;flex-direction:column;gap:12px"></div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>افزودن نشانی جدید</h2>
+                  <p>تا ۱۰ نشانی منزل، کارگاه یا فروشگاه قابل ذخیره است.</p>
+                </div>
+              </div>
+              <form id="addr-add-form" class="form-grid">
+                <div class="field"><label for="ad-title">عنوان نشانی *</label><input id="ad-title" required maxlength="60" placeholder="مثلاً: کارگاه قنادی"></div>
+                <div class="field"><label for="ad-receiver">نام تحویل‌گیرنده *</label><input id="ad-receiver" required maxlength="100"></div>
+                <div class="field"><label for="ad-phone">شماره تماس *</label><input id="ad-phone" class="ltr" required placeholder="09123456789" style="text-align:right"></div>
+                <div class="field"><label for="ad-postal">کد پستی</label><input id="ad-postal" class="ltr" maxlength="20" style="text-align:right"></div>
+                <div class="field"><label for="ad-prov">استان *</label><input id="ad-prov" required maxlength="80" placeholder="تهران"></div>
+                <div class="field"><label for="ad-city">شهر *</label><input id="ad-city" required maxlength="80" placeholder="تهران"></div>
+                <div class="field form-full"><label for="ad-line">نشانی دقیق *</label><textarea id="ad-line" rows="2" required maxlength="400"></textarea></div>
+                <div class="field form-full" style="flex-direction:row;align-items:center;gap:8px">
+                  <input type="checkbox" id="ad-default" checked style="width:auto">
+                  <label for="ad-default" style="margin:0;cursor:pointer">تنظیم به عنوان نشانی پیش‌فرض</label>
+                </div>
+                <div class="form-full">
+                  <button type="submit" class="btn btn-primary" style="width:100%">ثبت نشانی در دفترچه</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: FAVORITES -->
+        <section id="cview-favorites" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>محصولات نشان‌شده و علاقه‌مندی‌ها</h2>
+                <p>دسترسی سریع برای سفارش مجدد محصولات محبوب شما</p>
+              </div>
+              <a href="catalog.html" class="btn btn-outline btn-sm">افزودن از فروشگاه</a>
+            </div>
+            <div id="favorites-list"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: SUPPORT TICKETS -->
+        <section id="cview-tickets" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-split-2">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>تیکت‌های پشتیبانی من</h2>
+                  <p>پاسخ تیم پشتیبانی و فروش عمده مغزدانه را همین‌جا ببینید.</p>
+                </div>
+              </div>
+              <div id="cust-tickets-list"></div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>ثبت تیکت جدید</h2>
+                  <p>سؤال دربارهٔ سفارش، شارژ حساب یا خرید عمده را ارسال کنید.</p>
+                </div>
+              </div>
+              <form id="ticket-new-form" class="form-grid">
+                <div class="field form-full">
+                  <label for="tk-subject">موضوع تیکت *</label>
+                  <input id="tk-subject" required maxlength="160" placeholder="مثلاً: پیگیری زمان ارسال عمده">
+                </div>
+                <div class="field form-full">
+                  <label for="tk-cat">دپارتمان مربوطه</label>
+                  <select id="tk-cat">
+                    <option value="پیگیری سفارش">پیگیری سفارش و ارسال</option>
+                    <option value="مالی و کیف پول">مالی، فاکتور و کیف پول</option>
+                    <option value="خرید عمده و همکاری">خرید عمده، قنادی و صادرات</option>
+                    <option value="غرفه فروشندگان">امور غرفه‌داران شخصی</option>
+                    <option value="سایر">سایر موارد</option>
+                  </select>
+                </div>
+                <div class="field form-full">
+                  <label for="tk-msg">شرح درخواست *</label>
+                  <textarea id="tk-msg" rows="4" required maxlength="1500" placeholder="جزئیات درخواست یا شماره سفارش خود را بنویسید..."></textarea>
+                </div>
+                <div class="form-full">
+                  <button type="submit" class="btn btn-primary" style="width:100%">ارسال تیکت به پشتیبانی</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 7: PROFILE SETTINGS & PASSWORD CHANGE -->
+        <section id="cview-profile" class="dash-view" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>اطلاعات کاربری و نشانی پیش‌فرض</h2>
+                <p>مشخصات شما هنگام ثبت سفارش در تسویه‌حساب به‌صورت خودکار پر می‌شود.</p>
+              </div>
+              <span id="profile-saved-note" class="st-ok" style="font-size:0.82rem"></span>
+            </div>
+            <form id="profile-form" class="form-grid">
+              <div class="field"><label for="pf-name">نام و نام خانوادگی</label><input id="pf-name" required maxlength="120"></div>
+              <div class="field"><label for="pf-phone">شماره تلفن همراه</label><input id="pf-phone" class="ltr" maxlength="20" placeholder="09123456789" style="text-align:right"></div>
+              <div class="field">
+                <label for="pf-buyer-type">نوع خریدار</label>
+                <select id="pf-buyer-type">
+                  <option value="retail">خریدار خانگی / خرده‌فروشی (۲۵۰ گرم+)</option>
+                  <option value="confectionery">قنادی، کافه و کارگاه (نیم‌عمده ۵ کیلو+)</option>
+                  <option value="wholesale">خریدار عمده و آجیل‌فروشی (۲۵ کیلو+)</option>
+                </select>
+              </div>
+              <div class="field"><label for="pf-province">استان</label><input id="pf-province" maxlength="80"></div>
+              <div class="field"><label for="pf-city">شهر</label><input id="pf-city" maxlength="80"></div>
+              <div class="field"><label for="pf-postal">کد پستی</label><input id="pf-postal" class="ltr" maxlength="20" style="text-align:right"></div>
+              <div class="field form-full"><label for="pf-address">نشانی دقیق ارسال</label><textarea id="pf-address" rows="3" maxlength="400"></textarea></div>
+              <div class="form-full" style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="submit" class="btn btn-primary" id="pf-save-btn">ذخیره اطلاعات کاربری</button>
+                <a class="btn btn-outline" href="catalog.html">رفتن به فروشگاه</a>
+              </div>
+            </form>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تغییر یا تنظیم رمز عبور حساب</h2>
+                <p>اگر با پیامک یک‌بارمصرف ثبت‌نام کرده‌اید، از همین بخش می‌توانید رمز عبور دائمی تعیین کنید.</p>
+              </div>
+            </div>
+            <div class="auth-msg" id="pwc-msg"></div>
+            <form id="pw-change-form" class="form-grid">
+              <div class="field">
+                <label for="pwc-cur">رمز عبور فعلی (در صورت وجود)</label>
+                <input id="pwc-cur" type="password" class="ltr" placeholder="••••••••" style="text-align:right">
+              </div>
+              <div class="field">
+                <label for="pwc-new">رمز عبور جدید (حداقل ۶ کاراکتر) *</label>
+                <input id="pwc-new" type="password" class="ltr" required minlength="6" placeholder="••••••••" style="text-align:right">
+              </div>
+              <div class="field">
+                <label for="pwc-conf">تکرار رمز عبور جدید *</label>
+                <input id="pwc-conf" type="password" class="ltr" required minlength="6" placeholder="••••••••" style="text-align:right">
+              </div>
+              <div class="form-full">
+                <button type="submit" class="btn btn-gold btn-sm">ذخیره رمز عبور جدید</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- VIEW 8: RECURRING SUBSCRIPTIONS -->
+        <section id="cview-subscriptions" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>اشتراک‌های ارسال دوره‌ای من (۵٪ تخفیف دائمی)</h2>
+                <p>هر زمان بخواهید می‌توانید اشتراک تأمین خودکار خود را متوقف، فعال یا لغو کنید.</p>
+              </div>
+              <a href="wholesale.html#subscription" class="btn btn-primary btn-sm">+ ثبت اشتراک جدید</a>
+            </div>
+            <div id="cust-subs-list" style="display:flex;flex-direction:column;gap:12px"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 9: PERSONAL SELLER STOREFRONT BRIDGE -->
+        <section id="cview-seller" class="dash-view" hidden>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>غرفهٔ شما در بازارچهٔ فروشندگان مغزدانه</h2>
+                <p>محصولات باغ یا کارگاه خود را با برند و قیمت اختصاصی، جدا از انبار مرکزی عرضه کنید.</p>
+              </div>
+            </div>
+            <div id="seller-bridge-box"></div>
+          </div>
+        </section>
       </div>
-
-      <nav class="studio-tabs" role="tablist" aria-label="بخش‌های حساب کاربری">
-        <button type="button" class="studio-tab active" data-tab="profile">پروفایل و آدرس ثبت‌نام</button>
-        <button type="button" class="studio-tab" data-tab="orders">سفارش‌های من <span id="orders-cnt" class="num"></span></button>
-        <button type="button" class="studio-tab" data-tab="favorites">محصولات نشان‌شده <span id="favs-cnt" class="num"></span></button>
-      </nav>
-
-      <!-- Tab 1: Profile & Address Registration -->
-      <section class="studio-panel" id="tab-profile">
-        <div class="studio-panel-head">
-          <div>
-            <h2>اطلاعات ثبت‌نام و نشانی پیش‌فرض ارسال</h2>
-            <p>این مشخصات هنگام ثبت سفارش در صفحه تسویه‌حساب به‌طور خودکار پر می‌شود.</p>
-          </div>
-          <span id="profile-saved-note" style="font-size:0.8rem;color:var(--lux-emerald)"></span>
-        </div>
-        <form id="profile-form" class="form-grid">
-          <div class="field">
-            <label for="pf-name">نام و نام خانوادگی</label>
-            <input id="pf-name" required maxlength="120" placeholder="مثلاً: محمدعلی آقاعباسی">
-          </div>
-          <div class="field">
-            <label for="pf-phone">شماره تلفن همراه</label>
-            <input id="pf-phone" class="ltr" maxlength="24" placeholder="09123456789">
-          </div>
-          <div class="field">
-            <label for="pf-buyer-type">نوع خریدار</label>
-            <select id="pf-buyer-type">
-              <option value="retail">خریدار خانگی / خرده‌فروشی (۲۵۰ گرم به بالا)</option>
-              <option value="confectionery">قنادی، کافه و کارگاه شیرینی‌پزی (نیم‌عمده ۵ کیلو+)</option>
-              <option value="wholesale">خریدار عمده و آجیل‌فروشی (۲۵ کیلو+)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="pf-province">استان</label>
-            <input id="pf-province" maxlength="80" placeholder="مثلاً: تهران">
-          </div>
-          <div class="field">
-            <label for="pf-city">شهر</label>
-            <input id="pf-city" maxlength="80" placeholder="مثلاً: تهران">
-          </div>
-          <div class="field">
-            <label for="pf-postal">کد پستی (اختیاری)</label>
-            <input id="pf-postal" class="ltr" maxlength="20" placeholder="1234567890">
-          </div>
-          <div class="field form-full">
-            <label for="pf-address">نشانی دقیق ارسال</label>
-            <textarea id="pf-address" rows="3" maxlength="400" placeholder="خیابان، کوچه، پلاک، واحد..."></textarea>
-          </div>
-          <div class="form-full" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:6px">
-            <button type="submit" class="btn btn-primary" id="pf-save-btn">ذخیره اطلاعات کاربری</button>
-            <a class="btn btn-outline" href="catalog.html">رفتن به فروشگاه</a>
-          </div>
-        </form>
-      </section>
-
-      <!-- Tab 2: Live Orders -->
-      <section class="studio-panel" id="tab-orders" hidden>
-        <div class="studio-panel-head">
-          <div>
-            <h2>سفارش‌های ثبت‌شده من</h2>
-            <p>وضعیت سفارش‌های شما به‌صورت زنده از سیستم مدیریت مغزدانه به‌روزرسانی می‌شود.</p>
-          </div>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-refresh-orders">به‌روزرسانی</button>
-        </div>
-        <div id="orders-list"></div>
-      </section>
-
-      <!-- Tab 3: Saved Favorites -->
-      <section class="studio-panel" id="tab-favorites" hidden>
-        <div class="studio-panel-head">
-          <div>
-            <h2>محصولات نشان‌شده</h2>
-            <p>محصولات محبوب خود را برای خرید سریع‌تر و بررسی قیمت روز اینجا نگه دارید.</p>
-          </div>
-        </div>
-        <div id="favorites-grid" class="grid"></div>
-      </section>
     </div>
   </main>
 
-  <!-- Clean In-Page Confirmation Modal -->
-  <div class="modal-back" id="confirm-modal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cm-title">
-      <h3 id="cm-title">تأیید عملیات</h3>
-      <p id="cm-text" style="color:var(--c-text-soft);font-size:0.9rem;margin-bottom:22px"></p>
-      <div style="display:flex;gap:10px;justify-content:flex-end">
-        <button type="button" class="btn btn-outline btn-sm" id="cm-cancel">انصراف</button>
-        <button type="button" class="btn btn-primary btn-sm" id="cm-ok">تأیید</button>
-      </div>
-    </div>
-  </div>
-
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js?v=8"></script>
+  <script src="assets/js/app.js?v=19"></script>
   <script>
-    const STATUS_FA = {
-      new: 'ثبت جدید (در انتظار تأیید)',
-      processing: 'در حال آماده‌سازی و برشته‌کاری',
-      shipped: 'ارسال‌شده',
-      done: 'تحویل‌شده',
-      canceled: 'لغوشده',
+    const nextUrl = new URLSearchParams(location.search).get('next');
+    const STATUS_FA = { new: 'ثبت جدید', processing: 'در حال آماده‌سازی', shipped: 'ارسال‌شده', done: 'تحویل‌شده', canceled: 'لغوشده' };
+    const STATUS_CLS = { new: 'st-warn', processing: 'st-warn', shipped: 'st-ok', done: 'st-ok', canceled: 'st-danger' };
+    const TX_TYPE_FA = { topup: 'شارژ کیف پول', order_payment: 'پرداخت سفارش', admin_credit: 'شارژ توسط مدیریت', admin_debit: 'کسر اعتباری مدیریت', refund: 'بازگشت وجه' };
+    const TKT_STATUS_FA = { open: 'در انتظار پاسخ', answered: 'پاسخ داده‌شده', closed: 'بسته‌شده' };
+    const TKT_STATUS_CLS = { open: 'st-warn', answered: 'st-ok', closed: 'st-muted' };
+    const SUB_STATUS_FA = { active: 'فعال', paused: 'متوقف موقت', canceled: 'لغوشده' };
+    const SUB_STATUS_CLS = { active: 'st-ok', paused: 'st-warn', canceled: 'st-danger' };
+
+    const CVIEW_META = {
+      overview: 'پیشخوان کاربری',
+      wallet: 'کیف پول و شارژ حساب',
+      orders: 'سفارش‌ها و پیگیری مرسوله',
+      addresses: 'دفترچه آدرس‌ها',
+      subscriptions: 'اشتراک‌های دوره‌ای من',
+      favorites: 'محصولات علاقه‌مندی',
+      tickets: 'تیکت و پشتیبانی',
+      profile: 'پروفایل و تغییر رمز عبور',
+      seller: 'پنل مدیریت غرفهٔ من',
     };
 
-    let currentProfile = null;
-    let currentUser = null;
-    let confirmResolver = null;
+    let activeOtpPhone = '';
+    let authMode = 'none';
+    let custDash = null;
+    let currentCView = 'overview';
+    let txFilter = 'all';
+    let ordFilter = 'all';
 
-    function askConfirm(title, text) {
-      return new Promise((resolve) => {
-        confirmResolver = resolve;
-        document.getElementById('cm-title').textContent = title;
-        document.getElementById('cm-text').textContent = text;
-        document.getElementById('confirm-modal').classList.add('open');
-      });
+    function faDate(iso) {
+      if (!iso) return '—';
+      try { return new Date(iso).toLocaleDateString('fa-IR', { year: 'numeric', month: 'short', day: 'numeric' }); }
+      catch { return '—'; }
     }
 
-    document.getElementById('cm-cancel').onclick = () => {
-      document.getElementById('confirm-modal').classList.remove('open');
-      if (confirmResolver) confirmResolver(false);
-    };
-    document.getElementById('cm-ok').onclick = () => {
-      document.getElementById('confirm-modal').classList.remove('open');
-      if (confirmResolver) confirmResolver(true);
-    };
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.studio-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
-      ['profile', 'orders', 'favorites'].forEach(t => {
-        document.getElementById('tab-' + t).hidden = t !== tabId;
-      });
+    function showAuthMsg(text, isOk = false) {
+      const box = document.getElementById('auth-msg');
+      if (!text) { box.className = 'auth-msg'; box.textContent = ''; return; }
+      box.textContent = text;
+      box.className = 'auth-msg ' + (isOk ? 'ok' : 'err');
     }
 
-    document.querySelectorAll('.studio-tab').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    /* ---------- Auth Tabs ---------- */
+    document.querySelectorAll('[data-method]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const m = btn.dataset.method;
+        document.querySelectorAll('[data-method]').forEach(b => b.classList.toggle('active', b.dataset.method === m));
+        ['otp', 'password', 'google'].forEach(k => { document.getElementById('method-' + k).hidden = k !== m; });
+        showAuthMsg('');
+      });
     });
 
-    function formatTs(ts) {
-      if (!ts) return 'لحظاتی پیش';
-      const ms = ts.seconds ? ts.seconds * 1000 : Date.parse(ts);
-      if (!ms || Number.isNaN(ms)) return '—';
-      return new Date(ms).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
+    document.querySelectorAll('[data-pwmode]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.pwmode;
+        document.querySelectorAll('[data-pwmode]').forEach(b => b.classList.toggle('active', b.dataset.pwmode === mode));
+        document.getElementById('pw-login-form').hidden = mode !== 'login';
+        document.getElementById('pw-reg-form').hidden = mode !== 'register';
+        document.getElementById('pw-reset-form').hidden = mode !== 'reset';
+        showAuthMsg('');
+      });
+    });
 
-    async function loadOrders() {
-      const box = document.getElementById('orders-list');
-      if (!currentUser || !window.MgzCloud) return;
-      box.innerHTML = '<p style="color:var(--lux-muted)">در حال دریافت سفارش‌ها...</p>';
-      try {
-        const orders = await window.MgzCloud.getMyOrders(currentUser.uid);
-        document.getElementById('orders-cnt').textContent = orders.length ? `(${fmt(orders.length)})` : '';
-        if (!orders.length) {
-          box.innerHTML = `
-            <div class="empty">
-              <p style="color:#fff;font-weight:700;margin-bottom:6px">هنوز سفارشی ثبت نکرده‌اید</p>
-              <p style="font-size:0.84rem;margin-bottom:16px">پس از ثبت اولین سفارش، جزئیات و وضعیت ارسال آن اینجا نمایش داده می‌شود.</p>
-              <a class="btn btn-primary btn-sm" href="catalog.html">مشاهده فروشگاه</a>
-            </div>`;
-          return;
-        }
-        box.innerHTML = orders.map(o => {
-          const items = Array.isArray(o.items) ? o.items : [];
-          const stClass = o.status === 'done' ? 'st-done' : o.status === 'canceled' ? 'st-canceled' : o.status === 'shipped' ? 'st-shipped' : '';
-          return `
-            <article class="order-card">
-              <div class="order-card-top">
-                <div>
-                  <strong class="ltr" style="color:var(--lux-ivory);font-size:0.95rem">${o.orderCode || o.id}</strong>
-                  <span style="color:var(--lux-muted);font-size:0.8rem;margin-inline-start:12px">${formatTs(o.createdAt)}</span>
-                </div>
-                <span class="status-label ${stClass}">${STATUS_FA[o.status] || o.status}</span>
-              </div>
-              <div style="font-size:0.85rem;color:var(--lux-soft);margin-bottom:12px">
-                ${items.map(it => `${it.name} (${fmt(it.qty)} کیلو)`).join(' · ')}
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:0.86rem">
-                <div class="num">
-                  وزن کل: <b>${fmt(o.totalKg || 0)} کیلو</b> · جمع پرداختی: <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal || 0)}</strong>
-                </div>
-                ${o.status === 'new' ? `<button type="button" class="rm-btn" data-cancel-order="${o.id}">لغو سفارش</button>` : ''}
-              </div>
-            </article>`;
-        }).join('');
-
-        box.querySelectorAll('[data-cancel-order]').forEach(btn => {
-          btn.onclick = async () => {
-            const ok = await askConfirm('لغو سفارش', 'آیا از لغو این سفارش مطمئن هستید؟');
-            if (!ok) return;
-            try {
-              await window.MgzCloud.updateOrderStatus(btn.dataset.cancelOrder, 'canceled');
-              toast('سفارش لغو شد');
-              loadOrders();
-            } catch {
-              toast('خطا در لغو سفارش');
-            }
-          };
-        });
-      } catch {
-        box.innerHTML = '<p style="color:var(--c-danger)">خطا در بارگذاری سفارش‌ها.</p>';
+    /* ---------- Dashboard Sidebar View Switcher ---------- */
+    function switchCustomerView(viewKey) {
+      if (!CVIEW_META[viewKey]) viewKey = 'overview';
+      currentCView = viewKey;
+      document.querySelectorAll('[data-cview]').forEach(b => b.classList.toggle('active', b.dataset.cview === viewKey));
+      Object.keys(CVIEW_META).forEach(k => {
+        const el = document.getElementById('cview-' + k);
+        if (el) el.hidden = k !== viewKey;
+      });
+      document.getElementById('c-breadcrumb').textContent = `پورتال مشتریان مغزدانه / ${CVIEW_META[viewKey]}`;
+      document.getElementById('c-page-title').textContent = CVIEW_META[viewKey];
+      if (location.hash !== '#' + viewKey) {
+        history.replaceState(null, '', '#' + viewKey);
       }
     }
 
-    function renderFavorites() {
-      const grid = document.getElementById('favorites-grid');
-      const favIds = Array.isArray(currentProfile?.favoriteIds) ? currentProfile.favoriteIds : [];
-      document.getElementById('favs-cnt').textContent = favIds.length ? `(${fmt(favIds.length)})` : '';
-      const prods = favIds.map(id => byId(id)).filter(Boolean);
-      if (!prods.length) {
-        grid.innerHTML = `
-          <div class="empty" style="grid-column:1/-1">
-            <p style="color:#fff;font-weight:700;margin-bottom:6px">لیست نشان‌شده‌ها خالی است</p>
-            <p style="font-size:0.84rem;margin-bottom:16px">می‌توانید محصولات مورد علاقه خود را برای دسترسی سریع اینجا ذخیره کنید.</p>
-            <a class="btn btn-outline btn-sm" href="catalog.html">گشت‌وگذار در کاتالوگ</a>
+    document.querySelectorAll('[data-cview]').forEach(btn => {
+      btn.addEventListener('click', () => switchCustomerView(btn.dataset.cview));
+    });
+    document.querySelectorAll('[data-jump-cview]').forEach(btn => {
+      btn.addEventListener('click', () => switchCustomerView(btn.dataset.jumpCview));
+    });
+    document.getElementById('btn-quick-goto-wallet').addEventListener('click', () => switchCustomerView('wallet'));
+
+    // Preset amount buttons
+    document.querySelectorAll('.topup-presets').forEach(group => {
+      const targetId = group.dataset.presetTarget;
+      group.querySelectorAll('.topup-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.topup-preset-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const input = document.getElementById(targetId);
+          if (input) input.value = btn.dataset.amt;
+        });
+      });
+    });
+
+    /* ---------- 1. Mobile OTP Flow ---------- */
+    document.getElementById('otp-req-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAuthMsg('');
+      const phone = document.getElementById('otp-phone').value.trim();
+      const btn = document.getElementById('otp-send-btn');
+      btn.disabled = true;
+      btn.textContent = 'در حال صدور کد...';
+      try {
+        const res = await apiFetch('/api/auth/otp/request', { method: 'POST', body: JSON.stringify({ phone }) });
+        activeOtpPhone = res.phone;
+        document.getElementById('otp-req-form').hidden = true;
+        document.getElementById('otp-verify-form').hidden = false;
+        if (res.previewCode) {
+          document.getElementById('otp-preview-wrap').hidden = false;
+          document.getElementById('otp-preview-val').textContent = res.previewCode;
+        } else {
+          document.getElementById('otp-preview-wrap').hidden = true;
+        }
+        showAuthMsg('کد ۶ رقمی صادر شد؛ لطفاً کد را وارد کنید.', true);
+      } catch (err) {
+        showAuthMsg(err.message || 'خطا در ارسال کد یک‌بارمصرف');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'دریافت کد تأیید یک‌بارمصرف';
+      }
+    });
+
+    document.getElementById('otp-back-btn').addEventListener('click', () => {
+      document.getElementById('otp-verify-form').hidden = true;
+      document.getElementById('otp-req-form').hidden = false;
+      showAuthMsg('');
+    });
+
+    document.getElementById('otp-verify-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAuthMsg('');
+      try {
+        const res = await apiFetch('/api/auth/otp/verify', {
+          method: 'POST',
+          body: JSON.stringify({
+            phone: activeOtpPhone,
+            code: document.getElementById('otp-code').value.trim(),
+            fullName: document.getElementById('otp-name').value.trim(),
+          }),
+        });
+        APP.serverUser = res.user;
+        if (res && res.token) APP._userToken = res.token;
+        toast('با موفقیت وارد داشبورد کاربری شدید');
+        if (nextUrl && /^[a-z0-9._-]+\.html/i.test(nextUrl)) { location.href = nextUrl; return; }
+        await refreshAccountView();
+      } catch (err) {
+        showAuthMsg(err.message || 'کد تأیید نامعتبر است');
+      }
+    });
+
+    /* ---------- 2. Username / Password Login & Register ---------- */
+    document.getElementById('pw-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAuthMsg('');
+      try {
+        const res = await apiFetch('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            identifier: document.getElementById('pw-id').value.trim(),
+            password: document.getElementById('pw-pass').value,
+          }),
+        });
+        APP.serverUser = res.user;
+        if (res && res.token) APP._userToken = res.token;
+        toast('ورود با موفقیت انجام شد');
+        if (nextUrl && /^[a-z0-9._-]+\.html/i.test(nextUrl)) { location.href = nextUrl; return; }
+        await refreshAccountView();
+      } catch (err) {
+        showAuthMsg(err.message || 'نام کاربری یا رمز عبور اشتباه است');
+      }
+    });
+
+    document.getElementById('pw-reg-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAuthMsg('');
+      try {
+        const res = await apiFetch('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            fullName: document.getElementById('rg-name').value.trim(),
+            username: document.getElementById('rg-user').value.trim(),
+            phone: document.getElementById('rg-phone').value.trim(),
+            email: document.getElementById('rg-email').value.trim(),
+            password: document.getElementById('rg-pass').value,
+          }),
+        });
+        APP.serverUser = res.user;
+        if (res && res.token) APP._userToken = res.token;
+        toast('ثبت‌نام با موفقیت انجام شد');
+        if (nextUrl && /^[a-z0-9._-]+\.html/i.test(nextUrl)) { location.href = nextUrl; return; }
+        await refreshAccountView();
+      } catch (err) {
+        showAuthMsg(err.message || 'خطا در ثبت‌نام');
+      }
+    });
+
+    /* ---------- 2b. OTP Password Reset ---------- */
+    document.getElementById('rs-send-otp').addEventListener('click', async () => {
+      showAuthMsg('');
+      const phone = document.getElementById('rs-phone').value.trim();
+      if (!phone) { showAuthMsg('لطفاً شماره موبایل را وارد کنید.'); return; }
+      try {
+        const res = await apiFetch('/api/auth/otp/request', { method: 'POST', body: JSON.stringify({ phone }) });
+        if (res.previewCode) {
+          document.getElementById('rs-preview-wrap').hidden = false;
+          document.getElementById('rs-preview-val').textContent = res.previewCode;
+        }
+        showAuthMsg('کد ۶ رقمی بازیابی ارسال شد؛ آن را همراه رمز جدید وارد کنید.', true);
+      } catch (err) {
+        showAuthMsg(err.message || 'خطا در ارسال کد بازیابی');
+      }
+    });
+
+    document.getElementById('pw-reset-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showAuthMsg('');
+      try {
+        const res = await apiFetch('/api/auth/password/reset', {
+          method: 'POST',
+          body: JSON.stringify({
+            phone: document.getElementById('rs-phone').value.trim(),
+            code: document.getElementById('rs-code').value.trim(),
+            newPassword: document.getElementById('rs-newpass').value,
+          }),
+        });
+        e.target.reset();
+        document.getElementById('rs-preview-wrap').hidden = true;
+        document.querySelector('[data-pwmode="login"]').click();
+        showAuthMsg(res.message || 'رمز عبور جدید با موفقیت تنظیم شد.', true);
+        toast('رمز عبور بازیابی شد');
+      } catch (err) {
+        showAuthMsg(err.message || 'خطا در بازیابی رمز عبور');
+      }
+    });
+
+    /* ---------- 3. Google Login ---------- */
+    document.getElementById('btn-google-signin').addEventListener('click', async () => {
+      if (!window.MgzCloud) { showAuthMsg('سرویس گوگل در حال آماده‌سازی است.'); return; }
+      try {
+        await window.MgzCloud.signInWithGoogle();
+        toast('با حساب گوگل وارد شدید');
+        await refreshAccountView();
+      } catch {
+        showAuthMsg('ورود با حساب گوگل انجام نشد.');
+      }
+    });
+
+    /* ---------- Sign Out ---------- */
+    document.getElementById('btn-signout').addEventListener('click', async () => {
+      await apiFetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+      APP._userToken = null;
+      APP.serverUser = null;
+      APP.vendorShop = null;
+      if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
+        await window.MgzCloud.signOutUser().catch(() => {});
+      }
+      APP.user = null;
+      custDash = null;
+      updateHeaderAccountState();
+      toast('از حساب کاربری خارج شدید');
+      await refreshAccountView();
+    });
+
+    /* ---------- SVG 6-Month Customer Chart ---------- */
+    function renderCustomerChart(series) {
+      const wrap = document.getElementById('cust-chart-wrap');
+      const data = Array.isArray(series) && series.length ? series : [];
+      if (!data.length) {
+        wrap.innerHTML = '<div style="padding:28px;text-align:center;color:var(--lux-muted);font-size:0.84rem">داده‌ای برای نمایش نمودار ثبت نشده است.</div>';
+        return;
+      }
+      const maxVal = Math.max(100000, ...data.flatMap(d => [d.spent || 0, d.topup || 0]));
+      const W = 540, H = 190, padL = 14, padR = 14, padT = 16, padB = 34;
+      const chartH = H - padT - padB;
+      const groupW = (W - padL - padR) / data.length;
+      const barW = Math.min(20, groupW * 0.28);
+
+      const gridLines = [0, 0.33, 0.66, 1].map(f => {
+        const y = padT + chartH * (1 - f);
+        return `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="rgba(244,242,236,0.08)" stroke-width="1" />`;
+      }).join('');
+
+      const bars = data.map((d, i) => {
+        const cx = padL + groupW * i + groupW / 2;
+        const hSpent = Math.max(d.spent > 0 ? 6 : 2, ((d.spent || 0) / maxVal) * chartH);
+        const hTop = Math.max(d.topup > 0 ? 6 : 2, ((d.topup || 0) / maxVal) * chartH);
+        const ySpent = padT + chartH - hSpent;
+        const yTop = padT + chartH - hTop;
+        return `
+          <g>
+            <rect x="${(cx - barW - 2).toFixed(1)}" y="${ySpent.toFixed(1)}" width="${barW.toFixed(1)}" height="${hSpent.toFixed(1)}" rx="3" fill="${d.spent > 0 ? '#6fd195' : 'rgba(111,209,149,0.16)'}">
+              <title>خرید ${esc(d.label)}: ${faToman(d.spent || 0)}</title>
+            </rect>
+            <rect x="${(cx + 2).toFixed(1)}" y="${yTop.toFixed(1)}" width="${barW.toFixed(1)}" height="${hTop.toFixed(1)}" rx="3" fill="${d.topup > 0 ? '#d6b569' : 'rgba(214,181,105,0.16)'}">
+              <title>شارژ ${esc(d.label)}: ${faToman(d.topup || 0)}</title>
+            </rect>
+            <text x="${cx.toFixed(1)}" y="${H - 10}" text-anchor="middle" fill="#9ea8a1" font-size="11" font-family="Vazirmatn,sans-serif">${esc(d.label)}</text>
+          </g>`;
+      }).join('');
+
+      wrap.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="نمودار ۶ ماهه خرید و شارژ کیف پول">${gridLines}${bars}</svg>`;
+    }
+
+    /* ---------- Top-Up Handler (Both Quick & Full Form) ---------- */
+    async function submitWalletTopup({ amount, method, note, btn }) {
+      if (authMode !== 'server') {
+        toast('برای استفاده از کیف پول اختصاصی، با موبایل یا نام کاربری وارد شوید.');
+        return;
+      }
+      const prevTxt = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'در حال ثبت تراکنش...';
+      try {
+        const res = await apiFetch('/api/wallet/topup', {
+          method: 'POST',
+          body: JSON.stringify({ amount: Number(amount), method, note }),
+        });
+        APP.serverUser = res.user;
+        toast(`کیف پول به مبلغ ${faToman(amount)} با موفقیت شارژ شد`);
+        await refreshAccountView();
+      } catch (err) {
+        toast(err.message || 'خطا در شارژ کیف پول');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prevTxt;
+      }
+    }
+
+    document.getElementById('quick-topup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitWalletTopup({
+        amount: document.getElementById('qt-amount').value,
+        method: document.getElementById('qt-method').value,
+        note: 'شارژ فوری از پیشخوان کاربری',
+        btn: document.getElementById('qt-submit-btn'),
+      });
+    });
+
+    document.getElementById('wallet-topup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitWalletTopup({
+        amount: document.getElementById('wt-amount').value,
+        method: document.getElementById('wt-method').value,
+        note: document.getElementById('wt-note').value.trim(),
+        btn: document.getElementById('wt-submit-btn'),
+      });
+      document.getElementById('wt-note').value = '';
+    });
+
+    /* ---------- Wallet Transactions Filter & Render ---------- */
+    document.querySelectorAll('#tx-filter-seg button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        txFilter = btn.dataset.txf;
+        document.querySelectorAll('#tx-filter-seg button').forEach(b => b.classList.toggle('active', b.dataset.txf === txFilter));
+        renderTransactionsTable();
+      });
+    });
+
+    function renderTransactionsTable() {
+      const tbody = document.getElementById('wallet-tx-tbody');
+      const allTx = (custDash && custDash.transactions) || [];
+      const list = allTx.filter(t => {
+        if (txFilter === 'all') return true;
+        if (txFilter === 'admin') return t.type === 'admin_credit' || t.type === 'admin_debit';
+        return t.type === txFilter;
+      });
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:26px;color:var(--lux-muted)">هنوز تراکنشی در این دسته ثبت نشده است.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(t => {
+        const pos = Number(t.amount) >= 0;
+        return `
+          <tr>
+            <td class="ltr"><strong>${esc(t.refCode)}</strong></td>
+            <td><span class="${pos ? 'st-ok' : 'st-danger'}">${esc(TX_TYPE_FA[t.type] || t.type)}</span></td>
+            <td>${esc(t.note || '—')}</td>
+            <td>${esc(t.method || '—')}</td>
+            <td class="${pos ? 'st-ok' : 'st-danger'}">${pos ? '+' : ''}${faToman(t.amount)}</td>
+            <td><strong>${faToman(t.balanceAfter)}</strong></td>
+            <td>${faDate(t.createdAt)}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    /* ---------- Orders Filter, 4-Step Tracker & Reorder ---------- */
+    document.querySelectorAll('#ord-filter-seg button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ordFilter = btn.dataset.ordf;
+        document.querySelectorAll('#ord-filter-seg button').forEach(b => b.classList.toggle('active', b.dataset.ordf === ordFilter));
+        renderOrdersFull();
+      });
+    });
+
+    function orderStepIndex(status) {
+      if (status === 'done') return 4;
+      if (status === 'shipped') return 3;
+      if (status === 'processing') return 2;
+      if (status === 'new') return 1;
+      return 0;
+    }
+
+    function renderOrdersFull() {
+      const box = document.getElementById('orders-list');
+      const all = (custDash && custDash.orders) || [];
+      const list = all.filter(o => {
+        if (ordFilter === 'all') return true;
+        if (ordFilter === 'active') return ['new', 'processing', 'shipped'].includes(o.status);
+        return o.status === ordFilter;
+      });
+      if (!list.length) {
+        box.innerHTML = `
+          <div class="empty">
+            <p style="color:#fff;font-weight:800;margin-bottom:6px">سفارشی در این بخش ثبت نشده است</p>
+            <a class="btn btn-primary btn-sm" href="catalog.html" style="margin-top:12px">مشاهده فروشگاه</a>
           </div>`;
         return;
       }
-      grid.innerHTML = prods.map(p => productCard(p)).join('');
-      bindAddButtons(grid);
+      const stepLabels = ['ثبت سفارش', 'آماده‌سازی', 'ارسال‌شده', 'تحویل نهایی'];
+      box.innerHTML = list.map(o => {
+        const stIdx = orderStepIndex(o.status);
+        const stepsHtml = o.status === 'canceled'
+          ? '<div class="st-danger" style="font-size:0.8rem;margin-top:8px">این سفارش لغو شده است.</div>'
+          : `<div class="ord-steps">${stepLabels.map((lbl, idx) => `
+              <div class="ord-step-item ${idx < stIdx ? 'done' : ''}">
+                <span>${lbl}</span>
+                <div class="ord-step-bar"></div>
+              </div>`).join('')}</div>`;
+        return `
+          <article class="order-card">
+            <div class="order-card-top">
+              <div>
+                <strong class="ltr" style="color:#fff">${esc(o.orderCode || o.id)}</strong>
+                <span style="color:var(--lux-muted);font-size:0.78rem;margin-inline-start:10px">${faDate(o.createdAt)}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <span class="${STATUS_CLS[o.status] || 'st-muted'}" style="font-size:0.82rem">${esc(STATUS_FA[o.status] || o.status)}</span>
+                <button type="button" class="btn btn-outline btn-sm" data-invoice-ord="${esc(o.id)}">فاکتور رسمی (PDF)</button>
+                <button type="button" class="btn btn-outline btn-sm" data-reorder="${esc(o.id)}">سفارش مجدد</button>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;color:var(--lux-soft);margin-bottom:8px">
+              ${(o.items || []).map(it => `${esc(it.name)} (${fmt(it.qty)} ${it.kind ? 'بسته' : 'کیلو'})${it.variantLabel ? ` — ${esc(it.variantLabel)}` : ''}`).join(' · ')}
+            </div>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:0.84rem;color:var(--lux-muted)">
+              <span>روش پرداخت: <strong style="color:var(--lux-ivory)">${esc(o.payment || 'درگاه آنلاین')}</strong>${o.paid ? ' · <span class="st-ok">پرداخت‌شده</span>' : ''}${o.couponCode ? ` · کد تخفیف: <strong class="ltr">${esc(o.couponCode)}</strong>` : ''}</span>
+              <span class="num">وزن کل: <b>${fmt(o.totalKg || 0)} کیلو</b> · مبلغ: <strong style="color:var(--lux-emerald)">${faToman(o.grandTotal || 0)}</strong></span>
+            </div>
+            ${stepsHtml}
+          </article>`;
+      }).join('');
+
+      box.querySelectorAll('[data-invoice-ord]').forEach(btn => {
+        btn.onclick = () => {
+          const ord = all.find(x => x.id === btn.dataset.invoiceOrd);
+          if (ord) openInvoiceModal(ord);
+        };
+      });
+      box.querySelectorAll('[data-reorder]').forEach(btn => {
+        btn.onclick = () => {
+          const ord = all.find(x => x.id === btn.dataset.reorder);
+          if (!ord || !Array.isArray(ord.items)) return;
+          let added = 0;
+          ord.items.forEach(it => {
+            if (byId(it.id)) { addToCart(it.id, it.qty || 1); added++; }
+          });
+          if (added) toast(`${fmt(added)} قلم به سبد خرید اضافه شد`);
+          else toast('اقلام این سفارش در کاتالوگ فعلی موجود نیستند');
+        };
+      });
     }
 
-    async function hydrateUserDashboard(user) {
-      currentUser = user;
-      document.getElementById('acc-loading').hidden = true;
-      if (!user) {
-        document.getElementById('acc-guest').hidden = false;
+    /* ---------- Saved Addresses Book ---------- */
+    function renderAddresses() {
+      const box = document.getElementById('addresses-list');
+      const addrs = (custDash && custDash.user && custDash.user.addresses) || [];
+      document.getElementById('nav-addr-cnt').textContent = fmt(addrs.length);
+      if (!addrs.length) {
+        box.innerHTML = '<div style="padding:20px;color:var(--lux-muted);font-size:0.86rem">هنوز نشانی ذخیره نکرده‌اید. از فرم کنار می‌توانید اولین نشانی خود را ثبت کنید.</div>';
+        return;
+      }
+      box.innerHTML = addrs.map(a => `
+        <div class="order-card" style="margin:0">
+          <div class="order-card-top">
+            <div>
+              <strong style="color:#fff">${esc(a.title)}</strong>
+              ${a.isDefault ? '<span class="st-ok" style="font-size:0.76rem;margin-inline-start:10px">پیش‌فرض</span>' : ''}
+            </div>
+            <button type="button" class="rm-btn" data-del-addr="${esc(a.id)}">حذف</button>
+          </div>
+          <div style="font-size:0.84rem;color:var(--lux-soft);line-height:1.75">
+            ${esc(a.province)}، ${esc(a.city)} — ${esc(a.address)}
+          </div>
+          <div style="font-size:0.78rem;color:var(--lux-muted);margin-top:6px">
+            تحویل‌گیرنده: ${esc(a.receiver)} · تماس: <span class="ltr">${esc(a.phone || '—')}</span>${a.postalCode ? ` · کد پستی: <span class="ltr">${esc(a.postalCode)}</span>` : ''}
+          </div>
+        </div>`).join('');
+
+      box.querySelectorAll('[data-del-addr]').forEach(btn => {
+        btn.onclick = async () => {
+          try {
+            await apiFetch(`/api/customer/addresses/${encodeURIComponent(btn.dataset.delAddr)}`, { method: 'DELETE' });
+            toast('نشانی حذف شد');
+            await refreshAccountView();
+          } catch (err) {
+            toast(err.message || 'خطا در حذف نشانی');
+          }
+        };
+      });
+    }
+
+    document.getElementById('addr-add-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (authMode !== 'server') { toast('ذخیره دفترچه آدرس برای حساب‌های سرور فعال است'); return; }
+      try {
+        await apiFetch('/api/customer/addresses', {
+          method: 'POST',
+          body: JSON.stringify({
+            title: document.getElementById('ad-title').value.trim(),
+            receiver: document.getElementById('ad-receiver').value.trim(),
+            phone: document.getElementById('ad-phone').value.trim(),
+            postalCode: document.getElementById('ad-postal').value.trim(),
+            province: document.getElementById('ad-prov').value.trim(),
+            city: document.getElementById('ad-city').value.trim(),
+            address: document.getElementById('ad-line').value.trim(),
+            isDefault: document.getElementById('ad-default').checked,
+          }),
+        });
+        e.target.reset();
+        document.getElementById('ad-default').checked = true;
+        toast('نشانی جدید در دفترچه ذخیره شد');
+        await refreshAccountView();
+      } catch (err) {
+        toast(err.message || 'خطا در ثبت نشانی');
+      }
+    });
+
+    /* ---------- Favorites ---------- */
+    function renderFavorites() {
+      const box = document.getElementById('favorites-list');
+      const favIds = (custDash && custDash.user && custDash.user.favoriteIds) || [];
+      document.getElementById('nav-fav-cnt').textContent = fmt(favIds.length);
+      const products = (APP.db && APP.db.products) || [];
+      const favProds = favIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+      if (!favProds.length) {
+        const picks = products.slice(0, 3);
+        box.innerHTML = `
+          <div style="margin-bottom:18px;font-size:0.86rem;color:var(--lux-soft)">هنوز محصولی به لیست علاقه‌مندی‌ها اضافه نکرده‌اید. از گزینه‌های محبوب زیر می‌توانید یک محصول را نشان کنید:</div>
+          <div class="dash-table-wrap">
+            <table class="dash-table">
+              <thead><tr><th>محصول پیشنهادی</th><th>مبدأ</th><th>قیمت خرده</th><th>عملیات</th></tr></thead>
+              <tbody>
+                ${picks.map(p => `
+                  <tr>
+                    <td><strong>${esc(p.name)}</strong></td>
+                    <td>${esc(p.origin || '—')}</td>
+                    <td class="st-ok">${faToman(p.prices.retail)}</td>
+                    <td><button type="button" class="btn btn-outline btn-sm" data-toggle-fav="${esc(p.id)}">+ افزودن به علاقه‌مندی</button></td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>`;
+      } else {
+        box.innerHTML = `
+          <div class="dash-table-wrap">
+            <table class="dash-table">
+              <thead><tr><th>محصول</th><th>مبدأ</th><th>قیمت خرده</th><th>عمده ۲۵+</th><th>عملیات</th></tr></thead>
+              <tbody>
+                ${favProds.map(p => `
+                  <tr>
+                    <td><a href="product.html?id=${encodeURIComponent(p.id)}" style="color:#fff;font-weight:700">${esc(p.name)}</a></td>
+                    <td>${esc(p.origin || '—')}</td>
+                    <td>${faToman(p.prices.retail)}</td>
+                    <td class="st-ok">${faToman(p.prices.wholesale)}</td>
+                    <td>
+                      <div style="display:flex;gap:8px">
+                        <button type="button" class="btn btn-primary btn-sm" data-fav-cart="${esc(p.id)}">افزودن به سبد</button>
+                        <button type="button" class="rm-btn" data-toggle-fav="${esc(p.id)}">حذف</button>
+                      </div>
+                    </td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>`;
+      }
+
+      box.querySelectorAll('[data-toggle-fav]').forEach(btn => {
+        btn.onclick = async () => {
+          try {
+            const r = await apiFetch('/api/customer/favorites/toggle', {
+              method: 'POST',
+              body: JSON.stringify({ productId: btn.dataset.toggleFav }),
+            });
+            toast(r.saved ? 'به علاقه‌مندی‌ها اضافه شد' : 'از علاقه‌مندی‌ها حذف شد');
+            await refreshAccountView();
+          } catch (err) {
+            toast(err.message || 'خطا در به‌روزرسانی علاقه‌مندی‌ها');
+          }
+        };
+      });
+      box.querySelectorAll('[data-fav-cart]').forEach(btn => {
+        btn.onclick = () => { addToCart(btn.dataset.favCart, 1); toast('به سبد خرید اضافه شد'); };
+      });
+    }
+
+    /* ---------- Support Tickets ---------- */
+    function renderTickets() {
+      const box = document.getElementById('cust-tickets-list');
+      const tickets = (custDash && custDash.tickets) || [];
+      const openCnt = tickets.filter(t => t.status !== 'closed').length;
+      document.getElementById('nav-tkt-cnt').textContent = fmt(openCnt);
+
+      if (!tickets.length) {
+        box.innerHTML = '<div style="padding:22px;color:var(--lux-muted);font-size:0.86rem">هنوز تیکتی ثبت نکرده‌اید. از فرم کنار می‌توانید مستقیم با کارشناسان مغزدانه مکاتبه کنید.</div>';
+        return;
+      }
+
+      box.innerHTML = tickets.map(t => `
+        <div class="ticket-row">
+          <div class="ticket-head">
+            <div>
+              <strong class="ltr" style="color:var(--lux-gold)">${esc(t.code)}</strong>
+              <strong style="color:#fff;margin-inline-start:8px">${esc(t.subject)}</strong>
+              <span style="font-size:0.76rem;color:var(--lux-muted);margin-inline-start:8px">${esc(t.category)}</span>
+            </div>
+            <span class="${TKT_STATUS_CLS[t.status] || 'st-muted'}" style="font-size:0.8rem">${esc(TKT_STATUS_FA[t.status] || t.status)}</span>
+          </div>
+          <div class="ticket-msgs">
+            ${(t.messages || []).map(m => `
+              <div class="ticket-bubble ${m.sender === 'admin' ? 'from-admin' : ''}">
+                <div class="ticket-bubble-meta">
+                  <strong>${esc(m.senderName)}</strong>
+                  <span>${faDate(m.createdAt)}</span>
+                </div>
+                <div>${esc(m.text)}</div>
+              </div>`).join('')}
+          </div>
+          ${t.status !== 'closed' ? `
+            <form class="ticket-reply-form" data-reply-tkt="${esc(t.id)}" style="display:flex;gap:8px;margin-top:4px">
+              <input required maxlength="1500" placeholder="پاسخ تکمیلی خود را بنویسید..." style="flex:1;padding:9px 12px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:8px;color:#fff;font-size:0.84rem">
+              <button type="submit" class="btn btn-outline btn-sm">ارسال پاسخ</button>
+            </form>` : ''}
+        </div>`).join('');
+
+      box.querySelectorAll('.ticket-reply-form').forEach(form => {
+        form.onsubmit = async (e) => {
+          e.preventDefault();
+          const inp = form.querySelector('input');
+          const text = inp.value.trim();
+          if (!text) return;
+          try {
+            await apiFetch(`/api/customer/tickets/${encodeURIComponent(form.dataset.replyTkt)}/reply`, {
+              method: 'POST',
+              body: JSON.stringify({ text }),
+            });
+            toast('پاسخ شما ارسال شد');
+            await refreshAccountView();
+          } catch (err) {
+            toast(err.message || 'خطا در ارسال پاسخ');
+          }
+        };
+      });
+    }
+
+    document.getElementById('ticket-new-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (authMode !== 'server') { toast('ثبت تیکت برای حساب‌های احراز هویت شده سرور فعال است'); return; }
+      try {
+        await apiFetch('/api/customer/tickets', {
+          method: 'POST',
+          body: JSON.stringify({
+            subject: document.getElementById('tk-subject').value.trim(),
+            category: document.getElementById('tk-cat').value,
+            message: document.getElementById('tk-msg').value.trim(),
+          }),
+        });
+        e.target.reset();
+        toast('تیکت پشتیبانی با موفقیت ثبت شد');
+        await refreshAccountView();
+      } catch (err) {
+        toast(err.message || 'خطا در ثبت تیکت');
+      }
+    });
+
+    /* ---------- Main Dashboard Hydration ---------- */
+    async function refreshAccountView() {
+      const me = await apiFetch('/api/auth/me').catch(() => null);
+      if (me) {
+        APP.serverUser = me.user || null;
+        APP.vendorShop = me.vendorShop || null;
+        APP.serverAdmin = me.admin || null;
+      }
+      const gUser = window.MgzCloud ? window.MgzCloud.getCurrentUser() : null;
+      const u = APP.serverUser || gUser;
+      authMode = APP.serverUser ? 'server' : gUser ? 'google' : 'none';
+
+      document.getElementById('acc-loading-wrap').hidden = true;
+      updateHeaderAccountState();
+
+      if (!u) {
+        document.getElementById('acc-guest-wrap').hidden = false;
         document.getElementById('acc-dashboard').hidden = true;
         return;
       }
 
-      document.getElementById('acc-guest').hidden = true;
+      document.getElementById('acc-guest-wrap').hidden = true;
       document.getElementById('acc-dashboard').hidden = false;
-      document.getElementById('u-welcome').textContent = `سلام، ${user.displayName || 'مشتری گرامی'}`;
-      document.getElementById('u-email-line').textContent = user.email || '';
 
-      const isAdm = await window.MgzCloud.checkIsAdmin(user);
+      if (authMode === 'server') {
+        custDash = await apiFetch('/api/customer/dashboard').catch(() => null);
+      } else {
+        const gOrders = (gUser && window.MgzCloud) ? await window.MgzCloud.getMyOrders(gUser.uid).catch(() => []) : [];
+        custDash = {
+          user: { fullName: gUser.displayName, email: gUser.email, walletBalance: 0, addresses: [], favoriteIds: [] },
+          shop: null,
+          stats: {
+            walletBalance: 0,
+            totalOrders: gOrders.length,
+            activeOrdersCount: gOrders.filter(o => ['new', 'processing', 'shipped'].includes(o.status)).length,
+            totalSpent: gOrders.reduce((s, o) => s + (Number(o.grandTotal) || 0), 0),
+            totalKg: gOrders.reduce((s, o) => s + (Number(o.totalKg) || 0), 0),
+            totalTopups: 0,
+            openTicketsCount: 0,
+            loyalty: { tier: 'برنزی', nextTier: 'نقره‌ای', nextTarget: 3000000, progressPct: 0, discountPct: 0, points: 0 },
+            monthlySeries: [],
+          },
+          orders: gOrders,
+          transactions: [],
+          tickets: [],
+          subscriptions: [],
+        };
+      }
+
+      const usr = (custDash && custDash.user) || u;
+      const st = (custDash && custDash.stats) || {
+        walletBalance: 0, totalOrders: 0, activeOrdersCount: 0, totalSpent: 0, totalKg: 0, totalTopups: 0,
+        loyalty: { tier: 'برنزی', nextTier: 'نقره‌ای', progressPct: 0, discountPct: 0, points: 0 }, monthlySeries: [],
+      };
+
+      // Sidebar profile
+      document.getElementById('u-welcome').textContent = usr.fullName || usr.displayName || usr.username || 'مشتری گرامی';
+      document.getElementById('u-meta-line').textContent = [usr.phone, usr.username ? `@${usr.username}` : '', usr.email].filter(Boolean).join(' · ');
+      document.getElementById('u-method-kicker').textContent =
+        authMode === 'server'
+          ? (usr.authMethod === 'otp' ? 'احراز هویت با پیامک یک‌بارمصرف' : 'حساب کاربری مغزدانه')
+          : 'حساب گوگل';
+      document.getElementById('u-tier-mini').textContent = `باشگاه مشتریان: سطح ${st.loyalty.tier} (${fmt(st.loyalty.points)} امتیاز)`;
+
+      let isAdm = Boolean(APP.serverAdmin);
+      if (gUser && window.MgzCloud) {
+        isAdm = isAdm || (await window.MgzCloud.checkIsAdmin(gUser).catch(() => false));
+      }
       document.getElementById('u-admin-link').hidden = !isAdm;
 
-      try {
-        await window.MgzCloud.ensureUserProfileExists(user);
-        currentProfile = await window.MgzCloud.getMyProfile(user.uid);
-        if (currentProfile) {
-          document.getElementById('pf-name').value = currentProfile.fullName || user.displayName || '';
-          document.getElementById('pf-phone').value = currentProfile.phone || '';
-          document.getElementById('pf-buyer-type').value = currentProfile.buyerType || 'retail';
-          document.getElementById('pf-province').value = currentProfile.province || '';
-          document.getElementById('pf-city').value = currentProfile.city || '';
-          document.getElementById('pf-postal').value = currentProfile.postalCode || '';
-          document.getElementById('pf-address').value = currentProfile.address || '';
-        }
-      } catch (err) {
-        console.warn('Profile load warning:', err);
+      // Sidebar live counters
+      document.getElementById('nav-wallet-mini').textContent = st.walletBalance > 0 ? fmt(st.walletBalance) : '۰';
+      document.getElementById('nav-orders-cnt').textContent = fmt(st.totalOrders);
+
+      // Overview KPIs
+      document.getElementById('ckpi-wallet').textContent = faToman(st.walletBalance);
+      document.getElementById('ckpi-wallet-sub').textContent = `کل شارژها: ${faToman(st.totalTopups || 0)}`;
+      document.getElementById('ckpi-orders').textContent = fmt(st.totalOrders);
+      document.getElementById('ckpi-orders-sub').textContent = `${fmt(st.activeOrdersCount)} سفارش در جریان`;
+      document.getElementById('ckpi-spent').textContent = faToman(st.totalSpent);
+      document.getElementById('ckpi-kg-sub').textContent = `وزن کل سفارش‌ها: ${fmt(st.totalKg)} کیلوگرم`;
+      document.getElementById('ckpi-tier').textContent = st.loyalty.tier;
+      document.getElementById('ckpi-points-sub').textContent =
+        st.loyalty.discountPct > 0
+          ? `${fmt(st.loyalty.points)} امتیاز · ${fmt(st.loyalty.discountPct)}٪ تخفیف وفاداری`
+          : `${fmt(st.loyalty.points)} امتیاز وفاداری`;
+
+      // Loyalty bar
+      document.getElementById('loyalty-progress-label').textContent = st.loyalty.nextTier
+        ? `پیشرفت تا سطح «${st.loyalty.nextTier}» (هدف ${faToman(st.loyalty.nextTarget)})`
+        : 'بالاترین سطح باشگاه مشتریان (VIP) فعال است';
+      document.getElementById('loyalty-progress-pct').textContent = `${fmt(st.loyalty.progressPct)}٪`;
+      document.getElementById('loyalty-progress-bar').style.width = `${Math.max(4, st.loyalty.progressPct)}%`;
+
+      // Wallet hero card
+      document.getElementById('w-card-id').textContent = `MGZ-${(usr.id || 'USER').slice(-6).toUpperCase()}`;
+      document.getElementById('w-card-balance').textContent = faToman(st.walletBalance);
+      document.getElementById('w-card-total-topup').textContent = `مجموع واریزی و شارژها: ${faToman(st.totalTopups || 0)}`;
+
+      // Render 6-month chart
+      renderCustomerChart(st.monthlySeries);
+
+      // Overview Recent Orders
+      const ovOrd = document.getElementById('ov-recent-orders');
+      const recentOrds = (custDash.orders || []).slice(0, 4);
+      ovOrd.innerHTML = recentOrds.length
+        ? `<div class="ops-list">${recentOrds.map(o => `
+            <div class="ops-row">
+              <div>
+                <strong class="ltr" style="color:#fff">${esc(o.orderCode)}</strong>
+                <div style="font-size:0.76rem;color:var(--lux-muted)">${faDate(o.createdAt)} · ${fmt(o.totalKg)} کیلو</div>
+              </div>
+              <div style="text-align:left">
+                <div style="color:var(--lux-ivory);font-weight:700">${faToman(o.grandTotal)}</div>
+                <div class="${STATUS_CLS[o.status] || 'st-muted'}" style="font-size:0.76rem">${esc(STATUS_FA[o.status] || o.status)}</div>
+              </div>
+            </div>`).join('')}</div>`
+        : '<div style="padding:18px 0;color:var(--lux-muted);font-size:0.84rem">هنوز سفارشی ثبت نکرده‌اید.</div>';
+
+      // Overview Recent Transactions
+      const ovTx = document.getElementById('ov-recent-tx');
+      const recentTx = (custDash.transactions || []).slice(0, 5);
+      ovTx.innerHTML = recentTx.length
+        ? `<div class="ops-list">${recentTx.map(t => {
+            const pos = Number(t.amount) >= 0;
+            return `
+            <div class="ops-row">
+              <div>
+                <strong style="color:#fff">${esc(TX_TYPE_FA[t.type] || t.type)}</strong>
+                <div style="font-size:0.75rem;color:var(--lux-muted)"><span class="ltr">${esc(t.refCode)}</span> · ${faDate(t.createdAt)}</div>
+              </div>
+              <div style="text-align:left">
+                <div class="${pos ? 'st-ok' : 'st-danger'}">${pos ? '+' : ''}${faToman(t.amount)}</div>
+                <div style="font-size:0.74rem;color:var(--lux-muted)">مانده: ${faToman(t.balanceAfter)}</div>
+              </div>
+            </div>`;
+          }).join('')}</div>`
+        : '<div style="padding:18px 0;color:var(--lux-muted);font-size:0.84rem">تراکنش مالی ثبت نشده است — از کادر شارژ فوری اولین شارژ را انجام دهید.</div>';
+
+      // Hydrate Profile Form
+      let prof = usr;
+      if (authMode === 'google' && gUser && window.MgzCloud) {
+        await window.MgzCloud.ensureUserProfileExists(gUser).catch(() => {});
+        prof = (await window.MgzCloud.getMyProfile(gUser.uid).catch(() => null)) || usr;
+      }
+      document.getElementById('pf-name').value = prof.fullName || gUser?.displayName || '';
+      document.getElementById('pf-phone').value = prof.phone || '';
+      document.getElementById('pf-buyer-type').value = prof.buyerType || 'retail';
+      document.getElementById('pf-province').value = prof.province || '';
+      document.getElementById('pf-city').value = prof.city || '';
+      document.getElementById('pf-postal').value = prof.postalCode || '';
+      document.getElementById('pf-address').value = prof.address || '';
+      if (!document.getElementById('ad-receiver').value) document.getElementById('ad-receiver').value = prof.fullName || '';
+      if (!document.getElementById('ad-phone').value) document.getElementById('ad-phone').value = prof.phone || '';
+
+      // Render sub-views
+      renderTransactionsTable();
+      renderOrdersFull();
+      renderAddresses();
+      renderSubscriptions();
+      renderFavorites();
+      renderTickets();
+
+      // Render Personal Storefront Bridge
+      const shop = (custDash && custDash.shop) || APP.vendorShop;
+      const bridge = document.getElementById('seller-bridge-box');
+      if (authMode === 'server' && shop) {
+        bridge.innerHTML = `
+          <div class="order-card" style="margin:0">
+            <div class="order-card-top">
+              <div>
+                <strong style="color:#fff;font-size:1.05rem">${esc(shop.name)}</strong>
+                <span style="color:var(--lux-gold);font-size:0.82rem;margin-inline-start:12px">${esc(shop.city)}</span>
+              </div>
+              <span class="${shop.status === 'active' ? 'st-ok' : 'st-danger'}" style="font-size:0.82rem">${shop.status === 'active' ? 'غرفه فعال' : 'معلق'}</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--lux-soft);margin-bottom:16px">${esc(shop.bio || shop.specialty)}</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <a class="btn btn-primary btn-sm" href="seller.html">مدیریت محصولات و سفارش‌های غرفه ←</a>
+              <a class="btn btn-outline btn-sm" href="vendors.html?shop=${encodeURIComponent(shop.slug)}">مشاهده صفحه عمومی غرفه</a>
+            </div>
+          </div>`;
+      } else if (authMode === 'server') {
+        bridge.innerHTML = `
+          <div class="empty">
+            <p style="color:#fff;font-weight:800;margin-bottom:8px">هنوز فروشگاه شخصی خود را نساخته‌اید</p>
+            <p style="font-size:0.86rem;margin-bottom:18px">در کمتر از ۲ دقیقه غرفه مستقل خود را بسازید و محصولاتتان را جدا از انبار مرکزی بفروشید.</p>
+            <a class="btn btn-gold" href="seller.html">ایجاد فروشگاه شخصی من ←</a>
+          </div>`;
+      } else {
+        bridge.innerHTML = `
+          <div class="empty">
+            <p style="color:#fff;font-weight:800;margin-bottom:8px">برای ایجاد غرفه شخصی با موبایل یا نام کاربری وارد شوید</p>
+            <a class="btn btn-outline btn-sm" href="vendors.html" style="margin-top:10px">مشاهده غرفه‌های فعال</a>
+          </div>`;
       }
 
-      renderFavorites();
-      loadOrders();
+      // Honor URL hash (e.g., #wallet, #orders, #tickets)
+      const hashView = location.hash.replace('#', '');
+      if (hashView && CVIEW_META[hashView]) {
+        switchCustomerView(hashView);
+      }
     }
 
-    document.getElementById('btn-google-signin').addEventListener('click', async () => {
-      if (!window.MgzCloud) {
-        toast('سرویس ابری در حال آماده‌سازی است، لطفاً دوباره تلاش کنید.');
-        return;
-      }
-      try {
-        await window.MgzCloud.signInWithGoogle();
-        toast('با موفقیت وارد حساب کاربری شدید');
-      } catch (err) {
-        console.error(err);
-        toast('ورود با حساب گوگل انجام نشد');
-      }
-    });
-
-    document.getElementById('btn-signout').addEventListener('click', async () => {
-      if (!window.MgzCloud) return;
-      await window.MgzCloud.signOutUser();
-      toast('از حساب کاربری خارج شدید');
-    });
-
-    document.getElementById('btn-refresh-orders').addEventListener('click', loadOrders);
+    document.getElementById('btn-refresh-orders').addEventListener('click', refreshAccountView);
 
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!currentUser || !window.MgzCloud) return;
-      const btn = document.getElementById('pf-save-btn');
-      btn.disabled = true;
-      btn.textContent = 'در حال ذخیره...';
+      const payload = {
+        fullName: document.getElementById('pf-name').value.trim(),
+        phone: document.getElementById('pf-phone').value.trim(),
+        buyerType: document.getElementById('pf-buyer-type').value,
+        province: document.getElementById('pf-province').value.trim(),
+        city: document.getElementById('pf-city').value.trim(),
+        postalCode: document.getElementById('pf-postal').value.trim(),
+        address: document.getElementById('pf-address').value.trim(),
+      };
       try {
-        const nextData = {
-          fullName: document.getElementById('pf-name').value.trim(),
-          phone: document.getElementById('pf-phone').value.trim(),
-          buyerType: document.getElementById('pf-buyer-type').value,
-          province: document.getElementById('pf-province').value.trim(),
-          city: document.getElementById('pf-city').value.trim(),
-          postalCode: document.getElementById('pf-postal').value.trim(),
-          address: document.getElementById('pf-address').value.trim(),
-        };
-        await window.MgzCloud.saveMyProfile(currentUser.uid, nextData);
-        currentProfile = { ...(currentProfile || {}), ...nextData };
+        if (authMode === 'server') {
+          const res = await apiFetch('/api/profile', { method: 'PUT', body: JSON.stringify(payload) });
+          APP.serverUser = res.user;
+        } else if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
+          await window.MgzCloud.saveMyProfile(window.MgzCloud.getCurrentUser().uid, payload);
+        }
         document.getElementById('profile-saved-note').textContent = 'ذخیره شد';
-        toast('اطلاعات کاربری با موفقیت در فضای ابری ذخیره شد');
+        toast('اطلاعات کاربری با موفقیت ذخیره شد');
+        await refreshAccountView();
       } catch (err) {
-        console.error(err);
-        toast('خطا در ذخیره اطلاعات پروفایل');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'ذخیره اطلاعات کاربری';
+        toast(err.message || 'خطا در ذخیره اطلاعات');
+      }
+    });
+
+    /* ---------- Recurring Subscriptions Management ---------- */
+    function renderSubscriptions() {
+      const box = document.getElementById('cust-subs-list');
+      const subs = (custDash && custDash.subscriptions) || [];
+      document.getElementById('nav-sub-cnt').textContent = fmt(subs.filter(s => s.status === 'active').length);
+      if (!subs.length) {
+        box.innerHTML = `
+          <div class="empty">
+            <p style="color:#fff;font-weight:700;margin-bottom:8px">هنوز اشتراک ارسال دوره‌ای فعال نکرده‌اید</p>
+            <p style="font-size:0.84rem;margin-bottom:14px">با اشتراک ماهانه یا دوهفتگی، ۵٪ تخفیف ثابت روی تازه‌ترین بار دریافت کنید.</p>
+            <a class="btn btn-primary btn-sm" href="wholesale.html#subscription">ثبت اشتراک دوره‌ای ←</a>
+          </div>`;
+        return;
+      }
+      box.innerHTML = subs.map(s => `
+        <div class="order-card" style="margin:0">
+          <div class="order-card-top">
+            <div>
+              <strong style="color:#fff">${esc(s.productName)}</strong>
+              <span style="color:var(--lux-gold);font-size:0.8rem;margin-inline-start:10px">${fmt(s.qtyKg)} کیلو · هر ${fmt(s.intervalDays)} روز</span>
+            </div>
+            <span class="${SUB_STATUS_CLS[s.status] || 'st-muted'}" style="font-size:0.8rem">${esc(SUB_STATUS_FA[s.status] || s.status)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:0.84rem;color:var(--lux-soft)">
+            <span>مبلغ هر نوبت (با ۵٪ تخفیف): <strong style="color:var(--lux-emerald)">${faToman(s.cycleTotal)}</strong></span>
+            <div style="display:flex;gap:8px">
+              ${s.status === 'active'
+                ? `<button type="button" class="btn btn-outline btn-sm" data-sub-act="${esc(s.id)}" data-st="paused">توقف موقت</button>`
+                : s.status === 'paused'
+                  ? `<button type="button" class="btn btn-primary btn-sm" data-sub-act="${esc(s.id)}" data-st="active">فعال‌سازی مجدد</button>`
+                  : ''}
+              ${s.status !== 'canceled' ? `<button type="button" class="rm-btn" data-sub-act="${esc(s.id)}" data-st="canceled">لغو اشتراک</button>` : ''}
+            </div>
+          </div>
+        </div>`).join('');
+
+      box.querySelectorAll('[data-sub-act]').forEach(btn => {
+        btn.onclick = async () => {
+          try {
+            await apiFetch(`/api/subscriptions/${encodeURIComponent(btn.dataset.subAct)}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ status: btn.dataset.st }),
+            });
+            toast('وضعیت اشتراک به‌روزرسانی شد');
+            await refreshAccountView();
+          } catch (e) {
+            toast(e.message || 'خطا در تغییر وضعیت اشتراک');
+          }
+        };
+      });
+    }
+
+    /* ---------- Change Password Form ---------- */
+    document.getElementById('pw-change-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('pwc-msg');
+      const cur = document.getElementById('pwc-cur').value;
+      const nw = document.getElementById('pwc-new').value;
+      const conf = document.getElementById('pwc-conf').value;
+      if (nw !== conf) {
+        msg.textContent = 'تکرار رمز عبور جدید با رمز جدید مطابقت ندارد.';
+        msg.className = 'auth-msg err';
+        return;
+      }
+      try {
+        const res = await apiFetch('/api/auth/password/change', {
+          method: 'POST',
+          body: JSON.stringify({ currentPassword: cur, newPassword: nw }),
+        });
+        e.target.reset();
+        msg.textContent = res.message || 'رمز عبور جدید با موفقیت ذخیره شد.';
+        msg.className = 'auth-msg ok';
+        toast('رمز عبور تغییر کرد');
+      } catch (err) {
+        msg.textContent = err.message || 'خطا در تغییر رمز عبور';
+        msg.className = 'auth-msg err';
       }
     });
 
     boot('account').then(() => {
+      refreshAccountView();
       if (window.MgzCloud) {
-        window.MgzCloud.onAuth(hydrateUserDashboard);
-      } else {
-        document.getElementById('acc-loading').hidden = true;
-        document.getElementById('acc-guest').hidden = false;
+        window.MgzCloud.onAuth(() => refreshAccountView());
       }
     });
   </script>

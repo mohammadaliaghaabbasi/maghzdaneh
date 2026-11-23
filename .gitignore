@@ -1,3 +1,10 @@
 .DS_Store
 Thumbs.db
 *.log
+.env
+.env.local
+data/.admin-auth.json
+data/.session-secret
+data/runtime-store.json
+.playwright-cli/
+_inspect_*.png

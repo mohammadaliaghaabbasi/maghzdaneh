@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>هویت بصری، لوگو و تایپوگرافی برند مغزدانه</title>
+  <meta name="description" content="کتابچهٔ رسمی هویت بصری، طراحی لوگو، فلسفهٔ نام و نظام تایپوگرافی فارسی برند مغزدانه — نشان هشت‌گوش پسته و جفت‌سازی قلم امیری و وزیرمتن.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+  <style>
+    /* ========================================================================
+       BRAND IDENTITY BOOK & TYPOGRAPHY STUDIO (/brand.html)
+       ======================================================================== */
+    .brand-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Interactive Logo Stage */
+    .brand-stage-shell {
+      border: 1px solid var(--c-line-strong);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      background: var(--c-surface);
+      margin-bottom: 24px;
+    }
+    .brand-stage-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 14px 20px;
+      background: var(--c-canvas-2);
+      border-bottom: 1px solid var(--c-line);
+    }
+    .brand-ctrl-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .brand-ctrl-btn {
+      padding: 7px 14px;
+      min-height: 36px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--c-line);
+      background: transparent;
+      color: var(--c-text-soft);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      transition: background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease);
+    }
+    .brand-ctrl-btn:hover {
+      border-color: var(--c-line-strong);
+      color: var(--c-text);
+    }
+    .brand-ctrl-btn.active {
+      background: var(--c-text);
+      border-color: var(--c-text);
+      color: #060907;
+    }
+    .brand-ctrl-btn.gold-toggle.active {
+      background: var(--c-accent);
+      border-color: var(--c-accent);
+      color: #070b08;
+    }
+
+    .brand-stage-canvas {
+      position: relative;
+      min-height: clamp(320px, 42vw, 440px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(32px, 5vw, 64px) clamp(20px, 4vw, 48px);
+      transition: background 0.35s var(--ease), color 0.35s var(--ease);
+      overflow: hidden;
+    }
+    .brand-stage-canvas[data-surface="obsidian"] {
+      background:
+        radial-gradient(60% 80% at 50% 42%, rgba(214, 181, 105, 0.08), transparent 72%),
+        radial-gradient(50% 60% at 50% 60%, rgba(111, 209, 149, 0.06), transparent 70%),
+        #060907;
+      color: #f4f2ec;
+    }
+    .brand-stage-canvas[data-surface="ivory"] {
+      background:
+        radial-gradient(70% 80% at 50% 45%, #fbf9f3 0%, #efeadd 100%);
+      color: #0b1510;
+    }
+    .brand-stage-canvas[data-surface="foil"] {
+      background:
+        radial-gradient(65% 80% at 50% 40%, #111c16 0%, #050806 100%);
+      color: #d6b569;
+    }
+
+    /* Construction Grid Overlay */
+    .brand-grid-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease);
+    }
+    .brand-stage-canvas.show-grid .brand-grid-svg {
+      opacity: 1;
+    }
+
+    .brand-lockup-live {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(20px, 3vw, 34px);
+      padding: 24px 32px;
+      border: 1px dashed transparent;
+      transition: border-color 0.28s var(--ease);
+    }
+    .brand-stage-canvas.show-grid .brand-lockup-live {
+      border-color: rgba(214, 181, 105, 0.55);
+    }
+    .brand-lockup-live.mark-only .brand-lockup-divider,
+    .brand-lockup-live.mark-only .brand-lockup-type {
+      display: none;
+    }
+
+    .brand-emblem-live {
+      width: clamp(104px, 14vw, 152px);
+      height: clamp(104px, 14vw, 152px);
+      flex-shrink: 0;
+      display: block;
+    }
+    .brand-lockup-live.mark-only .brand-emblem-live {
+      width: clamp(160px, 22vw, 224px);
+      height: clamp(160px, 22vw, 224px);
+    }
+
+    .brand-lockup-divider {
+      width: 1px;
+      height: clamp(82px, 10vw, 112px);
+      background: linear-gradient(180deg, transparent, rgba(214, 181, 105, 0.55), transparent);
+      flex-shrink: 0;
+    }
+    .brand-stage-canvas[data-surface="ivory"] .brand-lockup-divider {
+      background: linear-gradient(180deg, transparent, rgba(145, 112, 42, 0.55), transparent);
+    }
+
+    .brand-lockup-type {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: right;
+    }
+    .brand-lockup-word {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 6.2vw, 5.2rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: 0.01em;
+      color: currentColor;
+    }
+    .brand-lockup-ornament {
+      width: 100%;
+      height: 12px;
+      margin-block: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-lockup-ornament i {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, currentColor);
+      opacity: 0.35;
+    }
+    .brand-lockup-ornament i:last-child {
+      background: linear-gradient(270deg, transparent, currentColor);
+    }
+    .brand-lockup-ornament b {
+      width: 6px;
+      height: 6px;
+      transform: rotate(45deg);
+      background: #d6b569;
+      flex-shrink: 0;
+    }
+    .brand-stage-canvas[data-surface="ivory"] .brand-lockup-ornament b {
+      background: #9f7a2c;
+    }
+    .brand-lockup-sub {
+      font-family: var(--font-body);
+      font-size: clamp(0.76rem, 0.9vw, 0.9rem);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #d6b569;
+    }
+    .brand-stage-canvas[data-surface="ivory"] .brand-lockup-sub {
+      color: #8f6d24;
+    }
+
+    .brand-stage-caption {
+      position: absolute;
+      bottom: 14px;
+      inset-inline: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.74rem;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    /* Scale Legibility Strip */
+    .scale-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .scale-cell {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-md);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 158px;
+      text-align: center;
+    }
+    .scale-cell-art {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scale-cell-meta {
+      font-size: var(--fs-xs);
+      color: var(--c-text-soft);
+    }
+    .scale-cell-meta strong {
+      display: block;
+      color: var(--c-text);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    /* Naming & Anatomy Editorial Split */
+    .identity-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(24px, 3.5vw, 44px);
+      align-items: start;
+    }
+    .naming-manifesto {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-xl);
+      padding: clamp(24px, 3vw, 38px);
+    }
+    .naming-word-huge {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 4.8vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--c-text);
+      margin-bottom: 6px;
+    }
+    .naming-phonetic {
+      font-size: var(--fs-sm);
+      color: var(--c-accent);
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .naming-roots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--c-line);
+    }
+    .naming-root-box {
+      background: var(--c-canvas-2);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-md);
+      padding: 16px;
+    }
+    .naming-root-box b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--c-accent-light);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .naming-root-box p {
+      font-size: var(--fs-xs);
+      color: var(--c-text-soft);
+      line-height: 1.8;
+    }
+
+    .anatomy-list {
+      display: grid;
+      gap: 14px;
+    }
+    .anatomy-item {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .anatomy-num {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-sm);
+      border: 1px solid rgba(214, 181, 105, 0.36);
+      background: rgba(214, 181, 105, 0.08);
+      color: var(--c-accent-light);
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .anatomy-item h3 {
+      font-size: var(--fs-md);
+      font-weight: 800;
+      color: var(--c-text);
+      margin-bottom: 6px;
+    }
+    .anatomy-item p {
+      font-size: var(--fs-sm);
+      color: var(--c-text-soft);
+      line-height: 1.85;
+    }
+
+    /* Typography Studio */
+    .type-pairing-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .font-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-xl);
+      padding: clamp(22px, 3vw, 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .font-card-kicker {
+      font-size: var(--fs-xs);
+      color: var(--c-accent);
+      font-weight: 700;
+    }
+    .font-card-sample {
+      font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+      color: var(--c-text);
+      line-height: 1.35;
+      padding-block: 6px;
+      border-bottom: 1px solid var(--c-line);
+    }
+    .font-card-sample.display-font {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    .font-card-sample.body-font {
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: clamp(1.7rem, 2.8vw, 2.35rem);
+    }
+    .font-glyph-strip {
+      font-size: 1.12rem;
+      color: var(--c-text-soft);
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+    }
+    .font-glyph-strip.display-font {
+      font-family: var(--font-display);
+      font-size: 1.42rem;
+    }
+    .font-meta-row {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: var(--fs-xs);
+      color: var(--c-text-muted);
+      padding-top: 12px;
+      border-top: 1px solid var(--c-line);
+    }
+
+    /* Live Interactive Persian Type Tester */
+    .type-tester {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line-strong);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .type-tester-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 22px;
+      background: var(--c-canvas-2);
+      border-bottom: 1px solid var(--c-line);
+    }
+    .type-slider-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--fs-xs);
+      color: var(--c-text-soft);
+      min-width: 210px;
+    }
+    .type-slider-wrap input[type="range"] {
+      width: 120px;
+      accent-color: var(--c-accent);
+    }
+    .type-tester-input-wrap {
+      padding: 16px 22px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .type-tester-input {
+      flex: 1;
+      min-width: 240px;
+      background: var(--c-canvas-2);
+      border: 1px solid var(--c-line-strong);
+      border-radius: var(--r-md);
+      padding: 10px 14px;
+      color: var(--c-text);
+      font-size: var(--fs-sm);
+    }
+    .type-tester-input:focus {
+      outline: none;
+      border-color: var(--c-accent);
+    }
+    .type-tester-preview {
+      padding: clamp(28px, 4vw, 48px) 26px;
+      min-height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--c-text);
+      line-height: 1.42;
+      word-break: break-word;
+      transition: font-size 0.12s linear;
+    }
+
+    /* Type Scale Table */
+    .type-scale-list {
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      background: var(--c-surface);
+    }
+    .type-scale-row {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr) 150px;
+      gap: 20px;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--c-line);
+    }
+    .type-scale-row:last-child { border-bottom: none; }
+    .ts-role {
+      font-size: var(--fs-xs);
+      color: var(--c-accent);
+      font-weight: 700;
+    }
+    .ts-spec {
+      font-size: 0.74rem;
+      color: var(--c-text-muted);
+      margin-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+    .ts-sample { color: var(--c-text); }
+    .ts-token {
+      font-size: 0.74rem;
+      color: var(--c-text-soft);
+      direction: ltr;
+      text-align: left;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* Color Swatches 60-30-10 */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .swatch-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-align: right;
+      transition: transform 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .swatch-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--c-accent);
+    }
+    .swatch-chip {
+      height: 108px;
+      position: relative;
+      border-bottom: 1px solid var(--c-line);
+    }
+    .swatch-ratio {
+      position: absolute;
+      top: 10px;
+      inset-inline-start: 10px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: var(--r-xs);
+      background: rgba(6, 9, 7, 0.72);
+      color: #f4f2ec;
+      border: 1px solid rgba(244, 242, 236, 0.16);
+    }
+    .swatch-body {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .swatch-name {
+      font-size: var(--fs-sm);
+      font-weight: 800;
+      color: var(--c-text);
+    }
+    .swatch-hex {
+      font-size: var(--fs-xs);
+      color: var(--c-accent-light);
+      direction: ltr;
+      text-align: right;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .swatch-use {
+      font-size: 0.74rem;
+      color: var(--c-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Real-world Luxury Application Mockups Gallery */
+    .brand-apps-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .brand-app-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-line);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-app-card.span-full { grid-column: span 12; }
+    .brand-app-card.span-7 { grid-column: span 7; }
+    .brand-app-card.span-5 { grid-column: span 5; }
+    .brand-app-media {
+      position: relative;
+      background: #050906;
+      overflow: hidden;
+    }
+    .brand-app-card.span-full .brand-app-media { aspect-ratio: 16 / 9; max-height: 640px; }
+    .brand-app-card.span-7 .brand-app-media { aspect-ratio: 4 / 3; }
+    .brand-app-card.span-5 .brand-app-media { aspect-ratio: 1 / 1; }
+    .brand-app-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s var(--ease);
+    }
+    .brand-app-card:hover .brand-app-media img { transform: scale(1.03); }
+    .brand-app-caption {
+      padding: 18px 22px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--c-line);
+    }
+    .brand-app-caption h3 {
+      font-family: var(--font-display);
+      font-size: 1.38rem;
+      font-weight: 700;
+      color: var(--c-text);
+    }
+    .brand-app-caption p {
+      font-size: var(--fs-xs);
+      color: var(--c-text-soft);
+    }
+
+    @media (max-width: 960px) {
+      .identity-split, .type-pairing-cards { grid-template-columns: 1fr; }
+      .swatch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .scale-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .brand-app-card.span-7, .brand-app-card.span-5 { grid-column: span 12; }
+      .type-scale-row { grid-template-columns: 1fr; gap: 8px; }
+      .ts-token { text-align: right; }
+    }
+    @media (max-width: 640px) {
+      .brand-lockup-live { flex-direction: column; text-align: center; gap: 16px; }
+      .brand-lockup-divider { width: 88px; height: 1px; }
+      .brand-lockup-type { align-items: center; text-align: center; }
+      .naming-roots { grid-template-columns: 1fr; }
+      .swatch-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <div class="page-head-row">
+        <div>
+          <span class="sec-label">کتابچه هویت بصری و تایپوگرافی برند · نسخه ۱۴۰۵</span>
+          <h1>مغزدانه؛ معماری نشان، نام و تایپوگرافی</h1>
+          <p>نظام کامل هویت بصری مغزدانه: نشان هشت‌گوش پسته و جوهر زمردی، لوگوتایپ فارسی اختصاصی، جفت‌سازی قلم‌های امیری و وزیرمتن و کاربردهای واقعی روی بسته‌بندی و اوراق اداری.</p>
+        </div>
+        <div class="brand-hero-actions">
+          <button type="button" class="btn btn-gold" id="dl-logo-svg">دانلود فایل برداری نشان رسمی</button>
+          <button type="button" class="btn btn-outline" id="dl-wordmark-svg">دانلود فایل برداری لوگوتایپ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 1. MASTER BRAND & LOGO INTERACTIVE STAGE ================= -->
+  <section>
+    <div class="container">
+      <div class="brand-stage-shell">
+        <div class="brand-stage-toolbar">
+          <div class="brand-ctrl-group" role="group" aria-label="انتخاب زمینه نمایش لوگو">
+            <button type="button" class="brand-ctrl-btn active" data-surface-btn="obsidian">زمردی تاریک (اصلی)</button>
+            <button type="button" class="brand-ctrl-btn" data-surface-btn="ivory">کاغذ عاجی (چاپ روشن)</button>
+            <button type="button" class="brand-ctrl-btn" data-surface-btn="foil">مهر طلایی تک‌رنگ</button>
+          </div>
+          <div class="brand-ctrl-group" role="group" aria-label="تنظیمات قفل لوگو و شبکه ساخت">
+            <button type="button" class="brand-ctrl-btn active" data-layout-btn="lockup">قفل افقی (نشان + نام)</button>
+            <button type="button" class="brand-ctrl-btn" data-layout-btn="mark">نشان مستقل</button>
+            <button type="button" class="brand-ctrl-btn gold-toggle" id="toggle-grid-btn">شبکه ساخت هندسی</button>
+          </div>
+        </div>
+
+        <div class="brand-stage-canvas" id="brand-stage" data-surface="obsidian">
+          <!-- Architectural Construction Grid Overlay -->
+          <svg class="brand-grid-svg" viewBox="0 0 1200 440" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <pattern id="mgz-grid-pat" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(214,181,105,0.16)" stroke-width="0.75"/>
+              </pattern>
+            </defs>
+            <rect width="1200" height="440" fill="url(#mgz-grid-pat)"/>
+            <line x1="0" y1="220" x2="1200" y2="220" stroke="rgba(214,181,105,0.42)" stroke-width="1" stroke-dasharray="6 6"/>
+            <line x1="600" y1="0" x2="600" y2="440" stroke="rgba(214,181,105,0.42)" stroke-width="1" stroke-dasharray="6 6"/>
+            <circle cx="600" cy="220" r="148" fill="none" stroke="rgba(111,209,149,0.28)" stroke-width="1" stroke-dasharray="4 6"/>
+            <circle cx="600" cy="220" r="92" fill="none" stroke="rgba(214,181,105,0.34)" stroke-width="1"/>
+          </svg>
+
+          <!-- Live Vector Crest + Sculptural Persian Wordmark -->
+          <div class="brand-lockup-live" id="brand-lockup-live">
+            <svg class="brand-emblem-live" id="live-emblem-svg" viewBox="0 0 120 120" role="img" aria-label="نشان رسمی مغزدانه">
+              <defs>
+                <radialGradient id="live-bg-dark" cx="50%" cy="35%" r="72%">
+                  <stop offset="0%" stop-color="#112219"/>
+                  <stop offset="68%" stop-color="#08120c"/>
+                  <stop offset="100%" stop-color="#050a07"/>
+                </radialGradient>
+                <linearGradient id="live-gold" x1="14%" y1="8%" x2="86%" y2="92%">
+                  <stop offset="0%" stop-color="#f2dfa6"/>
+                  <stop offset="46%" stop-color="#d6b569"/>
+                  <stop offset="100%" stop-color="#9c7a35"/>
+                </linearGradient>
+                <linearGradient id="live-emerald" x1="25%" y1="12%" x2="78%" y2="90%">
+                  <stop offset="0%" stop-color="#96ebb6"/>
+                  <stop offset="45%" stop-color="#4ec87d"/>
+                  <stop offset="100%" stop-color="#1b5e37"/>
+                </linearGradient>
+              </defs>
+              <polygon id="emblem-outer" points="36,6 84,6 114,36 114,84 84,114 36,114 6,84 6,36" fill="url(#live-bg-dark)" stroke="url(#live-gold)" stroke-width="2.2"/>
+              <polygon id="emblem-inner" points="39,12.5 81,12.5 107.5,39 107.5,81 81,107.5 39,107.5 12.5,81 12.5,39" fill="none" stroke="url(#live-gold)" stroke-opacity="0.45" stroke-width="0.9"/>
+              <polygon id="emblem-dot" points="60,21.5 64.2,25.7 60,29.9 55.8,25.7" fill="url(#live-gold)"/>
+              <path id="emblem-kernel" d="M60 35.5 C68.5 43.2 72.5 55.2 69.2 68.5 C67.1 76.8 63.6 82.8 60 87.2 C56.4 82.8 52.9 76.8 50.8 68.5 C47.5 55.2 51.5 43.2 60 35.5 Z" fill="url(#live-emerald)"/>
+              <path id="emblem-groove" d="M60 40.5 L60 80.5" stroke="#0c351e" stroke-opacity="0.34" stroke-width="1.15" stroke-linecap="round"/>
+              <path id="emblem-shell-l" d="M60 95.5 C41.5 89.2 31.2 73.8 32.8 54.5 C33.9 42.4 39.8 34.4 45.2 31.2 C43.2 44.6 46.8 62.4 55.4 76.4 C57.3 79.5 58.9 82.2 60 84.5" fill="none" stroke="url(#live-gold)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path id="emblem-shell-r" d="M60 95.5 C78.5 89.2 88.8 73.8 87.2 54.5 C86.1 42.4 80.2 34.4 74.8 31.2 C76.8 44.6 73.2 62.4 64.6 76.4 C62.7 79.5 61.1 82.2 60 84.5" fill="none" stroke="url(#live-gold)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            <span class="brand-lockup-divider" aria-hidden="true"></span>
+
+            <div class="brand-lockup-type">
+              <span class="brand-lockup-word">مغزدانه</span>
+              <span class="brand-lockup-ornament" aria-hidden="true"><i></i><b></b><i></i></span>
+              <span class="brand-lockup-sub">اصالت مغز ایرانی · بنیان‌گذاری ۱۳۷۵</span>
+            </div>
+          </div>
+
+          <div class="brand-stage-caption">
+            <span id="stage-surface-label">نسخه اصلی: زمرد ابسیدین + طلای شامپاینی + جوهر زمرد</span>
+            <span>نسبت طلایی ۱:۱.۶۱۸ · حریم امن حداقل ۰.۵×</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optical Legibility Across Sizes -->
+      <div class="scale-strip">
+        <div class="scale-cell">
+          <div class="scale-cell-art"><img src="assets/img/favicon.svg?v=14" alt="نشان در ابعاد فاوآیکون" width="20" height="20"></div>
+          <div class="scale-cell-meta"><strong>۱۶ تا ۲۴ پیکسل</strong>فاوآیکون مرورگر و تب سایت</div>
+        </div>
+        <div class="scale-cell">
+          <div class="scale-cell-art"><img src="assets/img/logo.svg?v=14" alt="نشان در ابعاد هدر" width="38" height="38"></div>
+          <div class="scale-cell-meta"><strong>۳۶ پیکسل</strong>نوار ناوبری و امضای هدر</div>
+        </div>
+        <div class="scale-cell">
+          <div class="scale-cell-art"><img src="assets/img/logo.svg?v=14" alt="نشان در ابعاد کارت" width="68" height="68"></div>
+          <div class="scale-cell-meta"><strong>۶۸ پیکسل</strong>کارت اصالت، مهر فاکتور و پروفایل</div>
+        </div>
+        <div class="scale-cell">
+          <div class="scale-cell-art"><img src="assets/img/logo.svg?v=14" alt="نشان در ابعاد بسته‌بندی" width="96" height="96"></div>
+          <div class="scale-cell-meta"><strong>۱۲۰ پیکسل به بالا</strong>برجسته‌کاری طلاکوب روی قوطی و جعبه</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. BRAND NAME PHILOSOPHY & EMBLEM ANATOMY ================= -->
+  <section class="sec-alt">
+    <div class="container">
+      <div class="identity-split">
+        <div class="naming-manifesto">
+          <span class="sec-label">فلسفه نام برند</span>
+          <div class="naming-word-huge">مَغزدانِه</div>
+          <div class="naming-phonetic">
+            <span>آوایش فارسی: مَغز + دانِه</span>
+            <span aria-hidden="true">·</span>
+            <span class="ltr" style="letter-spacing:0.12em">MAGHZDANEH</span>
+          </div>
+          <p style="color:var(--c-text-soft);line-height:1.95">
+            نام «مغزدانه» از ترکیب دو واژهٔ اصیل و ملموس فارسی ساخته شده که بی‌هیچ ابهام و تکلّفی، تخصص مطلق برند را تعریف می‌کند: نه فروشندهٔ عمومی آجیل، بلکه مرجع خالص‌ترین بخش هر میوهٔ خشک — یعنی خودِ مغز و دانهٔ دست‌اول باغ.
+          </p>
+          <div class="naming-roots">
+            <div class="naming-root-box">
+              <b>مغز</b>
+              <p>جوهر خالص، عصارهٔ پنهان در صدف، و معیار نهایی کیفیت در پسته، بادام و گردو.</p>
+            </div>
+            <div class="naming-root-box">
+              <b>دانه</b>
+              <p>نشانهٔ رویش، بذر اصیل رفسنجان و دامغان، و گزینش دانه‌به‌دانهٔ برداشت تازه.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="anatomy-list">
+          <div class="anatomy-item">
+            <span class="anatomy-num">۰۱</span>
+            <div>
+              <h3>قاب هشت‌گوش ایرانی (شمسهٔ معماری)</h3>
+              <p>به‌جای کادرهای تکراری مربعی یا دایره‌ای، نشان مغزدانه درون یک هشت‌گوش پخ‌دار دوخطی می‌نشیند که حس مهرهای اصیل بازرگانان خشکبار ایران و هندسهٔ کاشی‌های کویری را با خطوط مدرن ترکیب می‌کند.</p>
+            </div>
+          </div>
+          <div class="anatomy-item">
+            <span class="anatomy-num">۰۲</span>
+            <div>
+              <h3>صدف شکافتهٔ لاله‌ای</h3>
+              <p>دو کمان متقارن طلایی که از یک پایهٔ مشترک می‌شکفند، هم لحظهٔ خندان‌شدن طبیعی پسته اکبری را تداعی می‌کنند و هم استعاره‌ای ظریف از لالهٔ ایرانی و گشوده‌شدن پوسته هستند.</p>
+            </div>
+          </div>
+          <div class="anatomy-item">
+            <span class="anatomy-num">۰۳</span>
+            <div>
+              <h3>جوهر زمردی و نقطهٔ الماسی</h3>
+              <p>در کانون شکاف طلایی، مغز سبز تراش‌خورده با سایه‌روشن طبیعی می‌درخشد و در بالای محور تقارن، نقطهٔ الماسی (برگرفته از نقطهٔ خوشنویسی فارسی) توازن بصری نشان را کامل می‌کند.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. PERSIAN TYPOGRAPHY SYSTEM & LIVE TESTER ================= -->
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="sec-label">نظام تایپوگرافی دوگانهٔ فارسی</span>
+        <h2>جفت‌سازی قلم نمایشی و قلم رابط کاربری</h2>
+        <p>تضاد حساب‌شده میان اصالت کلاسیک نسخ در تیترها و خوانایی مهندسی‌شدهٔ قلم معاصر فارسی در قیمت‌ها، جدول‌ها و متون بلند.</p>
+      </div>
+
+      <div class="type-pairing-cards">
+        <article class="font-card">
+          <span class="font-card-kicker">۰۱ · قلم برند، تیترها و داستان‌سرایی</span>
+          <div class="font-card-sample display-font">امیری · نسخ کلاسیک</div>
+          <div class="font-glyph-strip display-font">ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی</div>
+          <p style="font-size:var(--fs-sm);color:var(--c-text-soft);line-height:1.85">
+            قلم نسخ اصیل با کنتراست قلم‌نی و کشیدگی‌های موزون؛ مخصوص نام برند «مغزدانه»، تیتر مراحل سه‌بعدی صفحهٔ آغازین، سرفصل صفحات و عناوین مجله. پشتیبانی کامل از حروف فارسی «پ چ ژ گ ک ی».
+          </p>
+          <div class="font-meta-row">
+            <span>وزن‌های فعال: ۴۰۰ (متن کتابی) · ۷۰۰ (تیتر و لوگوتایپ)</span>
+            <span class="ltr">--font-display</span>
+          </div>
+        </article>
+
+        <article class="font-card">
+          <span class="font-card-kicker">۰۲ · قلم رابط کاربری، بدنه و ارقام جدولی</span>
+          <div class="font-card-sample body-font">وزیرمتن · هندسی معاصر</div>
+          <div class="font-glyph-strip">۰ ۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹ · ۱٬۴۹۰٬۰۰۰ تومان · ۲۵۰ گرم تا ۵۰ کیلوگرم</div>
+          <p style="font-size:var(--fs-sm);color:var(--c-text-soft);line-height:1.85">
+            قلم هندسی معاصر با خوانایی فوق‌العاده در اندازه‌های کوچک و ارقام هم‌عرض جدولی؛ مخصوص ناوبری، کارت محصولات، جدول قیمت عمده، فرم‌ها و داشبورد مدیریت.
+          </p>
+          <div class="font-meta-row">
+            <span>وزن‌های محلی: ۴۰۰ · ۵۰۰ · ۷۰۰ · ۹۰۰</span>
+            <span class="ltr">--font-body</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Interactive Live Type Tester -->
+      <div class="type-tester">
+        <div class="type-tester-bar">
+          <div class="brand-ctrl-group" role="group" aria-label="انتخاب فونت آزمونگر">
+            <button type="button" class="brand-ctrl-btn active" data-font-btn="display">قلم نمایشی امیری</button>
+            <button type="button" class="brand-ctrl-btn" data-font-btn="body">قلم رابط کاربری وزیرمتن</button>
+            <button type="button" class="brand-ctrl-btn active" data-weight-btn="700">وزن ضخیم (۷۰۰)</button>
+            <button type="button" class="brand-ctrl-btn" data-weight-btn="400">وزن عادی (۴۰۰)</button>
+          </div>
+          <label class="type-slider-wrap">
+            <span>اندازه: <b id="type-size-val">۴۸</b> پیکسل</span>
+            <input type="range" id="type-size-range" min="24" max="76" value="48">
+          </label>
+        </div>
+
+        <div class="type-tester-input-wrap">
+          <input type="text" class="type-tester-input" id="type-tester-input" value="از پوستهٔ بسته، تا جوهرِ سبز — مغزدانه" aria-label="متن دلخواه برای آزمون قلم برند">
+          <button type="button" class="brand-ctrl-btn" data-preset="مغزدانه · اصالت مغز ایرانی">نام برند</button>
+          <button type="button" class="brand-ctrl-btn" data-preset="پستهٔ سبز رفسنجان، گردوی تویسرکان، چای و گلاب، ژرفای اصالت ایرانی">آزمون پ چ ژ گ</button>
+          <button type="button" class="brand-ctrl-btn" data-preset="۱٬۴۹۰٬۰۰۰ تومان · گرید اکبری سوپر دست‌چین">ارقام جدولی</button>
+        </div>
+
+        <div class="type-tester-preview" id="type-tester-preview" style="font-family:var(--font-display);font-size:48px;font-weight:700">
+          از پوستهٔ بسته، تا جوهرِ سبز — مغزدانه
+        </div>
+      </div>
+
+      <!-- Complete Editorial Type Scale -->
+      <div class="type-scale-list">
+        <div class="type-scale-row">
+          <div>
+            <div class="ts-role">تیتر سینمایی لندینگ</div>
+            <div class="ts-spec">Amiri 700 · 42–70px · LH 1.32</div>
+          </div>
+          <div class="ts-sample" style="font-family:var(--font-display);font-size:clamp(1.9rem,3vw,2.75rem);font-weight:700;line-height:1.3">از پوستهٔ بسته، تا جوهرِ سبز.</div>
+          <div class="ts-token">.cinema-title</div>
+        </div>
+        <div class="type-scale-row">
+          <div>
+            <div class="ts-role">نام برند در هدر</div>
+            <div class="ts-spec">Amiri 700 · 25px · LH 1.05</div>
+          </div>
+          <div class="ts-sample" style="font-family:var(--font-display);font-size:1.7rem;font-weight:700;line-height:1.1">مغزدانه</div>
+          <div class="ts-token">.brand-name</div>
+        </div>
+        <div class="type-scale-row">
+          <div>
+            <div class="ts-role">سرفصل صفحات</div>
+            <div class="ts-spec">Amiri 700 · 33–48px · LH 1.34</div>
+          </div>
+          <div class="ts-sample" style="font-family:var(--font-display);font-size:clamp(1.6rem,2.4vw,2.2rem);font-weight:700;line-height:1.34">فروشگاه تخصصی مغز پسته و بادام</div>
+          <div class="ts-token">.page-head h1</div>
+        </div>
+        <div class="type-scale-row">
+          <div>
+            <div class="ts-role">متن بدنه و توضیحات</div>
+            <div class="ts-spec">Vazirmatn 400 · 16px · LH 1.85</div>
+          </div>
+          <div class="ts-sample" style="font-family:var(--font-body);font-size:1rem;color:var(--c-text-soft);line-height:1.85">مغز پسته سبز اکبری برداشت مستقیم رفسنجان؛ پوست‌گیری تازه، رطوبت کنترل‌شده و بسته‌بندی وکیوم بدون واسطه.</div>
+          <div class="ts-token">body / p</div>
+        </div>
+        <div class="type-scale-row">
+          <div>
+            <div class="ts-role">قیمت و ارقام جدولی</div>
+            <div class="ts-spec">Vazirmatn 800 · Tabular Nums</div>
+          </div>
+          <div class="ts-sample num" style="font-family:var(--font-body);font-size:1.18rem;font-weight:800;color:var(--c-accent-light)">۱٬۴۹۰٬۰۰۰ تومان / کیلو · ۲٬۸۵۰٬۰۰۰ تومان</div>
+          <div class="ts-token">.price / .num</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4. 60-30-10 COLOR PALETTE ================= -->
+  <section class="sec-alt">
+    <div class="container">
+      <div class="sec-head">
+        <span class="sec-label">نظام رنگی برند (قانون ۶۰-۳۰-۱۰)</span>
+        <h2>پالت زمرد ابسیدین و طلای شامپاینی</h2>
+        <p>برای کپی کد رنگ کافی است روی هر کارت کلیک کنید.</p>
+      </div>
+
+      <div class="swatch-grid">
+        <button type="button" class="swatch-card" data-copy-hex="#060907">
+          <div class="swatch-chip" style="background:#060907"><span class="swatch-ratio">۶۰٪</span></div>
+          <div class="swatch-body">
+            <span class="swatch-name">زمرد ابسیدین</span>
+            <span class="swatch-hex">#060907</span>
+            <span class="swatch-use">بوم اصلی و فضای تنفس گالری</span>
+          </div>
+        </button>
+        <button type="button" class="swatch-card" data-copy-hex="#0d1510">
+          <div class="swatch-chip" style="background:#0d1510"><span class="swatch-ratio">۳۰٪</span></div>
+          <div class="swatch-body">
+            <span class="swatch-name">بازالت زمردی</span>
+            <span class="swatch-hex">#0D1510</span>
+            <span class="swatch-use">کارت‌ها، پنل‌ها و سطوح معماری</span>
+          </div>
+        </button>
+        <button type="button" class="swatch-card" data-copy-hex="#f4f2ec">
+          <div class="swatch-chip" style="background:#f4f2ec"><span class="swatch-ratio">تایپوگرافی</span></div>
+          <div class="swatch-body">
+            <span class="swatch-name">عاج گرم کاغذی</span>
+            <span class="swatch-hex">#F4F2EC</span>
+            <span class="swatch-use">تیترها، لوگوتایپ و متون اصلی</span>
+          </div>
+        </button>
+        <button type="button" class="swatch-card" data-copy-hex="#d6b569">
+          <div class="swatch-chip" style="background:#d6b569"><span class="swatch-ratio">۱۰٪</span></div>
+          <div class="swatch-body">
+            <span class="swatch-name">طلای شامپاینی</span>
+            <span class="swatch-hex">#D6B569</span>
+            <span class="swatch-use">نشان هشت‌گوش، فویل و تأکیدهای ویژه</span>
+          </div>
+        </button>
+        <button type="button" class="swatch-card" data-copy-hex="#6fd195">
+          <div class="swatch-chip" style="background:#6fd195"><span class="swatch-ratio">جوهر مغز</span></div>
+          <div class="swatch-body">
+            <span class="swatch-name">زمرد زندهٔ پسته</span>
+            <span class="swatch-hex">#6FD195</span>
+            <span class="swatch-use">هستهٔ نشان و سیگنال تازگی محصول</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. REAL-WORLD LUXURY APPLICATIONS ================= -->
+  <section>
+    <div class="container">
+      <div class="sec-head">
+        <span class="sec-label">کاربردهای واقعی هویت بصری</span>
+        <h2>از طلاکوب اوراق اداری تا قوطی هدیهٔ مغزدانه</h2>
+        <p>نمایش یکپارچگی نشان و پالت رنگی روی متریال‌های واقعی: کاغذ کتان پنبه‌ای، فلز مات زمردی و مهر برجستهٔ طلایی.</p>
+      </div>
+
+      <div class="brand-apps-grid">
+        <figure class="brand-app-card span-full">
+          <div class="brand-app-media">
+            <img src="src/assets/images/brand_stationery_foil_1795425174883.jpg" alt="ست اوراق اداری کتان زمردی، کارت طلاکوب و پاکت نمونه مغزدانه" loading="lazy" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'اوراق اداری مغزدانه')">
+          </div>
+          <figcaption class="brand-app-caption">
+            <h3>ست اوراق اداری کتان زمردی و پاکت نمونه</h3>
+            <p>چاپ فویل طلایی گرم روی مقوای کتان پنبه‌ای با مهر موم طلایی</p>
+          </figcaption>
+        </figure>
+
+        <figure class="brand-app-card span-7">
+          <div class="brand-app-media">
+            <img src="src/assets/images/brand_packaging_tin_1795425174400.jpg" alt="قوطی فلزی مات زمردی بسته‌بندی هدیه پسته مغزدانه" loading="lazy" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'بسته‌بندی قوطی مغزدانه')">
+          </div>
+          <figcaption class="brand-app-caption">
+            <h3>قوطی فلزی مات زمردی (نسخه هدیه)</h3>
+            <p>برجسته‌کاری مونوگرام صدف و مغز روی سطح فلزی مات ضدنور برای حفظ تازگی پسته</p>
+          </figcaption>
+        </figure>
+
+        <figure class="brand-app-card span-5">
+          <div class="brand-app-media">
+            <img src="src/assets/images/brand_emblem_gold_seal_1795425174465.jpg" alt="مهر اصالت طلاکوب برجسته هشت‌گوش مغزدانه" loading="lazy" referrerpolicy="no-referrer" onerror="mgzImgFallback(this,'مهر اصالت مغزدانه')">
+          </div>
+          <figcaption class="brand-app-caption">
+            <h3>مهر اصالت و گواهی برداشت</h3>
+            <p>داغی طلایی روی مقوای بافت‌دار برای پلمب جعبه‌های صادراتی</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/firebase-bundle.js?v=14" defer></script>
+  <script src="assets/js/app.js?v=19"></script>
+  <script>
+    (async () => {
+      await boot('brand');
+
+      const stage = document.getElementById('brand-stage');
+      const lockup = document.getElementById('brand-lockup-live');
+      const surfaceLabel = document.getElementById('stage-surface-label');
+
+      const emblemOuter = document.getElementById('emblem-outer');
+      const emblemInner = document.getElementById('emblem-inner');
+      const emblemDot = document.getElementById('emblem-dot');
+      const emblemKernel = document.getElementById('emblem-kernel');
+      const emblemGroove = document.getElementById('emblem-groove');
+      const emblemShellL = document.getElementById('emblem-shell-l');
+      const emblemShellR = document.getElementById('emblem-shell-r');
+
+      const SURFACE_LABELS = {
+        obsidian: 'نسخه اصلی: زمرد ابسیدین + طلای شامپاینی + جوهر زمرد',
+        ivory: 'نسخه چاپ روشن: کاغذ عاجی گرم + جوهر زمرد تیره و طلای کهنه',
+        foil: 'نسخه مهر تک‌رنگ: فویل طلایی خالص روی زمینهٔ تاریک'
+      };
+
+      function applySurface(mode) {
+        stage.dataset.surface = mode;
+        surfaceLabel.textContent = SURFACE_LABELS[mode] || SURFACE_LABELS.obsidian;
+        document.querySelectorAll('[data-surface-btn]').forEach(b => {
+          b.classList.toggle('active', b.dataset.surfaceBtn === mode);
+        });
+
+        if (mode === 'obsidian') {
+          emblemOuter.setAttribute('fill', 'url(#live-bg-dark)');
+          emblemOuter.setAttribute('stroke', 'url(#live-gold)');
+          emblemInner.setAttribute('stroke', 'url(#live-gold)');
+          emblemDot.setAttribute('fill', 'url(#live-gold)');
+          emblemKernel.setAttribute('fill', 'url(#live-emerald)');
+          emblemGroove.setAttribute('stroke', '#0c351e');
+          emblemShellL.setAttribute('stroke', 'url(#live-gold)');
+          emblemShellR.setAttribute('stroke', 'url(#live-gold)');
+        } else if (mode === 'ivory') {
+          emblemOuter.setAttribute('fill', '#faf7ef');
+          emblemOuter.setAttribute('stroke', '#9c7829');
+          emblemInner.setAttribute('stroke', '#b58f3d');
+          emblemDot.setAttribute('fill', '#9c7829');
+          emblemKernel.setAttribute('fill', '#1f6d42');
+          emblemGroove.setAttribute('stroke', '#0b2b19');
+          emblemShellL.setAttribute('stroke', '#0e2418');
+          emblemShellR.setAttribute('stroke', '#0e2418');
+        } else if (mode === 'foil') {
+          emblemOuter.setAttribute('fill', 'none');
+          emblemOuter.setAttribute('stroke', 'url(#live-gold)');
+          emblemInner.setAttribute('stroke', 'url(#live-gold)');
+          emblemDot.setAttribute('fill', 'url(#live-gold)');
+          emblemKernel.setAttribute('fill', 'url(#live-gold)');
+          emblemGroove.setAttribute('stroke', '#070c09');
+          emblemShellL.setAttribute('stroke', 'url(#live-gold)');
+          emblemShellR.setAttribute('stroke', 'url(#live-gold)');
+        }
+      }
+
+      document.querySelectorAll('[data-surface-btn]').forEach(btn => {
+        btn.addEventListener('click', () => applySurface(btn.dataset.surfaceBtn));
+      });
+
+      document.querySelectorAll('[data-layout-btn]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const isMark = btn.dataset.layoutBtn === 'mark';
+          lockup.classList.toggle('mark-only', isMark);
+          document.querySelectorAll('[data-layout-btn]').forEach(b => {
+            b.classList.toggle('active', b === btn);
+          });
+        });
+      });
+
+      const gridBtn = document.getElementById('toggle-grid-btn');
+      gridBtn.addEventListener('click', () => {
+        const active = stage.classList.toggle('show-grid');
+        gridBtn.classList.toggle('active', active);
+      });
+
+      // Real SVG Vector Downloads
+      async function downloadAsset(url, filename) {
+        try {
+          const res = await fetch(url);
+          const svgText = await res.text();
+          const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+          toast(`فایل برداری ${filename} دانلود شد.`);
+        } catch {
+          toast('خطا در آماده‌سازی فایل SVG.');
+        }
+      }
+
+      document.getElementById('dl-logo-svg').addEventListener('click', () => {
+        downloadAsset('assets/img/logo.svg?v=14', 'maghzdaneh-emblem.svg');
+      });
+      document.getElementById('dl-wordmark-svg').addEventListener('click', () => {
+        downloadAsset('assets/img/brand-wordmark.svg?v=14', 'maghzdaneh-wordmark.svg');
+      });
+
+      // Live Persian Typography Studio
+      const testerInput = document.getElementById('type-tester-input');
+      const testerPreview = document.getElementById('type-tester-preview');
+      const sizeRange = document.getElementById('type-size-range');
+      const sizeVal = document.getElementById('type-size-val');
+      let currentFont = 'display';
+      let currentWeight = '700';
+
+      function syncTypography() {
+        testerPreview.textContent = testerInput.value.trim() || 'مغزدانه؛ اصالت مغز ایرانی';
+        testerPreview.style.fontFamily = currentFont === 'display' ? 'var(--font-display)' : 'var(--font-body)';
+        testerPreview.style.fontWeight = currentWeight;
+        testerPreview.style.fontSize = `${sizeRange.value}px`;
+        sizeVal.textContent = fmt(Number(sizeRange.value));
+      }
+
+      testerInput.addEventListener('input', syncTypography);
+      sizeRange.addEventListener('input', syncTypography);
+
+      document.querySelectorAll('[data-font-btn]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentFont = btn.dataset.fontBtn;
+          document.querySelectorAll('[data-font-btn]').forEach(b => b.classList.toggle('active', b === btn));
+          syncTypography();
+        });
+      });
+
+      document.querySelectorAll('[data-weight-btn]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentWeight = btn.dataset.weightBtn;
+          document.querySelectorAll('[data-weight-btn]').forEach(b => b.classList.toggle('active', b === btn));
+          syncTypography();
+        });
+      });
+
+      document.querySelectorAll('[data-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          testerInput.value = btn.dataset.preset;
+          syncTypography();
+        });
+      });
+
+      // 1-Click Color Hex Copy
+      document.querySelectorAll('[data-copy-hex]').forEach(card => {
+        card.addEventListener('click', async () => {
+          const hex = card.dataset.copyHex;
+          try {
+            await navigator.clipboard.writeText(hex);
+            toast(`کد رنگ ${hex} کپی شد.`);
+          } catch {
+            toast(`کد رنگ: ${hex}`);
+          }
+        });
+      });
+
+      syncTypography();
+    })();
+  </script>
+</body>
+</html>

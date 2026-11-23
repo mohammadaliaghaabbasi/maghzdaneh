@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>پنل مدیریت غرفهٔ من در بازارچه | مغزدانه</title>
+  <meta name="description" content="غرفهٔ فروشندگی خود را در بازارچهٔ مغزدانه بسازید، محصولات را با قیمت پلکانی ثبت کنید، احراز هویت شوید و درآمد فروش خود را تسویه کنید.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <main class="studio-wrap">
+    <div id="seller-channel-guide" style="margin-bottom:24px"></div>
+
+    <!-- Loading -->
+    <div id="sl-loading" class="auth-gate-card">
+      <h2>در حال بررسی پنل مدیریت غرفه...</h2>
+      <p>لطفاً چند لحظه شکیبا باشید.</p>
+    </div>
+
+    <!-- Guest Gate -->
+    <section id="sl-guest" class="auth-gate-card" hidden>
+      <span class="band-kicker">پنل فروشندگان بازارچهٔ مغزدانه</span>
+      <h2>برای ساخت و مدیریت غرفهٔ خود وارد شوید</h2>
+      <p>
+        غرفهٔ شما در <strong>بازارچهٔ غرفه‌های فروشندگان</strong> نمایش داده می‌شود و کاملاً مستقل از انبار مرکزی مغزدانه است. اگر می‌خواهید بار عمدهٔ خود را یکجا و نقدی به انبار مغزدانه بفروشید، از صفحهٔ «فروش نقدی بار عمده» استفاده کنید.
+      </p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-primary" href="account.html?next=seller.html">ورود / ثبت‌نام سریع ←</a>
+        <a class="btn btn-outline" href="vendors.html">مشاهده بازارچهٔ غرفه‌ها</a>
+        <a class="btn btn-outline" href="supply.html">فروش نقدی بار عمده</a>
+      </div>
+    </section>
+
+    <!-- Authenticated Seller Studio -->
+    <div id="sl-studio" hidden>
+      <div class="studio-hero">
+        <div>
+          <span class="band-kicker">پنل مدیریت غرفه در بازارچهٔ مغزدانه</span>
+          <h1 id="sl-hero-title">ساخت و مدیریت غرفهٔ من</h1>
+          <p id="sl-hero-sub">این صفحه اتاق مدیریت غرفهٔ شماست؛ خروجی عمومی آن برای خریداران در صفحهٔ «بازارچهٔ غرفه‌های فروشندگان» نمایش داده می‌شود.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a id="sl-view-live" class="btn btn-gold btn-sm" href="vendors.html" hidden>مشاهدهٔ صفحهٔ عمومی غرفه ←</a>
+          <a class="btn btn-outline btn-sm" href="account.html">حساب کاربری</a>
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="kpi-strip">
+        <div class="kpi-box"><div class="k-label">وضعیت غرفه</div><div class="k-val" id="sl-kpi-status" style="font-size:1.05rem;color:var(--lux-gold)">ثبت‌نشده</div></div>
+        <div class="kpi-box"><div class="k-label">محصولات غرفهٔ من</div><div class="k-val" id="sl-kpi-prods">۰</div></div>
+        <div class="kpi-box"><div class="k-label">سفارش‌های غرفه</div><div class="k-val" id="sl-kpi-orders">۰</div></div>
+        <div class="kpi-box"><div class="k-label">موجودی قابل تسویه</div><div class="k-val" id="sl-kpi-balance" style="font-size:1.1rem;color:var(--lux-emerald)">۰ تومان</div></div>
+      </div>
+
+      <nav class="studio-tabs" role="tablist">
+        <button type="button" class="studio-tab active" data-stab="shop">۱. مشخصات غرفه</button>
+        <button type="button" class="studio-tab" data-stab="products">۲. محصولات غرفهٔ من</button>
+        <button type="button" class="studio-tab" data-stab="orders">۳. سفارش‌های دریافتی</button>
+        <button type="button" class="studio-tab" data-stab="finance">۴. مالی، کارمزد و تسویه</button>
+        <button type="button" class="studio-tab" data-stab="trust">۵. احراز هویت و پیام‌های مشتریان</button>
+      </nav>
+
+      <!-- Tab 1: Personal Storefront Setup -->
+      <section class="studio-panel" id="stab-shop">
+        <div class="studio-panel-head">
+          <div>
+            <h2>اطلاعات هویتی غرفه شخصی شما</h2>
+            <p>نشانی اختصاصی غرفه شما به‌صورت <span class="ltr" style="color:var(--lux-gold)">vendors.html?shop=...</span> ساخته می‌شود.</p>
+          </div>
+        </div>
+        <div class="auth-msg" id="shop-msg"></div>
+        <form id="shop-form" class="form-grid">
+          <div class="field">
+            <label for="sh-name">نام فروشگاه / غرفه *</label>
+            <input id="sh-name" required maxlength="100" placeholder="مثلاً: باغ پسته حاج‌رضا رفسنجان">
+          </div>
+          <div class="field">
+            <label for="sh-slug">نشانی اینترنتی غرفه (حروف انگلیسی) *</label>
+            <input id="sh-slug" class="ltr" required maxlength="60" placeholder="bagh-haj-reza">
+          </div>
+          <div class="field">
+            <label for="sh-owner">نام مدیر غرفه</label>
+            <input id="sh-owner" maxlength="100" placeholder="نام و نام خانوادگی شما">
+          </div>
+          <div class="field">
+            <label for="sh-city">شهر و استان مبدأ *</label>
+            <input id="sh-city" required maxlength="80" placeholder="مثلاً: رفسنجان، کرمان">
+          </div>
+          <div class="field">
+            <label for="sh-phone">شماره تماس / واتس‌اپ غرفه</label>
+            <input id="sh-phone" class="ltr" maxlength="20" placeholder="09131234567">
+          </div>
+          <div class="field">
+            <label for="sh-cover">تصویر جلد غرفه</label>
+            <select id="sh-cover">
+              <option value="src/assets/images/vendor_orchard_harvest_1795350768215.jpg">برداشت سنتی باغ پسته رفسنجان</option>
+              <option value="src/assets/images/article_pistachio_grading_1795350767749.jpg">سورتینگ پسته اکبری روی سنگ</option>
+              <option value="src/assets/images/article_green_slivers_1795350767949.jpg">خلال و مغز سبز زمردی قزوین</option>
+              <option value="src/assets/images/editorial_orchard_craft_1795339905141.jpg">نمای استودیویی مغز پستهٔ دست‌اول</option>
+            </select>
+          </div>
+          <div class="field form-full">
+            <label for="sh-spec">تخصص اصلی غرفه</label>
+            <input id="sh-spec" maxlength="140" placeholder="مثلاً: پسته اکبری دست‌چین، مغز سبز کال و خلال قزوین">
+          </div>
+          <div class="field form-full">
+            <label for="sh-bio">معرفی کوتاه باغ یا کارگاه شما</label>
+            <textarea id="sh-bio" rows="3" maxlength="500" placeholder="درباره نحوه برداشت، سورتینگ، تازگی و ضمانت محصولات خود بنویسید..."></textarea>
+          </div>
+          <div class="form-full">
+            <button type="submit" class="btn btn-primary" id="sh-save-btn">ذخیره و فعال‌سازی فروشگاه شخصی</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tab 2: Personal Seller Products -->
+      <section class="studio-panel" id="stab-products" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>محصولات غرفه شخصی شما</h2>
+            <p>این محصولات کاملاً مستقل از انبار مغزدانه هستند و فقط توسط شما ویرایش یا حذف می‌شوند.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-new-sp">+ ثبت محصول جدید در غرفه من</button>
+        </div>
+        <div id="sp-need-shop" class="empty" hidden>
+          <p style="color:#fff;font-weight:800">ابتدا مشخصات غرفه شخصی خود را در تب اول ذخیره کنید</p>
+        </div>
+        <div class="table-wrap" id="sp-table-wrap">
+          <table class="shop">
+            <thead>
+              <tr>
+                <th>محصول</th>
+                <th>دسته</th>
+                <th>خرده (تومان)</th>
+                <th>نیم‌عمده ۵+</th>
+                <th>عمده ۲۵+</th>
+                <th>موجودی (کیلو)</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="sp-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tab 3: Orders for This Personal Store -->
+      <section class="studio-panel" id="stab-orders" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>سفارش‌های ثبت‌شده برای غرفهٔ شما</h2>
+            <p>فهرست سفارش‌هایی که شامل اقلام غرفهٔ شما هستند.</p>
+          </div>
+        </div>
+        <div id="sl-orders-list"></div>
+      </section>
+
+      <!-- Tab 4: Finance, 8% Commission & IBAN Payouts -->
+      <section class="studio-panel" id="stab-finance" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>صورت‌حساب مالی، کارمزد ۸٪ و درخواست تسویه</h2>
+            <p>پس از کسر ۸٪ کارمزد زیرساخت و ضمانت بازارچه، خالص فروش شما قابل واریز به شماره شبا است.</p>
+          </div>
+        </div>
+        <div class="kpi-strip" style="margin-bottom:22px">
+          <div class="kpi-box"><div class="k-label">فروش ناخالص غرفه</div><div class="k-val" id="sf-gross" style="font-size:1.05rem">۰ تومان</div></div>
+          <div class="kpi-box"><div class="k-label">کارمزد بازارچه (۸٪)</div><div class="k-val" id="sf-comm" style="font-size:1.05rem;color:var(--lux-soft)">۰ تومان</div></div>
+          <div class="kpi-box"><div class="k-label">درآمد خالص غرفه‌دار</div><div class="k-val" id="sf-net" style="font-size:1.05rem;color:var(--lux-gold)">۰ تومان</div></div>
+          <div class="kpi-box"><div class="k-label">قابل برداشت (پس از تسویه‌ها)</div><div class="k-val" id="sf-avail" style="font-size:1.05rem;color:var(--lux-emerald)">۰ تومان</div></div>
+        </div>
+
+        <div class="auth-msg" id="payout-msg"></div>
+        <form id="payout-form" class="form-grid" style="margin-bottom:26px">
+          <div class="field">
+            <label for="po-shaba">شماره شبا (IR + ۲۴ رقم) *</label>
+            <input id="po-shaba" class="ltr" required maxlength="26" placeholder="IR120120000000001234567890" style="text-align:right">
+          </div>
+          <div class="field">
+            <label for="po-amount">مبلغ درخواست تسویه (حداقل ۱۰۰٬۰۰۰ تومان) *</label>
+            <input id="po-amount" type="number" class="ltr" required min="100000" step="10000" placeholder="500000" style="text-align:right">
+          </div>
+          <div class="form-full">
+            <button type="submit" class="btn btn-gold" id="po-submit-btn">ثبت درخواست تسویه بانکی</button>
+            <span id="sf-paid-note" style="font-size:0.8rem;color:var(--lux-muted);margin-inline-start:14px"></span>
+          </div>
+        </form>
+
+        <h3 style="font-size:1rem;color:#fff;margin-bottom:12px">سابقهٔ درخواست‌های تسویه</h3>
+        <div class="table-wrap">
+          <table class="shop">
+            <thead>
+              <tr>
+                <th>تاریخ</th>
+                <th>شماره شبا</th>
+                <th>مبلغ (تومان)</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody id="sf-payouts-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tab 5: Seller Verification & Customer Messages -->
+      <section class="studio-panel" id="stab-trust" hidden>
+        <div class="studio-panel-head">
+          <div>
+            <h2>احراز هویت باغدار / غرفه‌دار (نشان تأیید)</h2>
+            <p>دریافت نشان «✓ غرفهٔ تأییدشده» اعتماد خریداران عمده و خرد را دوچندان می‌کند.</p>
+          </div>
+          <span id="sv-badge-status" class="status-label">در انتظار ثبت</span>
+        </div>
+
+        <div class="auth-msg" id="verify-msg"></div>
+        <form id="verify-form" class="form-grid" style="margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--lux-line)">
+          <div class="field">
+            <label for="sv-nid">کد ملی ۱۰ رقمی مدیر غرفه *</label>
+            <input id="sv-nid" class="ltr" required maxlength="10" inputmode="numeric" placeholder="3051234567" style="text-align:right">
+          </div>
+          <div class="field">
+            <label for="sv-doc">توضیحات سند باغ، پروانه کسب یا کارگاه *</label>
+            <input id="sv-doc" required maxlength="300" placeholder="مثلاً: جواز باغ پسته رفسنجان — ۵ هکتار اکبری و کله‌قوچی">
+          </div>
+          <div class="form-full">
+            <button type="submit" class="btn btn-primary btn-sm" id="sv-submit-btn">ارسال درخواست احراز هویت به مدیریت</button>
+          </div>
+        </form>
+
+        <div class="studio-panel-head" style="margin-top:8px">
+          <div>
+            <h2>صندوق پیام‌های مستقیم خریداران</h2>
+            <p>استعلام قیمت، درخواست نمونه و پرسش‌هایی که خریداران از صفحهٔ غرفهٔ شما فرستاده‌اند.</p>
+          </div>
+        </div>
+        <div id="sl-messages-list" style="display:flex;flex-direction:column;gap:14px"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Seller Product Modal -->
+  <div class="modal-back" id="sp-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:640px">
+      <h3 id="spm-title">ثبت محصول جدید در غرفه شخصی</h3>
+      <form id="sp-form" class="form-grid">
+        <input type="hidden" id="spm-id">
+        <div class="field form-full"><label for="spm-name">نام محصول *</label><input id="spm-name" required maxlength="140" placeholder="مثلاً: مغز پسته احمدآقایی برداشت ۱۴۰۵"></div>
+        <div class="field">
+          <label for="spm-cat">دسته‌بندی</label>
+          <select id="spm-cat">
+            <option value="pistachio-kernel">مغز پسته</option>
+            <option value="pistachio-slice">خلال و پودر پسته</option>
+            <option value="almond-kernel">مغز بادام</option>
+            <option value="walnut-kernel">مغز گردو</option>
+            <option value="in-shell">پسته و گردوی پوست‌دار</option>
+          </select>
+        </div>
+        <div class="field"><label for="spm-origin">مبدأ برداشت</label><input id="spm-origin" maxlength="80" placeholder="مثلاً: رفسنجان"></div>
+        <div class="field"><label for="spm-grade">گرید کیفیت</label><input id="spm-grade" maxlength="80" value="دست‌چین باغدار"></div>
+        <div class="field"><label for="spm-stock">موجودی (کیلوگرم)</label><input id="spm-stock" type="number" min="0" value="50" required></div>
+        <div class="field"><label for="spm-p1">قیمت خرده (تومان/کیلو) *</label><input id="spm-p1" type="number" min="10000" required value="1450000"></div>
+        <div class="field"><label for="spm-p2">قیمت نیم‌عمده ۵+ کیلو</label><input id="spm-p2" type="number" min="10000" required value="1340000"></div>
+        <div class="field"><label for="spm-p3">قیمت عمده ۲۵+ کیلو</label><input id="spm-p3" type="number" min="10000" required value="1240000"></div>
+        <div class="field">
+          <label for="spm-img">تصویر محصول</label>
+          <select id="spm-img">
+            <option value="src/assets/images/article_pistachio_grading_1795350767749.jpg">پسته و مغز اکبری دست‌چین</option>
+            <option value="src/assets/images/article_green_slivers_1795350767949.jpg">خلال پسته سبز زمردی</option>
+            <option value="assets/img/maghz-pistachio-akbari.jpg">مغز پسته اکبری ممتاز</option>
+            <option value="assets/img/studio-walnut-tuyserkan.jpg">مغز گردوی سفید تویسرکان</option>
+            <option value="assets/img/studio-almond-mamai.jpg">مغز بادام مامایی</option>
+          </select>
+        </div>
+        <div class="field form-full"><label for="spm-desc">توضیحات محصول</label><textarea id="spm-desc" rows="3" maxlength="1000" placeholder="ویژگی‌های طعم، رطوبت، سایز دانه و نوع بسته‌بندی..."></textarea></div>
+        <div class="form-full" style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn btn-outline btn-sm" id="spm-close">انصراف</button>
+          <button type="submit" class="btn btn-primary btn-sm">ذخیره محصول در غرفه</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=19"></script>
+  <script>
+    let sellerState = { user: null, shop: null, products: [], orders: [], finance: null, messages: [] };
+    const PAYOUT_STATUS_FA = { pending: 'در انتظار واریز', paid: 'واریزشده ✓', rejected: 'ردشده' };
+
+    function switchSellerTab(id) {
+      document.querySelectorAll('[data-stab]').forEach(b => b.classList.toggle('active', b.dataset.stab === id));
+      ['shop', 'products', 'orders', 'finance', 'trust'].forEach(t => {
+        const el = document.getElementById('stab-' + t);
+        if (el) el.hidden = t !== id;
+      });
+    }
+    document.querySelectorAll('[data-stab]').forEach(b => {
+      b.addEventListener('click', () => switchSellerTab(b.dataset.stab));
+    });
+
+    function showPanelMsg(id, text, ok) {
+      const box = document.getElementById(id);
+      if (!box) return;
+      box.textContent = text;
+      box.className = 'auth-msg ' + (ok ? 'ok' : 'err');
+    }
+
+    async function loadSellerData() {
+      try {
+        sellerState = await apiFetch('/api/seller/me');
+        document.getElementById('sl-loading').hidden = true;
+        document.getElementById('sl-guest').hidden = true;
+        document.getElementById('sl-studio').hidden = false;
+        renderSellerDashboard();
+      } catch (err) {
+        document.getElementById('sl-loading').hidden = true;
+        document.getElementById('sl-guest').hidden = false;
+        document.getElementById('sl-studio').hidden = true;
+      }
+    }
+
+    function renderSellerDashboard() {
+      const { user, shop, products, orders, finance, messages } = sellerState;
+      const fin = finance || { grossSales: 0, commission: 0, netEarnings: 0, paidOut: 0, pendingPayouts: 0, availableBalance: 0, payouts: [] };
+      const liveBtn = document.getElementById('sl-view-live');
+
+      document.getElementById('sl-kpi-status').textContent = shop
+        ? (shop.status === 'active' ? (shop.verified ? 'فعال · تأییدشده ✓' : 'فعال و آنلاین') : 'معلق')
+        : 'در انتظار ساخت';
+      document.getElementById('sl-kpi-prods').textContent = fmt(products.length);
+      document.getElementById('sl-kpi-orders').textContent = fmt(orders.length);
+      document.getElementById('sl-kpi-balance').textContent = faToman(fin.availableBalance || 0);
+
+      if (shop) {
+        document.getElementById('sl-hero-title').textContent = `مدیریت غرفه: ${shop.name}`;
+        liveBtn.hidden = false;
+        liveBtn.href = `vendors.html?shop=${encodeURIComponent(shop.slug)}`;
+        document.getElementById('sh-name').value = shop.name || '';
+        document.getElementById('sh-slug').value = shop.slug || '';
+        document.getElementById('sh-owner').value = shop.ownerName || user.fullName || '';
+        document.getElementById('sh-city').value = shop.city || '';
+        document.getElementById('sh-phone').value = shop.phone || user.phone || '';
+        document.getElementById('sh-cover').value = shop.coverImage || 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg';
+        document.getElementById('sh-spec').value = shop.specialty || '';
+        document.getElementById('sh-bio').value = shop.bio || '';
+      } else {
+        document.getElementById('sh-owner').value = user.fullName || '';
+        document.getElementById('sh-phone').value = user.phone || '';
+      }
+
+      document.getElementById('sp-need-shop').hidden = Boolean(shop);
+      document.getElementById('sp-table-wrap').hidden = !shop;
+      document.getElementById('btn-new-sp').disabled = !shop;
+
+      const tbody = document.getElementById('sp-tbody');
+      if (!products.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--lux-soft)">هنوز محصولی در غرفه شخصی خود ثبت نکرده‌اید. روی «ثبت محصول جدید» کلیک کنید.</td></tr>';
+      } else {
+        tbody.innerHTML = products.map(p => `
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <img src="${esc(safeImgUrl(p.img))}" alt="${esc(p.name)}">
+                <div>
+                  <strong style="color:#fff">${esc(p.name)}</strong>
+                  <div style="font-size:0.75rem;color:var(--lux-muted)">${esc(p.origin)} · ${esc(p.grade)}</div>
+                </div>
+              </div>
+            </td>
+            <td style="font-size:0.8rem">${esc(catName(p.category))}</td>
+            <td class="num">${fmt(p.prices.retail)}</td>
+            <td class="num">${fmt(p.prices.semi)}</td>
+            <td class="num" style="color:var(--lux-emerald)">${fmt(p.prices.wholesale)}</td>
+            <td class="num">${fmt(p.stock)} کیلو</td>
+            <td>
+              <div style="display:flex;gap:6px">
+                <button type="button" class="btn btn-outline btn-sm" data-edit-sp="${esc(p.id)}">ویرایش</button>
+                <button type="button" class="rm-btn" data-del-sp="${esc(p.id)}">حذف</button>
+              </div>
+            </td>
+          </tr>`).join('');
+
+        tbody.querySelectorAll('[data-edit-sp]').forEach(btn => {
+          btn.onclick = () => openSellerProdModal(products.find(x => x.id === btn.dataset.editSp));
+        });
+        tbody.querySelectorAll('[data-del-sp]').forEach(btn => {
+          btn.onclick = async () => {
+            try {
+              await apiFetch(`/api/seller/products/${encodeURIComponent(btn.dataset.delSp)}`, { method: 'DELETE' });
+              toast('محصول از غرفه شما حذف شد');
+              await loadSellerData();
+            } catch (e) {
+              toast(e.message || 'خطا در حذف محصول');
+            }
+          };
+        });
+      }
+
+      const ol = document.getElementById('sl-orders-list');
+      if (!orders.length) {
+        ol.innerHTML = '<div class="empty"><p style="color:#fff;font-weight:700">هنوز سفارشی برای غرفه شما ثبت نشده است</p></div>';
+      } else {
+        ol.innerHTML = orders.map(o => `
+          <div class="order-card">
+            <div class="order-card-top">
+              <div><strong class="ltr" style="color:#fff">${esc(o.orderCode)}</strong> · ${esc(o.customerName)} (${esc(o.city)})</div>
+              <span class="status-label">${esc(o.status)}</span>
+            </div>
+            <div style="font-size:0.85rem;color:var(--lux-soft)">
+              ${(o.items || []).filter(i => i.vendorId === shop?.id).map(i => `${esc(i.name)} × ${fmt(i.qty)} کیلو (${faToman(i.lineTotal)})`).join(' · ')}
+            </div>
+          </div>`).join('');
+      }
+
+      // Render Tab 4: Finance & Payouts
+      document.getElementById('sf-gross').textContent = faToman(fin.grossSales || 0);
+      document.getElementById('sf-comm').textContent = faToman(fin.commission || 0);
+      document.getElementById('sf-net').textContent = faToman(fin.netEarnings || 0);
+      document.getElementById('sf-avail').textContent = faToman(fin.availableBalance || 0);
+      document.getElementById('sf-paid-note').textContent = `واریزشده تا امروز: ${faToman(fin.paidOut || 0)} · در انتظار واریز: ${faToman(fin.pendingPayouts || 0)}`;
+      document.getElementById('po-submit-btn').disabled = !shop;
+      const poTbody = document.getElementById('sf-payouts-tbody');
+      const payouts = fin.payouts || [];
+      if (!payouts.length) {
+        poTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:22px;color:var(--lux-muted)">هنوز درخواست تسویه‌ای ثبت نشده است.</td></tr>';
+      } else {
+        poTbody.innerHTML = payouts.map(p => `
+          <tr>
+            <td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString('fa-IR') : '—'}</td>
+            <td class="ltr">${esc(p.shaba)}</td>
+            <td class="num" style="color:var(--lux-emerald);font-weight:700">${faToman(p.amount)}</td>
+            <td><span class="status-label">${esc(PAYOUT_STATUS_FA[p.status] || p.status)}</span></td>
+          </tr>`).join('');
+      }
+
+      // Render Tab 5: Verification & Messages
+      const svBadge = document.getElementById('sv-badge-status');
+      const vr = shop && shop.verificationRequest;
+      if (shop && shop.verified) {
+        svBadge.textContent = '✓ غرفهٔ تأییدشده';
+        svBadge.style.color = 'var(--lux-emerald)';
+      } else if (vr && vr.status === 'pending') {
+        svBadge.textContent = 'در انتظار بررسی مدیریت';
+        svBadge.style.color = 'var(--lux-gold)';
+        if (vr.nationalId) document.getElementById('sv-nid').value = vr.nationalId;
+        if (vr.docNote) document.getElementById('sv-doc').value = vr.docNote;
+      } else {
+        svBadge.textContent = shop ? 'تأییدنشده' : 'ابتدا غرفه را بسازید';
+      }
+      document.getElementById('sv-submit-btn').disabled = !shop || Boolean(shop && shop.verified);
+
+      const msgBox = document.getElementById('sl-messages-list');
+      const msgs = messages || [];
+      if (!msgs.length) {
+        msgBox.innerHTML = '<div class="empty"><p style="color:var(--lux-soft)">هنوز پیامی از سوی خریداران در صفحهٔ غرفه ثبت نشده است.</p></div>';
+      } else {
+        msgBox.innerHTML = msgs.map(m => `
+          <div class="order-card" style="margin:0">
+            <div class="order-card-top">
+              <div><strong style="color:#fff">${esc(m.senderName)}</strong> ${m.phone ? `· <span class="ltr" style="color:var(--lux-gold)">${esc(m.phone)}</span>` : ''}</div>
+              <span style="font-size:0.78rem;color:var(--lux-muted)">${m.createdAt ? new Date(m.createdAt).toLocaleDateString('fa-IR') : ''}</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--lux-soft);margin-bottom:10px;line-height:1.8">${esc(m.text)}</p>
+            ${m.reply ? `<div class="qa-answer" style="margin-bottom:10px"><strong>پاسخ شما:</strong> ${esc(m.reply)}</div>` : ''}
+            <form class="sl-reply-form" data-msg-id="${esc(m.id)}" style="display:flex;gap:8px;flex-wrap:wrap">
+              <input required maxlength="1000" placeholder="${m.reply ? 'ویرایش یا ارسال پاسخ جدید...' : 'پاسخ خود را به خریدار بنویسید...'}" style="flex:1;min-width:200px;padding:9px 12px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:8px;color:#fff;font-size:0.84rem">
+              <button type="submit" class="btn btn-primary btn-sm">ثبت پاسخ</button>
+            </form>
+          </div>`).join('');
+
+        msgBox.querySelectorAll('.sl-reply-form').forEach(f => {
+          f.onsubmit = async (ev) => {
+            ev.preventDefault();
+            const reply = f.querySelector('input').value.trim();
+            if (!reply) return;
+            try {
+              await apiFetch(`/api/seller/messages/${encodeURIComponent(f.dataset.msgId)}/reply`, {
+                method: 'POST',
+                body: JSON.stringify({ reply }),
+              });
+              toast('پاسخ شما ثبت شد');
+              await loadSellerData();
+            } catch (e) {
+              toast(e.message || 'خطا در ثبت پاسخ');
+            }
+          };
+        });
+      }
+    }
+
+    document.getElementById('shop-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiFetch('/api/seller/shop', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: document.getElementById('sh-name').value.trim(),
+            slug: document.getElementById('sh-slug').value.trim(),
+            ownerName: document.getElementById('sh-owner').value.trim(),
+            city: document.getElementById('sh-city').value.trim(),
+            phone: document.getElementById('sh-phone').value.trim(),
+            coverImage: document.getElementById('sh-cover').value,
+            specialty: document.getElementById('sh-spec').value.trim(),
+            bio: document.getElementById('sh-bio').value.trim(),
+          }),
+        });
+        showPanelMsg('shop-msg', 'غرفهٔ شما با موفقیت ذخیره و در «بازارچهٔ غرفه‌های فروشندگان» فعال شد.', true);
+        toast('غرفهٔ شما فعال شد');
+        await loadSellerData();
+      } catch (err) {
+        showPanelMsg('shop-msg', err.message || 'خطا در ذخیره غرفه', false);
+      }
+    });
+
+    document.getElementById('payout-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiFetch('/api/seller/payout', {
+          method: 'POST',
+          body: JSON.stringify({
+            shaba: document.getElementById('po-shaba').value.trim().toUpperCase(),
+            amount: Number(document.getElementById('po-amount').value || 0),
+          }),
+        });
+        showPanelMsg('payout-msg', 'درخواست تسویه بانکی شما با موفقیت ثبت شد و در صف واریز مدیریت قرار گرفت.', true);
+        document.getElementById('po-amount').value = '';
+        toast('درخواست تسویه ثبت شد');
+        await loadSellerData();
+      } catch (err) {
+        showPanelMsg('payout-msg', err.message || 'خطا در ثبت درخواست تسویه', false);
+      }
+    });
+
+    document.getElementById('verify-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await apiFetch('/api/seller/verify-request', {
+          method: 'POST',
+          body: JSON.stringify({
+            nationalId: document.getElementById('sv-nid').value.trim(),
+            docNote: document.getElementById('sv-doc').value.trim(),
+          }),
+        });
+        showPanelMsg('verify-msg', 'مدارک احراز هویت برای تیم مدیریت مغزدانه ارسال شد.', true);
+        toast('درخواست احراز هویت ثبت شد');
+        await loadSellerData();
+      } catch (err) {
+        showPanelMsg('verify-msg', err.message || 'خطا در ثبت درخواست احراز هویت', false);
+      }
+    });
+
+    function openSellerProdModal(p = null) {
+      document.getElementById('spm-title').textContent = p ? `ویرایش: ${p.name}` : 'ثبت محصول جدید در غرفه شخصی';
+      document.getElementById('spm-id').value = p ? p.id : '';
+      document.getElementById('spm-name').value = p ? p.name : '';
+      document.getElementById('spm-cat').value = p ? p.category : 'pistachio-kernel';
+      document.getElementById('spm-origin').value = p ? p.origin : (sellerState.shop?.city || 'رفسنجان');
+      document.getElementById('spm-grade').value = p ? p.grade : 'دست‌چین باغدار';
+      document.getElementById('spm-stock').value = p ? p.stock : 50;
+      document.getElementById('spm-p1').value = p ? p.prices.retail : 1450000;
+      document.getElementById('spm-p2').value = p ? p.prices.semi : 1340000;
+      document.getElementById('spm-p3').value = p ? p.prices.wholesale : 1240000;
+      document.getElementById('spm-img').value = p ? p.img : 'src/assets/images/article_pistachio_grading_1795350767749.jpg';
+      document.getElementById('spm-desc').value = p ? (p.desc || '') : '';
+      document.getElementById('sp-modal').classList.add('open');
+    }
+
+    document.getElementById('btn-new-sp').onclick = () => openSellerProdModal(null);
+    document.getElementById('spm-close').onclick = () => document.getElementById('sp-modal').classList.remove('open');
+
+    document.getElementById('sp-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editingId = document.getElementById('spm-id').value;
+      const payload = {
+        name: document.getElementById('spm-name').value.trim(),
+        category: document.getElementById('spm-cat').value,
+        origin: document.getElementById('spm-origin').value.trim(),
+        grade: document.getElementById('spm-grade').value.trim(),
+        stock: Number(document.getElementById('spm-stock').value || 0),
+        retailPrice: Number(document.getElementById('spm-p1').value || 0),
+        semiPrice: Number(document.getElementById('spm-p2').value || 0),
+        wholesalePrice: Number(document.getElementById('spm-p3').value || 0),
+        img: document.getElementById('spm-img').value,
+        desc: document.getElementById('spm-desc').value.trim(),
+      };
+      try {
+        if (editingId) {
+          await apiFetch(`/api/seller/products/${encodeURIComponent(editingId)}`, { method: 'PUT', body: JSON.stringify(payload) });
+          toast('تغییرات محصول ذخیره شد');
+        } else {
+          await apiFetch('/api/seller/products', { method: 'POST', body: JSON.stringify(payload) });
+          toast('محصول جدید در غرفه شخصی شما منتشر شد');
+        }
+        document.getElementById('sp-modal').classList.remove('open');
+        await loadSellerData();
+      } catch (err) {
+        toast(err.message || 'خطا در ذخیره محصول');
+      }
+    });
+
+    boot('seller').then(() => {
+      document.getElementById('seller-channel-guide').innerHTML = renderChannelGuideHtml('seller');
+      loadSellerData();
+    });
+  </script>
+</body>
+</html>

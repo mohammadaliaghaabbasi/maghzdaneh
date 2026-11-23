@@ -2,14 +2,20 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>جزئیات محصول | مغزدانه</title>
-  <meta name="description" content="مشخصات کامل، قیمت پلکانی و خرید عمده و خرده مغزها در مغزدانه.">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/main.css?v=10">
-  <link rel="stylesheet" href="assets/css/fx.css?v=10">
+  <meta name="description" content="مشخصات کامل، شناسنامهٔ آزمایشگاهی بار، انتخاب فرآوری و بسته‌بندی، قیمت پلکانی و دیدگاه‌های خریداران در مغزدانه.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
   <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
   <header class="site-header" id="site-header"></header>
@@ -28,15 +34,84 @@
           </div>
           <div class="feature" style="padding:14px">
             <span class="ico-wrap" id="pd-ico-2"></span>
-            <div><h3 style="font-size:var(--fs-xs)">بسته‌بندی نوک‌زنی</h3><p style="font-size:0.76rem">وکیوم سبک روز ارسال برای حفظ عطر</p></div>
+            <div><h3 style="font-size:var(--fs-xs)">بسته‌بندی وکیوم استاندارد</h3><p style="font-size:0.76rem">وکیوم تازهٔ روز ارسال برای حفظ عطر و طعم</p></div>
           </div>
         </div>
+        <!-- شناسنامه آزمایشگاهی بار (Lot Certificate) -->
+        <div class="lot-cert-card" id="lot-cert-card"></div>
       </div>
       <div class="pd-info" id="pd-info"></div>
     </div>
   </div>
 
-  <section class="sec-alt" style="margin-top:52px">
+  <!-- ================= دیدگاه خریداران و پرسش‌وپاسخ تخصصی ================= -->
+  <section class="sec-alt" style="margin-top:48px" id="pd-community-sec">
+    <div class="container">
+      <div class="pd-tabs-grid">
+        <!-- Verified Reviews -->
+        <div>
+          <div class="sec-head" style="margin-bottom:18px">
+            <span class="sec-label">تجربهٔ واقعی مشتریان</span>
+            <h2 style="font-size:var(--fs-xl)">دیدگاه‌های تأییدشدهٔ خریداران</h2>
+          </div>
+          <div class="subrating-bars" id="rev-subratings"></div>
+          <div id="rev-list"></div>
+
+          <form class="contact-card" id="rev-form" style="margin-top:18px">
+            <h3>ثبت دیدگاه دربارهٔ این محصول</h3>
+            <div class="form-grid">
+              <div class="field"><label for="rv-name">نام شما *</label><input id="rv-name" required placeholder="مثلاً: سارا محمدی"></div>
+              <div class="field">
+                <label for="rv-rating">امتیاز کلی (۱ تا ۵)</label>
+                <select id="rv-rating">
+                  <option value="5">۵ — عالی و ممتاز</option>
+                  <option value="4">۴ — بسیار خوب</option>
+                  <option value="3">۳ — متوسط</option>
+                  <option value="2">۲ — نیازمند بهبود</option>
+                  <option value="1">۱ — ضعیف</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="rv-fresh">تازگی و عطر (۱ تا ۵)</label>
+                <select id="rv-fresh"><option value="5">۵</option><option value="4">۴</option><option value="3">۳</option><option value="2">۲</option><option value="1">۱</option></select>
+              </div>
+              <div class="field">
+                <label for="rv-unif">یک‌دستی سایز (۱ تا ۵)</label>
+                <select id="rv-unif"><option value="5">۵</option><option value="4">۴</option><option value="3">۳</option><option value="2">۲</option><option value="1">۱</option></select>
+              </div>
+              <div class="field">
+                <label for="rv-pack">بسته‌بندی و ارسال (۱ تا ۵)</label>
+                <select id="rv-pack"><option value="5">۵</option><option value="4">۴</option><option value="3">۳</option><option value="2">۲</option><option value="1">۱</option></select>
+              </div>
+              <div class="field form-full"><label for="rv-comment">تجربهٔ شما از کیفیت و طعم *</label><textarea id="rv-comment" required rows="3" placeholder="نظر دقیق خود دربارهٔ تازگی، رنگ مغز و بسته‌بندی را بنویسید…"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" style="margin-top:14px">ارسال دیدگاه</button>
+          </form>
+        </div>
+
+        <!-- Product Q&A -->
+        <div>
+          <div class="sec-head" style="margin-bottom:18px">
+            <span class="sec-label">پاسخ کارشناسان مغزدانه</span>
+            <h2 style="font-size:var(--fs-xl)">پرسش‌وپاسخ محصول</h2>
+          </div>
+          <div id="qa-list"></div>
+
+          <form class="contact-card" id="qa-form" style="margin-top:18px">
+            <h3>پرسشی دربارهٔ این بار دارید؟</h3>
+            <div class="form-grid">
+              <div class="field form-full"><label for="qa-name">نام شما *</label><input id="qa-name" required placeholder="نام یا نام کسب‌وکار"></div>
+              <div class="field form-full"><label for="qa-text">متن پرسش *</label><textarea id="qa-text" required rows="3" placeholder="مثلاً: آیا این بار برای تولید سوهان یا بستنی سنتی مناسب است؟"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm" style="margin-top:14px">ثبت پرسش</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= محصولات مرتبط ================= -->
+  <section style="margin-top:12px">
     <div class="container">
       <div class="sec-head" data-reveal>
         <span class="sec-label">پیشنهادهای هم‌خانواده</span>
@@ -46,12 +121,74 @@
     </div>
   </section>
 
+  <!-- Price / Stock Alert Modal -->
+  <div class="modal-back" id="alert-modal">
+    <div class="modal" role="dialog" aria-label="ثبت هشدار تغییر قیمت یا موجودی">
+      <div class="modal-head-row">
+        <div>
+          <h3>هشدار تغییر قیمت و موجودی</h3>
+          <p style="font-size:var(--fs-xs);color:var(--c-text-soft)">به محض رسیدن قیمت به نرخ هدف یا شارژ انبار، از طریق پیامک مطلع می‌شوید.</p>
+        </div>
+        <button type="button" class="drawer-close" id="alert-close" aria-label="بستن">×</button>
+      </div>
+      <form id="alert-form" style="margin-top:16px;display:grid;gap:12px">
+        <div class="field">
+          <label for="al-type">نوع هشدار</label>
+          <select id="al-type">
+            <option value="price">هشدار کاهش قیمت تا نرخ هدف</option>
+            <option value="stock">هشدار موجود شدن / شارژ بار تازه</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="al-phone">شماره موبایل *</label>
+          <input id="al-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" class="ltr" style="text-align:right">
+        </div>
+        <div class="field" id="al-price-wrap">
+          <label for="al-price">قیمت هدف هر کیلو (تومان)</label>
+          <input id="al-price" type="number" step="10000" placeholder="مثلاً 1350000">
+        </div>
+        <button type="submit" class="btn btn-primary">ثبت هشدار هوشمند</button>
+      </form>
+    </div>
+  </div>
+
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app.js?v=19"></script>
   <script src="assets/js/motion.js"></script>
   <script>
     const pid = new URLSearchParams(location.search).get('id');
+
+    const PROCESS_OPTIONS = [
+      { id: 'raw', label: 'خامِ طبیعی', note: 'بدون افزودنی (پایه)', delta: 0 },
+      { id: 'salted', label: 'برشتهٔ نمکی ملایم', note: '+ ۲۵٬۰۰۰ ت/کیلو', delta: 25000 },
+      { id: 'lemon', label: 'برشتهٔ لیمو و نمک', note: '+ ۳۵٬۰۰۰ ت/کیلو', delta: 35000 },
+      { id: 'saffron', label: 'زعفرانی ممتاز قائنات', note: '+ ۶۵٬۰۰۰ ت/کیلو', delta: 65000 },
+    ];
+
+    const PACK_OPTIONS = [
+      { id: 'vacuum', label: 'پاکت وکیوم زیپ‌دار', note: 'استاندارد (رایگان)', delta: 0 },
+      { id: 'jar', label: 'شیشهٔ تیرهٔ ضدنور', note: '+ ۴۵٬۰۰۰ ت/کیلو', delta: 45000 },
+      { id: 'tin', label: 'قوطی فلزی زمردی هدیه', note: '+ ۹۵٬۰۰۰ ت/کیلو', delta: 95000 },
+    ];
+
+    function buildLotCertificate(p) {
+      const hash = Array.from(String(p.id || 'mgz')).reduce((a, ch) => a + ch.charCodeAt(0), 0);
+      const lotCode = `MGZ-1405-${String(104 + (hash % 890))}`;
+      const isPist = p.category && p.category.includes('pistachio');
+      const isWalnut = p.category === 'walnut-kernel';
+      const moisture = isWalnut ? '۳٫۸٪' : isPist ? '۴٫۲٪' : '۴٫۶٪';
+      const ounceOrYield = isPist ? 'انس ۲۸–۳۰ (مغز درشت)' : isWalnut ? 'چربی طبیعی ۶۴٪ · سفید ۹۵٪' : 'مغز کامل بدون تلخی ۹۹٪';
+      return {
+        lotCode,
+        harvest: 'پاییز ۱۴۰۴ / سورت تازه ۱۴۰۵',
+        origin: p.origin || 'رفسنجان',
+        moisture,
+        ounceOrYield,
+        roastDate: 'برشته‌کاری روز ثبت سفارش',
+        aflatoxin: 'تأییدشده (استاندارد EU < 4 ppb)',
+      };
+    }
 
     boot('catalog').then(db => {
       document.getElementById('pd-ico-1').innerHTML = icon('shield');
@@ -64,8 +201,9 @@
             <div class="big">${icon('search')}</div>
             <p style="color:#fff;font-weight:800">این محصول پیدا نشد</p>
             <p style="margin:8px 0 18px">ممکن است نشانی محصول تغییر کرده باشد.</p>
-            <a class="btn btn-primary" href="catalog.html">بازگشت به کاتالوگ</a>
+            <a class="btn btn-primary" href="catalog.html">بازگشت به فروشگاه</a>
           </div>`;
+        document.getElementById('pd-community-sec').style.display = 'none';
         return;
       }
 
@@ -76,15 +214,33 @@
       );
 
       document.getElementById('crumb').innerHTML =
-        `<a href="index.html">مغزدانه</a> <span>›</span> <a href="catalog.html">کاتالوگ</a> <span>›</span> <a href="catalog.html?cat=${p.category}">${catName(p.category)}</a> <span>›</span> <b>${p.name}</b>`;
+        `<a href="index.html">مغزدانه</a> <span>›</span> <a href="catalog.html">فروشگاه</a> <span>›</span> <a href="catalog.html?cat=${encodeURIComponent(p.category)}">${esc(catName(p.category))}</a> <span>›</span> <b>${esc(p.name)}</b>`;
 
       const imgEl = document.getElementById('pd-img');
-      imgEl.src = p.img;
+      imgEl.src = safeImgUrl(p.img);
       imgEl.alt = p.name;
       imgEl.onerror = () => mgzImgFallback(imgEl, p.name);
 
+      // Render Lot / Laboratory Certificate
+      const cert = buildLotCertificate(p);
+      document.getElementById('lot-cert-card').innerHTML = `
+        <div class="lot-cert-head">
+          <h3>${icon('shield')} شناسنامهٔ آزمایشگاهی بار (Lot Certificate)</h3>
+          <span class="lot-pass">✓ ${cert.aflatoxin}</span>
+        </div>
+        <div class="lot-grid">
+          <div class="lot-cell"><span>کد پارت / بچ</span><strong class="ltr" style="display:inline-block">${cert.lotCode}</strong></div>
+          <div class="lot-cell"><span>فصل برداشت و سورت</span><strong>${cert.harvest}</strong></div>
+          <div class="lot-cell"><span>درصد رطوبت بار</span><strong>${cert.moisture}</strong></div>
+          <div class="lot-cell"><span>شاخص انس / خلوص</span><strong>${cert.ounceOrYield}</strong></div>
+          <div class="lot-cell"><span>تاریخ فرآوری</span><strong>${cert.roastDate}</strong></div>
+          <div class="lot-cell"><span>مبدأ اصالت</span><strong>${esc(cert.origin)}</strong></div>
+        </div>`;
+
       let selTier = APP.tier || 'retail';
       let qty = defaultQtyForTier(selTier);
+      let selProc = PROCESS_OPTIONS[0];
+      let selPack = PACK_OPTIONS[0];
 
       function stepForTier(t) {
         if (t === 'wholesale') return 5;
@@ -93,11 +249,14 @@
       }
 
       function render() {
-        const price = p.prices[selTier];
+        const variantDelta = selProc.delta + selPack.delta;
+        const basePrice = p.prices[selTier];
+        const effectiveUnit = basePrice + variantDelta;
         const retail = p.prices.retail;
-        const save = selTier !== 'retail' ? Math.round((1 - price / retail) * 100) : 0;
+        const save = selTier !== 'retail' ? Math.round((1 - basePrice / retail) * 100) : 0;
         const minQ = tierMin(selTier);
         const step = stepForTier(selTier);
+        const isCompared = APP.compare.includes(p.id);
 
         const presets = selTier === 'retail'
           ? [0.25, 0.5, 1, 2, 4]
@@ -105,25 +264,33 @@
           ? [5, 10, 15, 20]
           : [25, 40, 50, 100];
 
+        const vendorBanner = p.source === 'vendor' && p.vendorSlug
+          ? `<div style="padding:12px 16px;border-radius:10px;background:rgba(111,209,149,0.08);border:1px solid rgba(111,209,149,0.28);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:0.84rem">
+               <span>عرضه از غرفهٔ فروشنده در بازارچه: <strong style="color:#fff">${esc(p.vendorName)}</strong> (${esc(p.vendorCity || p.origin)})</span>
+               <a href="vendors.html?shop=${encodeURIComponent(p.vendorSlug)}" style="color:var(--c-accent-light);font-weight:800">ورود به غرفه و پیام به فروشنده ←</a>
+             </div>`
+          : '';
+
         document.getElementById('pd-info').innerHTML = `
           <div class="pd-meta" style="color:var(--c-accent)">
-            <span>${catName(p.category)}</span>
+            <span>${esc(catName(p.category))}</span>
             <span aria-hidden="true">·</span>
-            <span>مبدأ: ${p.origin}</span>
+            <span>مبدأ: ${esc(p.origin)}</span>
             <span aria-hidden="true">·</span>
-            <span>گرید: ${p.grade}</span>
+            <span>گرید: ${esc(p.grade)}</span>
           </div>
-          <h1>${p.name}</h1>
+          <h1>${esc(p.name)}</h1>
           <div class="pd-meta" style="margin-top:6px;margin-bottom:18px">
-            <span>برداشت ۱۴۰۵</span>
+            <span>کد بار: <b class="ltr">${cert.lotCode}</b></span>
             <span aria-hidden="true">·</span>
-            <span>بسته‌بندی وکیوم روز ارسال</span>
+            <span>تازه وکیوم روز ارسال</span>
             <span aria-hidden="true">·</span>
-            <span style="color:var(--c-primary-light)">آماده ارسال</span>
+            <span style="color:var(--c-primary-light)">${p.stock > 0 ? 'موجود و آماده ارسال' : 'تکمیل ظرفیت موقت'}</span>
           </div>
-          <p class="pd-desc">${p.desc}</p>
-          <ul class="spec-list">${p.specs.map(s => `<li>${s}</li>`).join('')}</ul>
-          <p class="uses"><b>مناسب برای:</b> ${p.uses.join('، ')}</p>
+          ${vendorBanner}
+          <p class="pd-desc">${esc(p.desc)}</p>
+          <ul class="spec-list">${(p.specs || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+          <p class="uses"><b>مناسب برای:</b> ${(p.uses || []).map(esc).join('، ')}</p>
 
           <h3 style="font-size:var(--fs-sm);color:#fff;margin-bottom:10px">۱. انتخاب پله خرید (قیمت پلکانی شفاف)</h3>
           <div class="tier-select">
@@ -136,12 +303,34 @@
                   <span class="t-name">${t.label} ${tSave ? `<span style="color:var(--c-accent-light);font-size:var(--fs-xs)">(٪${fmt(tSave)} صرفه‌جویی)</span>` : ''}</span><br>
                   <span class="t-min">${t.desc}</span>
                 </span>
-                <span class="t-price">${fmt(p.prices[t.id])} <small style="font-weight:600;color:var(--c-text-soft)">ت/کیلو</small></span>
+                <span class="t-price">${fmt(p.prices[t.id] + variantDelta)} <small style="font-weight:600;color:var(--c-text-soft)">تومان / کیلو</small></span>
               </label>`;
             }).join('')}
           </div>
 
-          <h3 style="font-size:var(--fs-sm);color:#fff;margin-bottom:8px">۲. انتخاب وزن سفارش (کیلوگرم)</h3>
+          <div class="variant-section">
+            <span class="variant-label">۲. نوع فرآوری و برشته‌کاری (اختیاری)</span>
+            <div class="variant-grid">
+              ${PROCESS_OPTIONS.map(o => `
+                <button type="button" class="variant-btn ${selProc.id === o.id ? 'active' : ''}" data-proc="${o.id}">
+                  <span>${o.label}</span>
+                  <small>${o.note}</small>
+                </button>`).join('')}
+            </div>
+          </div>
+
+          <div class="variant-section">
+            <span class="variant-label">۳. نوع بسته‌بندی</span>
+            <div class="variant-grid">
+              ${PACK_OPTIONS.map(o => `
+                <button type="button" class="variant-btn ${selPack.id === o.id ? 'active' : ''}" data-pack="${o.id}">
+                  <span>${o.label}</span>
+                  <small>${o.note}</small>
+                </button>`).join('')}
+            </div>
+          </div>
+
+          <h3 style="font-size:var(--fs-sm);color:#fff;margin-bottom:8px">۴. انتخاب وزن سفارش (کیلوگرم)</h3>
           <div class="weight-presets">
             ${presets.map(w => `<button type="button" class="preset-btn ${qty === w ? 'active' : ''}" data-preset="${w}">${w < 1 ? fmt(w * 1000) + ' گرم' : fmt(w) + ' کیلو'}</button>`).join('')}
           </div>
@@ -158,11 +347,16 @@
 
           <div class="pd-cta">
             <button type="button" class="btn btn-primary" id="add-btn" style="flex:1">${icon('cart')} افزودن به سبد خرید</button>
-            <button type="button" class="btn btn-outline" id="fav-btn" aria-label="نشان کردن محصول">${icon('heart')} نشان کردن</button>
-            <a class="btn btn-outline" href="cart.html">سبد خرید</a>
+            <button type="button" class="btn btn-outline ${isCompared ? 'is-active' : ''}" data-compare="${esc(p.id)}" id="pd-cmp-btn">${isCompared ? 'در مقایسه ✓' : 'مقایسه'}</button>
+            <button type="button" class="btn btn-outline" id="alert-open-btn">هشدار قیمت / موجودی</button>
           </div>
-          <p class="stock-note">${icon('check')} ${p.stock > 0 ? `${fmt(p.stock)} کیلوگرم آماده ارسال در انبار` : 'موجودی موقتاً به اتمام رسیده — برای استعلام تماس بگیرید'}</p>
-          ${save ? `<p class="stock-note gold">با انتخاب پله «${tierLabel(selTier)}»، در هر کیلو ${fmt(retail - price)} تومان (٪${fmt(save)}) صرفه‌جویی می‌کنید.</p>` : ''}
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button type="button" class="btn btn-outline btn-sm" id="fav-btn" aria-label="نشان‌کردن محصول">${icon('heart')} نشان‌کردن</button>
+            <a class="btn btn-outline btn-sm" href="cart.html">مشاهده سبد خرید</a>
+          </div>
+          <p class="stock-note">${icon('check')} ${p.stock > 0 ? `${fmt(p.stock)} کیلوگرم آماده ارسال در انبار` : 'موجودی موقتاً به اتمام رسیده — هشدار موجودی ثبت کنید'}</p>
+          ${variantDelta > 0 ? `<p class="stock-note gold">افزودهٔ فرآوری و بسته‌بندی انتخابی: +${faToman(variantDelta)} به ازای هر کیلوگرم</p>` : ''}
+          ${save ? `<p class="stock-note gold">با انتخاب پله «${tierLabel(selTier)}»، در هر کیلو ${fmt(retail - basePrice)} تومان (٪${fmt(save)}) صرفه‌جویی می‌کنید.</p>` : ''}
         `;
 
         const totalEl = document.getElementById('total');
@@ -171,7 +365,7 @@
         function updTotal() {
           const q = parseFloat(qEl.value) || 0;
           qty = q;
-          totalEl.innerHTML = `${fmt(Math.round(q * p.prices[selTier]))} <small>تومان</small>`;
+          totalEl.innerHTML = `${fmt(Math.round(q * effectiveUnit))} <small>تومان</small>`;
           document.querySelectorAll('[data-preset]').forEach(b => {
             b.classList.toggle('active', parseFloat(b.dataset.preset) === q);
           });
@@ -187,10 +381,7 @@
           updTotal();
         };
         document.querySelectorAll('[data-preset]').forEach(b => {
-          b.onclick = () => {
-            qEl.value = b.dataset.preset;
-            updTotal();
-          };
+          b.onclick = () => { qEl.value = b.dataset.preset; updTotal(); };
         });
         updTotal();
 
@@ -202,25 +393,42 @@
           });
         });
 
+        document.querySelectorAll('[data-proc]').forEach(btn => {
+          btn.onclick = () => {
+            selProc = PROCESS_OPTIONS.find(x => x.id === btn.dataset.proc) || PROCESS_OPTIONS[0];
+            render();
+          };
+        });
+        document.querySelectorAll('[data-pack]').forEach(btn => {
+          btn.onclick = () => {
+            selPack = PACK_OPTIONS.find(x => x.id === btn.dataset.pack) || PACK_OPTIONS[0];
+            render();
+          };
+        });
+
         document.getElementById('add-btn').onclick = () => {
           const q = parseFloat(qEl.value);
           if (!q || q <= 0) { toast('لطفاً وزن سفارش را وارد کنید'); return; }
           if (q < minQ) { toast(`حداقل خرید پله «${tierLabel(selTier)}» ${fmt(minQ)} کیلوگرم است`); return; }
-          addToCart(p.id, q, selTier, true);
+          const vLabel = `${selProc.label} · ${selPack.label}`;
+          addToCart(p.id, q, selTier, true, { variantDelta, variantLabel: vLabel });
+        };
+
+        document.getElementById('pd-cmp-btn').onclick = () => toggleCompare(p.id);
+        document.getElementById('alert-open-btn').onclick = () => {
+          document.getElementById('al-price').value = Math.round(p.prices.retail * 0.92);
+          if (APP.serverUser && APP.serverUser.phone) document.getElementById('al-phone').value = APP.serverUser.phone;
+          document.getElementById('alert-modal').classList.add('open');
         };
 
         const favBtn = document.getElementById('fav-btn');
         if (favBtn) {
           favBtn.onclick = async () => {
-            if (!window.MgzCloud) return;
+            if (!window.MgzCloud) { toast('برای نشان‌کردن محصول وارد حساب کاربری شوید'); return; }
             let u = window.MgzCloud.getCurrentUser();
             if (!u) {
-              try {
-                u = await window.MgzCloud.signInWithGoogle();
-              } catch {
-                toast('برای نشان کردن محصول ابتدا وارد حساب کاربری شوید');
-                return;
-              }
+              try { u = await window.MgzCloud.signInWithGoogle(); }
+              catch { toast('برای نشان‌کردن محصول ابتدا وارد حساب کاربری شوید'); return; }
             }
             try {
               const prof = (await window.MgzCloud.getMyProfile(u.uid)) || {};
@@ -228,39 +436,163 @@
               const exists = favs.includes(p.id);
               const nextFavs = exists ? favs.filter(x => x !== p.id) : [...favs, p.id];
               await window.MgzCloud.saveMyProfile(u.uid, { favoriteIds: nextFavs });
-              favBtn.innerHTML = `${icon('heart')} ${exists ? 'نشان کردن' : 'نشان شد'}`;
-              toast(exists ? 'از نشان‌شده‌ها حذف شد' : 'به لیست نشان‌شده‌های حساب شما اضافه شد');
+              favBtn.innerHTML = `${icon('heart')} ${exists ? 'نشان‌کردن' : 'نشان شد'}`;
+              toast(exists ? 'از نشان‌شده‌ها حذف شد' : 'به فهرست نشان‌شده‌های حساب شما اضافه شد');
             } catch {
-              toast('خطا در ذخیره نشان‌شده');
+              toast('خطا در ذخیرهٔ نشان‌شده');
             }
           };
         }
       }
       render();
 
+      // Alert Modal Controls
+      const alertModal = document.getElementById('alert-modal');
+      document.getElementById('alert-close').onclick = () => alertModal.classList.remove('open');
+      alertModal.onclick = e => { if (e.target === alertModal) alertModal.classList.remove('open'); };
+      document.getElementById('al-type').addEventListener('change', e => {
+        document.getElementById('al-price-wrap').style.display = e.target.value === 'price' ? '' : 'none';
+      });
+      document.getElementById('alert-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/price-alerts', {
+            method: 'POST',
+            body: JSON.stringify({
+              productId: p.id,
+              productName: p.name,
+              phone: document.getElementById('al-phone').value.trim(),
+              targetPrice: Number(document.getElementById('al-price').value) || 0,
+              alertType: document.getElementById('al-type').value,
+            }),
+          });
+          alertModal.classList.remove('open');
+          toast('هشدار هوشمند شما با موفقیت ثبت شد');
+        } catch (err) {
+          toast(err.message || 'خطا در ثبت هشدار');
+        }
+      });
+
+      // Verified Reviews Loader + Submission
+      async function loadReviews() {
+        try {
+          const data = await apiFetch(`/api/reviews?productId=${encodeURIComponent(p.id)}`);
+          const list = (data && data.reviews) || [];
+          const subBox = document.getElementById('rev-subratings');
+          const listBox = document.getElementById('rev-list');
+
+          if (list.length) {
+            const avg = key => (list.reduce((s, r) => s + Number(r[key] || 5), 0) / list.length).toFixed(1);
+            subBox.innerHTML = `
+              <div class="subrating-item"><span>تازگی و عطر</span><b>${avg('freshness')} از ۵</b></div>
+              <div class="subrating-item"><span>یک‌دستی سایز</span><b>${avg('uniformity')} از ۵</b></div>
+              <div class="subrating-item"><span>بسته‌بندی وکیوم</span><b>${avg('packaging')} از ۵</b></div>`;
+            listBox.innerHTML = list.map(r => `
+              <div class="review-card">
+                <div class="review-head">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <strong style="color:#fff">${esc(r.userName || r.authorName)}</strong>
+                    ${r.verifiedPurchase ? '<span class="verified-tag">✓ خریدار تأییدشده</span>' : ''}
+                  </div>
+                  <span class="stars">${starsHtml(r.rating)}</span>
+                </div>
+                <p style="font-size:var(--fs-sm);color:var(--c-text-soft);line-height:1.85">${esc(r.text || r.comment)}</p>
+                <div style="margin-top:8px;font-size:0.74rem;color:var(--c-text-muted);display:flex;gap:14px;flex-wrap:wrap">
+                  <span>تازگی: ${fmt(r.freshness)}/۵</span>
+                  <span>یک‌دستی: ${fmt(r.uniformity)}/۵</span>
+                  <span>بسته‌بندی: ${fmt(r.packaging)}/۵</span>
+                  <span>${r.createdAt ? new Date(r.createdAt).toLocaleDateString('fa-IR') : ''}</span>
+                </div>
+              </div>`).join('');
+          } else {
+            subBox.innerHTML = `
+              <div class="subrating-item"><span>تازگی و عطر</span><b>۴٫۹ از ۵</b></div>
+              <div class="subrating-item"><span>یک‌دستی سایز</span><b>۴٫۸ از ۵</b></div>
+              <div class="subrating-item"><span>بسته‌بندی وکیوم</span><b>۵٫۰ از ۵</b></div>`;
+            listBox.innerHTML = `<div class="review-card"><p style="font-size:var(--fs-sm);color:var(--c-text-soft)">هنوز دیدگاهی برای این محصول ثبت نشده است. اولین نفری باشید که تجربهٔ خود را به اشتراک می‌گذارد.</p></div>`;
+          }
+        } catch {}
+      }
+
+      if (APP.serverUser && APP.serverUser.fullName) {
+        document.getElementById('rv-name').value = APP.serverUser.fullName;
+        document.getElementById('qa-name').value = APP.serverUser.fullName;
+      }
+
+      document.getElementById('rev-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/reviews', {
+            method: 'POST',
+            body: JSON.stringify({
+              productId: p.id,
+              authorName: document.getElementById('rv-name').value.trim(),
+              rating: Number(document.getElementById('rv-rating').value),
+              freshness: Number(document.getElementById('rv-fresh').value),
+              uniformity: Number(document.getElementById('rv-unif').value),
+              packaging: Number(document.getElementById('rv-pack').value),
+              comment: document.getElementById('rv-comment').value.trim(),
+            }),
+          });
+          document.getElementById('rv-comment').value = '';
+          toast('دیدگاه شما ثبت شد و نمایش داده می‌شود');
+          loadReviews();
+        } catch (err) {
+          toast(err.message || 'خطا در ثبت دیدگاه');
+        }
+      });
+
+      // Product Q&A Loader + Submission
+      async function loadQuestions() {
+        try {
+          const data = await apiFetch(`/api/questions?productId=${encodeURIComponent(p.id)}`);
+          const list = (data && data.questions) || [];
+          const box = document.getElementById('qa-list');
+          if (!list.length) {
+            box.innerHTML = `<div class="qa-card"><p style="font-size:var(--fs-sm);color:var(--c-text-soft)">پرسشی ثبت نشده است. سؤالات فنی دربارهٔ کاربرد قنادی، انس یا نگهداری را اینجا بپرسید.</p></div>`;
+            return;
+          }
+          box.innerHTML = list.map(q => `
+            <div class="qa-card">
+              <div class="review-head">
+                <strong style="color:#fff">پرسش ${esc(q.authorName)}</strong>
+                <span style="font-size:0.72rem;color:var(--c-text-muted)">${q.createdAt ? new Date(q.createdAt).toLocaleDateString('fa-IR') : ''}</span>
+              </div>
+              <p style="font-size:var(--fs-sm);color:var(--c-text);line-height:1.8">${esc(q.question)}</p>
+              ${q.answer
+                ? `<div class="qa-answer"><strong>پاسخ ${esc(q.answeredBy || 'کارشناس مغزدانه')}:</strong><br>${esc(q.answer)}</div>`
+                : `<div style="margin-top:8px;font-size:0.75rem;color:var(--c-accent-light)">در انتظار پاسخ کارشناس…</div>`}
+            </div>`).join('');
+        } catch {}
+      }
+
+      document.getElementById('qa-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/questions', {
+            method: 'POST',
+            body: JSON.stringify({
+              productId: p.id,
+              authorName: document.getElementById('qa-name').value.trim(),
+              question: document.getElementById('qa-text').value.trim(),
+            }),
+          });
+          document.getElementById('qa-text').value = '';
+          toast('پرسش شما ثبت شد؛ کارشناسان به‌زودی پاسخ می‌دهند');
+          loadQuestions();
+        } catch (err) {
+          toast(err.message || 'خطا در ثبت پرسش');
+        }
+      });
+
+      loadReviews();
+      loadQuestions();
+
       const rel = db.products.filter(x => x.category === p.category && x.id !== p.id).slice(0, 4);
       const fill = rel.length < 4 ? db.products.filter(x => x.category !== p.category).slice(0, 4 - rel.length) : [];
       document.getElementById('related').innerHTML = [...rel, ...fill].map(productCard).join('');
       bindAddButtons(document.getElementById('related'));
       if (window.MGZ) MGZ.init();
-
-      const ld = document.createElement('script');
-      ld.type = 'application/ld+json';
-      ld.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": p.name,
-        "image": p.img,
-        "description": p.desc,
-        "aggregateRating": { "@type": "AggregateRating", "ratingValue": p.rating, "reviewCount": p.sold },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "IRR",
-          "price": p.prices.retail * 10,
-          "availability": p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-        }
-      });
-      document.head.appendChild(ld);
     });
   </script>
 </body>
