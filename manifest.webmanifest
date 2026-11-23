@@ -1,12 +1,12 @@
 {
-  "id": "/",
+  "id": "./",
   "name": "مغزدانه — بازار تخصصی مغز پسته، بادام و گردو",
   "short_name": "مغزدانه",
   "description": "مرجع تخصصی خرید و فروش خرده، نیم‌عمده و عمده مغز پسته، بادام و گردو؛ عرضه مستقیم از باغداران رفسنجان و بازارچه غرفه‌های فروشندگان.",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "/catalog.html?source=pwa",
-  "scope": "/",
+  "start_url": "./catalog.html?source=pwa",
+  "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
@@ -15,25 +15,25 @@
   "categories": ["shopping", "food", "business"],
   "icons": [
     {
-      "src": "/assets/img/pwa-192x192.png",
+      "src": "./assets/img/pwa-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/img/pwa-512x512.png",
+      "src": "./assets/img/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/img/pwa-maskable-512x512.png",
+      "src": "./assets/img/pwa-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/assets/img/logo.svg",
+      "src": "./assets/img/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -43,26 +43,26 @@
     {
       "name": "فروشگاه مرکزی",
       "short_name": "فروشگاه",
-      "url": "/catalog.html",
-      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+      "url": "./catalog.html",
+      "icons": [{ "src": "./assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "غرفه‌های فروشندگان",
       "short_name": "غرفه‌ها",
-      "url": "/vendors.html",
-      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+      "url": "./vendors.html",
+      "icons": [{ "src": "./assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "سبد خرید",
       "short_name": "سبد خرید",
-      "url": "/cart.html",
-      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+      "url": "./cart.html",
+      "icons": [{ "src": "./assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "حساب کاربری",
       "short_name": "حساب من",
-      "url": "/account.html",
-      "icons": [{ "src": "/assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+      "url": "./account.html",
+      "icons": [{ "src": "./assets/img/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

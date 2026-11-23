@@ -1,30 +1,36 @@
 /* ==========================================================================
-   مغزدانه — Service Worker (PWA Offline Shell & Smart Caching)
-   - Network-First for HTML documents (always fresh content, falls back to cache/offline card)
-   - Network-Only for /api/* (never caches sensitive auth/order/wallet responses)
-   - Stale-While-Revalidate for CSS, JS, fonts, and brand images
+   مغزدانه — Service Worker (Subpath & GitHub Pages Compatible PWA Engine)
+   - Resolves all shell assets relative to self.registration.scope so both
+     root domains (/) and GitHub Pages subpaths (/repo-name/) work seamlessly.
+   - Network-First for HTML navigations with cache + offline fallback
+   - Network-Only for /api/* (never caches auth/order/wallet responses)
+   - Stale-While-Revalidate for static assets
    ========================================================================== */
 
-const CACHE_VERSION = 'maghzdaneh-pwa-v19';
-const SHELL_ASSETS = [
-  '/',
-  '/index.html',
-  '/catalog.html',
-  '/vendors.html',
-  '/gifts.html',
-  '/wholesale.html',
-  '/cart.html',
-  '/account.html',
-  '/manifest.webmanifest',
-  '/assets/css/main.css?v=19',
-  '/assets/css/fx.css?v=17',
-  '/assets/js/app.js?v=19',
-  '/assets/img/logo.svg',
-  '/assets/img/pwa-192x192.png',
-  '/assets/img/pwa-512x512.png',
-  '/assets/img/apple-touch-icon.png',
-  '/data/db.json',
+const CACHE_VERSION = 'maghzdaneh-pwa-v20';
+const SHELL_RELATIVE = [
+  './',
+  './index.html',
+  './catalog.html',
+  './vendors.html',
+  './gifts.html',
+  './wholesale.html',
+  './cart.html',
+  './account.html',
+  './manifest.webmanifest',
+  './assets/css/main.css?v=19',
+  './assets/css/fx.css?v=17',
+  './assets/js/app.js?v=20',
+  './assets/img/logo.svg',
+  './assets/img/pwa-192x192.png',
+  './assets/img/pwa-512x512.png',
+  './assets/img/apple-touch-icon.png',
+  './data/db.json',
 ];
+
+function scopeUrl(relPath) {
+  return new URL(relPath, self.registration.scope).href;
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -32,8 +38,8 @@ self.addEventListener('install', (event) => {
       .open(CACHE_VERSION)
       .then((cache) =>
         Promise.allSettled(
-          SHELL_ASSETS.map((url) =>
-            cache.add(new Request(url, { cache: 'reload' })).catch(() => null)
+          SHELL_RELATIVE.map((rel) =>
+            cache.add(new Request(scopeUrl(rel), { cache: 'reload' })).catch(() => null)
           )
         )
       )
@@ -63,6 +69,7 @@ self.addEventListener('message', (event) => {
 });
 
 function offlineFallbackHtml() {
+  const iconSrc = scopeUrl('./assets/img/pwa-192x192.png');
   return new Response(
     `<!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -73,7 +80,7 @@ function offlineFallbackHtml() {
 <style>
   body{margin:0;min-height:100vh;display:grid;place-items:center;background:#060907;color:#eef3ef;font-family:Vazirmatn,Tahoma,sans-serif;padding:24px;text-align:center}
   .box{max-width:400px;background:#101713;border:1px solid rgba(212,175,55,0.28);border-radius:18px;padding:32px 24px}
-  img{width:64px;height:64px;margin-bottom:14px}
+  img{width:64px;height:64px;margin-bottom:14px;border-radius:14px}
   h1{font-size:1.25rem;margin:0 0 10px;color:#fff}
   p{font-size:0.9rem;color:#9eb0a5;line-height:1.8;margin:0 0 22px}
   button{background:#2ea05f;color:#050b07;border:0;border-radius:10px;padding:12px 22px;font-weight:800;font-family:inherit;font-size:0.92rem;cursor:pointer}
@@ -81,7 +88,7 @@ function offlineFallbackHtml() {
 </head>
 <body>
   <div class="box">
-    <img src="/assets/img/pwa-192x192.png" alt="مغزدانه">
+    <img src="${iconSrc}" alt="مغزدانه">
     <h1>اتصال اینترنت برقرار نیست</h1>
     <p>در حال حاضر دستگاه شما آفلاین است. پس از برقراری دوبارهٔ اینترنت، صفحه را تازه‌سازی کنید.</p>
     <button onclick="location.reload()">تلاش مجدد</button>
@@ -101,9 +108,9 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith('/api/')) return;
+  if (url.pathname.includes('/api/')) return;
 
-  // Navigation / HTML pages: Network-First with cache + offline fallback
+  // Navigation / HTML pages: Network-First with scope-safe cache & offline fallback
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith(
       fetch(req)
@@ -115,13 +122,17 @@ self.addEventListener('fetch', (event) => {
           return res;
         })
         .catch(() =>
-          caches.match(req).then((cached) => cached || caches.match('/catalog.html').then((fb) => fb || offlineFallbackHtml()))
+          caches
+            .match(req)
+            .then((cached) =>
+              cached || caches.match(scopeUrl('./catalog.html')).then((fb) => fb || offlineFallbackHtml())
+            )
         )
     );
     return;
   }
 
-  // Static assets (CSS, JS, images, JSON catalog): Stale-While-Revalidate
+  // Static assets: Stale-While-Revalidate
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetchPromise = fetch(req)

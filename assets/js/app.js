@@ -804,7 +804,7 @@ function initPWA() {
   APP.pwa.isIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
   }
 
   window.addEventListener('beforeinstallprompt', e => {

@@ -453,9 +453,9 @@
     if (window.MgzCloud) wireLiveCms();
     else window.addEventListener('mgzcloud:ready', wireLiveCms, { once: true });
 
-    // 3. Register PWA Service Worker from entry page
+    // 3. Register PWA Service Worker from entry page (subpath-safe for GitHub Pages & root domains)
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
     }
   </script>
 </body>
