@@ -674,7 +674,7 @@
                 <h2>اشتراک‌های ارسال دوره‌ای من (۵٪ تخفیف دائمی)</h2>
                 <p>هر زمان بخواهید می‌توانید اشتراک تأمین خودکار خود را متوقف، فعال یا لغو کنید.</p>
               </div>
-              <a href="wholesale.html#subscription" class="btn btn-primary btn-sm">+ ثبت اشتراک جدید</a>
+              <a href="wholesale.html#subscription-sec" class="btn btn-primary btn-sm">+ ثبت اشتراک جدید</a>
             </div>
             <div id="cust-subs-list" style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
@@ -1631,7 +1631,7 @@
                     <strong style="color:#fff">غرفه: ${esc(m.vendorName || m.vendorId || 'غرفه‌دار بازارچه')}</strong>
                     <span style="font-size:0.75rem;color:var(--lux-muted)">${faDate(m.createdAt)}</span>
                   </div>
-                  <p style="font-size:0.84rem;color:var(--lux-soft);margin:0">${esc(m.body || '')}</p>
+                  <p style="font-size:0.84rem;color:var(--lux-soft);margin:0">${esc(m.text || m.body || '')}</p>
                   ${m.reply ? `<div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(82,199,136,0.1);color:var(--lux-emerald);font-size:0.82rem"><strong>پاسخ غرفه‌دار:</strong> ${esc(m.reply)}</div>` : '<div style="margin-top:6px;font-size:0.74rem;color:var(--lux-gold)">در انتظار پاسخ غرفه‌دار…</div>'}
                 </div>`).join('')
             : '<div style="padding:14px 0;color:var(--lux-muted);font-size:0.84rem">هنوز پیامی برای غرفه‌داران ارسال نکرده‌اید.</div>';
@@ -1717,7 +1717,7 @@
           <div class="empty">
             <p style="color:#fff;font-weight:700;margin-bottom:8px">هنوز اشتراک ارسال دوره‌ای فعال نکرده‌اید</p>
             <p style="font-size:0.84rem;margin-bottom:14px">با اشتراک ماهانه یا دوهفتگی، ۵٪ تخفیف ثابت روی تازه‌ترین بار دریافت کنید.</p>
-            <a class="btn btn-primary btn-sm" href="wholesale.html#subscription">ثبت اشتراک دوره‌ای ←</a>
+            <a class="btn btn-primary btn-sm" href="wholesale.html#subscription-sec">ثبت اشتراک دوره‌ای ←</a>
           </div>`;
         return;
       }

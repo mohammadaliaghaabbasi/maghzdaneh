@@ -76,13 +76,13 @@
           : faqSource;
 
         if (!items.length) {
-          listEl.innerHTML = `<div class="empty"><p>سؤالی با عبارت «${q}» پیدا نشد. عبارت دیگری امتحان کنید یا از صفحهٔ تماس بپرسید.</p></div>`;
+          listEl.innerHTML = `<div class="empty"><p>سؤالی با عبارت «${esc(q)}» پیدا نشد. عبارت دیگری امتحان کنید یا از صفحهٔ تماس بپرسید.</p></div>`;
           return;
         }
         listEl.innerHTML = items.map((f, i) => `
           <details class="faq" ${i === 0 ? 'open' : ''}>
-            <summary>${f.q}</summary>
-            <div class="a">${f.a}</div>
+            <summary>${esc(f.q)}</summary>
+            <div class="a">${esc(f.a)}</div>
           </details>`).join('');
         if (window.MGZ) MGZ.init();
       }
@@ -95,7 +95,7 @@
       ld.textContent = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
-        mainEntity: db.faq.map(f => ({
+        mainEntity: faqSource.map(f => ({
           '@type': 'Question',
           name: f.q,
           acceptedAnswer: { '@type': 'Answer', text: f.a }

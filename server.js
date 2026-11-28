@@ -650,14 +650,14 @@ function getAuthenticatedUser(req) {
 }
 
 function getAdminConfig() {
+  const fileCfg = loadJsonSafe(ADMIN_AUTH_PATH, null);
+  if (fileCfg && fileCfg.username && fileCfg.passwordHash) {
+    return { configured: true, envManaged: false, username: fileCfg.username, passwordHash: fileCfg.passwordHash };
+  }
   const rawUser = cleanStr(process.env.MAGHZDANEH_ADMIN_USER, 64);
   const rawPass = String(process.env.MAGHZDANEH_ADMIN_PASS || '');
   if (isRealEnvValue(rawUser) && isRealEnvValue(rawPass) && rawPass.length >= 4) {
     return { configured: true, envManaged: true, username: rawUser, passwordPlain: rawPass };
-  }
-  const fileCfg = loadJsonSafe(ADMIN_AUTH_PATH, null);
-  if (fileCfg && fileCfg.username && fileCfg.passwordHash) {
-    return { configured: true, envManaged: false, username: fileCfg.username, passwordHash: fileCfg.passwordHash };
   }
   return { configured: false, envManaged: false };
 }
@@ -757,7 +757,11 @@ async function handleApi(req, res, pathname, query) {
     return sendJson(res, 200, { vendors: list });
   }
 
-  if (req.method === 'GET' && pathname.startsWith('/api/vendors/')) {
+  if (
+    req.method === 'GET' &&
+    pathname.startsWith('/api/vendors/') &&
+    !pathname.endsWith('/reviews')
+  ) {
     const slug = decodeURIComponent(pathname.slice('/api/vendors/'.length));
     const vendor = STORE.vendors.find((v) => v.slug === slug && v.status === 'active');
     if (!vendor) return sendJson(res, 404, { error: 'غرفه مورد نظر یافت نشد' });
@@ -1406,11 +1410,12 @@ async function handleApi(req, res, pathname, query) {
     const user = getAuthenticatedUser(req);
     if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
     const body = await readJsonBody(req);
-    if (!Array.isArray(body.cart)) return sendJson(res, 400, { error: 'سبد خرید نامعتبر است.' });
+    const nextCart = Array.isArray(body.cart) ? body.cart : Array.isArray(body.items) ? body.items : null;
+    if (!nextCart) return sendJson(res, 400, { error: 'سبد خرید نامعتبر است.' });
     if (!STORE.savedCarts) STORE.savedCarts = {};
-    STORE.savedCarts[user.id] = body.cart.slice(0, 40);
+    STORE.savedCarts[user.id] = nextCart.slice(0, 40);
     saveStore();
-    return sendJson(res, 200, { ok: true, count: STORE.savedCarts[user.id].length });
+    return sendJson(res, 200, { ok: true, cart: STORE.savedCarts[user.id], count: STORE.savedCarts[user.id].length });
   }
 
   if (req.method === 'POST' && pathname.startsWith('/api/vendors/') && pathname.endsWith('/message')) {
@@ -1427,11 +1432,13 @@ async function handleApi(req, res, pathname, query) {
     }
     const msg = {
       id: 'vmsg_' + crypto.randomBytes(5).toString('hex'),
+      userId: user ? user.id : null,
       vendorId: vendor.id,
       vendorName: vendor.name,
       senderName,
       phone,
       text,
+      body: text,
       reply: '',
       repliedAt: null,
       createdAt: new Date().toISOString(),
@@ -1779,16 +1786,22 @@ async function handleApi(req, res, pathname, query) {
     const involvedVendorIds = new Set();
 
     for (const raw of items) {
-      if (raw.kind === 'gift-box' || raw.kind === 'sample-pack') {
+      if (raw.kind === 'gift-box' || raw.kind === 'sample-pack' || raw.kind === 'custom-mix') {
         const qty = Math.max(1, Math.min(200, Number(raw.qty) || 1));
         const unit = Math.max(50000, Math.min(50000000, Math.round(Number(raw.unitPrice || raw.unit) || 0)));
         const lineTotal = Math.round(unit * qty);
         subtotal += lineTotal;
-        totalKg += Number(raw.weightKg || 0.5) * qty;
+        totalKg += Math.max(0.1, Math.min(50, Number(raw.weightKg || 0.5))) * qty;
+        const defaultName =
+          raw.kind === 'gift-box'
+            ? 'جعبه هدیه اختصاصی مغزدانه'
+            : raw.kind === 'custom-mix'
+              ? 'میکس اختصاصی آجیل و مغز مغزدانه'
+              : 'بسته نمونه ارزیابی';
         normalizedItems.push({
           id: cleanStr(raw.id, 80) || `${raw.kind}_${Date.now().toString(36)}`,
           kind: raw.kind,
-          name: cleanStr(raw.name, 180) || (raw.kind === 'gift-box' ? 'جعبه هدیه اختصاصی مغزدانه' : 'بسته نمونه ارزیابی'),
+          name: cleanStr(raw.name, 180) || defaultName,
           tier: 'retail',
           qty,
           unitPrice: unit,
@@ -1838,10 +1851,25 @@ async function handleApi(req, res, pathname, query) {
     }
 
     const netAfterDiscount = Math.max(0, subtotal - discountAmount);
-    const shippingCost = netAfterDiscount >= 5000000 ? 0 : 89000;
+    const baseDb = getBaseDb();
+    const freeOver = Number((baseDb.site && baseDb.site.shipping && baseDb.site.shipping.free_over) || 3000000);
+    const defaultShip = netAfterDiscount >= freeOver ? 0 : 89000;
+    const requestedShip = body.totals && typeof body.totals.shipping === 'number' && Number.isFinite(body.totals.shipping)
+      ? Math.max(0, Math.min(1500000, Math.round(body.totals.shipping)))
+      : defaultShip;
+    const shippingCost = requestedShip;
     const grandTotal = netAfterDiscount + shippingCost;
     const cust = body.customer && typeof body.customer === 'object' ? body.customer : {};
     const payWithWallet = body.paymentMethod === 'wallet' || String(body.payment || '').includes('کیف پول');
+    const paymentRefId = cleanStr(body.paymentRefId, 80);
+    const corpRaw = body.corporateInvoice && typeof body.corporateInvoice === 'object' && body.corporateInvoice.requested
+      ? {
+          requested: true,
+          companyName: cleanStr(body.corporateInvoice.companyName, 140),
+          nationalId: cleanStr(body.corporateInvoice.nationalId, 30),
+          economicCode: cleanStr(body.corporateInvoice.economicCode, 30),
+        }
+      : null;
 
     if (payWithWallet) {
       if (!user) return sendJson(res, 401, { error: 'برای پرداخت از کیف پول ابتدا وارد حساب کاربری شوید.' });
@@ -1864,7 +1892,11 @@ async function handleApi(req, res, pathname, query) {
       address: cleanStr(body.address || cust.address, 400),
       shipping: cleanStr(body.shipping, 100),
       payment: payWithWallet ? 'پرداخت آنلاین از کیف پول مغزدانه' : cleanStr(body.payment, 100) || 'درگاه آنلاین',
-      paid: payWithWallet,
+      paymentMethod: cleanStr(body.paymentMethod, 30) || (payWithWallet ? 'wallet' : 'gateway'),
+      paymentRefId,
+      escrowStatus: involvedVendorIds.size ? 'held' : 'protected',
+      corporateInvoice: corpRaw,
+      paid: payWithWallet || Boolean(paymentRefId),
       note: cleanStr(body.note, 400),
       couponCode,
       discountAmount,
@@ -1874,7 +1906,7 @@ async function handleApi(req, res, pathname, query) {
       shippingCost,
       grandTotal,
       totalKg: Math.round(totalKg * 100) / 100,
-      status: payWithWallet ? 'processing' : 'new',
+      status: (payWithWallet || paymentRefId) ? 'processing' : 'new',
       createdAt: new Date().toISOString(),
     };
 

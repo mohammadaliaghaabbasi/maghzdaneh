@@ -93,7 +93,7 @@
         <div class="no-print" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">
           <a class="btn btn-primary" href="catalog.html">ادامه خرید</a>
           <button type="button" class="btn btn-outline" id="print-btn">چاپ رسید</button>
-          <a class="btn btn-ghost" href="contact.html#track">پیگیری سفارش</a>
+          <a class="btn btn-ghost" id="track-order-btn" href="track.html">پیگیری لحظه‌ای سفارش</a>
         </div>
       </div>
     </div>
@@ -119,6 +119,8 @@
       const isLocal = params.get('local') === '1';
 
       document.getElementById('order-id').textContent = oid || '—';
+      const trackBtn = document.getElementById('track-order-btn');
+      if (trackBtn && oid) trackBtn.href = `track.html?code=${encodeURIComponent(oid)}`;
 
       const storedOrders = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
       const order = storedOrders.find(o => o.id === oid) || null;
@@ -135,14 +137,17 @@
         : `<p style="margin-top:12px;color:var(--c-text-soft);font-size:var(--fs-sm);line-height:1.9">مبلغ قابل پرداخت: <b style="color:#fff" class="num">${faToman(grand)}</b> — پیامک تأیید و هماهنگی پرداخت (${escHtml(db.site.payment.gateway)}) به‌زودی ارسال می‌شود. تلفن پشتیبانی: <b class="ltr" style="color:var(--c-accent-light)">${escHtml(db.site.phone)}</b></p>`;
 
       if (order) {
-        const itemsHtml = (order.items || []).map(it => `
+        const itemsHtml = (order.items || []).map(it => {
+          const unitLbl = it.kind === 'custom-mix' ? 'بسته میکس' : it.kind === 'gift-box' ? 'بسته' : it.kind === 'sample-pack' ? 'پک' : 'کیلوگرم';
+          return `
           <div class="receipt-item">
             <div>
               <strong style="color:#fff">${escHtml(it.name)}</strong>
-              <div style="font-size:var(--fs-xs);color:var(--c-text-soft)">${escHtml(tierLabel(it.tier))} · ${fmt(it.qty)} کیلوگرم × ${fmt(it.unit)} ت</div>
+              <div style="font-size:var(--fs-xs);color:var(--c-text-soft)">${escHtml(tierLabel(it.tier))} · ${fmt(it.qty)} ${unitLbl} × ${fmt(it.unit)} ت${it.variantLabel ? ` · ${escHtml(it.variantLabel)}` : ''}</div>
             </div>
             <strong class="num" style="color:var(--c-primary-light);white-space:nowrap">${faToman(it.total)}</strong>
-          </div>`).join('');
+          </div>`;
+        }).join('');
 
         document.getElementById('receipt-wrap').innerHTML = `
           <div class="receipt-card">
@@ -155,6 +160,11 @@
               <span>جمع اقلام (${fmt(order.totals ? order.totals.totalKg : 0)} کیلوگرم)</span>
               <span>${faToman(order.totals ? order.totals.subtotal : grand)}</span>
             </div>
+            ${order.totals && order.totals.discount > 0 ? `
+            <div class="sum-row" style="color:var(--c-primary-light)">
+              <span>تخفیف${order.couponCode ? ` (${escHtml(order.couponCode)})` : ''}</span>
+              <span>− ${faToman(order.totals.discount)}</span>
+            </div>` : ''}
             <div class="sum-row">
               <span>هزینه ارسال</span>
               <span>${order.totals && order.totals.shipping === 0 ? 'رایگان' : faToman(order.totals ? order.totals.shipping : 0)}</span>
@@ -167,6 +177,7 @@
               <div><b style="color:#fff">تحویل‌گیرنده:</b> ${escHtml(order.customer && order.customer.name)} · <span class="ltr">${escHtml(order.customer && order.customer.phone)}</span></div>
               <div><b style="color:#fff">نشانی:</b> ${escHtml(order.customer && order.customer.province)}، ${escHtml(order.customer && order.customer.city)} — ${escHtml(order.customer && order.customer.address)}</div>
               <div><b style="color:#fff">روش پرداخت:</b> ${escHtml(payLabels[order.payment] || order.payment || '—')}</div>
+              ${order.paymentRefId ? `<div><b style="color:#fff">کد رهگیری درگاه:</b> <span class="ltr" style="color:var(--c-primary-light)">${escHtml(order.paymentRefId)}</span></div>` : ''}
               ${order.note ? `<div><b style="color:#fff">یادداشت:</b> ${escHtml(order.note)}</div>` : ''}
             </div>
           </div>`;
