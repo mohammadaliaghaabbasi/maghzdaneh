@@ -74,24 +74,49 @@
             </div>
 
             <div class="contact-card">
-              <h3>۲. آدرس ارسال</h3>
+              <h3>۲. آدرس و محاسبه هوشمند ارسال</h3>
               <div class="form-grid">
                 <div class="field"><label for="f-prov">استان *</label><input id="f-prov" required placeholder="مثلاً تهران"></div>
                 <div class="field"><label for="f-city">شهر *</label><input id="f-city" required placeholder="مثلاً تهران"></div>
                 <div class="field form-full"><label for="f-addr">آدرس کامل پستی *</label><textarea id="f-addr" required rows="3" placeholder="خیابان، کوچه، پلاک، واحد"></textarea></div>
                 <div class="field"><label for="f-post">کد پستی</label><input id="f-post" inputmode="numeric" placeholder="۱۰ رقم" style="direction:ltr;text-align:right"></div>
-                <div class="field"><label for="f-ship">روش ارسال</label>
+                <div class="field"><label for="f-ship">روش ارسال (برآورد هوشمند)</label>
                   <select id="f-ship">
                     <option value="tipax">تیپاکس (۲–۴ روز کاری)</option>
                     <option value="post">پست پیشتاز (۳–۵ روز کاری)</option>
-                    <option value="tehran-courier" ${!db.site.shipping.tehran_same_day ? 'disabled' : ''}>پیک تهران (همان‌روز — فقط تهران)</option>
+                    <option value="tehran-courier" ${!db.site.shipping.tehran_same_day ? 'disabled' : ''}>پیک سریع تهران (همان‌روز — فقط تهران)</option>
+                    <option value="freight">باربری عمده (پیشنهادی برای ۲۵ کیلو به بالا)</option>
+                  </select>
+                </div>
+                <div class="field form-full" id="slot-wrap" hidden>
+                  <label for="f-slot">بازهٔ زمانی تحویل پیک تهران</label>
+                  <select id="f-slot">
+                    <option value="امروز ۱۴ تا ۱۷">امروز ۱۴:۰۰ تا ۱۷:۰۰</option>
+                    <option value="امروز ۱۷ تا ۲۰">امروز ۱۷:۰۰ تا ۲۰:۰۰</option>
+                    <option value="فردا ۱۰ تا ۱۴">فردا ۱۰:۰۰ تا ۱۴:۰۰</option>
                   </select>
                 </div>
               </div>
+              <div id="ship-estimate-note" style="margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--c-line);font-size:var(--fs-xs);color:var(--c-text-soft)"></div>
             </div>
 
             <div class="contact-card">
-              <h3>۳. روش پرداخت و یادداشت</h3>
+              <h3>۳. فاکتور رسمی شرکتی و پرداخت امن</h3>
+              <div style="padding:11px 14px;border-radius:10px;background:rgba(16,34,23,0.75);border:1px solid rgba(82,199,136,0.28);font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">
+                <strong style="color:var(--c-primary-light)">🛡 ضمانت پرداخت امن امانی (Escrow مغزدانه):</strong>
+                مبلغ سفارش شما (به‌ویژه خرید از غرفه‌های بازارچه) تا تحویل سالم و تأیید کیفیت ۷ روزه نزد مغزدانه امانت می‌ماند.
+              </div>
+
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:var(--fs-sm);color:#fff;font-weight:700;margin-bottom:12px">
+                <input type="checkbox" id="f-vat-toggle" style="width:auto">
+                <span>درخواست فاکتور رسمی شرکتی (مشمول ارزش‌افزوده و کد اقتصادی)</span>
+              </label>
+              <div id="vat-fields" hidden class="form-grid" style="margin-bottom:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--c-line)">
+                <div class="field form-full"><label for="f-comp-name">نام حقوقی شرکت / قنادی</label><input id="f-comp-name" placeholder="شرکت صنایع غذایی …"></div>
+                <div class="field"><label for="f-comp-nid">شناسه ملی</label><input id="f-comp-nid" class="ltr" placeholder="1400xxxxxxx" style="text-align:right"></div>
+                <div class="field"><label for="f-comp-eco">کد اقتصادی</label><input id="f-comp-eco" class="ltr" placeholder="411xxxxxxxxx" style="text-align:right"></div>
+              </div>
+
               <div class="pay-methods">
                 ${APP.serverUser ? (() => {
                   const bal = Math.max(0, Math.round(Number(APP.serverUser.walletBalance) || 0));
@@ -111,14 +136,18 @@
                   return `
                   <label class="pay-opt ${isSel ? 'sel' : ''}">
                     <input type="radio" name="pay" value="${i}" ${isSel ? 'checked' : ''}>
-                    <span>${m}</span>
+                    <span>${m} ${i === 0 ? '<small style="color:var(--c-accent-light)">(درگاه آزمایشی شاپرک / زرین‌پال — دمو)</small>' : ''}</span>
                   </label>`;
                 }).join('')}
+                <label class="pay-opt">
+                  <input type="radio" name="pay" value="sayadi">
+                  <span>پرداخت اعتباری / چک صیادی (ویژه خریداران عمده و قنادی — دمو)</span>
+                </label>
               </div>
-              <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">${APP.serverUser ? 'سفارش‌های پرداخت‌شده با کیف پول بلافاصله وارد صف آماده‌سازی می‌شوند.' : 'برای پرداخت آنی از کیف پول، ابتدا <a href="account.html?next=checkout.html" style="color:var(--c-accent-light)">وارد حساب کاربری</a> شوید.'} لینک درگاه ${db.site.payment.gateway} برای سایر روش‌ها پیامک می‌شود.</p>
+              <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">${APP.serverUser ? 'سفارش‌های پرداخت‌شده با کیف پول یا درگاه آنلاین بلافاصله وارد صف آماده‌سازی می‌شوند.' : 'برای پرداخت آنی از کیف پول، ابتدا <a href="account.html?next=checkout.html" style="color:var(--c-accent-light)">وارد حساب کاربری</a> شوید.'} درگاه زرین‌پال/شاپرک در حال حاضر روی حالت شبیه‌ساز دمو فعال است و با ثبت کلید API در محیط سرور به درگاه واقعی متصل می‌شود.</p>
               <div class="field" style="margin-top:16px">
                 <label for="f-note">یادداشت سفارش (اختیاری)</label>
-                <textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا درخواست صورت‌حساب رسمی برای قنادی"></textarea>
+                <textarea id="f-note" rows="2" placeholder="مثلاً: بسته‌بندی جدا برای هر کیلو، یا زمان تماس پیک"></textarea>
               </div>
             </div>
           </div>
@@ -134,8 +163,8 @@
             <div class="sum-row"><span>وزن کل</span><span>${fmt(t.totalKg)} کیلوگرم</span></div>
             <div class="sum-row"><span>جمع کالاها</span><span>${faToman(t.subtotal)}</span></div>
             ${t.discount > 0 ? `<div class="sum-row" style="color:var(--c-primary-light)"><span>کد تخفیف (${esc(t.couponCode)})</span><span>− ${faToman(t.discount)}</span></div>` : ''}
-            <div class="sum-row"><span>هزینه ارسال</span><span>${t.shipCost ? faToman(t.shipCost) : 'رایگان'}</span></div>
-            <div class="sum-row total"><span>قابل پرداخت</span><span>${faToman(t.grand)}</span></div>
+            <div class="sum-row"><span>هزینه ارسال هوشمند</span><span id="co-ship-val">${t.shipCost ? faToman(t.shipCost) : 'رایگان'}</span></div>
+            <div class="sum-row total"><span>قابل پرداخت</span><span id="co-grand-val">${faToman(t.grand)}</span></div>
 
             <div class="coupon-box">
               <label for="co-coupon-inp" style="font-size:var(--fs-xs);font-weight:800;color:var(--c-accent-light)">کد تخفیف</label>
@@ -149,12 +178,79 @@
             <button type="button" class="btn btn-outline btn-sm" id="co-proforma" style="width:100%;margin-top:10px">${icon('receipt')} پیش‌فاکتور رسمی (PDF)</button>
             <p class="hint" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-top:10px">با ثبت سفارش، <a href="legal.html">قوانین فروش</a> مغزدانه را می‌پذیرید.</p>
           </aside>
-        </form>`;
+        </form>
+
+        <!-- Demo Shaparak / ZarinPal Payment Gateway Modal -->
+        <div class="modal-back" id="demo-gw-modal">
+          <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <span class="sec-label" style="margin:0;color:var(--c-accent-light)">شبیه‌ساز درگاه پرداخت (حالت دمو)</span>
+              <button type="button" class="drawer-close" id="gw-cancel-x" aria-label="انصراف">×</button>
+            </div>
+            <h3 style="margin:0 0 6px;color:#fff">درگاه پرداخت امن شاپرک / زرین‌پال (Sandbox)</h3>
+            <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">این پنجره محیط آزمایشی پرداخت آنلاین است. پس از قرار دادن کلید <code>ZARINPAL_MERCHANT_ID</code> در سرور، به درگاه بانکی واقعی هدایت می‌شود.</p>
+            <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--c-line);display:grid;gap:6px;font-size:var(--fs-xs);margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between"><span>پذیرنده:</span><strong style="color:#fff">فروشگاه تخصصی مغزدانه</strong></div>
+              <div style="display:flex;justify-content:space-between"><span>شماره سفارش:</span><strong class="ltr" id="gw-order-code">—</strong></div>
+              <div style="display:flex;justify-content:space-between"><span>مبلغ قابل پرداخت:</span><strong class="num" style="color:var(--c-primary-light)" id="gw-amount">—</strong></div>
+            </div>
+            <div style="display:grid;gap:8px">
+              <button type="button" class="btn btn-primary" id="gw-approve-btn" style="width:100%">✓ تأیید پرداخت موفق (دمو)</button>
+              <button type="button" class="btn btn-outline btn-sm" id="gw-reject-btn" style="width:100%">انصراف و بازگشت به تسویه‌حساب</button>
+            </div>
+          </div>
+        </div>`;
 
         document.querySelectorAll('.pay-opt input').forEach(r => r.addEventListener('change', () => {
           document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
           r.closest('.pay-opt').classList.add('sel');
         }));
+
+        const vatToggle = document.getElementById('f-vat-toggle');
+        const vatFields = document.getElementById('vat-fields');
+        vatToggle.addEventListener('change', () => { vatFields.hidden = !vatToggle.checked; });
+
+        // Dynamic Province + Weight + Carrier Shipping Estimator
+        let dynamicShipCost = t.shipCost;
+        function recalcSmartShipping() {
+          const prov = (document.getElementById('f-prov').value || '').trim();
+          const carrier = document.getElementById('f-ship').value;
+          const slotWrap = document.getElementById('slot-wrap');
+          const noteEl = document.getElementById('ship-estimate-note');
+          slotWrap.hidden = carrier !== 'tehran-courier';
+
+          const isTehran = prov.includes('تهران') || prov.includes('البرز');
+          const freeThreshold = db.site.shipping.free_over || 3000000;
+          let estCost = 0;
+          let eta = '۲ تا ۴ روز کاری';
+
+          if (carrier === 'freight') {
+            estCost = t.totalKg >= 25 ? 0 : 140000;
+            eta = '۱ تا ۲ روز کاری (تحویل پای باربری شهر مقصد)';
+          } else if (t.subtotal >= freeThreshold && carrier !== 'tehran-courier') {
+            estCost = 0;
+            eta = isTehran ? '۱ تا ۲ روز کاری' : '۲ تا ۴ روز کاری';
+          } else if (carrier === 'tehran-courier') {
+            estCost = 120000;
+            eta = 'تحویل همان‌روز در بازهٔ انتخابی (ویژه تهران)';
+          } else if (carrier === 'post') {
+            estCost = Math.round((isTehran ? 65000 : 85000) + Math.max(0, t.totalKg - 1) * 18000);
+            eta = isTehran ? '۲ تا ۳ روز کاری' : '۳ تا ۵ روز کاری';
+          } else {
+            estCost = Math.round((isTehran ? 75000 : 105000) + Math.max(0, t.totalKg - 1) * 22000);
+            eta = isTehran ? '۱ تا ۲ روز کاری' : '۲ تا ۴ روز کاری';
+          }
+
+          dynamicShipCost = estCost;
+          const liveGrand = Math.max(0, t.subtotal - t.discount + dynamicShipCost);
+          document.getElementById('co-ship-val').textContent = dynamicShipCost ? faToman(dynamicShipCost) : 'رایگان';
+          document.getElementById('co-grand-val').textContent = faToman(liveGrand);
+          noteEl.innerHTML = `📦 برآورد ارسال (${fmt(t.totalKg)} کیلوگرم${prov ? ` به ${esc(prov)}` : ''}): <strong style="color:#fff">${dynamicShipCost ? faToman(dynamicShipCost) : 'رایگان'}</strong> · زمان تحویل تقریبی: <strong style="color:var(--c-primary-light)">${eta}</strong>`;
+        }
+
+        document.getElementById('f-prov').addEventListener('input', recalcSmartShipping);
+        document.getElementById('f-ship').addEventListener('change', recalcSmartShipping);
+        recalcSmartShipping();
 
         document.getElementById('co-proforma').onclick = () => openInvoiceModal();
 
@@ -174,17 +270,76 @@
           }
         };
 
+        async function runDemoGatewayModal(orderCode, amount) {
+          return new Promise(resolve => {
+            const modal = document.getElementById('demo-gw-modal');
+            document.getElementById('gw-order-code').textContent = orderCode;
+            document.getElementById('gw-amount').textContent = faToman(amount);
+            modal.classList.add('open');
+
+            const cleanup = () => {
+              modal.classList.remove('open');
+              document.getElementById('gw-approve-btn').onclick = null;
+              document.getElementById('gw-reject-btn').onclick = null;
+              document.getElementById('gw-cancel-x').onclick = null;
+            };
+            document.getElementById('gw-approve-btn').onclick = async () => {
+              let refId = 'ZP-DEMO-' + Math.floor(100000 + Math.random() * 900000);
+              try {
+                const gw = await apiFetch('/api/payments/demo-gateway', {
+                  method: 'POST',
+                  body: JSON.stringify({ orderCode, amount, action: 'approve' }),
+                });
+                if (gw && gw.refId) refId = gw.refId;
+              } catch {}
+              cleanup();
+              resolve({ ok: true, refId });
+            };
+            const reject = () => { cleanup(); resolve({ ok: false }); };
+            document.getElementById('gw-reject-btn').onclick = reject;
+            document.getElementById('gw-cancel-x').onclick = reject;
+          });
+        }
+
         document.getElementById('co-form').addEventListener('submit', async e => {
           e.preventDefault();
           const btn = document.getElementById('submit-btn');
           btn.disabled = true;
-          btn.textContent = 'در حال ثبت سفارش…';
+          btn.textContent = 'در حال بررسی سفارش…';
           const selectedPayVal = document.querySelector('input[name="pay"]:checked').value;
           const isWalletPay = selectedPayVal === 'wallet';
+          const isSayadiPay = selectedPayVal === 'sayadi';
+          const isOnlineGateway = selectedPayVal === '0';
           const liveT = cartTotals();
+          const finalShip = dynamicShipCost;
+          const computedGrand = Math.max(0, liveT.subtotal - liveT.discount + finalShip);
+          const orderCode = 'MD-' + Date.now().toString(36).toUpperCase();
+
+          let paymentRefId = '';
+          if (isOnlineGateway) {
+            const gwRes = await runDemoGatewayModal(orderCode, computedGrand);
+            if (!gwRes.ok) {
+              btn.disabled = false;
+              btn.textContent = 'ثبت نهایی سفارش';
+              toast('پرداخت درگاه آزمایشی لغو شد');
+              return;
+            }
+            paymentRefId = gwRes.refId;
+          }
+
+          btn.textContent = 'در حال ثبت نهایی سفارش…';
+          const vatEnabled = document.getElementById('f-vat-toggle').checked;
+          const shipSelect = document.getElementById('f-ship');
+          const slotText = shipSelect.value === 'tehran-courier' ? ` (${document.getElementById('f-slot').value})` : '';
+          const corporateInvoice = vatEnabled ? {
+            requested: true,
+            companyName: document.getElementById('f-comp-name').value.trim(),
+            nationalId: document.getElementById('f-comp-nid').value.trim(),
+            economicCode: document.getElementById('f-comp-eco').value.trim(),
+          } : null;
 
           const order = {
-            id: 'MD-' + Date.now().toString(36).toUpperCase(),
+            id: orderCode,
             date: new Date().toISOString(),
             customer: {
               name: document.getElementById('f-name').value.trim(),
@@ -195,9 +350,16 @@
               address: document.getElementById('f-addr').value.trim(),
               postal: document.getElementById('f-post').value.trim(),
             },
-            shipping: document.getElementById('f-ship').selectedOptions[0].textContent,
-            payment: isWalletPay ? 'پرداخت آنلاین از کیف پول مغزدانه' : db.site.payment.methods[+selectedPayVal],
-            paymentMethod: isWalletPay ? 'wallet' : 'gateway',
+            shipping: shipSelect.selectedOptions[0].textContent + slotText,
+            payment: isWalletPay
+              ? 'پرداخت آنلاین از کیف پول مغزدانه'
+              : isSayadiPay
+                ? 'پرداخت اعتباری / چک صیادی (عمده — دمو)'
+                : db.site.payment.methods[+selectedPayVal] + (paymentRefId ? ` (کد پیگیری ${paymentRefId})` : ''),
+            paymentMethod: isWalletPay ? 'wallet' : isSayadiPay ? 'sayadi' : 'gateway',
+            paymentRefId,
+            escrowProtected: true,
+            corporateInvoice,
             couponCode: liveT.couponCode || '',
             discountAmount: liveT.discount || 0,
             note: document.getElementById('f-note').value.trim(),
@@ -225,15 +387,15 @@
             totals: {
               subtotal: liveT.subtotal,
               discount: liveT.discount,
-              shipping: liveT.shipCost,
+              shipping: finalShip,
               totalKg: liveT.totalKg,
-              grand: liveT.grand,
+              grand: computedGrand,
             },
-            status: isWalletPay ? 'processing' : 'new',
+            status: (isWalletPay || paymentRefId) ? 'processing' : 'new',
           };
 
           let savedRemote = false;
-          let finalGrand = liveT.grand;
+          let finalGrand = computedGrand;
           try {
             const res = await apiFetch('/api/orders', {
               method: 'POST',
@@ -243,6 +405,9 @@
                 shipping: order.shipping,
                 payment: order.payment,
                 paymentMethod: order.paymentMethod,
+                paymentRefId: order.paymentRefId,
+                escrowProtected: true,
+                corporateInvoice: order.corporateInvoice,
                 couponCode: order.couponCode,
                 note: order.note,
                 items: order.items,

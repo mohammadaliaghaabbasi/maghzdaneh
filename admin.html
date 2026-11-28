@@ -581,6 +581,22 @@
               <div class="field form-full"><label for="br-addr">نشانی فروشگاه</label><input id="br-addr" maxlength="240"></div>
             </div>
           </form>
+
+          <!-- External Services & Cloud DB Sync Readiness Console -->
+          <div class="dash-card" style="margin-top:20px">
+            <div class="dash-card-head">
+              <div>
+                <h2>وضعیت اتصال سرویس‌های بیرونی و فضای ابری (Demo Readiness)</h2>
+                <p>نمایش زندهٔ وضعیت سرویس‌های متصل و سرویس‌هایی که در حالت دمو آمادهٔ دریافت کلید API در فایل <code>.env</code> هستند.</p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-refresh-integrations">به‌روزرسانی وضعیت ↻</button>
+                <button type="button" class="btn btn-gold btn-sm" id="btn-cloud-backup">☁ پشتیبان‌گیری ابری (Firestore)</button>
+              </div>
+            </div>
+            <div id="adm-integrations-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div>
+            <div id="adm-integrations-counts" style="margin-top:14px;font-size:0.82rem;color:var(--lux-soft)"></div>
+          </div>
         </section>
 
         <!-- VIEW 11: COUPONS MANAGER -->
@@ -1663,7 +1679,60 @@
       document.getElementById('br-phone').value = br.phone || '';
       document.getElementById('br-mobile').value = br.mobile || '';
       document.getElementById('br-addr').value = br.address || '';
+      loadAdminIntegrations();
     }
+
+    async function loadAdminIntegrations() {
+      const grid = document.getElementById('adm-integrations-grid');
+      const cntEl = document.getElementById('adm-integrations-counts');
+      if (!grid) return;
+      let data = null;
+      try { data = await apiFetch('/api/admin/integrations'); } catch {}
+      const list = (data && Array.isArray(data.integrations)) ? data.integrations : [
+        { id: 'fx', name: 'نرخ زنده ارز صادراتی (ExchangeRate-API)', mode: 'live', envKey: 'بدون نیاز به کلید', note: 'متصل و زنده' },
+        { id: 'zarinpal', name: 'درگاه پرداخت شاپرک / زرین‌پال', mode: 'demo', envKey: 'ZARINPAL_MERCHANT_ID', note: 'در حالت شبیه‌ساز دمو فعال است' },
+        { id: 'sms', name: 'سامانه پیامک و OTP', mode: 'demo', envKey: 'SMS_API_KEY', note: 'نمایش کد آزمایشی روی فرم ورود' },
+        { id: 'post', name: 'وب‌سرویس رهگیری پست و تیپاکس', mode: 'demo', envKey: 'POST_API_KEY', note: 'تولید کد رهگیری آزمایشی' },
+        { id: 'push', name: 'اعلان‌های وب‌اپلیکیشن (Web Push)', mode: 'demo', envKey: 'VAPID_PUBLIC_KEY', note: 'آماده ارسال اعلان محلی PWA' },
+        { id: 'firestore', name: 'پایگاه داده ابری Firestore', mode: 'hybrid', envKey: 'firebase-applet-config.json', note: 'حالت هیبریدی (سرور + همگام‌سازی ابری)' },
+      ];
+      grid.innerHTML = list.map(item => {
+        const badgeCls = item.mode === 'live' ? 'st-ok' : item.mode === 'hybrid' ? 'st-ok' : 'st-warn';
+        const badgeTxt = item.mode === 'live' ? '● متصل و زنده' : item.mode === 'hybrid' ? '● هیبریدی / آماده' : '◐ حالت دمو (آماده اتصال)';
+        return `
+          <div class="order-card" style="margin:0;padding:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+              <strong style="color:#fff;font-size:0.86rem">${esc(item.name)}</strong>
+            </div>
+            <div class="${badgeCls}" style="font-size:0.76rem;font-weight:800;margin-bottom:6px">${badgeTxt}</div>
+            <div style="font-size:0.75rem;color:var(--lux-soft);margin-bottom:6px">${esc(item.note || '')}</div>
+            <div style="font-size:0.72rem;color:var(--lux-muted)">کلید محیطی: <code class="ltr">${esc(item.envKey || '—')}</code></div>
+          </div>`;
+      }).join('');
+      if (cntEl && data && data.counts) {
+        cntEl.innerHTML = `آمار ماژول‌های جدید سامانه: <strong style="color:#fff">${fmt(data.counts.rfqs || 0)}</strong> مناقصه عمده (RFQ) · <strong style="color:#fff">${fmt(data.counts.preorders || 0)}</strong> رزرو نوبرانه فصل · <strong style="color:#fff">${fmt(data.counts.vendorReviews || 0)}</strong> دیدگاه غرفه‌ها · <strong style="color:#fff">${fmt(data.counts.savedCarts || 0)}</strong> سبد همگام‌سازی‌شده`;
+      }
+    }
+
+    document.getElementById('btn-refresh-integrations').onclick = () => {
+      loadAdminIntegrations().then(() => toast('وضعیت سرویس‌های بیرونی به‌روزرسانی شد'));
+    };
+    document.getElementById('btn-cloud-backup').onclick = async () => {
+      try {
+        if (window.MgzCloud && window.MgzCloud.saveSiteContent) {
+          await window.MgzCloud.saveSiteContent('backup_meta', {
+            backedUpAt: new Date().toISOString(),
+            ordersCount: (overview && overview.orders && overview.orders.length) || 0,
+            vendorsCount: (overview && overview.vendors && overview.vendors.length) || 0,
+          });
+          toast('نسخهٔ پشتیبان متادیتا در Firestore ذخیره شد');
+        } else {
+          toast('همگام‌سازی ابری در حالت آماده (برای ذخیره ابری با حساب گوگل مدیر وارد شوید)');
+        }
+      } catch {
+        toast('پشتیبان محلی سرور فعال است؛ برای پشتیبان ابری اتصال Firestore را بررسی کنید');
+      }
+    };
 
     document.getElementById('branding-form').addEventListener('submit', async (e) => {
       e.preventDefault();

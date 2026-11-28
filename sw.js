@@ -7,11 +7,15 @@
    - Stale-While-Revalidate for static assets
    ========================================================================== */
 
-const CACHE_VERSION = 'maghzdaneh-pwa-v22';
+const CACHE_VERSION = 'maghzdaneh-pwa-v23';
 const SHELL_RELATIVE = [
   './',
   './index.html',
   './catalog.html',
+  './mix.html',
+  './trace.html',
+  './track.html',
+  './export.html',
   './vendors.html',
   './gifts.html',
   './wholesale.html',
@@ -146,6 +150,40 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => cached);
       return cached || fetchPromise;
+    })
+  );
+});
+
+// Web Push Notification Readiness (Demo & VAPID-Ready)
+self.addEventListener('push', (event) => {
+  let payload = { title: 'مغزدانه', body: 'اطلاع‌رسانی جدید از فروشگاه تخصصی مغزدانه', url: './account.html' };
+  try {
+    if (event.data) payload = { ...payload, ...event.data.json() };
+  } catch {
+    if (event.data) payload.body = event.data.text();
+  }
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: scopeUrl('./assets/img/pwa-192x192.png'),
+      badge: scopeUrl('./assets/img/pwa-192x192.png'),
+      dir: 'rtl',
+      lang: 'fa',
+      data: { url: scopeUrl(payload.url || './') },
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || scopeUrl('./');
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if (client.url === target && 'focus' in client) return client.focus();
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(target);
+      return null;
     })
   );
 });

@@ -352,6 +352,36 @@
               <div id="ov-recent-tx"></div>
             </div>
           </div>
+
+          <!-- Referral Program + PWA Web Push Readiness -->
+          <div class="dash-split-even">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>دعوت از دوستان (کیف پول هدیه)</h2>
+                  <p>با دعوت هر دوست، ۱۵۰٬۰۰۰ تومان اعتبار کیف پول برای شما و ۱۰٪ تخفیف برای دوستتان فعال می‌شود.</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <code id="ref-code-box" class="ltr" style="padding:10px 14px;border-radius:10px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);color:var(--lux-gold);font-weight:900;font-size:1rem">MGZ-INVITE</code>
+                <button type="button" class="btn btn-gold btn-sm" id="btn-copy-ref">کپی لینک دعوت</button>
+                <span id="ref-stats-lbl" style="font-size:0.78rem;color:var(--lux-soft)"></span>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <h2>اعلان‌های لحظه‌ای وب‌اپلیکیشن (Web Push)</h2>
+                  <p>دریافت اعلان افت قیمت بازار، وضعیت مرسوله و پاسخ غرفه‌داران روی گوشی و دسکتاپ (آماده اتصال VAPID — دمو)</p>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                <span id="push-status-lbl" style="font-size:0.82rem;color:var(--lux-soft)">وضعیت: آمادهٔ فعال‌سازی</span>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-enable-push">🔔 فعال‌سازی و ارسال اعلان تست</button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- VIEW 2: WALLET & TOP-UP -->
@@ -561,6 +591,18 @@
                 </div>
               </form>
             </div>
+          </div>
+
+          <!-- Buyer-Vendor 2-Way Messages Inbox -->
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>پیام‌ها و استعلام‌های من با غرفه‌داران بازارچه</h2>
+                <p>تمام پیام‌هایی که در صفحات غرفه‌ها ارسال کرده‌اید و پاسخ غرفه‌داران اینجا نمایش داده می‌شود.</p>
+              </div>
+              <a href="vendors.html" class="btn btn-outline btn-sm">مشاهده بازارچه غرفه‌ها</a>
+            </div>
+            <div id="cust-vendor-msgs" style="display:grid;gap:10px"></div>
           </div>
         </section>
 
@@ -1115,8 +1157,9 @@
               </div>
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
                 <span class="${STATUS_CLS[o.status] || 'st-muted'}" style="font-size:0.82rem">${esc(STATUS_FA[o.status] || o.status)}</span>
+                <a class="btn btn-outline btn-sm" href="track.html?code=${encodeURIComponent(o.orderCode || o.id)}">پیگیری مرسوله</a>
                 <button type="button" class="btn btn-outline btn-sm" data-invoice-ord="${esc(o.id)}">فاکتور رسمی (PDF)</button>
-                <button type="button" class="btn btn-outline btn-sm" data-reorder="${esc(o.id)}">سفارش مجدد</button>
+                <button type="button" class="btn btn-primary btn-sm" data-reorder="${esc(o.id)}">تکرار سفارش ۱-کلیک</button>
               </div>
             </div>
             <div style="font-size:0.85rem;color:var(--lux-soft);margin-bottom:8px">
@@ -1525,6 +1568,75 @@
       renderSubscriptions();
       renderFavorites();
       renderTickets();
+
+      // Referral Program & Web Push Readiness
+      (async () => {
+        let refCode = 'MGZ-' + String(usr.username || usr.id || 'FRIEND').slice(0, 6).toUpperCase().replace(/[^A-Z0-9]/g, 'X');
+        let refCount = 0;
+        let refBonus = 0;
+        if (authMode === 'server') {
+          try {
+            const rf = await apiFetch('/api/customer/referral');
+            if (rf && rf.code) {
+              refCode = rf.code;
+              refCount = Number(rf.invitedCount || 0);
+              refBonus = Number(rf.bonusEarned || 0);
+            }
+          } catch {}
+        }
+        const codeBox = document.getElementById('ref-code-box');
+        const statsEl = document.getElementById('ref-stats-lbl');
+        if (codeBox) codeBox.textContent = refCode;
+        if (statsEl) statsEl.textContent = `دعوت موفق: ${fmt(refCount)} نفر · اعتبار هدیه: ${faToman(refBonus)}`;
+        const copyBtn = document.getElementById('btn-copy-ref');
+        if (copyBtn) {
+          copyBtn.onclick = () => {
+            const shareUrl = `${location.origin}${location.pathname.replace(/[^/]+$/, '')}index.html?ref=${encodeURIComponent(refCode)}`;
+            if (navigator.clipboard) navigator.clipboard.writeText(shareUrl).catch(() => {});
+            toast(`لینک دعوت با کد ${refCode} کپی شد`);
+          };
+        }
+
+        const pushBtn = document.getElementById('btn-enable-push');
+        const pushLbl = document.getElementById('push-status-lbl');
+        if (pushLbl && 'Notification' in window) {
+          pushLbl.textContent = Notification.permission === 'granted' ? '✓ اعلان‌های وب‌اپلیکیشن فعال است' : 'وضعیت: آمادهٔ فعال‌سازی';
+        }
+        if (pushBtn) {
+          pushBtn.onclick = async () => {
+            if (typeof enableMaghzdanehPush === 'function') {
+              const ok = await enableMaghzdanehPush();
+              if (pushLbl) pushLbl.textContent = ok ? '✓ اعلان تست ارسال و فعال شد (دمو)' : 'مرورگر مجوز اعلان را مسدود کرده است';
+            }
+          };
+        }
+
+        // Load Buyer-Vendor Messages
+        const vmBox = document.getElementById('cust-vendor-msgs');
+        if (vmBox) {
+          let msgs = [];
+          if (authMode === 'server') {
+            try {
+              const mr = await apiFetch('/api/customer/messages');
+              if (mr && Array.isArray(mr.messages)) msgs = mr.messages;
+            } catch {}
+          }
+          if (!msgs.length) {
+            try { msgs = JSON.parse(localStorage.getItem('maghzdaneh_vendor_msgs') || '[]'); } catch {}
+          }
+          vmBox.innerHTML = msgs.length
+            ? msgs.map(m => `
+                <div class="order-card" style="margin:0">
+                  <div class="order-card-top">
+                    <strong style="color:#fff">غرفه: ${esc(m.vendorName || m.vendorId || 'غرفه‌دار بازارچه')}</strong>
+                    <span style="font-size:0.75rem;color:var(--lux-muted)">${faDate(m.createdAt)}</span>
+                  </div>
+                  <p style="font-size:0.84rem;color:var(--lux-soft);margin:0">${esc(m.body || '')}</p>
+                  ${m.reply ? `<div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(82,199,136,0.1);color:var(--lux-emerald);font-size:0.82rem"><strong>پاسخ غرفه‌دار:</strong> ${esc(m.reply)}</div>` : '<div style="margin-top:6px;font-size:0.74rem;color:var(--lux-gold)">در انتظار پاسخ غرفه‌دار…</div>'}
+                </div>`).join('')
+            : '<div style="padding:14px 0;color:var(--lux-muted);font-size:0.84rem">هنوز پیامی برای غرفه‌داران ارسال نکرده‌اید.</div>';
+        }
+      })();
 
       // Render Personal Storefront Bridge
       const shop = (custDash && custDash.shop) || APP.vendorShop;

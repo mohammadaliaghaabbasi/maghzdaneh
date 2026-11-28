@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>میکس‌ساز اختصاصی آجیل و چهارمغز با لیبل دلخواه | مغزدانه</title>
+  <meta name="description" content="ترکیب اختصاصی مغز پسته، بادام مامایی، گردوی تویسرکان و خلال سبز را با درصد دقیق دلخواه، جدول ارزش غذایی زنده و لیبل چاپی اختصاصی بسازید.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="میکس‌ساز اختصاصی آجیل و چهارمغز | مغزدانه">
+  <meta property="og:description" content="درصد هر مغز، نوع تفت و بسته‌بندی را انتخاب کنید؛ قیمت لحظه‌ای و ارزش غذایی را ببینید و با لیبل اختصاصی سفارش دهید.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+  <style>
+    .mix-grid { display: grid; gap: 24px; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; }
+    @media (max-width: 960px) { .mix-grid { grid-template-columns: 1fr; } }
+    .mix-card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 16px; padding: 22px; }
+    .mix-item-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 74px; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--c-line); }
+    .mix-item-row:last-child { border-bottom: 0; }
+    .mix-item-row img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid var(--c-line-strong); }
+    .mix-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .mix-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.06); margin: 12px 0 6px; }
+    .mix-seg { transition: width .22s ease; }
+    .label-preview { position: relative; border-radius: 14px; padding: 20px; text-align: center; background: linear-gradient(145deg, #0b140f, #132119); border: 1px solid rgba(212,175,55,0.45); box-shadow: inset 0 0 0 1px rgba(212,175,55,0.14); }
+    .label-preview .lp-emblem { font-size: 0.72rem; letter-spacing: 0.14em; color: var(--c-accent-light); text-transform: uppercase; }
+    .label-preview .lp-title { font-size: 1.25rem; font-weight: 900; color: #fff; margin: 6px 0 4px; }
+    .label-preview .lp-sub { font-size: 0.78rem; color: var(--c-text-soft); }
+    .nutri-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    .nutri-cell { background: rgba(255,255,255,0.03); border: 1px solid var(--c-line); border-radius: 10px; padding: 10px 8px; text-align: center; }
+    .nutri-cell span { display: block; font-size: 0.72rem; color: var(--c-text-muted); }
+    .nutri-cell strong { font-size: 0.96rem; color: var(--c-primary-light); }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container page-head-row">
+      <div>
+        <span class="sec-label">تجربه اختصاصی مغزدانه · ترکیب دلخواه</span>
+        <h1>میکس‌ساز اختصاصی آجیل و چهارمغز</h1>
+        <p>درصد دقیق هر مغز، نوع برشته‌کاری، بسته‌بندی و متن لیبل اختصاصی قوطی خود را تنظیم کنید؛ ارزش غذایی و قیمت لحظه‌ای به‌صورت زنده محاسبه می‌شود.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-outline" href="gifts.html">سازندهٔ جعبه هدیه چندخانه</a>
+        <a class="btn btn-outline" href="catalog.html">بازگشت به فروشگاه</a>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="mix-grid">
+        <div style="display:grid;gap:18px">
+          <div class="mix-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+              <h2 style="font-size:var(--fs-md);margin:0">۱. انتخاب ترکیب و درصد مغزها</h2>
+              <span id="mix-total-pct" style="font-size:var(--fs-xs);font-weight:800;color:var(--c-primary-light)">جمع درصدها: ۱۰۰٪</span>
+            </div>
+            <div class="mix-presets" id="mix-presets"></div>
+            <div class="mix-bar" id="mix-bar" aria-label="نسبت بصری ترکیب"></div>
+            <div id="mix-ingredients"></div>
+          </div>
+
+          <div class="mix-card">
+            <h2 style="font-size:var(--fs-md);margin:0 0 14px">۲. وزن، فرآوری، بسته‌بندی و لیبل اختصاصی</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label for="mix-weight">وزن بستهٔ میکس</label>
+                <select id="mix-weight">
+                  <option value="0.5">۵۰۰ گرم (مصرف خانگی)</option>
+                  <option value="1" selected>۱ کیلوگرم (استاندارد محبوب)</option>
+                  <option value="2">۲ کیلوگرم (خانوادگی — ۵٪ تخفیف)</option>
+                  <option value="5">۵ کیلوگرم (نیم‌عمده — ۱۰٪ تخفیف)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="mix-roast">نوع برشته‌کاری و طعم</label>
+                <select id="mix-roast">
+                  <option value="0|خام طبیعی (بدون نمک)">خام طبیعی بدون نمک (پایه)</option>
+                  <option value="25000|برشته نمکی ملایم">برشته نمکی ملایم (+۲۵٬۰۰۰ ت/کیلو)</option>
+                  <option value="45000|لیمو و نمک دریا">لیمو و نمک دریا (+۴۵٬۰۰۰ ت/کیلو)</option>
+                  <option value="75000|زعفرانی ممتاز قائنات">زعفرانی ممتاز قائنات (+۷۵٬۰۰۰ ت/کیلو)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="mix-pack">نوع بسته‌بندی</label>
+                <select id="mix-pack">
+                  <option value="0|پاکت وکیوم زیپ‌دار ضدنور">پاکت وکیوم زیپ‌دار (رایگان)</option>
+                  <option value="55000|شیشه تیره آزمایشگاهی">شیشه تیره ضدنور (+۵۵٬۰۰۰ تومان)</option>
+                  <option value="110000|قوطی فلزی زمردی لوکس">قوطی فلزی زمردی هدیه (+۱۱۰٬۰۰۰ تومان)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="mix-label">نام دلخواه چاپی روی لیبل بسته (رایگان)</label>
+                <input id="mix-label" maxlength="40" value="چهارمغز ویژهٔ خانواده" placeholder="مثلاً: میکس انرژی باشگاه علی">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="cart-summary" style="position:sticky;top:92px">
+          <div class="label-preview" id="label-preview">
+            <div class="lp-emblem">MAGHZDANEH · CUSTOM BLEND</div>
+            <div class="lp-title" id="lp-title">چهارمغز ویژهٔ خانواده</div>
+            <div class="lp-sub" id="lp-sub">۱ کیلوگرم · خام طبیعی · پاکت وکیوم</div>
+            <div id="lp-composition" style="margin-top:10px;font-size:0.74rem;color:var(--c-accent-light)"></div>
+          </div>
+
+          <div style="margin-top:16px">
+            <div style="font-size:var(--fs-xs);color:var(--c-text-soft);font-weight:800">ارزش غذایی تخمینی (در هر ۱۰۰ گرم)</div>
+            <div class="nutri-grid" id="nutri-grid"></div>
+          </div>
+
+          <div style="margin-top:18px;border-top:1px solid var(--c-line);padding-top:14px" id="mix-price-summary"></div>
+          <button type="button" class="btn btn-primary" id="btn-add-mix" style="width:100%;margin-top:14px">افزودن میکس اختصاصی به سبد خرید</button>
+          <p style="font-size:0.74rem;color:var(--c-text-muted);margin-top:10px;line-height:1.7">هر بسته میکس اختصاصی پس از ثبت سفارش شما در کارگاه مغزدانه به‌صورت تازه ترکیب، وکیوم و با لیبل اختصاصی ارسال می‌شود.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+    const MIX_ITEMS = [
+      { id: 'maghz-akbari-premium', fallbackName: 'مغز پسته اکبری سوپر رفسنجان', fallbackPrice: 1550000, img: 'assets/img/maghz-pistachio-akbari.jpg', color: '#2ea05f', kcal: 562, protein: 20.2, fat: 45.3, fiber: 10.6, pct: 35 },
+      { id: 'maghz-badam-mamai', fallbackName: 'مغز بادام مامایی صادراتی سامان', fallbackPrice: 980000, img: 'assets/img/studio-almond-mamai.jpg', color: '#d4af37', kcal: 579, protein: 21.2, fat: 49.9, fiber: 12.5, pct: 30 },
+      { id: 'maghz-gerdoo-lux', fallbackName: 'مغز گردوی سفید دوپر تویسرکان', fallbackPrice: 950000, img: 'assets/img/studio-walnut-tuyserkan.jpg', color: '#c48f5a', kcal: 654, protein: 15.2, fat: 65.2, fiber: 6.7, pct: 25 },
+      { id: 'khall-qazvin', fallbackName: 'مغز پسته سبز زمردی قزوین', fallbackPrice: 1850000, img: 'assets/img/maghz-pistachio-green.jpg', color: '#5be28e', kcal: 560, protein: 20.6, fat: 44.8, fiber: 10.3, pct: 10 },
+      { id: 'maghz-pistachio-roasted', fallbackName: 'مغز پسته برشته کارگاهی', fallbackPrice: 1490000, img: 'assets/img/maghz-pistachio-roasted.jpg', color: '#8f6b3e', kcal: 572, protein: 21.0, fat: 46.0, fiber: 10.0, pct: 0 },
+    ];
+
+    const PRESETS = [
+      { label: 'چهارمغز مجلسی (پیشنهادی)', weights: [35, 30, 25, 10, 0] },
+      { label: 'میکس انرژی ورزشی و بدنسازی', weights: [25, 40, 35, 0, 0] },
+      { label: 'سوپر لوکس پسته و زمرد', weights: [50, 15, 10, 25, 0] },
+      { label: 'میکس اقتصادی روزانه', weights: [20, 40, 40, 0, 0] },
+    ];
+
+    boot('mix').then(db => {
+      // Sync names/prices with live catalog
+      MIX_ITEMS.forEach(m => {
+        const p = byId(m.id);
+        if (p) {
+          m.name = p.name;
+          m.unitPrice = Number(p.prices.retail || m.fallbackPrice);
+          m.img = p.img || m.img;
+        } else {
+          m.name = m.fallbackName;
+          m.unitPrice = m.fallbackPrice;
+        }
+      });
+
+      const presetsWrap = document.getElementById('mix-presets');
+      presetsWrap.innerHTML = PRESETS.map((pr, idx) =>
+        `<button type="button" class="chip ${idx === 0 ? 'active' : ''}" data-preset="${idx}">${pr.label}</button>`
+      ).join('');
+      presetsWrap.querySelectorAll('[data-preset]').forEach(btn => {
+        btn.onclick = () => {
+          presetsWrap.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          btn.classList.add('active');
+          const w = PRESETS[+btn.dataset.preset].weights;
+          MIX_ITEMS.forEach((m, i) => { m.pct = w[i] || 0; });
+          renderSliders();
+          recalc();
+        };
+      });
+
+      function renderSliders() {
+        const wrap = document.getElementById('mix-ingredients');
+        wrap.innerHTML = MIX_ITEMS.map((m, i) => `
+          <div class="mix-item-row">
+            <img src="${esc(safeImgUrl(m.img))}" alt="${esc(m.name)}" onerror="mgzImgFallback(this,'${esc(m.name)}')">
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:6px">
+                <strong style="font-size:0.88rem;color:#fff"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${m.color};margin-left:6px"></span>${esc(m.name)}</strong>
+                <span style="font-size:0.74rem;color:var(--c-text-muted)" class="num">${faToman(m.unitPrice)} / کیلو</span>
+              </div>
+              <input type="range" min="0" max="100" step="5" value="${m.pct}" data-mix-idx="${i}" style="width:100%">
+            </div>
+            <div style="text-align:center">
+              <strong class="num" style="color:${m.color};font-size:1.05rem" id="mix-pct-val-${i}">٪${fmt(m.pct)}</strong>
+            </div>
+          </div>`).join('');
+
+        wrap.querySelectorAll('[data-mix-idx]').forEach(inp => {
+          inp.addEventListener('input', () => {
+            MIX_ITEMS[+inp.dataset.mixIdx].pct = Number(inp.value) || 0;
+            document.getElementById(`mix-pct-val-${inp.dataset.mixIdx}`).textContent = `٪${fmt(inp.value)}`;
+            recalc();
+          });
+        });
+      }
+
+      function recalc() {
+        const sumPct = MIX_ITEMS.reduce((s, m) => s + m.pct, 0);
+        const norm = sumPct > 0 ? sumPct : 1;
+        const pctEl = document.getElementById('mix-total-pct');
+        pctEl.textContent = sumPct === 100
+          ? 'جمع درصدها: ۱۰۰٪ (متعادل ✓)'
+          : `جمع فعلی: ${fmt(sumPct)}٪ (تناسب خودکار روی ۱۰۰٪ اعمال می‌شود)`;
+        pctEl.style.color = sumPct === 100 ? 'var(--c-primary-light)' : 'var(--c-accent-light)';
+
+        document.getElementById('mix-bar').innerHTML = MIX_ITEMS
+          .filter(m => m.pct > 0)
+          .map(m => `<div class="mix-seg" style="width:${(m.pct / norm) * 100}%;background:${m.color}" title="${esc(m.name)}"></div>`)
+          .join('');
+
+        const weightKg = Number(document.getElementById('mix-weight').value) || 1;
+        const [roastDeltaStr, roastLabel] = document.getElementById('mix-roast').value.split('|');
+        const [packDeltaStr, packLabel] = document.getElementById('mix-pack').value.split('|');
+        const roastDelta = Number(roastDeltaStr) || 0;
+        const packDelta = Number(packDeltaStr) || 0;
+        const customLabel = document.getElementById('mix-label').value.trim() || 'میکس اختصاصی مغزدانه';
+
+        const weightedBasePerKg = MIX_ITEMS.reduce((s, m) => s + (m.pct / norm) * m.unitPrice, 0);
+        const volumeDiscountPct = weightKg >= 5 ? 0.10 : weightKg >= 2 ? 0.05 : 0;
+        const perKgNet = Math.round((weightedBasePerKg + roastDelta) * (1 - volumeDiscountPct));
+        const finalPrice = Math.round(perKgNet * weightKg + packDelta);
+
+        const kcal = Math.round(MIX_ITEMS.reduce((s, m) => s + (m.pct / norm) * m.kcal, 0));
+        const protein = (MIX_ITEMS.reduce((s, m) => s + (m.pct / norm) * m.protein, 0)).toFixed(1);
+        const fat = (MIX_ITEMS.reduce((s, m) => s + (m.pct / norm) * m.fat, 0)).toFixed(1);
+        const fiber = (MIX_ITEMS.reduce((s, m) => s + (m.pct / norm) * m.fiber, 0)).toFixed(1);
+
+        document.getElementById('lp-title').textContent = customLabel;
+        document.getElementById('lp-sub').textContent = `${fmt(weightKg)} کیلوگرم · ${roastLabel} · ${packLabel}`;
+        const activeParts = MIX_ITEMS.filter(m => m.pct > 0).map(m => `${Math.round((m.pct / norm) * 100)}٪ ${m.name.split(' ').slice(0, 3).join(' ')}`);
+        document.getElementById('lp-composition').textContent = activeParts.join(' · ') || 'لطفاً حداقل یک مغز انتخاب کنید';
+
+        document.getElementById('nutri-grid').innerHTML = `
+          <div class="nutri-cell"><span>کالری</span><strong class="num">${fmt(kcal)}</strong></div>
+          <div class="nutri-cell"><span>پروتئین</span><strong class="num">${protein}g</strong></div>
+          <div class="nutri-cell"><span>چربی مفید</span><strong class="num">${fat}g</strong></div>
+          <div class="nutri-cell"><span>فیبر</span><strong class="num">${fiber}g</strong></div>`;
+
+        document.getElementById('mix-price-summary').innerHTML = `
+          <div class="sum-row"><span>قیمت پایه هر کیلو ترکیب</span><span class="num">${faToman(Math.round(weightedBasePerKg))}</span></div>
+          ${volumeDiscountPct > 0 ? `<div class="sum-row" style="color:var(--c-primary-light)"><span>تخفیف حجمی (${fmt(volumeDiscountPct * 100)}٪)</span><span>اعمال شد ✓</span></div>` : ''}
+          ${packDelta > 0 ? `<div class="sum-row"><span>بسته‌بندی (${esc(packLabel)})</span><span class="num">+ ${faToman(packDelta)}</span></div>` : ''}
+          <div class="sum-row total"><span>قیمت نهایی بسته</span><span class="num">${faToman(finalPrice)}</span></div>`;
+
+        document.getElementById('btn-add-mix').onclick = () => {
+          if (sumPct <= 0) { toast('لطفاً درصد حداقل یک مغز را بیشتر از صفر کنید'); return; }
+          addCustomToCart({
+            kind: 'custom-mix',
+            name: `میکس اختصاصی «${customLabel}» (${fmt(weightKg)} کیلو)`,
+            qty: 1,
+            unitPrice: finalPrice,
+            weightKg,
+            variantLabel: `${activeParts.join(' + ')} · ${roastLabel} · ${packLabel}`,
+            img: MIX_ITEMS.find(m => m.pct > 0)?.img || 'assets/img/maghz-pistachio-akbari.jpg',
+          }, true);
+        };
+      }
+
+      ['mix-weight', 'mix-roast', 'mix-pack', 'mix-label'].forEach(id => {
+        document.getElementById(id).addEventListener('input', recalc);
+        document.getElementById(id).addEventListener('change', recalc);
+      });
+
+      renderSliders();
+      recalc();
+    });
+  </script>
+</body>
+</html>

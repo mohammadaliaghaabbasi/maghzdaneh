@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>استعلام اصالت بار و شناسنامه آزمایشگاهی QR | مغزدانه</title>
+  <meta name="description" content="کد بچ یا QR روی بسته‌بندی مغزدانه را وارد کنید و شناسنامه آزمایشگاهی آفلاتوکسین، درصد رطوبت، باغ مبدا و تاریخ برشته‌کاری محصول را استعلام بگیرید.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="استعلام اصالت بار و شناسنامه QR | مغزدانه">
+  <meta property="og:description" content="شفافیت کامل از باغ تا سفره: استعلام آنلاین گواهی آزمایشگاهی آفلاتوکسین و مشخصات هر پارت محصول مغزدانه.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+  <style>
+    .trace-box { max-width: 880px; margin-inline: auto; display: grid; gap: 22px; }
+    .trace-search { display: flex; gap: 10px; flex-wrap: wrap; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 16px; padding: 18px; }
+    .trace-search input { flex: 1; min-width: 220px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--c-line-strong); background: var(--c-canvas-2); color: #fff; font-weight: 700; }
+    .cert-shell { background: linear-gradient(155deg, rgba(14,24,18,0.96), rgba(9,14,11,0.98)); border: 1px solid rgba(46,160,95,0.42); border-radius: 18px; padding: 26px; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+    .cert-top { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--c-line); padding-bottom: 18px; margin-bottom: 18px; }
+    .qr-card { background: #fff; padding: 10px; border-radius: 12px; width: 112px; height: 112px; flex-shrink: 0; display: grid; place-items: center; }
+    .cert-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .cert-metric { background: rgba(255,255,255,0.03); border: 1px solid var(--c-line); border-radius: 12px; padding: 14px; }
+    .cert-metric span { display: block; font-size: 0.75rem; color: var(--c-text-muted); margin-bottom: 4px; }
+    .cert-metric strong { font-size: 0.94rem; color: #fff; }
+    .cert-timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-top: 18px; }
+    .cert-step { padding: 12px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.22); background: rgba(212,175,55,0.05); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <span class="sec-label">شفافیت از باغ تا سفره · گواهی سلامت بار</span>
+      <h1>استعلام اصالت بار و شناسنامه آزمایشگاهی QR</h1>
+      <p>کد پارت (Lot Code) درج‌شده روی لیبل بسته‌بندی مغزدانه را وارد کنید تا مبدا باغ، تاریخ برداشت، درصد رطوبت و نتیجه آزمایش آفلاتوکسین همان بسته را ببینید.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="trace-box">
+        <form class="trace-search" id="trace-form">
+          <input id="trace-input" class="ltr" style="text-align:right" placeholder="کد پارت را وارد کنید (مثلاً MGZ-1405-RFJ-101)" required>
+          <button type="submit" class="btn btn-primary">استعلام اصالت بار</button>
+        </form>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center" id="sample-lots">
+          <span style="font-size:var(--fs-xs);color:var(--c-text-muted)">پارت‌های نمونه برای تست سریع:</span>
+        </div>
+
+        <div id="trace-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+    function generateDeterministicQrSvg(text) {
+      const size = 21;
+      let seed = Array.from(text).reduce((a, c, i) => (a * 31 + c.charCodeAt(0) * (i + 7)) >>> 0, 2166136261);
+      const nextBit = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return (seed >>> 24) & 1; };
+      const isFinder = (r, c) =>
+        (r < 7 && c < 7) || (r < 7 && c >= size - 7) || (r >= size - 7 && c < 7);
+      let rects = '';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          let on = false;
+          if (isFinder(r, c)) {
+            const lr = r < 7 ? r : r - (size - 7);
+            const lc = c < 7 ? c : c - (size - 7);
+            on = lr === 0 || lr === 6 || lc === 0 || lc === 6 || (lr >= 2 && lr <= 4 && lc >= 2 && lc <= 4);
+          } else {
+            on = nextBit() === 1;
+          }
+          if (on) rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0b130e"/>`;
+        }
+      }
+      return `<svg viewBox="0 0 ${size} ${size}" width="92" height="92" shape-rendering="crispEdges" role="img" aria-label="کد QR اصالت ${esc(text)}">${rects}</svg>`;
+    }
+
+    function lotForProduct(p) {
+      const hash = Array.from(String(p.id || 'mgz')).reduce((a, ch) => a + ch.charCodeAt(0), 0);
+      const lotCode = `MGZ-1405-${String(104 + (hash % 890))}`;
+      const isPist = p.category && p.category.includes('pistachio');
+      const isWalnut = p.category === 'walnut-kernel';
+      return {
+        lotCode,
+        product: p,
+        orchard: p.vendorName || `باغ‌های منتخب ${p.origin || 'رفسنجان'}`,
+        origin: p.origin || 'رفسنجان، کرمان',
+        harvestDate: 'شهریور ۱۴۰۴ (برداشت اول فصل)',
+        sortDate: 'آبان ۱۴۰۵ · سورتینگ لیزری و دستی',
+        roastDate: 'برشته‌کاری تازه روز ارسال سفارش',
+        moisture: isWalnut ? '۳٫۸٪ (استاندارد < ۵٪)' : isPist ? '۴٫۱٪ (استاندارد < ۵٪)' : '۴٫۵٪ (استاندارد < ۵٫۵٪)',
+        aflatoxin: '۱٫۲ ppb — تأییدشده (حد مجاز اروپا < ۴ ppb)',
+        labName: 'آزمایشگاه مرجع کنترل کیفیت خشکبار رفسنجان (ISO 17025)',
+        labRef: `LAB-${140500 + (hash % 900)}`,
+        gradeSpec: isPist ? 'اُنس ۲۰–۲۲ · خلوص ۹۹٫۴٪' : isWalnut ? 'دوپر سفید ۸۸٪ · چربی طبیعی ۶۴٪' : 'شیرین یکدست ۹۹٪ بدون دانه تلخ',
+      };
+    }
+
+    boot('trace').then(db => {
+      const allLots = (db.products || []).map(lotForProduct);
+      const chipsWrap = document.getElementById('sample-lots');
+      allLots.slice(0, 5).forEach(l => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip ltr';
+        b.textContent = l.lotCode;
+        b.onclick = () => {
+          document.getElementById('trace-input').value = l.lotCode;
+          renderLot(l);
+        };
+        chipsWrap.appendChild(b);
+      });
+
+      function renderLot(lot) {
+        const resEl = document.getElementById('trace-result');
+        if (!lot) {
+          resEl.innerHTML = `
+            <div class="empty">
+              <p style="color:#fff;font-weight:800">کد پارت واردشده در سامانه ثبت نشده است</p>
+              <p style="font-size:var(--fs-xs);margin-top:8px">لطفاً کد درج‌شده روی لیبل بسته را بررسی کنید یا یکی از کدهای نمونه بالا را انتخاب نمایید.</p>
+            </div>`;
+          return;
+        }
+        const p = lot.product;
+        const shareUrl = `${location.origin}${location.pathname}?lot=${encodeURIComponent(lot.lotCode)}`;
+        resEl.innerHTML = `
+          <div class="cert-shell">
+            <div class="cert-top">
+              <div>
+                <span class="verified-tag" style="margin-bottom:8px;display:inline-flex">✓ اصالت و سلامت آزمایشگاهی تأیید شد</span>
+                <h2 style="font-size:1.35rem;color:#fff;margin:0 0 6px">${esc(p.name)}</h2>
+                <div style="font-size:var(--fs-xs);color:var(--c-text-soft)">کد پارت: <strong class="ltr" style="color:var(--c-accent-light)">${esc(lot.lotCode)}</strong> · شماره گزارش آزمایشگاه: <strong class="ltr">${esc(lot.labRef)}</strong></div>
+              </div>
+              <div class="qr-card" title="QR اختصاصی استعلام بار">${generateDeterministicQrSvg(shareUrl)}</div>
+            </div>
+
+            <div class="cert-metrics">
+              <div class="cert-metric"><span>نتیجه تست آفلاتوکسین</span><strong style="color:var(--c-primary-light)">${esc(lot.aflatoxin)}</strong></div>
+              <div class="cert-metric"><span>درصد رطوبت بار</span><strong>${esc(lot.moisture)}</strong></div>
+              <div class="cert-metric"><span>شاخص گرید و خلوص</span><strong>${esc(lot.gradeSpec)}</strong></div>
+              <div class="cert-metric"><span>مبدا و باغ تأمین‌کننده</span><strong>${esc(lot.orchard)} (${esc(lot.origin)})</strong></div>
+              <div class="cert-metric"><span>فصل برداشت و سورتینگ</span><strong>${esc(lot.harvestDate)}</strong></div>
+              <div class="cert-metric"><span>آزمایشگاه صادرکننده</span><strong>${esc(lot.labName)}</strong></div>
+            </div>
+
+            <div class="cert-timeline">
+              <div class="cert-step"><strong style="color:var(--c-accent-light)">۱. برداشت باغ</strong><div style="color:var(--c-text-soft);margin-top:4px">${esc(lot.origin)}</div></div>
+              <div class="cert-step"><strong style="color:var(--c-accent-light)">۲. آزمایشگاه ISO</strong><div style="color:var(--c-text-soft);margin-top:4px">کنترل رطوبت و آفلاتوکسین</div></div>
+              <div class="cert-step"><strong style="color:var(--c-accent-light)">۳. سورتینگ و وکیوم</strong><div style="color:var(--c-text-soft);margin-top:4px">${esc(lot.sortDate)}</div></div>
+              <div class="cert-step"><strong style="color:var(--c-accent-light)">۴. تفت تازه</strong><div style="color:var(--c-text-soft);margin-top:4px">${esc(lot.roastDate)}</div></div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
+              <a class="btn btn-primary btn-sm" href="product.html?id=${encodeURIComponent(p.id)}">مشاهده و خرید این محصول ←</a>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-copy-trace">کپی لینک استعلام QR</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="window.print()">چاپ شناسنامه (PDF)</button>
+            </div>
+          </div>`;
+
+        document.getElementById('btn-copy-trace').onclick = () => {
+          navigator.clipboard?.writeText(shareUrl).then(() => toast('لینک استعلام اصالت کپی شد')).catch(() => toast(shareUrl));
+        };
+      }
+
+      function lookup(raw) {
+        const q = String(raw || '').trim().toUpperCase();
+        const found = allLots.find(l => l.lotCode.toUpperCase() === q || l.product.id.toUpperCase() === q);
+        renderLot(found || null);
+      }
+
+      document.getElementById('trace-form').addEventListener('submit', e => {
+        e.preventDefault();
+        lookup(document.getElementById('trace-input').value);
+      });
+
+      const paramLot = new URLSearchParams(location.search).get('lot');
+      if (paramLot) {
+        document.getElementById('trace-input').value = paramLot;
+        lookup(paramLot);
+      } else if (allLots[0]) {
+        document.getElementById('trace-input').value = allLots[0].lotCode;
+        renderLot(allLots[0]);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" id="export-html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Export Desk — Iranian Pistachio, Almond & Walnut Wholesale | Maghzdaneh</title>
+  <meta name="description" content="Trilingual B2B Export Desk (FA / EN / AR) for Iranian Rafsanjan Pistachio Kernels, Qazvin Green Slivers, Mamra Almonds and Tuyserkan Walnuts with live FOB/CIF container calculator.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Maghzdaneh Export Desk — Iranian Nuts FOB/CIF Wholesale">
+  <meta property="og:description" content="Direct orchard-to-port export of EU aflatoxin-tested Iranian pistachio kernels, green slivers, and mamra almonds.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+  <style>
+    .lang-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .lang-btn { padding: 7px 14px; border-radius: 9px; border: 1px solid var(--c-line-strong); background: rgba(255,255,255,0.03); color: var(--c-text-soft); font-weight: 800; font-size: 0.82rem; cursor: pointer; }
+    .lang-btn.active { background: var(--c-primary); color: #050b07; border-color: transparent; }
+    .exp-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .exp-stat { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 14px; padding: 18px; }
+    .exp-stat span { display: block; font-size: 0.78rem; color: var(--c-text-muted); margin-bottom: 6px; }
+    .exp-stat strong { font-size: 1.2rem; color: var(--c-accent-light); }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container page-head-row">
+      <div>
+        <span class="sec-label" id="ex-kicker">درگاه بین‌المللی و صادرات مستقیم</span>
+        <h1 id="ex-title">میز صادرات مغزدانه (FOB / CIF)</h1>
+        <p id="ex-sub">تأمین مستقیم محموله‌های صادراتی مغز پسته رفسنجان، خلال سبز قزوین، بادام مامایی سامان و گردوی تویسرکان با گواهی آزمایشگاهی آفلاتوکسین استاندارد اروپا و کارتن‌های ۱۰ کیلویی وکیوم.</p>
+      </div>
+      <div class="lang-bar" role="group" aria-label="Language Switcher">
+        <button type="button" class="lang-btn active" data-lang="fa">فارسی (FA)</button>
+        <button type="button" class="lang-btn" data-lang="en">English (EN)</button>
+        <button type="button" class="lang-btn" data-lang="ar">العربية (AR)</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="exp-cards">
+        <div class="exp-stat"><span id="ex-s1-lbl">استاندارد ایمنی اروپا</span><strong>EU Aflatoxin &lt; 4 ppb</strong></div>
+        <div class="exp-stat"><span id="ex-s2-lbl">بسته‌بندی صادراتی</span><strong>10kg Vacuum Cartons</strong></div>
+        <div class="exp-stat"><span id="ex-s3-lbl">بنادر تحویل</span><strong>Bandar Abbas · Jebel Ali</strong></div>
+        <div class="exp-stat"><span id="ex-s4-lbl">ارز نمایش زنده</span><strong id="ex-fx-live">USD · EUR · AED</strong></div>
+      </div>
+
+      <div class="calc-box">
+        <div style="display:grid;gap:14px">
+          <h2 id="ex-calc-title" style="margin:0;font-size:var(--fs-md)">ماشین‌حساب کانتینر و اینکوترمز صادراتی</h2>
+          <div class="form-grid">
+            <div class="field">
+              <label for="ex-grade" id="ex-lbl-grade">گرید صادراتی</label>
+              <select id="ex-grade">
+                <option value="14.8|Super Akbari Pistachio Kernel (Rafsanjan)">مغز پسته اکبری سوپر ($14.80/kg FOB)</option>
+                <option value="19.4|Grade-S Peeled Green Pistachio Kernel">مغز پسته سبز دوپوست گرید S ($19.40/kg FOB)</option>
+                <option value="20.1|Qazvin Emerald Pistachio Slivers">خلال پسته سبز قزوین ($20.10/kg FOB)</option>
+                <option value="9.7|Export Mamra Almond Kernel (Saman)">مغز بادام مامایی صادراتی ($9.70/kg FOB)</option>
+                <option value="9.4|Tuyserkan White Half Walnut Kernel">مغز گردوی دوپر سفید تویسرکان ($9.40/kg FOB)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="ex-incoterm" id="ex-lbl-term">شرایط تحویل (Incoterms)</label>
+              <select id="ex-incoterm">
+                <option value="0|FOB Bandar Abbas">FOB Bandar Abbas (+$0.00/kg)</option>
+                <option value="0.45|CIF Jebel Ali (Dubai)">CIF Jebel Ali — Dubai (+$0.45/kg)</option>
+                <option value="0.65|CIF Nhava Sheva (India)">CIF Nhava Sheva — India (+$0.65/kg)</option>
+                <option value="1.15|CIF Hamburg / Rotterdam (EU)">CIF Hamburg / Rotterdam (+$1.15/kg)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="ex-qty" id="ex-lbl-qty">حجم محموله (کیلوگرم)</label>
+              <select id="ex-qty">
+                <option value="500">500 kg (Air / LCL Sample — 50 Cartons)</option>
+                <option value="2000" selected>2,000 kg (LCL Palletized — 200 Cartons)</option>
+                <option value="11000">11,000 kg (20ft Reefer FCL — 1,100 Cartons)</option>
+                <option value="23000">23,000 kg (40ft Reefer FCL — 2,300 Cartons)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="ex-curr" id="ex-lbl-curr">ارز پیش‌فاکتور</label>
+              <select id="ex-curr">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="AED">AED (درهم امارات)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="calc-result" id="ex-calc-out"></div>
+      </div>
+
+      <form class="contact-card" id="ex-rfq-form" style="margin-top:26px">
+        <h3 id="ex-form-title">ارسال درخواست رسمی پیش‌فاکتور صادراتی (Proforma / RFQ)</h3>
+        <div class="form-grid">
+          <div class="field"><label for="ex-company" id="ex-lbl-comp">نام شرکت / خریدار *</label><input id="ex-company" required placeholder="Company / Buyer Name"></div>
+          <div class="field"><label for="ex-contact" id="ex-lbl-cont">واتس‌اپ / ایمیل تجاری *</label><input id="ex-contact" required class="ltr" style="text-align:right" placeholder="+971... / trade@company.com"></div>
+          <div class="field"><label for="ex-port" id="ex-lbl-port">کشور و بندر مقصد *</label><input id="ex-port" required placeholder="UAE — Jebel Ali / Germany — Hamburg"></div>
+          <div class="field"><label for="ex-notes" id="ex-lbl-notes">جزئیات بسته‌بندی یا گواهی‌ها</label><input id="ex-notes" placeholder="Phytosanitary, Certificate of Origin, EU Lab Test"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:14px" id="ex-submit-btn">ارسال درخواست پیش‌فاکتور صادراتی</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+    const I18N = {
+      fa: {
+        dir: 'rtl',
+        kicker: 'درگاه بین‌المللی و صادرات مستقیم',
+        title: 'میز صادرات مغزدانه (FOB / CIF)',
+        sub: 'تأمین مستقیم محموله‌های صادراتی مغز پسته رفسنجان، خلال سبز قزوین، بادام مامایی سامان و گردوی تویسرکان با گواهی آزمایشگاهی آفلاتوکسین استاندارد اروپا و کارتن‌های ۱۰ کیلویی وکیوم.',
+        calcTitle: 'ماشین‌حساب کانتینر و اینکوترمز صادراتی',
+        formTitle: 'ارسال درخواست رسمی پیش‌فاکتور صادراتی (Proforma / RFQ)',
+        submitBtn: 'ارسال درخواست پیش‌فاکتور صادراتی',
+        toastOk: 'درخواست پیش‌فاکتور صادراتی شما با موفقیت ثبت شد',
+      },
+      en: {
+        dir: 'ltr',
+        kicker: 'INTERNATIONAL B2B EXPORT DESK',
+        title: 'Maghzdaneh Direct Export (FOB / CIF)',
+        sub: 'Orchard-direct Iranian Rafsanjan pistachio kernels, Qazvin emerald slivers, Saman Mamra almonds, and Tuyserkan walnuts packed in 10kg vacuum cartons with EU aflatoxin lab certification.',
+        calcTitle: 'Export Container & Incoterms Calculator',
+        formTitle: 'Request Official Export Proforma Invoice (RFQ)',
+        submitBtn: 'Submit Export Proforma Request',
+        toastOk: 'Your Export RFQ has been submitted to our trade desk',
+      },
+      ar: {
+        dir: 'rtl',
+        kicker: 'مكتب التصدير الدولي المباشر',
+        title: 'بوابة التصدير — مغزدانه (FOB / CIF)',
+        sub: 'توريد مباشر لأجود لب الفستق الإيراني (رفسنجان)، شرائح الفستق الأخضر (قزوين)، لوز مامايي ولب الجوز في كراتين مفرغة من الهواء 10 كجم مع شهادة فحص الأفلاتوكسين الأوروبية.',
+        calcTitle: 'حاسبة الحاويات وشروط الشحن (Incoterms)',
+        formTitle: 'طلب فاتورة تصدير مبدئية (Proforma / RFQ)',
+        submitBtn: 'إرسال طلب التصدير المباشر',
+        toastOk: 'تم تسجيل طلب التصدير بنجاح وسيتواصل معك فريقنا التجاري',
+      },
+    };
+
+    let fxRates = { USD: 1, EUR: 0.92, AED: 3.6725 };
+    let curLang = 'fa';
+
+    boot('export').then(async () => {
+      try {
+        const r = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+        if (r.ok) {
+          const j = await r.json();
+          if (j && j.rates) {
+            fxRates.EUR = Number(j.rates.EUR) || 0.92;
+            fxRates.AED = Number(j.rates.AED) || 3.6725;
+            document.getElementById('ex-fx-live').textContent = `1 USD = €${fxRates.EUR.toFixed(2)} · ${fxRates.AED.toFixed(2)} AED`;
+          }
+        }
+      } catch {}
+
+      function setLang(lang) {
+        curLang = lang;
+        const t = I18N[lang];
+        document.getElementById('export-html').dir = t.dir;
+        document.getElementById('export-html').lang = lang;
+        document.getElementById('ex-kicker').textContent = t.kicker;
+        document.getElementById('ex-title').textContent = t.title;
+        document.getElementById('ex-sub').textContent = t.sub;
+        document.getElementById('ex-calc-title').textContent = t.calcTitle;
+        document.getElementById('ex-form-title').textContent = t.formTitle;
+        document.getElementById('ex-submit-btn').textContent = t.submitBtn;
+        document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+        recalc();
+      }
+
+      function recalc() {
+        const [fobStr, gradeName] = document.getElementById('ex-grade').value.split('|');
+        const [freightStr, incoterm] = document.getElementById('ex-incoterm').value.split('|');
+        const kg = Number(document.getElementById('ex-qty').value) || 2000;
+        const curr = document.getElementById('ex-curr').value || 'USD';
+        const mult = fxRates[curr] || 1;
+        const sym = curr === 'EUR' ? '€' : curr === 'AED' ? 'AED ' : '$';
+        const bulkDisc = kg >= 20000 ? 0.94 : kg >= 10000 ? 0.97 : 1;
+        const unitUsd = (Number(fobStr) * bulkDisc) + Number(freightStr);
+        const unitCurr = unitUsd * mult;
+        const grandCurr = unitCurr * kg;
+        const cartons = Math.ceil(kg / 10);
+
+        document.getElementById('ex-calc-out').innerHTML = `
+          <div class="calc-row"><span>${curLang === 'en' ? 'Grade' : 'محصول'}</span><strong>${esc(gradeName)}</strong></div>
+          <div class="calc-row"><span>${curLang === 'en' ? 'Incoterm' : 'تحویل'}</span><strong>${esc(incoterm)}</strong></div>
+          <div class="calc-row"><span>${curLang === 'en' ? 'Cartons (10kg Vacuum)' : 'تعداد کارتن ۱۰ کیلویی'}</span><strong class="ltr">${cartons.toLocaleString('en-US')} Cartons</strong></div>
+          <div class="calc-row"><span>${curLang === 'en' ? 'Unit Price / kg' : 'نرخ هر کیلوگرم'}</span><strong class="ltr" style="color:var(--c-accent-light)">${sym}${unitCurr.toFixed(2)}</strong></div>
+          <div class="calc-row grand"><span>${curLang === 'en' ? 'Estimated Shipment Total' : 'برآورد کل محموله'}</span><strong class="ltr">${sym}${Math.round(grandCurr).toLocaleString('en-US')}</strong></div>`;
+      }
+
+      document.querySelectorAll('[data-lang]').forEach(b => { b.onclick = () => setLang(b.dataset.lang); });
+      ['ex-grade', 'ex-incoterm', 'ex-qty', 'ex-curr'].forEach(id => document.getElementById(id).addEventListener('change', recalc));
+      recalc();
+
+      document.getElementById('ex-rfq-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const [, gradeName] = document.getElementById('ex-grade').value.split('|');
+        const [, incoterm] = document.getElementById('ex-incoterm').value.split('|');
+        const kg = Number(document.getElementById('ex-qty').value) || 2000;
+        const payload = {
+          buyerName: document.getElementById('ex-company').value.trim(),
+          phone: document.getElementById('ex-contact').value.trim(),
+          city: `${document.getElementById('ex-port').value.trim()} (${incoterm})`,
+          productTitle: `[EXPORT] ${gradeName}`,
+          weightKg: kg,
+          note: document.getElementById('ex-notes').value.trim(),
+        };
+        try {
+          await apiFetch('/api/rfq', { method: 'POST', body: JSON.stringify(payload) });
+        } catch {
+          try {
+            const list = JSON.parse(localStorage.getItem('maghzdaneh_export_rfqs') || '[]');
+            list.unshift({ ...payload, createdAt: new Date().toISOString() });
+            localStorage.setItem('maghzdaneh_export_rfqs', JSON.stringify(list.slice(0, 20)));
+          } catch {}
+        }
+        toast(I18N[curLang].toastOk);
+        e.target.reset();
+      });
+    });
+  </script>
+</body>
+</html>

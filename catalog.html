@@ -50,23 +50,126 @@
           </div>
           <i aria-hidden="true">←</i>
         </a>
-        <a class="shop-hub-link" href="seller.html">
+        <a class="shop-hub-link" href="mix.html">
           <div>
-            <strong>پنل مدیریت غرفه (فروشندگان)</strong>
-            <span>افتتاح و مدیریت غرفه در بازارچهٔ مغزدانه</span>
+            <strong>آجیل‌ساز هوشمند (ترکیب دلخواه)</strong>
+            <span>درصد هر مغز را بچینید + جدول کالری و لیبل چاپی</span>
           </div>
           <i aria-hidden="true">←</i>
         </a>
         <a class="shop-hub-link" href="wholesale.html">
           <div>
-            <strong>خرید عمده، نرخ روز و نمونه</strong>
-            <span>بستهٔ نمونه ۵ گرید، نرخ بورس و اشتراک ماهانه</span>
+            <strong>خرید عمده، نرخ روز و مناقصه RFQ</strong>
+            <span>بستهٔ نمونه ۵ گرید، نمودار قیمت و تالار استعلام عمده</span>
           </div>
           <i aria-hidden="true">←</i>
         </a>
       </div>
     </div>
   </nav>
+
+  <!-- Interactive Grade Finder Wizard + Seasonal Harvest Pre-Order -->
+  <section style="padding-block:18px 0">
+    <div class="container" style="display:grid;gap:14px">
+      <!-- Grade Finder Wizard -->
+      <div class="contact-card" style="padding:18px 20px;border-color:rgba(212,175,55,0.28);background:linear-gradient(135deg,rgba(16,28,20,0.88),rgba(11,17,13,0.92))">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <span class="sec-label" style="margin-bottom:4px">راهنمای ۳ مرحله‌ای</span>
+            <h2 style="font-size:var(--fs-md);margin:0;color:#fff">مشاور هوشمند انتخاب گرید مغز (Grade Finder)</h2>
+          </div>
+          <button type="button" class="btn btn-gold btn-sm" id="gf-toggle">شروع انتخاب هوشمند ↓</button>
+        </div>
+        <div id="gf-panel" hidden style="margin-top:16px;padding-top:16px;border-top:1px solid var(--c-line);display:grid;gap:14px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+            <div class="field">
+              <label for="gf-use">۱. کاربرد اصلی شما چیست؟</label>
+              <select id="gf-use">
+                <option value="snack">آجیل و مصرف خانگی لوکس</option>
+                <option value="pastry">قنادی، باقلوا و بستنی‌سازی</option>
+                <option value="gift">هدیه و پک سازمانی</option>
+                <option value="export">صادرات یا فروش عمده</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gf-budget">۲. اولویت بودجه و گرید</label>
+              <select id="gf-budget">
+                <option value="luxury">سوپرلوکس و دست‌چین اول</option>
+                <option value="balanced">تعادل کیفیت و قیمت اقتصادی</option>
+                <option value="bulk">صرفه‌جویی حداکثری عمده</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gf-taste">۳. طعم و نوع ترجیحی</label>
+              <select id="gf-taste">
+                <option value="pistachio">پسته و خلال سبز زمردی</option>
+                <option value="almond">بادام شیرین و مامایی</option>
+                <option value="walnut">گردوی سفید و چرب</option>
+                <option value="any">هر مغز برتر متناسب با کاربرد</option>
+              </select>
+            </div>
+          </div>
+          <div id="gf-results" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px"></div>
+        </div>
+      </div>
+
+      <!-- Seasonal Harvest Pre-Order Strip -->
+      <div class="contact-card" style="padding:18px 20px;border-color:rgba(82,199,136,0.28);background:linear-gradient(135deg,rgba(14,34,23,0.85),rgba(9,16,12,0.92))">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+          <div>
+            <span class="sec-label" style="color:var(--c-primary-light);margin-bottom:4px">پیش‌خرید مستقیم از باغ (نوبرانه ۱۴۰۵)</span>
+            <h2 style="font-size:var(--fs-md);margin:0;color:#fff">رزرو برداشت تازهٔ فصل — قفل قیمت باغدار با ۱۰٪ تخفیف پیش‌خرید</h2>
+            <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin:6px 0 0">مغز پستهٔ کالک سبز رفسنجان و گردوی تویسرکان نوبرانه — اولویت تحویل از اولین چین فصل.</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div id="harvest-countdown" style="display:flex;gap:8px;font-size:var(--fs-xs);font-weight:800;color:var(--c-accent-light);background:rgba(0,0,0,0.35);padding:8px 12px;border-radius:10px;border:1px solid rgba(212,175,55,0.25)"></div>
+            <button type="button" class="btn btn-primary btn-sm" id="open-preorder-btn">رزرو سهمیه نوبرانه</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seasonal Pre-Order Modal -->
+  <div class="modal-back" id="preorder-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:480px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0">رزرو پیش‌خرید نوبرانهٔ فصل برداشت</h3>
+        <button type="button" class="drawer-close" id="po-close" aria-label="بستن">×</button>
+      </div>
+      <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">با ثبت رزرو، نرخ پیش‌فصل برای سهمیهٔ شما قفل می‌شود و پیش از ارسال، نمونهٔ تست ارسال می‌گردد.</p>
+      <form id="po-form" style="display:grid;gap:12px">
+        <div class="field">
+          <label for="po-crop">محصول نوبرانه *</label>
+          <select id="po-crop" required>
+            <option value="مغز پسته کالک سبز سوپر رفسنجان (برداشت شهریور)">مغز پسته کالک سبز سوپر رفسنجان (تحویل شهریور)</option>
+            <option value="مغز گردوی سفید تویسرکان نوبرانه (برداشت مهر)">مغز گردوی سفید تویسرکان نوبرانه (تحویل مهر)</option>
+            <option value="خلال پسته سبز قزوین چین اول (برداشت شهریور)">خلال پسته سبز قزوین چین اول (تحویل شهریور)</option>
+            <option value="بادام مامایی چهارمحال چین اول (برداشت مرداد)">بادام مامایی چهارمحال چین اول (تحویل مرداد)</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="field">
+            <label for="po-weight">وزن درخواستی (کیلو) *</label>
+            <input id="po-weight" type="number" min="1" max="500" value="5" required>
+          </div>
+          <div class="field">
+            <label for="po-city">شهر تحویل *</label>
+            <input id="po-city" required placeholder="تهران">
+          </div>
+        </div>
+        <div class="field">
+          <label for="po-name">نام و نام خانوادگی *</label>
+          <input id="po-name" required placeholder="نام شما">
+        </div>
+        <div class="field">
+          <label for="po-phone">شماره موبایل *</label>
+          <input id="po-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" class="ltr" style="text-align:right">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">ثبت رزرو نوبرانه (بدون پیش‌پرداخت آنلاین)</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Structured 2-Column Storefront: Sticky Filter Sidebar + Immediate Product Grid -->
   <section style="padding-block:clamp(28px, 4vw, 48px)">
@@ -297,6 +400,119 @@
       syncSourceBtns();
       renderCategories();
       render();
+
+      // Grade Finder Wizard
+      const gfToggle = document.getElementById('gf-toggle');
+      const gfPanel = document.getElementById('gf-panel');
+      const gfUse = document.getElementById('gf-use');
+      const gfBudget = document.getElementById('gf-budget');
+      const gfTaste = document.getElementById('gf-taste');
+      const gfResults = document.getElementById('gf-results');
+
+      function scoreForWizard(p) {
+        let s = (p.rating || 4.5) * 10;
+        const txt = `${p.name} ${p.desc || ''} ${(p.uses || []).join(' ')} ${p.category || ''}`;
+        const taste = gfTaste.value;
+        if (taste === 'pistachio' && (p.category === 'pistachio' || p.category === 'sliver' || txt.includes('پسته'))) s += 35;
+        if (taste === 'almond' && (p.category === 'almond' || txt.includes('بادام'))) s += 35;
+        if (taste === 'walnut' && (p.category === 'walnut' || txt.includes('گردو'))) s += 35;
+
+        const use = gfUse.value;
+        if (use === 'pastry' && (txt.includes('خلال') || txt.includes('قنادی') || txt.includes('کالک') || txt.includes('باقلوا'))) s += 28;
+        if (use === 'snack' && (txt.includes('اکبری') || txt.includes('درشت') || txt.includes('مامایی') || txt.includes('آجیل'))) s += 26;
+        if (use === 'gift' && (p.badge || txt.includes('لوکس') || txt.includes('سوپر') || txt.includes('اکبری'))) s += 24;
+        if (use === 'export' && (p.prices && p.prices.wholesale < p.prices.retail * 0.88)) s += 25;
+
+        const budget = gfBudget.value;
+        const unit = priceFor(p, APP.tier);
+        if (budget === 'luxury') s += (unit / 100000);
+        if (budget === 'balanced') s += Math.max(0, 20 - Math.abs(unit - 1200000) / 100000);
+        if (budget === 'bulk') s += Math.max(0, 30 - (p.prices.wholesale / 100000));
+        return s;
+      }
+
+      function renderWizardRecommendations() {
+        const picks = [...db.products]
+          .sort((a, b) => scoreForWizard(b) - scoreForWizard(a))
+          .slice(0, 2);
+        const recTier = gfBudget.value === 'bulk' || gfUse.value === 'export' ? 'wholesale' : (gfUse.value === 'pastry' ? 'semi' : 'retail');
+        gfResults.innerHTML = picks.map((p, i) => `
+          <div style="display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1)">
+            <img src="${esc(safeImgUrl(p.img))}" alt="${esc(p.name)}" style="width:68px;height:68px;border-radius:10px;object-fit:cover;flex-shrink:0">
+            <div style="min-width:0;flex:1">
+              <span style="font-size:0.7rem;color:var(--c-accent-light);font-weight:800">${i === 0 ? '★ پیشنهاد اول مشاور' : '◆ پیشنهاد جایگزین'} · پله ${tierLabel(recTier)}</span>
+              <div style="font-weight:800;color:#fff;font-size:var(--fs-sm);margin:2px 0">${esc(p.name)}</div>
+              <div style="font-size:var(--fs-xs);color:var(--c-primary-light);font-weight:800">${faToman(p.prices[recTier])} / کیلو</div>
+              <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+                <a class="btn btn-outline btn-sm" href="product.html?id=${encodeURIComponent(p.id)}">مشاهده مشخصات</a>
+                <button type="button" class="btn btn-primary btn-sm" data-gf-add="${esc(p.id)}" data-gf-tier="${recTier}">افزودن به سبد</button>
+              </div>
+            </div>
+          </div>`).join('');
+        gfResults.querySelectorAll('[data-gf-add]').forEach(btn => {
+          btn.onclick = () => {
+            const qty = btn.dataset.gfTier === 'wholesale' ? 25 : btn.dataset.gfTier === 'semi' ? 5 : 1;
+            addToCart(btn.dataset.gfAdd, qty, btn.dataset.gfTier, true);
+          };
+        });
+      }
+
+      gfToggle.onclick = () => {
+        gfPanel.hidden = !gfPanel.hidden;
+        gfToggle.textContent = gfPanel.hidden ? 'شروع انتخاب هوشمند ↓' : 'بستن مشاور ↑';
+        if (!gfPanel.hidden) renderWizardRecommendations();
+      };
+      [gfUse, gfBudget, gfTaste].forEach(el => el.addEventListener('change', renderWizardRecommendations));
+
+      // Seasonal Harvest Countdown & Pre-Order Modal
+      const targetHarvest = new Date(Date.now() + 28 * 86400000 + 6 * 3600000);
+      function tickHarvest() {
+        const el = document.getElementById('harvest-countdown');
+        if (!el) return;
+        const diff = Math.max(0, targetHarvest.getTime() - Date.now());
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        el.innerHTML = `<span>${fmt(d)} روز</span><span>:</span><span>${fmt(h)} ساعت</span><span>:</span><span>${fmt(m)} دقیقه تا اولین برداشت</span>`;
+      }
+      tickHarvest();
+      setInterval(tickHarvest, 30000);
+
+      const poModal = document.getElementById('preorder-modal');
+      document.getElementById('open-preorder-btn').onclick = () => {
+        if (APP.serverUser) {
+          if (APP.serverUser.fullName && !document.getElementById('po-name').value) document.getElementById('po-name').value = APP.serverUser.fullName;
+          if (APP.serverUser.phone && !document.getElementById('po-phone').value) document.getElementById('po-phone').value = APP.serverUser.phone;
+          if (APP.serverUser.city && !document.getElementById('po-city').value) document.getElementById('po-city').value = APP.serverUser.city;
+        }
+        poModal.classList.add('open');
+      };
+      document.getElementById('po-close').onclick = () => poModal.classList.remove('open');
+      poModal.onclick = e => { if (e.target === poModal) poModal.classList.remove('open'); };
+      document.getElementById('po-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const payload = {
+          cropName: document.getElementById('po-crop').value,
+          weightKg: Number(document.getElementById('po-weight').value) || 5,
+          city: document.getElementById('po-city').value.trim(),
+          customerName: document.getElementById('po-name').value.trim(),
+          phone: document.getElementById('po-phone').value.trim(),
+        };
+        let code = 'PO-' + Math.floor(10000 + Math.random() * 90000);
+        try {
+          const res = await apiFetch('/api/preorders', { method: 'POST', body: JSON.stringify(payload) });
+          if (res && res.preorder && res.preorder.id) code = res.preorder.id;
+        } catch {
+          try {
+            const list = JSON.parse(localStorage.getItem('maghzdaneh_preorders') || '[]');
+            list.unshift({ id: code, ...payload, createdAt: new Date().toISOString() });
+            localStorage.setItem('maghzdaneh_preorders', JSON.stringify(list.slice(0, 30)));
+          } catch {}
+        }
+        poModal.classList.remove('open');
+        e.target.reset();
+        toast(`رزرو نوبرانه شما با کد پیگیری ${code} ثبت شد`);
+      });
     });
   </script>
 </body>

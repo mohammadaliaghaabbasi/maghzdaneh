@@ -229,8 +229,19 @@ async function loadDB() {
     }
   }
 
-  APP.cart = APP.cart.filter(i => i && (i.kind === 'gift-box' || i.kind === 'sample-pack' || byId(i.id)));
+  APP.cart = APP.cart.filter(i => i && (i.kind === 'gift-box' || i.kind === 'sample-pack' || i.kind === 'custom-mix' || byId(i.id)));
   APP.compare = (Array.isArray(APP.compare) ? APP.compare : []).filter(id => Boolean(byId(id))).slice(0, 3);
+  if (APP.serverUser && !APP._cartSyncedOnce) {
+    APP._cartSyncedOnce = true;
+    apiFetch('/api/customer/cart').then(res => {
+      if (res && Array.isArray(res.cart) && res.cart.length && !APP.cart.length) {
+        APP.cart = res.cart.filter(i => i && (isCustomCartItem(i) || byId(i.id)));
+        localStorage.setItem('maghzdaneh_cart', JSON.stringify(APP.cart));
+        updateCartBadge();
+        renderCartDrawer();
+      }
+    }).catch(() => {});
+  }
   return APP.db;
 }
 
@@ -280,10 +291,20 @@ window.mgzImgFallback = function (img, title) {
 };
 
 /* ---------- Cart, Variants, Custom Packs & Coupon Engine ---------- */
+let _cartSyncTimer = null;
 function saveCart() {
   localStorage.setItem('maghzdaneh_cart', JSON.stringify(APP.cart));
   updateCartBadge();
   renderCartDrawer();
+  if (APP.serverUser) {
+    clearTimeout(_cartSyncTimer);
+    _cartSyncTimer = setTimeout(() => {
+      apiFetch('/api/customer/cart', {
+        method: 'PUT',
+        body: JSON.stringify({ cart: APP.cart }),
+      }).catch(() => {});
+    }, 600);
+  }
 }
 
 function setCoupon(couponObj) {
@@ -299,7 +320,7 @@ function clearCoupon() {
 }
 
 function isCustomCartItem(it) {
-  return Boolean(it && (it.kind === 'gift-box' || it.kind === 'sample-pack'));
+  return Boolean(it && (it.kind === 'gift-box' || it.kind === 'sample-pack' || it.kind === 'custom-mix'));
 }
 
 function cartItemUnit(it) {
@@ -312,12 +333,16 @@ function cartItemUnit(it) {
 
 function cartItemMeta(it) {
   if (isCustomCartItem(it)) {
+    const defaultName =
+      it.kind === 'gift-box' ? 'جعبه هدیه سفارشی'
+      : it.kind === 'custom-mix' ? 'میکس اختصاصی آجیل و مغز'
+      : 'بسته نمونه ۵ گرید';
     return {
-      name: it.name || (it.kind === 'gift-box' ? 'جعبه هدیه سفارشی' : 'بسته نمونه ۵ گرید'),
+      name: it.name || defaultName,
       img: it.img || 'assets/img/maghz-pistachio-akbari.jpg',
       source: 'house',
       vendorName: 'عرضه مستقیم مغزدانه',
-      unitLabel: it.kind === 'gift-box' ? 'بسته' : 'پک',
+      unitLabel: it.kind === 'custom-mix' ? 'بسته میکس' : it.kind === 'gift-box' ? 'بسته' : 'پک',
     };
   }
   const p = byId(it.id);
@@ -1013,10 +1038,12 @@ function buildHeader(active) {
     </div>
     <nav class="main-nav" id="main-nav" aria-label="ناوبری اصلی سایت">
       <div class="nav-item has-sub">
-        <a class="nav-link ${shopActive ? 'active' : ''}" href="catalog.html">فروشگاه</a>
+        <a class="nav-link ${shopActive || active === 'mix' || active === 'trace' ? 'active' : ''}" href="catalog.html">فروشگاه</a>
         <div class="nav-dropdown" role="menu">
-          <a href="catalog.html" class="${active === 'catalog' ? 'active' : ''}">فروشگاه مرکزی و همهٔ محصولات</a>
+          <a href="catalog.html" class="${active === 'catalog' ? 'active' : ''}">فروشگاه مرکزی و مشاور انتخاب گرید</a>
+          <a href="mix.html" class="${active === 'mix' ? 'active' : ''}">میکس‌ساز اختصاصی آجیل و چهارمغز</a>
           <a href="gifts.html" class="${active === 'gifts' ? 'active' : ''}">سازندهٔ جعبه هدیه و پک سازمانی</a>
+          <a href="trace.html" class="${active === 'trace' ? 'active' : ''}">استعلام اصالت بار و شناسنامه QR</a>
         </div>
       </div>
 
@@ -1029,9 +1056,10 @@ function buildHeader(active) {
       </div>
 
       <div class="nav-item has-sub">
-        <a class="nav-link ${wholesaleActive ? 'active' : ''}" href="wholesale.html">خرید عمده</a>
+        <a class="nav-link ${wholesaleActive || active === 'export' ? 'active' : ''}" href="wholesale.html">خرید عمده</a>
         <div class="nav-dropdown" role="menu">
-          <a href="wholesale.html" class="${active === 'wholesale' ? 'active' : ''}">قیمت پلکانی، نرخ روز و بستهٔ نمونه</a>
+          <a href="wholesale.html" class="${active === 'wholesale' ? 'active' : ''}">نرخ روز، نمودار بازار و تالار استعلام عمده (RFQ)</a>
+          <a href="export.html" class="${active === 'export' ? 'active' : ''}">درگاه صادراتی سه‌زبانه (FA / EN / AR)</a>
           <a href="supply.html" class="${active === 'supply' ? 'active' : ''}">فروش نقدی بار عمده به مغزدانه</a>
         </div>
       </div>
@@ -1039,8 +1067,10 @@ function buildHeader(active) {
       <a class="nav-link ${active === 'articles' ? 'active' : ''}" href="articles.html">مجله</a>
 
       <div class="nav-item has-sub">
-        <a class="nav-link ${aboutActive ? 'active' : ''}" href="about.html">درباره ما</a>
+        <a class="nav-link ${aboutActive || active === 'track' ? 'active' : ''}" href="about.html">پشتیبانی و اصالت</a>
         <div class="nav-dropdown" role="menu">
+          <a href="track.html" class="${active === 'track' ? 'active' : ''}">پیگیری سریع سفارش بدون ورود</a>
+          <a href="trace.html" class="${active === 'trace' ? 'active' : ''}">استعلام اصالت آزمایشگاهی QR</a>
           <a href="about.html" class="${active === 'about' ? 'active' : ''}">داستان و اصالت مغزدانه</a>
           <a href="faq.html" class="${active === 'faq' ? 'active' : ''}">سؤالات متداول</a>
           <a href="contact.html" class="${active === 'contact' ? 'active' : ''}">تماس و پشتیبانی</a>
@@ -1127,19 +1157,22 @@ function buildFooter() {
       </button>
     </div>
     <div>
-      <h4>فروشگاه و دسته‌ها</h4>
+      <h4>فروشگاه و ابزارهای اختصاصی</h4>
       <ul>
         <li><a href="catalog.html">فروشگاه مرکزی مغزدانه</a></li>
+        <li><a href="mix.html">میکس‌ساز اختصاصی آجیل و چهارمغز</a></li>
         <li><a href="gifts.html">سازندهٔ جعبه هدیه و پک سازمانی</a></li>
+        <li><a href="trace.html">استعلام اصالت و شناسنامه QR بار</a></li>
         ${db.categories.map(c => `<li><a href="catalog.html?cat=${encodeURIComponent(c.id)}">${esc(c.name)}</a></li>`).join('')}
       </ul>
     </div>
     <div>
-      <h4>بازارچهٔ غرفه‌ها و عمده</h4>
+      <h4>بازارچهٔ غرفه‌ها، عمده و صادرات</h4>
       <ul>
         <li><a href="vendors.html">بازارچهٔ غرفه‌های فروشندگان</a></li>
         <li><a href="seller.html">پنل مدیریت غرفهٔ من (فروشندگان)</a></li>
-        <li><a href="wholesale.html">خرید عمده، نرخ روز و بستهٔ نمونه</a></li>
+        <li><a href="wholesale.html">نرخ روز، نمودار بازار و تالار عمده (RFQ)</a></li>
+        <li><a href="export.html">درگاه صادراتی سه‌زبانه (FA / EN / AR)</a></li>
         <li><a href="supply.html">فروش نقدی بار عمده به مغزدانه</a></li>
         <li><a href="articles.html">مجله و مقالات تخصصی</a></li>
       </ul>
@@ -1147,7 +1180,8 @@ function buildFooter() {
     <div>
       <h4>پشتیبانی و حساب کاربری</h4>
       <ul>
-        <li><a href="account.html">حساب کاربری، کیف پول و اشتراک‌ها</a></li>
+        <li><a href="track.html">پیگیری سریع سفارش بدون ورود</a></li>
+        <li><a href="account.html">حساب کاربری، کیف پول و دعوت دوستان</a></li>
         <li><a href="about.html">داستان و اصالت مغزدانه</a></li>
         <li><a href="faq.html">سؤالات متداول</a></li>
         <li><a href="contact.html">تماس با ما</a></li>
@@ -1670,6 +1704,60 @@ function bindAddButtons(root) {
   });
 }
 
+/* ---------- SEO Schema.org JSON-LD & PWA Web Push Helpers ---------- */
+function injectJsonLd(id, payload) {
+  if (!payload || typeof document === 'undefined') return;
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.id = id;
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(payload);
+}
+
+function injectBaseSeoSchemas() {
+  const site = (APP.db && APP.db.site) || {};
+  const originUrl = location.origin && location.origin !== 'null' ? location.origin : 'https://maghzdaneh.ir';
+  injectJsonLd('schema-org-base', {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.name || 'مغزدانه',
+    url: originUrl,
+    logo: `${originUrl}/assets/img/pwa-512x512.png`,
+    description: site.description || 'بازار تخصصی مغز پسته، بادام و گردو — خرده، عمده و بازارچه مستقیم باغداران ایران',
+    contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone || '+98-21-91008080', contactType: 'customer service', availableLanguage: ['fa', 'en', 'ar'] }],
+  });
+}
+
+async function enableMaghzdanehPush() {
+  if (typeof Notification === 'undefined') {
+    toast('مرورگر شما از اعلان‌های وب پشتیبانی نمی‌کند');
+    return false;
+  }
+  const perm = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+  if (perm !== 'granted') {
+    toast('مجوز نمایش اعلان در مرورگر رد شد');
+    return false;
+  }
+  localStorage.setItem('maghzdaneh_push_enabled', '1');
+  try {
+    const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    const opts = {
+      body: 'اعلان‌های لحظه‌ای مغزدانه (وضعیت سفارش، افت نرخ بازار و نوبرانه فصل) در حالت آماده اتصال فعال شد.',
+      icon: './assets/img/pwa-192x192.png',
+      badge: './assets/img/pwa-192x192.png',
+      dir: 'rtl',
+      lang: 'fa',
+    };
+    if (reg && reg.showNotification) await reg.showNotification('مغزدانه — اعلان‌ها فعال شدند', opts);
+    else new Notification('مغزدانه — اعلان‌ها فعال شدند', opts);
+  } catch {}
+  toast('اعلان‌های لحظه‌ای وب‌اپلیکیشن فعال شد');
+  return true;
+}
+
 /* ---------- Boot ---------- */
 async function boot(activePage) {
   initPWA();
@@ -1682,6 +1770,7 @@ async function boot(activePage) {
     );
     throw e;
   }
+  injectBaseSeoSchemas();
   buildHeader(activePage);
   buildFooter();
   buildMobileAppNav(activePage);

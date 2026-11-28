@@ -279,6 +279,66 @@ async function getLiveFxIndex(forceRefresh = false) {
   };
 }
 
+function defaultRfqTenders() {
+  return [
+    {
+      id: 'rfq_1',
+      buyerName: 'قنادی و شیرینی‌پزی بهارستان',
+      city: 'اصفهان',
+      productTitle: 'خلال پسته سبز زمردی قزوین (بدون پودر)',
+      weightKg: 120,
+      targetPrice: 1650000,
+      deliveryDays: 5,
+      note: 'بسته‌بندی پاکت ۵ کیلویی وکیوم ضدنور؛ خرید مستمر ماهانه در صورت رضایت از نمونه.',
+      status: 'open',
+      createdAt: '2026-11-24T09:15:00.000Z',
+      bids: [
+        { id: 'bid_1', vendorName: 'کارگاه تخصصی خلال زمرد قزوین', city: 'قزوین', unitPrice: 1615000, deliveryDays: 3, note: 'تولید روز از پسته بومی قزوین + ارسال نمونه ۲۰۰ گرمی رایگان', createdAt: '2026-11-25T11:20:00.000Z' },
+        { id: 'bid_2', vendorName: 'باغستان کهن نوق رفسنجان', city: 'رفسنجان', unitPrice: 1640000, deliveryDays: 4, note: 'ارسال با باربری یخچالی و تضمین بازگشت', createdAt: '2026-11-26T08:40:00.000Z' },
+      ],
+    },
+    {
+      id: 'rfq_2',
+      buyerName: 'بازرگانی صادراتی پارسیان خلیج',
+      city: 'بندرعباس (صادراتی FOB)',
+      productTitle: 'مغز پسته اکبری سوپر اُنس ۲۰–۲۲ صادراتی',
+      weightKg: 500,
+      targetPrice: 1270000,
+      deliveryDays: 7,
+      note: 'نیاز به گواهی آفلاتوکسین EU زیر ۴ ppb و بسته‌بندی کارتن ۱۰ کیلویی وکیوم صادراتی.',
+      status: 'open',
+      createdAt: '2026-11-25T14:00:00.000Z',
+      bids: [
+        { id: 'bid_3', vendorName: 'باغستان کهن نوق رفسنجان', city: 'رفسنجان', unitPrice: 1265000, deliveryDays: 5, note: 'آماده تحویل در رفسنجان یا بندرعباس همراه با برگه آزمایشگاه معتبر', createdAt: '2026-11-26T16:10:00.000Z' },
+      ],
+    },
+    {
+      id: 'rfq_3',
+      buyerName: 'کارگاه کره پسته و گرانولا ارگانیک',
+      city: 'تهران',
+      productTitle: 'مغز پسته فندقی کارگاهی و مغز بادام مامایی',
+      weightKg: 200,
+      targetPrice: 1050000,
+      deliveryDays: 4,
+      note: '۱۰۰ کیلو مغز فندقی دامغان + ۱۰۰ کیلو بادام مامایی سامان — تسویه ۵۰٪ نقد ۵۰٪ چک صیادی ۳۰ روزه.',
+      status: 'open',
+      createdAt: '2026-11-27T10:30:00.000Z',
+      bids: [
+        { id: 'bid_4', vendorName: 'مزرعه پسته شاه‌پسند دامغان', city: 'دامغان', unitPrice: 1045000, deliveryDays: 2, note: 'تحویل مستقیم در تهران با سورتینگ تک‌سایز کارگاهی', createdAt: '2026-11-27T15:05:00.000Z' },
+      ],
+    },
+  ];
+}
+
+function defaultVendorReviews() {
+  return [
+    { id: 'vr_1', vendorId: 'vnd-rafsanjan-heritage', authorName: 'فرهاد کریمی', rating: 5, text: 'بار اکبری نوق واقعاً دست‌اول و خوش‌عطر بود. بسته‌بندی وکیوم عالی و ارسال سریع.', createdAt: '2026-11-18T10:00:00.000Z' },
+    { id: 'vr_2', vendorId: 'vnd-qazvin-emerald', authorName: 'قنادی صدف شیراز', rating: 5, text: 'سومین بار است که خلال قزوین می‌گیریم؛ یک‌دست و کاملاً سبز طبیعی بدون ذره‌ای پودر.', createdAt: '2026-11-20T14:30:00.000Z' },
+    { id: 'vr_3', vendorId: 'vnd-tuyserkan-walnut', authorName: 'مهناز رضایی', rating: 5, text: 'مغز گردوی دوپر بسیار سفید و چرب بود، هیچ دانه تلخی داخل بار نبود.', createdAt: '2026-11-22T09:15:00.000Z' },
+    { id: 'vr_4', vendorId: 'vnd-saman-almond', authorName: 'امیر طاهری', rating: 5, text: 'بادام مامایی سامان عالی و درشت بود؛ برای مصرف خانگی و شیر بادام بی‌نظیر است.', createdAt: '2026-11-24T17:45:00.000Z' },
+  ];
+}
+
 function createInitialStore() {
   const seed = loadJsonSafe(SEED_PATH, { vendors: [], vendorProducts: [], articles: [] });
   return {
@@ -296,6 +356,10 @@ function createInitialStore() {
     reviews: defaultReviews(),
     questions: defaultQuestions(),
     vendorMessages: [],
+    vendorReviews: defaultVendorReviews(),
+    rfqTenders: defaultRfqTenders(),
+    preorders: [],
+    savedCarts: {},
     payouts: [],
     subscriptions: [],
     priceAlerts: [],
@@ -320,6 +384,10 @@ let STORE = (() => {
     reviews: Array.isArray(existing.reviews) && existing.reviews.length ? existing.reviews : base.reviews,
     questions: Array.isArray(existing.questions) && existing.questions.length ? existing.questions : base.questions,
     vendorMessages: Array.isArray(existing.vendorMessages) ? existing.vendorMessages : [],
+    vendorReviews: mergeById(existing.vendorReviews, base.vendorReviews),
+    rfqTenders: mergeById(existing.rfqTenders, base.rfqTenders),
+    preorders: Array.isArray(existing.preorders) ? existing.preorders : [],
+    savedCarts: existing.savedCarts && typeof existing.savedCarts === 'object' ? existing.savedCarts : {},
     payouts: Array.isArray(existing.payouts) ? existing.payouts : [],
     subscriptions: Array.isArray(existing.subscriptions) ? existing.subscriptions : [],
     priceAlerts: Array.isArray(existing.priceAlerts) ? existing.priceAlerts : [],
@@ -1094,6 +1162,255 @@ async function handleApi(req, res, pathname, query) {
     STORE.questions.unshift(qa);
     saveStore();
     return sendJson(res, 201, { ok: true, question: qa });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/orders/track') {
+    const code = cleanStr(query.get('code'), 60).toUpperCase();
+    const phone = normalizeIranPhone(query.get('phone') || '');
+    if (!code) return sendJson(res, 400, { error: 'کد سفارش را وارد کنید.' });
+    const order = (STORE.orders || []).find((o) => {
+      const oCode = String(o.orderCode || o.id || '').toUpperCase();
+      if (oCode !== code) return false;
+      if (!phone) return true;
+      const oPhone = normalizeIranPhone((o.customer && o.customer.phone) || o.customerPhone || '');
+      return !oPhone || oPhone === phone;
+    });
+    if (!order) return sendJson(res, 404, { error: 'سفارشی با این مشخصات یافت نشد.' });
+    const statusOrder = ['new', 'processing', 'shipped', 'done'];
+    const curIdx = order.status === 'canceled' ? -1 : Math.max(0, statusOrder.indexOf(order.status || 'new'));
+    return sendJson(res, 200, {
+      order: {
+        orderCode: order.orderCode || order.id,
+        status: order.status || 'new',
+        stepIndex: curIdx,
+        createdAt: order.createdAt || order.date,
+        shipping: order.shipping || 'ارسال استاندارد مغزدانه',
+        city: (order.customer && order.customer.city) || order.city || 'ایران',
+        totalKg: Number(order.totalKg || (order.totals && order.totals.totalKg) || 1),
+        grandTotal: Number(order.grandTotal || (order.totals && order.totals.grand) || 0),
+        paymentStatus: order.paymentStatus || (order.paymentMethod === 'wallet' ? 'paid' : 'pending'),
+        escrowStatus: order.escrowStatus || 'protected',
+        courierTrackingCode: order.courierTrackingCode || `IR-${String(order.orderCode || order.id).replace(/[^A-Z0-9]/g, '').slice(-8)}`,
+        itemCount: Array.isArray(order.items) ? order.items.length : 1,
+        items: (order.items || []).slice(0, 10).map((it) => ({ name: it.name, qty: it.qty, variantLabel: it.variantLabel || '' })),
+      },
+    });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/rfq') {
+    const normalizeTender = (t) => ({
+      ...t,
+      title: t.title || t.productTitle || '',
+      productTitle: t.productTitle || t.title || '',
+      maxBudgetPerKg: Number(t.maxBudgetPerKg || t.targetPrice || 0),
+      targetPrice: Number(t.targetPrice || t.maxBudgetPerKg || 0),
+      bids: (t.bids || []).map((b) => ({
+        ...b,
+        unitPrice: Number(b.unitPrice || b.pricePerKg || 0),
+        pricePerKg: Number(b.pricePerKg || b.unitPrice || 0),
+      })),
+    });
+    const list = (STORE.rfqTenders || []).map(normalizeTender).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+    return sendJson(res, 200, { tenders: list, rfqs: list });
+  }
+
+  if (req.method === 'POST' && pathname === '/api/rfq') {
+    const user = getAuthenticatedUser(req);
+    const body = await readJsonBody(req);
+    const buyerName = cleanStr(body.buyerName, 120) || (user && user.fullName) || '';
+    const phone = normalizeIranPhone(body.phone || (user && user.phone) || '');
+    const city = cleanStr(body.city, 80) || 'تهران';
+    const productTitle = cleanStr(body.productTitle || body.title, 160);
+    const weightKg = Math.max(10, Math.min(100000, Number(body.weightKg) || 50));
+    const targetPrice = Math.max(0, Math.min(50000000, Math.round(Number(body.targetPrice || body.maxBudgetPerKg) || 0)));
+    const deliveryDays = Math.max(1, Math.min(60, Math.round(Number(body.deliveryDays) || 5)));
+    if (!buyerName || !productTitle) {
+      return sendJson(res, 400, { error: 'نام خریدار/کسب‌وکار و عنوان محصول درخواستی الزامی است.' });
+    }
+    const tender = {
+      id: 'rfq_' + crypto.randomBytes(5).toString('hex'),
+      userId: user ? user.id : null,
+      buyerName,
+      phone,
+      city,
+      title: productTitle,
+      productTitle,
+      weightKg,
+      targetPrice,
+      maxBudgetPerKg: targetPrice,
+      deliveryDays,
+      note: cleanStr(body.note, 600),
+      status: 'open',
+      createdAt: new Date().toISOString(),
+      bids: [],
+    };
+    STORE.rfqTenders.unshift(tender);
+    saveStore();
+    return sendJson(res, 201, { ok: true, tender, rfq: tender });
+  }
+
+  if (req.method === 'POST' && pathname.startsWith('/api/rfq/') && pathname.endsWith('/bid')) {
+    const rfqId = decodeURIComponent(pathname.slice('/api/rfq/'.length, -'/bid'.length));
+    const tender = (STORE.rfqTenders || []).find((t) => t.id === rfqId);
+    if (!tender) return sendJson(res, 404, { error: 'درخواست استعلام یافت نشد.' });
+    const user = getAuthenticatedUser(req);
+    const vendorShop = user ? (STORE.vendors || []).find((v) => v.ownerId === user.id) : null;
+    const body = await readJsonBody(req);
+    const vendorName = cleanStr(body.vendorName, 120) || (vendorShop && vendorShop.name) || (user && user.fullName) || '';
+    const city = cleanStr(body.city, 80) || (vendorShop && vendorShop.city) || 'رفسنجان';
+    const unitPrice = Math.max(10000, Math.min(50000000, Math.round(Number(body.unitPrice || body.pricePerKg) || 0)));
+    const deliveryDays = Math.max(1, Math.min(60, Math.round(Number(body.deliveryDays) || 4)));
+    if (!vendorName || !unitPrice) {
+      return sendJson(res, 400, { error: 'نام غرفه/تأمین‌کننده و قیمت پیشنهادی هر کیلو الزامی است.' });
+    }
+    const bid = {
+      id: 'bid_' + crypto.randomBytes(4).toString('hex'),
+      vendorId: vendorShop ? vendorShop.id : null,
+      vendorName,
+      city,
+      unitPrice,
+      pricePerKg: unitPrice,
+      deliveryDays,
+      note: cleanStr(body.note, 400),
+      createdAt: new Date().toISOString(),
+    };
+    if (!Array.isArray(tender.bids)) tender.bids = [];
+    tender.bids.unshift(bid);
+    saveStore();
+    const enriched = {
+      ...tender,
+      title: tender.title || tender.productTitle,
+      maxBudgetPerKg: Number(tender.maxBudgetPerKg || tender.targetPrice || 0),
+    };
+    return sendJson(res, 201, { ok: true, bid, tender: enriched, rfq: enriched });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/preorders') {
+    return sendJson(res, 200, { count: (STORE.preorders || []).length });
+  }
+
+  if (req.method === 'POST' && pathname === '/api/preorders') {
+    const user = getAuthenticatedUser(req);
+    const body = await readJsonBody(req);
+    const crop = cleanStr(body.crop || body.cropName, 140);
+    const customerName = cleanStr(body.customerName, 120) || (user && user.fullName) || '';
+    const phone = normalizeIranPhone(body.phone || (user && user.phone) || '');
+    const qtyKg = Math.max(1, Math.min(5000, Number(body.qtyKg || body.weightKg) || 5));
+    if (!crop || !customerName || !isValidIranPhone(phone)) {
+      return sendJson(res, 400, { error: 'لطفاً محصول نوبرانه، نام و شماره موبایل معتبر وارد کنید.' });
+    }
+    const rec = {
+      id: 'pre_' + crypto.randomBytes(5).toString('hex'),
+      userId: user ? user.id : null,
+      crop,
+      cropName: crop,
+      customerName,
+      phone,
+      qtyKg,
+      weightKg: qtyKg,
+      city: cleanStr(body.city, 80) || 'تهران',
+      createdAt: new Date().toISOString(),
+    };
+    STORE.preorders.unshift(rec);
+    saveStore();
+    return sendJson(res, 201, { ok: true, preorder: rec });
+  }
+
+  if (req.method === 'POST' && pathname === '/api/payments/demo-gateway') {
+    const body = await readJsonBody(req);
+    const orderCode = cleanStr(body.orderCode, 60);
+    const outcome = body.outcome === 'cancel' ? 'cancel' : 'approve';
+    const order = (STORE.orders || []).find((o) => String(o.orderCode || o.id) === orderCode);
+    if (outcome === 'cancel') {
+      return sendJson(res, 200, { ok: false, status: 'canceled', message: 'تراکنش توسط کاربر لغو شد (حالت دمو).' });
+    }
+    const refId = 'SHP-' + String(Math.floor(10000000 + Math.random() * 89999999));
+    if (order) {
+      order.paymentStatus = 'paid';
+      order.paymentRefId = refId;
+      order.gatewayMode = isRealEnvValue(process.env.ZARINPAL_MERCHANT_ID) ? 'live' : 'demo';
+      const hasVendor = Array.isArray(order.items) && order.items.some((it) => it.source === 'vendor');
+      if (hasVendor) order.escrowStatus = 'held';
+      saveStore();
+    }
+    return sendJson(res, 200, {
+      ok: true,
+      status: 'paid',
+      refId,
+      mode: isRealEnvValue(process.env.ZARINPAL_MERCHANT_ID) ? 'live' : 'demo',
+    });
+  }
+
+  if (req.method === 'GET' && pathname.startsWith('/api/vendors/') && pathname.endsWith('/reviews')) {
+    const vid = decodeURIComponent(pathname.slice('/api/vendors/'.length, -'/reviews'.length));
+    const list = (STORE.vendorReviews || []).filter((r) => r.vendorId === vid);
+    return sendJson(res, 200, { reviews: list });
+  }
+
+  if (req.method === 'POST' && pathname.startsWith('/api/vendors/') && pathname.endsWith('/review')) {
+    const vid = decodeURIComponent(pathname.slice('/api/vendors/'.length, -'/review'.length));
+    const user = getAuthenticatedUser(req);
+    const body = await readJsonBody(req);
+    const authorName = cleanStr(body.authorName || body.author, 80) || (user && user.fullName) || 'خریدار مغزدانه';
+    const rating = Math.max(1, Math.min(5, Math.round(Number(body.rating) || 5)));
+    const text = cleanStr(body.text, 600);
+    if (text.length < 5) return sendJson(res, 400, { error: 'متن دیدگاه حداقل ۵ کاراکتر باشد.' });
+    const rev = {
+      id: 'vr_' + crypto.randomBytes(5).toString('hex'),
+      vendorId: vid,
+      author: authorName,
+      authorName,
+      rating,
+      text,
+      createdAt: new Date().toISOString(),
+    };
+    STORE.vendorReviews.unshift(rev);
+    saveStore();
+    return sendJson(res, 201, { ok: true, review: rev });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/customer/referral') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    if (!user.referralCode) {
+      user.referralCode = 'MGZ-' + String(user.id || crypto.randomBytes(3).toString('hex')).replace(/[^a-zA-Z0-9]/g, '').slice(-6).toUpperCase();
+      saveStore();
+    }
+    const invitedCount = (STORE.users || []).filter((u) => u.referredBy === user.referralCode).length;
+    const bonus = invitedCount * 150000;
+    return sendJson(res, 200, {
+      code: user.referralCode,
+      referralCode: user.referralCode,
+      invitedCount,
+      bonusPerInvite: 150000,
+      bonusEarned: bonus,
+      earnedBonus: bonus,
+    });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/customer/messages') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    const phone = normalizeIranPhone(user.phone || '');
+    const msgs = (STORE.vendorMessages || []).filter((m) => (m.userId && m.userId === user.id) || (phone && normalizeIranPhone(m.phone || '') === phone));
+    return sendJson(res, 200, { ok: true, messages: msgs });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/customer/cart') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    return sendJson(res, 200, { cart: (STORE.savedCarts && STORE.savedCarts[user.id]) || [] });
+  }
+
+  if (req.method === 'PUT' && pathname === '/api/customer/cart') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    const body = await readJsonBody(req);
+    if (!Array.isArray(body.cart)) return sendJson(res, 400, { error: 'سبد خرید نامعتبر است.' });
+    if (!STORE.savedCarts) STORE.savedCarts = {};
+    STORE.savedCarts[user.id] = body.cart.slice(0, 40);
+    saveStore();
+    return sendJson(res, 200, { ok: true, count: STORE.savedCarts[user.id].length });
   }
 
   if (req.method === 'POST' && pathname.startsWith('/api/vendors/') && pathname.endsWith('/message')) {
@@ -2308,6 +2625,69 @@ async function handleApi(req, res, pathname, query) {
       recordAudit(admin.username, 'به‌روزرسانی نرخ روز بازار', `${nextRates.length} قلم شاخص عمده به‌روز شد`);
       saveStore();
       return sendJson(res, 200, { ok: true, rates: nextRates });
+    }
+
+    if (req.method === 'GET' && pathname === '/api/admin/integrations') {
+      return sendJson(res, 200, {
+        integrations: [
+          {
+            id: 'zarinpal',
+            name: 'درگاه پرداخت شاپرک / زرین‌پال',
+            envKey: 'ZARINPAL_MERCHANT_ID',
+            configured: isRealEnvValue(process.env.ZARINPAL_MERCHANT_ID),
+            mode: isRealEnvValue(process.env.ZARINPAL_MERCHANT_ID) ? 'live' : 'demo',
+            note: 'در حالت دمو، شبیه‌ساز درگاه شاپرک با صدور کد پیگیری فعال است.',
+          },
+          {
+            id: 'sms',
+            name: 'سامانه پیامک OTP و هشدار قیمت (کاوه‌نگار / ملی‌پیامک)',
+            envKey: 'SMS_API_KEY',
+            configured: isRealEnvValue(process.env.SMS_API_KEY),
+            mode: isRealEnvValue(process.env.SMS_API_KEY) ? 'live' : 'demo',
+            note: 'در حالت دمو، کد تأیید پیامکی در صفحه پیش‌نمایش نمایش داده می‌شود.',
+          },
+          {
+            id: 'post',
+            name: 'سرویس نرخ‌دهی و رهگیری پست پیشتاز / تیپاکس',
+            envKey: 'POST_API_KEY',
+            configured: isRealEnvValue(process.env.POST_API_KEY),
+            mode: isRealEnvValue(process.env.POST_API_KEY) ? 'live' : 'demo',
+            note: 'محاسبه هوشمند کرایه بر اساس استان و وزن + صدور کد رهگیری دمو فعال است.',
+          },
+          {
+            id: 'fx',
+            name: 'شاخص زندهٔ ارز بین‌المللی (ExchangeRate-API)',
+            envKey: 'PUBLIC_API',
+            configured: true,
+            mode: 'live',
+            note: 'به‌صورت مستقیم و زنده برای نرخ صادراتی دلار، یورو و درهم متصل است.',
+          },
+          {
+            id: 'firestore',
+            name: 'دیتابیس ابری Firestore (پشتیبان و همگام‌سازی زنده)',
+            envKey: 'firebase-applet-config.json',
+            configured: fs.existsSync(path.join(ROOT, 'firebase-applet-config.json')),
+            mode: 'hybrid',
+            note: 'آماده همگام‌سازی دوطرفه با پایگاه داده ابری مغزدانه.',
+          },
+          {
+            id: 'push',
+            name: 'اعلان‌های لحظه‌ای وب‌اپلیکیشن (PWA Web Push)',
+            envKey: 'VAPID_PUBLIC_KEY',
+            configured: isRealEnvValue(process.env.VAPID_PUBLIC_KEY),
+            mode: isRealEnvValue(process.env.VAPID_PUBLIC_KEY) ? 'live' : 'demo',
+            note: 'در حالت دمو، اعلان‌های محلی مرورگر (Notification API) فعال و قابل تست است.',
+          },
+        ],
+        rfqCount: (STORE.rfqTenders || []).length,
+        preorderCount: (STORE.preorders || []).length,
+        counts: {
+          rfqs: (STORE.rfqTenders || []).length,
+          preorders: (STORE.preorders || []).length,
+          vendorReviews: (STORE.vendorReviews || []).length,
+          savedCarts: Object.keys(STORE.savedCarts || {}).length,
+        },
+      });
     }
   }
 

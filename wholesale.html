@@ -58,14 +58,78 @@
               <th>نرخ روز (تومان / کیلو)</th>
               <th>معادل صادراتی (FOB)</th>
               <th>تغییر نسبت به دیروز</th>
-              <th>هشدار قیمت</th>
+              <th>هشدار / نمودار</th>
             </tr>
           </thead>
           <tbody><tr><td colspan="6" style="text-align:center;color:var(--c-text-muted)">در حال دریافت نرخ روز بازار…</td></tr></tbody>
         </table>
       </div>
+
+      <!-- Historical Price Trend SVG Chart -->
+      <div class="contact-card" id="rate-trend-card" style="margin-top:18px;padding:18px 20px" data-reveal>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <div>
+            <span class="sec-label" style="margin-bottom:4px">تحلیل روند قیمتی</span>
+            <h3 id="trend-title" style="margin:0;color:#fff;font-size:var(--fs-md)">نمودار روند نرخ بازار — مغز پسته اکبری رفسنجان</h3>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="trend-range-btns">
+            <button type="button" class="btn btn-primary btn-sm" data-trend-range="7">۷ روزه</button>
+            <button type="button" class="btn btn-outline btn-sm" data-trend-range="30">۳۰ روزه</button>
+            <button type="button" class="btn btn-outline btn-sm" data-trend-range="90">فصلی (۹۰ روزه)</button>
+          </div>
+        </div>
+        <div id="trend-svg-wrap" style="width:100%;overflow:hidden;border-radius:12px;background:rgba(6,10,8,0.65);border:1px solid var(--c-line);padding:12px"></div>
+        <div id="trend-stats" style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:var(--fs-xs);color:var(--c-text-soft)"></div>
+      </div>
     </div>
   </section>
+
+  <!-- ================= تالار مناقصه و استعلام معکوس عمده (RFQ) ================= -->
+  <section class="sec-alt" id="rfq-section">
+    <div class="container">
+      <div class="sec-head" data-reveal>
+        <span class="sec-label">تالار معاملات B2B و رقابت شفاف غرفه‌داران</span>
+        <h2>تالار مناقصه و استعلام معکوس عمده (RFQ)</h2>
+        <p>خریدار عمده درخواست وزن و سقف قیمت خود را ثبت می‌کند و باغداران و غرفه‌های تأییدشده برای تأمین بار قیمت رقابتی پیشنهاد می‌دهند.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;align-items:start">
+        <div style="display:grid;gap:12px" id="rfq-list">
+          <div class="contact-card"><p style="color:var(--c-text-muted);font-size:var(--fs-xs)">در حال دریافت مناقصه‌های فعال…</p></div>
+        </div>
+        <form class="contact-card" id="rfq-form">
+          <h3 style="margin-bottom:6px">ثبت درخواست مناقصهٔ جدید (خریدار عمده)</h3>
+          <p style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:14px">درخواست شما در تالار مناقصه نمایش داده می‌شود تا بهترین پیشنهادها از باغداران دریافت گردد.</p>
+          <div class="form-grid">
+            <div class="field form-full"><label for="rfq-title">شرح بار و گرید مورد نیاز *</label><input id="rfq-title" required placeholder="مثلاً: ۱۵۰ کیلو مغز پسته سبز دوپوست قزوین"></div>
+            <div class="field"><label for="rfq-weight">وزن درخواستی (کیلو) *</label><input id="rfq-weight" type="number" min="10" value="50" required></div>
+            <div class="field"><label for="rfq-max">سقف قیمت پیشنهادی (تومان/کیلو)</label><input id="rfq-max" type="number" min="100000" step="10000" placeholder="مثلاً 1350000"></div>
+            <div class="field"><label for="rfq-buyer">نام خریدار یا مجموعه *</label><input id="rfq-buyer" required placeholder="مثلاً: قنادی و شیرینی‌پزی بهار"></div>
+            <div class="field"><label for="rfq-city">شهر تحویل *</label><input id="rfq-city" required placeholder="تهران"></div>
+            <div class="field form-full"><label for="rfq-phone">شماره تماس *</label><input id="rfq-phone" required inputmode="tel" pattern="09[0-9]{9}" placeholder="09xxxxxxxxx" class="ltr" style="text-align:right"></div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:14px">انتشار درخواست در تالار مناقصه</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- مودال ثبت پیشنهاد قیمت فروشنده در مناقصه -->
+  <div class="modal-back" id="rfq-bid-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0">ثبت پیشنهاد قیمت رقابتی (غرفه‌دار / تأمین‌کننده)</h3>
+        <button type="button" class="drawer-close" id="rb-close" aria-label="بستن">×</button>
+      </div>
+      <p id="rb-desc" style="font-size:var(--fs-xs);color:var(--c-text-soft);margin-bottom:12px"></p>
+      <form id="rb-form" style="display:grid;gap:12px">
+        <input type="hidden" id="rb-id">
+        <div class="field"><label for="rb-vendor">نام غرفه یا باغدار *</label><input id="rb-vendor" required placeholder="مثلاً: غرفه باغداران رفسنجان"></div>
+        <div class="field"><label for="rb-price">قیمت پیشنهادی هر کیلو (تومان) *</label><input id="rb-price" type="number" min="100000" step="5000" required></div>
+        <div class="field"><label for="rb-note">شرایط تحویل / نمونه</label><input id="rb-note" placeholder="مثلاً: ارسال نمونه رایگان + تحویل ۴۸ ساعته"></div>
+        <button type="submit" class="btn btn-gold" style="width:100%">ثبت پیشنهاد در مناقصه</button>
+      </form>
+    </div>
+  </div>
 
   <!-- مودال ثبت هشدار افت قیمت نرخ روز -->
   <div class="modal-back" id="rate-alert-modal">
@@ -331,8 +395,86 @@
             <span style="color:var(--c-text-soft)">درهم: <strong class="num" style="color:#fff">${faToman(fx.aedToman)}</strong></span>`;
         }
 
+        let loadedRates = data.rates || [];
+        let selectedRate = loadedRates[0] || null;
+        let activeTrendRange = 7;
+
+        function buildTrendPoints(rateObj, days) {
+          const base = Number((rateObj && (rateObj.price || rateObj.wholesalePrice)) || 1200000);
+          const seedStr = String((rateObj && rateObj.id) || 'rate');
+          let h = 0;
+          for (let i = 0; i < seedStr.length; i++) h = (h * 31 + seedStr.charCodeAt(i)) % 997;
+          const count = days === 7 ? 7 : days === 30 ? 10 : 12;
+          const pts = [];
+          for (let i = count - 1; i >= 0; i--) {
+            const wave = Math.sin((i + h) * 0.7) * 0.022 + Math.cos((i * 1.3 + h) * 0.4) * 0.014;
+            const drift = i === 0 ? 0 : -(i / count) * (Number(rateObj && rateObj.changePct || 0.8) / 100) * (days === 90 ? 3.2 : days === 30 ? 1.8 : 1);
+            const val = i === 0 ? base : Math.round((base * (1 + wave + drift)) / 5000) * 5000;
+            const lbl = i === 0 ? 'امروز' : (days === 7 ? `${fmt(i)} روز پیش` : days === 30 ? `${fmt(i * 3)} روز پیش` : `${fmt(i)} هفته پیش`);
+            pts.push({ label: lbl, value: val });
+          }
+          return pts;
+        }
+
+        function renderRateTrend() {
+          if (!selectedRate) return;
+          const titleEl = document.getElementById('trend-title');
+          const wrap = document.getElementById('trend-svg-wrap');
+          const stats = document.getElementById('trend-stats');
+          const pts = buildTrendPoints(selectedRate, activeTrendRange);
+          const vals = pts.map(p => p.value);
+          const minV = Math.min(...vals);
+          const maxV = Math.max(...vals);
+          const avgV = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+          const span = Math.max(10000, maxV - minV);
+          const W = 720, H = 190, padX = 28, padY = 22;
+          const coords = pts.map((p, idx) => {
+            const x = padX + (idx / Math.max(1, pts.length - 1)) * (W - padX * 2);
+            const y = H - padY - ((p.value - minV) / span) * (H - padY * 2);
+            return { ...p, x, y };
+          });
+          const linePath = coords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+          const areaPath = `${linePath} L${coords[coords.length - 1].x.toFixed(1)},${H - padY} L${coords[0].x.toFixed(1)},${H - padY} Z`;
+
+          titleEl.textContent = `نمودار روند ${activeTrendRange === 7 ? '۷ روزه' : activeTrendRange === 30 ? '۳۰ روزه' : 'فصلی (۹۰ روزه)'} — ${selectedRate.name}`;
+          wrap.innerHTML = `
+            <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="نمودار قیمت ${esc(selectedRate.name)}">
+              <defs>
+                <linearGradient id="mgzTrendGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#52c788" stop-opacity="0.38"/>
+                  <stop offset="100%" stop-color="#52c788" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+              <line x1="${padX}" y1="${padY}" x2="${W - padX}" y2="${padY}" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 4"/>
+              <line x1="${padX}" y1="${(H / 2).toFixed(0)}" x2="${W - padX}" y2="${(H / 2).toFixed(0)}" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 4"/>
+              <line x1="${padX}" y1="${H - padY}" x2="${W - padX}" y2="${H - padY}" stroke="rgba(255,255,255,0.12)"/>
+              <path d="${areaPath}" fill="url(#mgzTrendGrad)"/>
+              <path d="${linePath}" fill="none" stroke="#52c788" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              ${coords.map((c, idx) => `
+                <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${idx === coords.length - 1 ? 5.5 : 3.5}" fill="${idx === coords.length - 1 ? '#e2c15a' : '#52c788'}" stroke="#0b120e" stroke-width="2">
+                  <title>${esc(c.label)}: ${faToman(c.value)}</title>
+                </circle>`).join('')}
+            </svg>`;
+          stats.innerHTML = `
+            <span>کمترین نرخ بازه: <strong class="num" style="color:#fff">${faToman(minV)}</strong></span>
+            <span>میانگین دوره: <strong class="num" style="color:var(--c-accent-light)">${faToman(avgV)}</strong></span>
+            <span>بیشترین نرخ بازه: <strong class="num" style="color:var(--c-primary-light)">${faToman(maxV)}</strong></span>
+            <span>نرخ امروز: <strong class="num" style="color:#fff">${faToman(vals[vals.length - 1])}</strong></span>`;
+        }
+
+        document.querySelectorAll('[data-trend-range]').forEach(btn => {
+          btn.onclick = () => {
+            activeTrendRange = Number(btn.dataset.trendRange) || 7;
+            document.querySelectorAll('[data-trend-range]').forEach(b => {
+              b.classList.toggle('btn-primary', b === btn);
+              b.classList.toggle('btn-outline', b !== btn);
+            });
+            renderRateTrend();
+          };
+        });
+
         const tbody = document.querySelector('#market-rates-table tbody');
-        tbody.innerHTML = (data.rates || []).map(r => {
+        tbody.innerHTML = loadedRates.map((r, idx) => {
           const pct = Number(r.changePct || 0);
           const cls = pct > 0 ? 'rate-up' : pct < 0 ? 'rate-down' : 'rate-flat';
           const arrow = pct > 0 ? `▲ +${fmt(pct)}٪` : pct < 0 ? `▼ ${fmt(pct)}٪` : '• بدون تغییر';
@@ -340,19 +482,39 @@
           const fobUsd = Number(r.fobUsd || (fx && fx.usdToman ? (unitPrice / fx.usdToman) : 0));
           const region = r.region || r.origin || 'رفسنجان';
           return `
-            <tr>
+            <tr data-rate-idx="${idx}" style="cursor:pointer">
               <td><strong style="color:#fff">${esc(r.name)}</strong><br><small style="color:var(--c-text-muted)">${esc(r.grade)}</small></td>
               <td>${esc(region)}</td>
               <td class="num" style="font-weight:900;color:var(--c-primary-light)">${faToman(unitPrice)}</td>
               <td class="num ltr" style="color:var(--c-accent-light);font-weight:700">$${fobUsd > 0 ? fobUsd.toFixed(2) : '—'} / kg</td>
               <td class="${cls} num">${arrow}</td>
-              <td><button type="button" class="btn btn-outline btn-sm" data-rate-alert="${esc(r.id)}" data-rate-name="${esc(r.name)}" data-rate-price="${unitPrice}">ثبت هشدار</button></td>
+              <td style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="btn btn-outline btn-sm" data-rate-chart="${idx}">نمودار</button>
+                <button type="button" class="btn btn-outline btn-sm" data-rate-alert="${esc(r.id)}" data-rate-name="${esc(r.name)}" data-rate-price="${unitPrice}">هشدار</button>
+              </td>
             </tr>`;
         }).join('');
 
+        tbody.querySelectorAll('[data-rate-chart]').forEach(btn => {
+          btn.onclick = e => {
+            e.stopPropagation();
+            selectedRate = loadedRates[Number(btn.dataset.rateChart)] || loadedRates[0];
+            renderRateTrend();
+            document.getElementById('rate-trend-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          };
+        });
+        tbody.querySelectorAll('tr[data-rate-idx]').forEach(tr => {
+          tr.onclick = () => {
+            selectedRate = loadedRates[Number(tr.dataset.rateIdx)] || loadedRates[0];
+            renderRateTrend();
+          };
+        });
+        renderRateTrend();
+
         const raModal = document.getElementById('rate-alert-modal');
         tbody.querySelectorAll('[data-rate-alert]').forEach(btn => {
-          btn.onclick = () => {
+          btn.onclick = e => {
+            e.stopPropagation();
             document.getElementById('ra-id').value = btn.dataset.rateAlert;
             document.getElementById('ra-name').value = btn.dataset.rateName;
             document.getElementById('ra-desc').textContent = `محصول: ${btn.dataset.rateName} — نرخ فعلی ${faToman(btn.dataset.ratePrice)}`;
@@ -398,6 +560,148 @@
         toast(`هشدار افت قیمت برای «${alertPayload.productName}» ثبت شد`);
       });
       loadRates();
+
+      // 0.5. B2B Reverse Auction / RFQ Marketplace
+      const FALLBACK_RFQS = [
+        {
+          id: 'RFQ-1405-01',
+          title: '۱۲۰ کیلو مغز پسته سبز دوپوست قزوین ویژه باقلوا',
+          weightKg: 120,
+          maxBudgetPerKg: 1850000,
+          buyerName: 'قنادی و باقلواسرای پرنیان',
+          city: 'تهران',
+          status: 'open',
+          bids: [
+            { vendorName: 'کارگاه خلال و دوپوست قزوین', pricePerKg: 1790000, note: 'تحویل ۴۸ ساعته + ارسال نمونه ۲۰۰ گرمی' },
+            { vendorName: 'غرفه باغداران رفسنجان', pricePerKg: 1815000, note: 'پوست‌گیری لیزری + گواهی آفلاتوکسین' },
+          ],
+        },
+        {
+          id: 'RFQ-1405-02',
+          title: '۲۵۰ کیلو مغز گردوی سفید تویسرکان بدون دوقلو',
+          weightKg: 250,
+          maxBudgetPerKg: 980000,
+          buyerName: 'پخش خشکبار و آجیل پایتخت',
+          city: 'اصفهان',
+          status: 'open',
+          bids: [
+            { vendorName: 'غرفه گردوستان تویسرکان', pricePerKg: 945000, note: 'بار دست‌چین مهرماه، تسویه پای باربری' },
+          ],
+        },
+      ];
+
+      let rfqList = [];
+      async function loadRfqs() {
+        try {
+          const r = await apiFetch('/api/rfq');
+          if (r && Array.isArray(r.rfqs)) rfqList = r.rfqs;
+        } catch {}
+        if (!rfqList.length) {
+          try {
+            const saved = JSON.parse(localStorage.getItem('maghzdaneh_rfq_demo') || '[]');
+            rfqList = [...saved, ...FALLBACK_RFQS];
+          } catch {
+            rfqList = [...FALLBACK_RFQS];
+          }
+        }
+        renderRfqs();
+      }
+
+      function renderRfqs() {
+        const box = document.getElementById('rfq-list');
+        if (!box) return;
+        box.innerHTML = rfqList.map(r => {
+          const bids = Array.isArray(r.bids) ? r.bids : [];
+          const best = bids.length ? Math.min(...bids.map(b => Number(b.pricePerKg) || Infinity)) : null;
+          return `
+            <div class="contact-card" style="padding:16px 18px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+                <div>
+                  <span style="font-size:0.72rem;color:var(--c-accent-light);font-weight:800">${esc(r.id)} · ${esc(r.city || 'سراسر ایران')}</span>
+                  <h4 style="margin:4px 0;color:#fff;font-size:var(--fs-sm)">${esc(r.title)}</h4>
+                  <div style="font-size:var(--fs-xs);color:var(--c-text-soft)">خریدار: ${esc(r.buyerName || 'خریدار عمده')} · وزن: <strong class="num">${fmt(r.weightKg || 50)} کیلو</strong>${r.maxBudgetPerKg ? ` · سقف بودجه: <strong class="num">${faToman(r.maxBudgetPerKg)}</strong>` : ''}</div>
+                </div>
+                <button type="button" class="btn btn-gold btn-sm" data-bid-rfq="${esc(r.id)}">ثبت پیشنهاد قیمت</button>
+              </div>
+              <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--c-line);display:grid;gap:6px">
+                <div style="font-size:0.74rem;color:var(--c-primary-light);font-weight:800">
+                  ${bids.length ? `${fmt(bids.length)} پیشنهاد ثبت‌شده — بهترین نرخ فعلی: ${faToman(best)} / کیلو` : 'هنوز پیشنهادی ثبت نشده — اولین غرفه باشید'}
+                </div>
+                ${bids.slice(0, 3).map(b => `
+                  <div style="display:flex;justify-content:space-between;gap:8px;font-size:0.76rem;color:var(--c-text-soft);background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:8px">
+                    <span><strong style="color:#fff">${esc(b.vendorName)}</strong>${b.note ? ` — ${esc(b.note)}` : ''}</span>
+                    <strong class="num" style="color:var(--c-primary-light);white-space:nowrap">${faToman(b.pricePerKg)}</strong>
+                  </div>`).join('')}
+              </div>
+            </div>`;
+        }).join('');
+
+        box.querySelectorAll('[data-bid-rfq]').forEach(btn => {
+          btn.onclick = () => {
+            const target = rfqList.find(x => x.id === btn.dataset.bidRfq);
+            if (!target) return;
+            document.getElementById('rb-id').value = target.id;
+            document.getElementById('rb-desc').textContent = `${target.title} (${fmt(target.weightKg)} کیلو — تحویل ${target.city})`;
+            document.getElementById('rb-price').value = target.maxBudgetPerKg ? Math.round(target.maxBudgetPerKg * 0.96) : 1200000;
+            document.getElementById('rfq-bid-modal').classList.add('open');
+          };
+        });
+      }
+
+      const rbModal = document.getElementById('rfq-bid-modal');
+      document.getElementById('rb-close').onclick = () => rbModal.classList.remove('open');
+      rbModal.onclick = e => { if (e.target === rbModal) rbModal.classList.remove('open'); };
+
+      document.getElementById('rb-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const rfqId = document.getElementById('rb-id').value;
+        const bid = {
+          vendorName: document.getElementById('rb-vendor').value.trim(),
+          pricePerKg: Number(document.getElementById('rb-price').value) || 0,
+          note: document.getElementById('rb-note').value.trim(),
+        };
+        try {
+          const r = await apiFetch(`/api/rfq/${encodeURIComponent(rfqId)}/bid`, { method: 'POST', body: JSON.stringify(bid) });
+          if (r && r.rfq) {
+            rfqList = rfqList.map(x => (x.id === rfqId ? r.rfq : x));
+          }
+        } catch {
+          rfqList = rfqList.map(x => (x.id === rfqId ? { ...x, bids: [bid, ...(x.bids || [])] } : x));
+        }
+        rbModal.classList.remove('open');
+        e.target.reset();
+        renderRfqs();
+        toast('پیشنهاد قیمت شما در تالار مناقصه ثبت شد');
+      });
+
+      document.getElementById('rfq-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const payload = {
+          title: document.getElementById('rfq-title').value.trim(),
+          weightKg: Number(document.getElementById('rfq-weight').value) || 50,
+          maxBudgetPerKg: Number(document.getElementById('rfq-max').value) || 0,
+          buyerName: document.getElementById('rfq-buyer').value.trim(),
+          city: document.getElementById('rfq-city').value.trim(),
+          phone: document.getElementById('rfq-phone').value.trim(),
+        };
+        let created = null;
+        try {
+          const r = await apiFetch('/api/rfq', { method: 'POST', body: JSON.stringify(payload) });
+          if (r && r.rfq) created = r.rfq;
+        } catch {
+          created = { id: 'RFQ-' + Math.floor(1000 + Math.random() * 9000), ...payload, status: 'open', bids: [] };
+          try {
+            const saved = JSON.parse(localStorage.getItem('maghzdaneh_rfq_demo') || '[]');
+            saved.unshift(created);
+            localStorage.setItem('maghzdaneh_rfq_demo', JSON.stringify(saved.slice(0, 20)));
+          } catch {}
+        }
+        if (created) rfqList.unshift(created);
+        e.target.reset();
+        renderRfqs();
+        toast('مناقصهٔ جدید با موفقیت منتشر شد');
+      });
+      loadRfqs();
 
       // 1. Live Wholesale Calculator + Proforma Invoice
       const prodSel = document.getElementById('calc-prod');

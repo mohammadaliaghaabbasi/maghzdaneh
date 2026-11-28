@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>پیگیری سریع سفارش و مرسوله پستی | مغزدانه</title>
+  <meta name="description" content="وضعیت آماده‌سازی، برشته‌کاری روزانه، بسته‌بندی وکیوم و کد رهگیری پست یا تیپاکس سفارش خود را بدون نیاز به ورود به حساب مشاهده کنید.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مغزدانه">
+  <meta name="theme-color" content="#060907">
+  <link rel="stylesheet" href="assets/css/fonts.css?v=14">
+  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/fx.css?v=17">
+  <style>
+    .track-wrap { max-width: 820px; margin-inline: auto; display: grid; gap: 20px; }
+    .track-timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 22px 0; }
+    @media (max-width: 720px) { .track-timeline { grid-template-columns: 1fr; } }
+    .tl-node { position: relative; padding: 14px; border-radius: 12px; border: 1px solid var(--c-line); background: rgba(255,255,255,0.02); opacity: 0.55; }
+    .tl-node.done { opacity: 1; border-color: rgba(46,160,95,0.5); background: rgba(46,160,95,0.1); }
+    .tl-node.active { opacity: 1; border-color: var(--c-accent-light); background: rgba(212,175,55,0.12); }
+    .tl-step-num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--c-canvas-2); border: 1px solid var(--c-line-strong); font-size: 0.78rem; font-weight: 800; margin-bottom: 8px; }
+    .tl-node.done .tl-step-num { background: var(--c-primary); color: #050b07; border-color: transparent; }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <span class="sec-label">رهگیری لحظه‌ای بدون نیاز به ورود</span>
+      <h1>پیگیری سریع سفارش و مرسوله</h1>
+      <p>کد سفارش (مثلاً `MD-...`) و شماره موبایل ثبت‌شده را وارد کنید تا مرحلهٔ دقیق آماده‌سازی، برشته‌کاری و کد رهگیری پست یا تیپاکس را ببینید.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="track-wrap">
+        <form class="contact-card" id="track-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="tr-code">کد سفارش *</label>
+              <input id="tr-code" class="ltr" style="text-align:right" required placeholder="MD-...">
+            </div>
+            <div class="field">
+              <label for="tr-phone">شماره موبایل (اختیاری برای تطبیق)</label>
+              <input id="tr-phone" class="ltr" style="text-align:right" inputmode="tel" placeholder="09xxxxxxxxx">
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center">
+            <button type="submit" class="btn btn-primary">جستجوی وضعیت سفارش</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-demo-track">مشاهده نمونهٔ دمو پیگیری</button>
+          </div>
+        </form>
+
+        <div id="track-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+    const STEPS = [
+      { title: 'ثبت و تأیید سفارش', desc: 'دریافت سفارش و تخصیص بار از انبار تازه' },
+      { title: 'سورتینگ و برشته‌کاری روز', desc: 'تفت ملایم روزانه و کنترل کیفیت رطوبت' },
+      { title: 'وکیوم و تحویل به حامل', desc: 'بسته‌بندی ضدنور و صدور بارنامه پست/تیپاکس' },
+      { title: 'تحویل نهایی به خریدار', desc: 'تحویل سالم مرسوله و آزادسازی پرداخت امن' },
+    ];
+
+    const DEMO_ORDER = {
+      orderCode: 'MD-DEMO-1405',
+      status: 'shipped',
+      stepIndex: 2,
+      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+      shipping: 'تیپاکس اکسپرس (۲ تا ۴ روز کاری)',
+      city: 'تهران',
+      totalKg: 3,
+      grandTotal: 4250000,
+      paymentStatus: 'paid',
+      escrowStatus: 'held',
+      courierTrackingCode: 'TPX-88412904',
+      items: [
+        { name: 'مغز پسته اکبری سوپر رفسنجان', qty: 2, variantLabel: 'برشته نمکی ملایم · پاکت وکیوم' },
+        { name: 'مغز گردوی دوپر سفید تویسرکان', qty: 1, variantLabel: 'خام طبیعی · پاکت وکیوم' },
+      ],
+      isDemo: true,
+    };
+
+    function renderOrderTrack(o) {
+      const box = document.getElementById('track-result');
+      if (!o) {
+        box.innerHTML = `<div class="empty"><p style="color:#fff;font-weight:800">سفارشی با این مشخصات یافت نشد</p><p style="font-size:var(--fs-xs);margin-top:8px">کد سفارش را از پیامک یا بخش «سفارش‌های من» در حساب کاربری بررسی کنید.</p></div>`;
+        return;
+      }
+      const stepIdx = Number.isFinite(o.stepIndex) ? o.stepIndex : 0;
+      const statusFa = { new: 'ثبت‌شده', processing: 'در حال آماده‌سازی و برشته‌کاری', shipped: 'ارسال‌شده با پست/تیپاکس', done: 'تحویل داده‌شده', canceled: 'لغوشده' }[o.status] || 'ثبت‌شده';
+
+      box.innerHTML = `
+        <div class="contact-card">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--c-line);padding-bottom:14px">
+            <div>
+              <div style="font-size:0.78rem;color:var(--c-text-muted)">کد پیگیری سفارش ${o.isDemo ? '· (حالت نمایشی دمو)' : ''}</div>
+              <h2 class="ltr" style="margin:4px 0 0;color:#fff;text-align:right">${esc(o.orderCode)}</h2>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="verified-tag">وضعیت: ${statusFa}</span>
+              <span class="verified-tag" style="border-color:rgba(212,175,55,0.4);color:var(--c-accent-light)">🛡 پرداخت امن امانی (Escrow)</span>
+            </div>
+          </div>
+
+          <div class="track-timeline">
+            ${STEPS.map((st, idx) => {
+              const cls = o.status === 'canceled' ? '' : idx < stepIdx ? 'done' : idx === stepIdx ? 'active' : '';
+              return `
+                <div class="tl-node ${cls}">
+                  <span class="tl-step-num">${idx < stepIdx ? '✓' : fmt(idx + 1)}</span>
+                  <div style="font-weight:800;color:#fff;font-size:0.86rem">${st.title}</div>
+                  <div style="font-size:0.75rem;color:var(--c-text-soft);margin-top:4px">${st.desc}</div>
+                </div>`;
+            }).join('')}
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px">
+            <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--c-line)">
+              <div style="font-size:0.74rem;color:var(--c-text-muted)">روش ارسال</div>
+              <strong style="font-size:0.86rem;color:#fff">${esc(o.shipping)}</strong>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--c-line)">
+              <div style="font-size:0.74rem;color:var(--c-text-muted)">کد رهگیری پستی / تیپاکس (آماده اتصال API)</div>
+              <strong class="ltr" style="font-size:0.9rem;color:var(--c-accent-light);display:inline-block">${esc(o.courierTrackingCode || 'در انتظار صدور')}</strong>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--c-line)">
+              <div style="font-size:0.74rem;color:var(--c-text-muted)">وزن و مبلغ کل</div>
+              <strong style="font-size:0.88rem;color:var(--c-primary-light)">${fmt(o.totalKg || 1)} کیلو · ${faToman(o.grandTotal || 0)}</strong>
+            </div>
+          </div>
+
+          ${Array.isArray(o.items) && o.items.length ? `
+            <div style="border-top:1px solid var(--c-line);padding-top:12px">
+              <div style="font-size:var(--fs-xs);color:var(--c-text-muted);margin-bottom:8px">اقلام داخل بسته:</div>
+              ${o.items.map(it => `<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:0.84rem"><span>${esc(it.name)} ${it.variantLabel ? `<small style="color:var(--c-text-muted)">(${esc(it.variantLabel)})</small>` : ''}</span><strong>${fmt(it.qty)}</strong></div>`).join('')}
+            </div>` : ''}
+        </div>`;
+    }
+
+    boot('track').then(() => {
+      async function searchOrder(code, phone) {
+        const clean = String(code || '').trim().toUpperCase();
+        if (clean === DEMO_ORDER.orderCode) { renderOrderTrack(DEMO_ORDER); return; }
+        try {
+          const qs = new URLSearchParams({ code: clean });
+          if (phone) qs.set('phone', phone);
+          const res = await apiFetch(`/api/orders/track?${qs.toString()}`);
+          if (res && res.order) { renderOrderTrack(res.order); return; }
+        } catch {}
+
+        // LocalStorage fallback (for GitHub Pages static orders)
+        try {
+          const localOrders = JSON.parse(localStorage.getItem('maghzdaneh_orders') || '[]');
+          const found = localOrders.find(o => String(o.id || o.orderCode || '').toUpperCase() === clean);
+          if (found) {
+            renderOrderTrack({
+              orderCode: found.id || found.orderCode,
+              status: found.status || 'new',
+              stepIndex: 1,
+              createdAt: found.date,
+              shipping: found.shipping || 'ارسال استاندارد',
+              city: (found.customer && found.customer.city) || 'ایران',
+              totalKg: (found.totals && found.totals.totalKg) || 1,
+              grandTotal: (found.totals && found.totals.grand) || 0,
+              courierTrackingCode: `IR-${clean.slice(-8)}`,
+              items: found.items || [],
+            });
+            return;
+          }
+        } catch {}
+        renderOrderTrack(null);
+      }
+
+      document.getElementById('track-form').addEventListener('submit', e => {
+        e.preventDefault();
+        searchOrder(document.getElementById('tr-code').value, document.getElementById('tr-phone').value.trim());
+      });
+
+      document.getElementById('btn-demo-track').onclick = () => {
+        document.getElementById('tr-code').value = DEMO_ORDER.orderCode;
+        renderOrderTrack(DEMO_ORDER);
+      };
+
+      const urlCode = new URLSearchParams(location.search).get('code');
+      if (urlCode) {
+        document.getElementById('tr-code').value = urlCode;
+        searchOrder(urlCode, '');
+      }
+    });
+  </script>
+</body>
+</html>
