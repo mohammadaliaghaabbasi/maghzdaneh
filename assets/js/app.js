@@ -157,7 +157,7 @@ function ensureCloudSDK() {
       return;
     }
     const s = document.createElement('script');
-    s.src = 'assets/js/firebase-bundle.js?v=11';
+    s.src = 'assets/js/firebase-bundle.js?v=21';
     s.async = true;
     s.onload = () => done();
     s.onerror = () => resolve(null);
@@ -189,19 +189,34 @@ async function loadDB() {
   if (apiCat && Array.isArray(apiCat.products) && apiCat.products.length > 0) {
     APP.db.products = apiCat.products;
   } else {
-    APP.db.products = (APP.db.products || []).map(p => ({ ...p, source: 'house', vendorName: 'عرضه مستقیم مغزدانه' }));
+    const houseList = (APP.db.products || []).map(p => ({ ...p, source: 'house', vendorName: 'عرضه مستقیم مغزدانه' }));
+    let seedVendorProducts = [];
+    try {
+      const seedRes = await fetch('./data/marketplace-seed.json', { cache: 'no-cache' });
+      if (seedRes.ok) {
+        const seedData = await seedRes.json();
+        seedVendorProducts = (Array.isArray(seedData.vendorProducts) ? seedData.vendorProducts : [])
+          .filter(p => p.active !== false)
+          .map(p => ({ ...p, source: 'vendor' }));
+      }
+    } catch {}
+    APP.db.products = [...houseList, ...seedVendorProducts];
   }
 
   // Apply server-stored branding CMS if present
   const srvBranding = apiCat && apiCat.cms && apiCat.cms.branding;
   if (srvBranding) applyBrandingToDb(srvBranding);
 
-  // Also hydrate live Firestore products/branding if configured
+  // Also hydrate live Firestore products/branding if configured (bounded timeout so slow networks never stall UI)
   if (cloud) {
     try {
-      const [liveProducts, liveBranding] = await Promise.all([
-        cloud.getLiveProducts().catch(() => []),
-        cloud.getSiteContent('branding').catch(() => null),
+      const timeoutFallback = new Promise(resolve => setTimeout(() => resolve([[], null]), 2500));
+      const [liveProducts, liveBranding] = await Promise.race([
+        Promise.all([
+          cloud.getLiveProducts().catch(() => []),
+          cloud.getSiteContent('branding').catch(() => null),
+        ]),
+        timeoutFallback,
       ]);
       if (Array.isArray(liveProducts) && liveProducts.length > 0) {
         const vendorOnly = APP.db.products.filter(p => p.source === 'vendor');

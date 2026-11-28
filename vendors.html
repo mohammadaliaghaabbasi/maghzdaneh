@@ -144,115 +144,170 @@
       }
     });
 
+    let _seedCache = null;
+    async function loadSeedMarketplace() {
+      if (_seedCache) return _seedCache;
+      try {
+        const res = await fetch('./data/marketplace-seed.json', { cache: 'no-cache' });
+        if (res.ok) {
+          _seedCache = await res.json();
+          return _seedCache;
+        }
+      } catch {}
+      return { vendors: [], vendorProducts: [] };
+    }
+
     async function renderDirectory() {
       const grid = document.getElementById('vendors-grid');
       const countEl = document.getElementById('vendors-count');
+      let vendors = [];
       try {
         const res = await apiFetch('/api/vendors');
-        const vendors = Array.isArray(res.vendors) ? res.vendors : [];
-        countEl.textContent = `${fmt(vendors.length)} غرفهٔ فعال`;
-        if (!vendors.length) {
-          grid.innerHTML = `
-            <div class="empty" style="grid-column:1/-1">
-              <p style="color:#fff;font-weight:800">هنوز غرفه‌ای ثبت نشده است</p>
-              <a class="btn btn-primary btn-sm" href="seller.html" style="margin-top:14px">اولین غرفه را بسازید</a>
-            </div>`;
-          return;
+        if (res && Array.isArray(res.vendors) && res.vendors.length) {
+          vendors = res.vendors;
         }
-        grid.innerHTML = vendors.map(v => `
-          <a class="vendor-card" href="vendors.html?shop=${encodeURIComponent(v.slug)}">
-            <div class="vendor-card-cover">
-              <img src="${esc(safeImgUrl(v.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg'))}" alt="${esc(v.name)}" loading="lazy">
-            </div>
-            <div class="vendor-card-body">
-              <div class="vendor-card-meta" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-                <span>${esc(v.city)}</span>
-                ${v.verified ? '<span class="verified-tag">✓ غرفهٔ تأییدشده</span>' : ''}
-              </div>
-              <h3 class="vendor-card-title">${esc(v.name)}</h3>
-              <p class="vendor-card-bio">${esc(v.bio || v.specialty)}</p>
-              <div class="vendor-card-foot">
-                <span>تخصص: ${esc(v.specialty || 'خشکبار دست‌اول')}</span>
-                <strong style="color:var(--lux-emerald)">${fmt(v.productCount || 0)} محصول ←</strong>
-              </div>
-            </div>
-          </a>`).join('');
-      } catch {
-        grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>خطا در دریافت لیست غرفه‌ها.</p></div>';
+      } catch {}
+
+      if (!vendors.length) {
+        const seed = await loadSeedMarketplace();
+        const seedProducts = Array.isArray(seed.vendorProducts) ? seed.vendorProducts : [];
+        vendors = (Array.isArray(seed.vendors) ? seed.vendors : [])
+          .filter(v => v.status !== 'suspended')
+          .map(v => ({
+            ...v,
+            productCount: seedProducts.filter(p => p.vendorId === v.id && p.active !== false).length,
+          }));
       }
+
+      countEl.textContent = `${fmt(vendors.length)} غرفهٔ فعال`;
+      if (!vendors.length) {
+        grid.innerHTML = `
+          <div class="empty" style="grid-column:1/-1">
+            <p style="color:#fff;font-weight:800">هنوز غرفه‌ای ثبت نشده است</p>
+            <a class="btn btn-primary btn-sm" href="seller.html" style="margin-top:14px">اولین غرفه را بسازید</a>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = vendors.map(v => `
+        <a class="vendor-card" href="vendors.html?shop=${encodeURIComponent(v.slug)}">
+          <div class="vendor-card-cover">
+            <img src="${esc(safeImgUrl(v.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg'))}" alt="${esc(v.name)}" loading="lazy">
+          </div>
+          <div class="vendor-card-body">
+            <div class="vendor-card-meta" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+              <span>${esc(v.city)}</span>
+              ${v.verified ? '<span class="verified-tag">✓ غرفهٔ تأییدشده</span>' : ''}
+            </div>
+            <h3 class="vendor-card-title">${esc(v.name)}</h3>
+            <p class="vendor-card-bio">${esc(v.bio || v.specialty)}</p>
+            <div class="vendor-card-foot">
+              <span>تخصص: ${esc(v.specialty || 'خشکبار دست‌اول')}</span>
+              <strong style="color:var(--lux-emerald)">${fmt(v.productCount || 0)} محصول ←</strong>
+            </div>
+          </div>
+        </a>`).join('');
     }
 
     async function renderSingleShop(slug) {
       document.getElementById('vendors-directory-view').hidden = true;
       document.getElementById('vendor-single-view').hidden = false;
 
+      let vendor = null;
+      let products = [];
       try {
         const res = await apiFetch(`/api/vendors/${encodeURIComponent(slug)}`);
-        const { vendor, products } = res;
-        activeVendorId = vendor.id;
-        document.title = `${vendor.name} | بازارچهٔ غرفه‌های مغزدانه`;
-        document.getElementById('vs-crumb-name').textContent = vendor.name;
-        document.getElementById('vs-cover').src = safeImgUrl(vendor.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg');
-        document.getElementById('vs-cover').alt = vendor.name;
-        document.getElementById('vs-kicker').textContent = 'غرفهٔ فروشنده در بازارچهٔ مغزدانه';
-        document.getElementById('vs-verified-badge').hidden = !vendor.verified;
-        document.getElementById('vs-name').textContent = vendor.name;
-        document.getElementById('vs-bio').textContent = vendor.bio || vendor.specialty || '';
-        document.getElementById('vs-owner').textContent = `مدیریت غرفه: ${vendor.ownerName || 'باغدار'}`;
-        document.getElementById('vs-city').textContent = `مبدأ: ${vendor.city}`;
-        if (vendor.phone) {
-          document.getElementById('vs-phone-wrap').innerHTML = `· تماس: <span class="ltr" style="color:var(--lux-gold)">${esc(vendor.phone)}</span>`;
+        if (res && res.vendor) {
+          vendor = res.vendor;
+          products = Array.isArray(res.products) ? res.products : [];
         }
-        document.getElementById('vs-products-title').textContent = `محصولات ${vendor.name} (${fmt(products.length)} کالا)`;
+      } catch {}
 
-        renderTierSwitcher(document.getElementById('vs-tier-switcher'));
-
-        const paint = () => {
-          const grid = document.getElementById('vs-products-grid');
-          const empty = document.getElementById('vs-empty');
-          if (!products.length) {
-            grid.innerHTML = '';
-            empty.hidden = false;
-            return;
-          }
-          empty.hidden = true;
-          grid.innerHTML = products.map(productCard).join('');
-          bindAddButtons(grid);
-        };
-        paint();
-        document.addEventListener('tier:changed', paint);
-
-        if (APP.serverUser) {
-          if (APP.serverUser.fullName) document.getElementById('vm-name').value = APP.serverUser.fullName;
-          if (APP.serverUser.phone) document.getElementById('vm-phone').value = APP.serverUser.phone;
+      if (!vendor) {
+        const seed = await loadSeedMarketplace();
+        vendor = (Array.isArray(seed.vendors) ? seed.vendors : []).find(v => v.slug === slug);
+        if (vendor) {
+          products = (Array.isArray(seed.vendorProducts) ? seed.vendorProducts : [])
+            .filter(p => p.vendorId === vendor.id && p.active !== false)
+            .map(p => ({ ...p, source: 'vendor', vendorName: vendor.name, vendorSlug: vendor.slug, vendorCity: vendor.city }));
         }
+      }
 
-        document.getElementById('vendor-msg-form').addEventListener('submit', async e => {
-          e.preventDefault();
-          const btn = document.getElementById('vm-submit');
-          btn.disabled = true;
-          try {
-            await apiFetch(`/api/vendors/${encodeURIComponent(activeVendorId)}/message`, {
-              method: 'POST',
-              body: JSON.stringify({
-                senderName: document.getElementById('vm-name').value.trim(),
-                phone: document.getElementById('vm-phone').value.trim(),
-                body: document.getElementById('vm-body').value.trim(),
-              }),
-            });
-            document.getElementById('vm-body').value = '';
-            document.getElementById('vm-status').textContent = '✓ پیام شما با موفقیت در صندوق غرفه‌دار ثبت شد.';
-            toast('پیام شما به غرفه‌دار ارسال شد');
-          } catch (err) {
-            toast(err.message || 'خطا در ارسال پیام');
-          } finally {
-            btn.disabled = false;
-          }
-        });
-      } catch {
+      if (!vendor) {
         document.getElementById('vs-name').textContent = 'غرفهٔ مورد نظر یافت نشد';
         document.getElementById('vs-empty').hidden = false;
+        return;
       }
+
+      activeVendorId = vendor.id;
+      document.title = `${vendor.name} | بازارچهٔ غرفه‌های مغزدانه`;
+      document.getElementById('vs-crumb-name').textContent = vendor.name;
+      document.getElementById('vs-cover').src = safeImgUrl(vendor.coverImage, 'src/assets/images/vendor_orchard_harvest_1795350768215.jpg');
+      document.getElementById('vs-cover').alt = vendor.name;
+      document.getElementById('vs-kicker').textContent = 'غرفهٔ فروشنده در بازارچهٔ مغزدانه';
+      document.getElementById('vs-verified-badge').hidden = !vendor.verified;
+      document.getElementById('vs-name').textContent = vendor.name;
+      document.getElementById('vs-bio').textContent = vendor.bio || vendor.specialty || '';
+      document.getElementById('vs-owner').textContent = `مدیریت غرفه: ${vendor.ownerName || 'باغدار'}`;
+      document.getElementById('vs-city').textContent = `مبدأ: ${vendor.city}`;
+      if (vendor.phone) {
+        document.getElementById('vs-phone-wrap').innerHTML = `· تماس: <span class="ltr" style="color:var(--lux-gold)">${esc(vendor.phone)}</span>`;
+      }
+      document.getElementById('vs-products-title').textContent = `محصولات ${vendor.name} (${fmt(products.length)} کالا)`;
+
+      renderTierSwitcher(document.getElementById('vs-tier-switcher'));
+
+      const paint = () => {
+        const grid = document.getElementById('vs-products-grid');
+        const empty = document.getElementById('vs-empty');
+        if (!products.length) {
+          grid.innerHTML = '';
+          empty.hidden = false;
+          return;
+        }
+        empty.hidden = true;
+        grid.innerHTML = products.map(productCard).join('');
+        bindAddButtons(grid);
+      };
+      paint();
+      document.addEventListener('tier:changed', paint);
+
+      if (APP.serverUser) {
+        if (APP.serverUser.fullName) document.getElementById('vm-name').value = APP.serverUser.fullName;
+        if (APP.serverUser.phone) document.getElementById('vm-phone').value = APP.serverUser.phone;
+      }
+
+      document.getElementById('vendor-msg-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = document.getElementById('vm-submit');
+        btn.disabled = true;
+        const payload = {
+          senderName: document.getElementById('vm-name').value.trim(),
+          phone: document.getElementById('vm-phone').value.trim(),
+          body: document.getElementById('vm-body').value.trim(),
+        };
+        try {
+          await apiFetch(`/api/vendors/${encodeURIComponent(activeVendorId)}/message`, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          });
+          document.getElementById('vm-body').value = '';
+          document.getElementById('vm-status').textContent = '✓ پیام شما با موفقیت در صندوق غرفه‌دار ثبت شد.';
+          toast('پیام شما به غرفه‌دار ارسال شد');
+        } catch {
+          // Graceful static hosting fallback
+          try {
+            const localMsgs = JSON.parse(localStorage.getItem('maghzdaneh_vendor_msgs') || '[]');
+            localMsgs.unshift({ vendorId: activeVendorId, vendorName: vendor.name, ...payload, createdAt: new Date().toISOString() });
+            localStorage.setItem('maghzdaneh_vendor_msgs', JSON.stringify(localMsgs.slice(0, 30)));
+          } catch {}
+          document.getElementById('vm-body').value = '';
+          document.getElementById('vm-status').textContent = `✓ استعلام شما ثبت شد. برای تماس فوری با غرفه‌دار: ${vendor.phone || '021-91008080'}`;
+          toast('استعلام شما ثبت شد');
+        } finally {
+          btn.disabled = false;
+        }
+      });
     }
   </script>
 </body>

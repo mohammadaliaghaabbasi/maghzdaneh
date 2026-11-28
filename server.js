@@ -200,14 +200,83 @@ function defaultQuestions() {
 }
 
 function defaultMarketRates() {
+  const seed = loadJsonSafe(SEED_PATH, null);
+  if (seed && Array.isArray(seed.marketRates) && seed.marketRates.length) {
+    return seed.marketRates.map((r) => ({ ...r }));
+  }
   return [
-    { id: 'mr_1', name: 'مغز پسته اکبری سوپر', origin: 'رفسنجان', grade: 'اُنس ۲۰–۲۲ / سبز', wholesalePrice: 1290000, changePct: +1.8, trend: 'up', updatedAt: 'امروز ۱۰:۳۰' },
-    { id: 'mr_2', name: 'مغز پسته سبز کال (کله‌قوچی)', origin: 'رفسنجان', grade: 'سوپر زمردی', wholesalePrice: 1620000, changePct: +2.4, trend: 'up', updatedAt: 'امروز ۱۰:۳۰' },
-    { id: 'mr_3', name: 'خلال پسته سبز درجه‌یک', origin: 'قزوین', grade: 'کشیده و یکدست', wholesalePrice: 1740000, changePct: 0.0, trend: 'flat', updatedAt: 'امروز ۱۰:۳۰' },
-    { id: 'mr_4', name: 'پسته اکبری خندان طبیعی', origin: 'رفسنجان', grade: 'اُنس ۲۰–۲۲', wholesalePrice: 920000, changePct: -0.9, trend: 'down', updatedAt: 'امروز ۱۰:۳۰' },
-    { id: 'mr_5', name: 'مغز بادام مامایی صادراتی', origin: 'سامان', grade: 'درشت و شیرین', wholesalePrice: 820000, changePct: +1.1, trend: 'up', updatedAt: 'امروز ۱۰:۳۰' },
-    { id: 'mr_6', name: 'مغز گردوی سفید دوپَر', origin: 'تویسرکان', grade: 'پُرمغز و چرب', wholesalePrice: 780000, changePct: +0.5, trend: 'up', updatedAt: 'امروز ۱۰:۳۰' },
+    { id: 'mr_1', name: 'مغز پسته اکبری سوپر صادراتی', origin: 'رفسنجان', region: 'رفسنجان', grade: 'اُنس ۲۰–۲۲ / پوست‌ارغوانی', wholesalePrice: 1290000, fobUsd: 14.8, changePct: 1.8, trend: 'up' },
+    { id: 'mr_2', name: 'مغز پسته سبز کال دوپوست (گرید S)', origin: 'رفسنجان', region: 'رفسنجان', grade: 'سوپر زمردی قنادی', wholesalePrice: 1680000, fobUsd: 19.4, changePct: 2.4, trend: 'up' },
+    { id: 'mr_3', name: 'خلال پسته سبز درجه‌یک قزوین', origin: 'قزوین', region: 'قزوین', grade: 'کشیده بدون پودر', wholesalePrice: 1740000, fobUsd: 20.1, changePct: 0.6, trend: 'up' },
+    { id: 'mr_4', name: 'پسته اکبری خندان طبیعی', origin: 'رفسنجان', region: 'رفسنجان', grade: 'اُنس ۲۰–۲۲ مجلسی', wholesalePrice: 920000, fobUsd: 10.6, changePct: -0.9, trend: 'down' },
+    { id: 'mr_5', name: 'مغز پسته فندقی کارگاهی', origin: 'دامغان', region: 'دامغان', grade: 'یکدست تولیدی', wholesalePrice: 1065000, fobUsd: 12.2, changePct: 0.0, trend: 'flat' },
+    { id: 'mr_6', name: 'مغز بادام مامایی صادراتی', origin: 'سامان', region: 'سامان', grade: 'سایز ۷۰–۸۰ طلایی', wholesalePrice: 845000, fobUsd: 9.7, changePct: 1.1, trend: 'up' },
+    { id: 'mr_7', name: 'مغز گردوی سفید دوپَر ممتاز', origin: 'تویسرکان', region: 'تویسرکان', grade: 'پُرمغز و چرب ۸۵٪ دوپَر', wholesalePrice: 815000, fobUsd: 9.4, changePct: 0.5, trend: 'up' },
+    { id: 'mr_8', name: 'مغز گردوی خورشتی و کارگاهی', origin: 'تویسرکان', region: 'تویسرکان', grade: 'چرب و شیرین بدون تلخی', wholesalePrice: 635000, fobUsd: 7.3, changePct: -0.4, trend: 'down' },
   ];
+}
+
+function mergeById(existingArr, seedArr) {
+  const list = Array.isArray(existingArr) ? [...existingArr] : [];
+  const seen = new Set(list.map((item) => item && item.id));
+  for (const item of Array.isArray(seedArr) ? seedArr : []) {
+    if (item && item.id && !seen.has(item.id)) {
+      list.push(item);
+      seen.add(item.id);
+    }
+  }
+  return list;
+}
+
+let _fxCache = { data: null, fetchedAt: 0 };
+async function getLiveFxIndex(forceRefresh = false) {
+  const now = Date.now();
+  if (!forceRefresh && _fxCache.data && now - _fxCache.fetchedAt < 15 * 60 * 1000) {
+    return _fxCache.data;
+  }
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    const resp = await fetch('https://open.er-api.com/v6/latest/USD', {
+      signal: ctrl.signal,
+      headers: { Accept: 'application/json' },
+    });
+    clearTimeout(timer);
+    if (resp.ok) {
+      const json = await resp.json();
+      const irr = Number(json && json.rates && json.rates.IRR);
+      const eur = Number(json && json.rates && json.rates.EUR);
+      const aed = Number(json && json.rates && json.rates.AED);
+      if (Number.isFinite(irr) && irr > 100000) {
+        const usdToman = Math.round(irr / 10);
+        const data = {
+          live: true,
+          source: 'ExchangeRate-API (نرخ لحظه‌ای ارز بین‌المللی)',
+          usdToman,
+          eurToman: eur > 0 ? Math.round(usdToman / eur) : Math.round(usdToman * 1.09),
+          aedToman: aed > 0 ? Math.round(usdToman / aed) : Math.round(usdToman / 3.6725),
+          eurPerUsd: eur > 0 ? eur : 0.92,
+          updatedAt: json.time_last_update_utc ? new Date(json.time_last_update_utc).toISOString() : new Date().toISOString(),
+          syncedAt: new Date().toISOString(),
+        };
+        _fxCache = { data, fetchedAt: now };
+        return data;
+      }
+    }
+  } catch {
+    // Fallback cleanly to cached or reference benchmark
+  }
+  if (_fxCache.data) return _fxCache.data;
+  return {
+    live: false,
+    source: 'نرخ مرجع داخلی مغزدانه',
+    usdToman: 87000,
+    eurToman: 94800,
+    aedToman: 23700,
+    eurPerUsd: 0.92,
+    updatedAt: new Date().toISOString(),
+    syncedAt: new Date().toISOString(),
+  };
 }
 
 function createInitialStore() {
@@ -242,9 +311,9 @@ let STORE = (() => {
   return {
     ...base,
     ...existing,
-    vendors: Array.isArray(existing.vendors) && existing.vendors.length ? existing.vendors : base.vendors,
-    vendorProducts: Array.isArray(existing.vendorProducts) && existing.vendorProducts.length ? existing.vendorProducts : base.vendorProducts,
-    articles: Array.isArray(existing.articles) && existing.articles.length ? existing.articles : base.articles,
+    vendors: mergeById(existing.vendors, base.vendors),
+    vendorProducts: mergeById(existing.vendorProducts, base.vendorProducts),
+    articles: mergeById(existing.articles, base.articles),
     transactions: Array.isArray(existing.transactions) ? existing.transactions : [],
     tickets: Array.isArray(existing.tickets) ? existing.tickets : [],
     coupons: Array.isArray(existing.coupons) && existing.coupons.length ? existing.coupons : base.coupons,
@@ -255,7 +324,7 @@ let STORE = (() => {
     subscriptions: Array.isArray(existing.subscriptions) ? existing.subscriptions : [],
     priceAlerts: Array.isArray(existing.priceAlerts) ? existing.priceAlerts : [],
     auditLogs: Array.isArray(existing.auditLogs) ? existing.auditLogs : [],
-    marketRates: Array.isArray(existing.marketRates) && existing.marketRates.length ? existing.marketRates : base.marketRates,
+    marketRates: mergeById(existing.marketRates, base.marketRates),
   };
 })();
 
@@ -515,7 +584,7 @@ function getAuthenticatedUser(req) {
 function getAdminConfig() {
   const rawUser = cleanStr(process.env.MAGHZDANEH_ADMIN_USER, 64);
   const rawPass = String(process.env.MAGHZDANEH_ADMIN_PASS || '');
-  if (isRealEnvValue(rawUser) && isRealEnvValue(rawPass) && rawPass.length >= 8) {
+  if (isRealEnvValue(rawUser) && isRealEnvValue(rawPass) && rawPass.length >= 4) {
     return { configured: true, envManaged: true, username: rawUser, passwordPlain: rawPass };
   }
   const fileCfg = loadJsonSafe(ADMIN_AUTH_PATH, null);
@@ -527,9 +596,11 @@ function getAdminConfig() {
 
 function getAuthenticatedAdmin(req) {
   const cookies = parseCookies(req);
-  const authHeader = String(req.headers['x-admin-token'] || req.headers.authorization || '');
+  const rawAdminHeader = String(req.headers['x-admin-token'] || '').trim();
+  const xAdmin = rawAdminHeader.startsWith('Bearer ') ? rawAdminHeader.slice(7).trim() : rawAdminHeader;
+  const authHeader = String(req.headers.authorization || '').trim();
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-  const token = bearer || cookies.mgz_admin_session || '';
+  const token = xAdmin || bearer || cookies.mgz_admin_session || '';
   const payload = verifyToken(token);
   if (!payload || payload.kind !== 'admin' || !payload.username) return null;
   return payload;
@@ -690,8 +761,8 @@ async function handleApi(req, res, pathname, query) {
     if (phone && !isValidIranPhone(phone)) {
       return sendJson(res, 400, { error: 'شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد.' });
     }
-    if (password.length < 8) {
-      return sendJson(res, 400, { error: 'رمز عبور باید حداقل ۸ کاراکتر باشد.' });
+    if (password.length < 4) {
+      return sendJson(res, 400, { error: 'رمز عبور باید حداقل ۴ کاراکتر باشد.' });
     }
 
     const dup = STORE.users.find(
@@ -910,13 +981,28 @@ async function handleApi(req, res, pathname, query) {
 
   /* ---------- PUBLIC MARKET RATES, COUPONS, REVIEWS, Q&A, ALERTS, VENDOR INQUIRIES ---------- */
   if (req.method === 'GET' && pathname === '/api/market-rates') {
-    const raw = STORE.marketRates || defaultMarketRates();
-    const rates = raw.map((r) => ({
-      ...r,
-      region: r.region || r.origin || 'رفسنجان',
-      price: Number(r.price || r.wholesalePrice || 0),
-    }));
-    return sendJson(res, 200, { updatedAt: new Date().toISOString(), rates });
+    const force = query.get('refresh') === '1';
+    const fx = await getLiveFxIndex(force);
+    const raw = STORE.marketRates && STORE.marketRates.length ? STORE.marketRates : defaultMarketRates();
+    const rates = raw.map((r) => {
+      const unitToman = Number(r.price || r.wholesalePrice || 0);
+      const computedUsd = fx.usdToman > 0 ? Number((unitToman / fx.usdToman).toFixed(2)) : Number(r.fobUsd || 0);
+      const fobUsd = Number(r.fobUsd) > 0 ? Number(r.fobUsd) : computedUsd;
+      const eurPerKg = Number((computedUsd * (fx.eurPerUsd || 0.92)).toFixed(2));
+      return {
+        ...r,
+        region: r.region || r.origin || 'رفسنجان',
+        price: unitToman,
+        wholesalePrice: unitToman,
+        fobUsd: computedUsd || fobUsd,
+        eurPerKg,
+      };
+    });
+    return sendJson(res, 200, {
+      updatedAt: fx.syncedAt || new Date().toISOString(),
+      fx,
+      rates,
+    });
   }
 
   if (req.method === 'POST' && pathname === '/api/coupons/validate') {
@@ -1766,8 +1852,8 @@ async function handleApi(req, res, pathname, query) {
     if (!/^[a-z0-9._-]{3,40}$/.test(username)) {
       return sendJson(res, 400, { error: 'نام کاربری مدیر باید ۳ تا ۴۰ کاراکتر انگلیسی یا عدد باشد.' });
     }
-    if (password.length < 8) {
-      return sendJson(res, 400, { error: 'رمز عبور مدیر باید حداقل ۸ کاراکتر باشد.' });
+    if (password.length < 4) {
+      return sendJson(res, 400, { error: 'رمز عبور مدیر باید حداقل ۴ کاراکتر باشد.' });
     }
     const record = {
       username,
@@ -2195,6 +2281,33 @@ async function handleApi(req, res, pathname, query) {
       recordAudit(admin.username, 'پاسخ به پرسش محصول', qa.question.slice(0, 60));
       saveStore();
       return sendJson(res, 200, { ok: true, question: qa });
+    }
+
+    if (req.method === 'PUT' && pathname === '/api/admin/market-rates') {
+      const body = await readJsonBody(req);
+      if (!Array.isArray(body.rates) || !body.rates.length) {
+        return sendJson(res, 400, { error: 'لیست نرخ‌های بازار معتبر نیست.' });
+      }
+      const nextRates = body.rates.slice(0, 20).map((r, idx) => {
+        const price = Math.max(10000, Math.min(50000000, Math.round(Number(r.wholesalePrice || r.price) || 0)));
+        const pct = Math.max(-50, Math.min(50, Number(Number(r.changePct || 0).toFixed(2))));
+        return {
+          id: cleanStr(r.id, 40) || `mr_${idx + 1}`,
+          name: cleanStr(r.name, 120) || 'محصول شاخص',
+          origin: cleanStr(r.origin || r.region, 60) || 'رفسنجان',
+          region: cleanStr(r.region || r.origin, 60) || 'رفسنجان',
+          grade: cleanStr(r.grade, 80) || 'ممتاز',
+          wholesalePrice: price,
+          fobUsd: Number(r.fobUsd) > 0 ? Number(Number(r.fobUsd).toFixed(2)) : undefined,
+          changePct: pct,
+          trend: pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat',
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      STORE.marketRates = nextRates;
+      recordAudit(admin.username, 'به‌روزرسانی نرخ روز بازار', `${nextRates.length} قلم شاخص عمده به‌روز شد`);
+      saveStore();
+      return sendJson(res, 200, { ok: true, rates: nextRates });
     }
   }
 

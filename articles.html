@@ -97,11 +97,22 @@
       try {
         const res = await apiFetch('/api/articles');
         allArticles = Array.isArray(res.articles) ? res.articles : [];
-        renderCategoryChips();
-        renderArticles();
-      } catch {
-        document.getElementById('art-grid').innerHTML = '<div class="empty" style="grid-column:1/-1"><p>خطا در دریافت مقالات.</p></div>';
+      } catch {}
+      if (!allArticles.length) {
+        try {
+          const seedRes = await fetch('./data/marketplace-seed.json', { cache: 'no-cache' });
+          if (seedRes.ok) {
+            const seed = await seedRes.json();
+            allArticles = Array.isArray(seed.articles) ? seed.articles : [];
+          }
+        } catch {}
       }
+      if (!allArticles.length) {
+        document.getElementById('art-grid').innerHTML = '<div class="empty" style="grid-column:1/-1"><p>خطا در دریافت مقالات.</p></div>';
+        return;
+      }
+      renderCategoryChips();
+      renderArticles();
     }
 
     function renderCategoryChips() {
@@ -177,20 +188,33 @@
     async function renderArticleReader(articleSlug) {
       document.getElementById('articles-list-view').hidden = true;
       document.getElementById('article-reader-view').hidden = false;
+      let article = null;
       try {
-        const { article } = await apiFetch(`/api/articles/${encodeURIComponent(articleSlug)}`);
-        document.title = `${article.title} | مجله مغزدانه`;
-        document.getElementById('ar-crumb').textContent = article.title;
-        document.getElementById('ar-cat').textContent = article.category || 'مقاله تخصصی';
-        document.getElementById('ar-title').textContent = article.title;
-        document.getElementById('ar-meta').textContent = `${article.author || 'تحریریه مغزدانه'} · ${fmt(article.readMinutes || 5)} دقیقه مطالعه · انتشار: ${article.publishedAt || ''}`;
-        document.getElementById('ar-cover').src = safeImgUrl(article.coverImage, 'src/assets/images/article_pistachio_grading_1795350767749.jpg');
-        document.getElementById('ar-cover').alt = article.title;
-        const paras = Array.isArray(article.body) ? article.body : [String(article.body || '')];
-        document.getElementById('ar-body').innerHTML = paras.map(p => `<p>${esc(p)}</p>`).join('');
-      } catch {
-        document.getElementById('ar-title').textContent = 'مقاله مورد نظر یافت نشد';
+        const res = await apiFetch(`/api/articles/${encodeURIComponent(articleSlug)}`);
+        article = res && res.article ? res.article : null;
+      } catch {}
+      if (!article) {
+        try {
+          const seedRes = await fetch('./data/marketplace-seed.json', { cache: 'no-cache' });
+          if (seedRes.ok) {
+            const seed = await seedRes.json();
+            article = (Array.isArray(seed.articles) ? seed.articles : []).find(a => a.slug === articleSlug || a.id === articleSlug) || null;
+          }
+        } catch {}
       }
+      if (!article) {
+        document.getElementById('ar-title').textContent = 'مقاله مورد نظر یافت نشد';
+        return;
+      }
+      document.title = `${article.title} | مجله مغزدانه`;
+      document.getElementById('ar-crumb').textContent = article.title;
+      document.getElementById('ar-cat').textContent = article.category || 'مقاله تخصصی';
+      document.getElementById('ar-title').textContent = article.title;
+      document.getElementById('ar-meta').textContent = `${article.author || 'تحریریه مغزدانه'} · ${fmt(article.readMinutes || 5)} دقیقه مطالعه · انتشار: ${article.publishedAt || ''}`;
+      document.getElementById('ar-cover').src = safeImgUrl(article.coverImage, 'src/assets/images/article_pistachio_grading_1795350767749.jpg');
+      document.getElementById('ar-cover').alt = article.title;
+      const paras = Array.isArray(article.body) ? article.body : [String(article.body || '')];
+      document.getElementById('ar-body').innerHTML = paras.map(p => `<p>${esc(p)}</p>`).join('');
     }
   </script>
 </body>

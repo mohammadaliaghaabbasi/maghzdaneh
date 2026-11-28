@@ -7,7 +7,7 @@
    - Stale-While-Revalidate for static assets
    ========================================================================== */
 
-const CACHE_VERSION = 'maghzdaneh-pwa-v20';
+const CACHE_VERSION = 'maghzdaneh-pwa-v22';
 const SHELL_RELATIVE = [
   './',
   './index.html',
@@ -26,6 +26,7 @@ const SHELL_RELATIVE = [
   './assets/img/pwa-512x512.png',
   './assets/img/apple-touch-icon.png',
   './data/db.json',
+  './data/marketplace-seed.json',
 ];
 
 function scopeUrl(relPath) {

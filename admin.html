@@ -43,8 +43,8 @@
             <input id="cl-user" class="ltr" required minlength="3" maxlength="40" value="admin" placeholder="admin" style="text-align:right">
           </div>
           <div class="field form-full">
-            <label for="cl-pass">رمز عبور مدیر (حداقل ۸ کاراکتر) *</label>
-            <input id="cl-pass" type="password" class="ltr" required minlength="8" placeholder="حداقل ۸ کاراکتر امن" style="text-align:right">
+            <label for="cl-pass">رمز عبور مدیر (حداقل ۴ کاراکتر) *</label>
+            <input id="cl-pass" type="password" class="ltr" required minlength="4" placeholder="رمز عبور مدیر" style="text-align:right">
           </div>
           <div class="form-full">
             <button type="submit" class="btn btn-primary" style="width:100%">ثبت رمز مدیر و ورود به داشبورد</button>
@@ -385,7 +385,7 @@
         </section>
 
         <!-- VIEW 5: HOUSE CATALOG & INVENTORY -->
-        <section id="aview-catalog" hidden>
+        <section id="aview-catalog" hidden style="display:flex;flex-direction:column;gap:22px">
           <div class="dash-card">
             <div class="dash-card-head">
               <div>
@@ -407,6 +407,30 @@
                   </tr>
                 </thead>
                 <tbody id="adm-products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تابلوی نرخ روز بازار مغز (متصل به صفحه خرید عمده)</h2>
+                <p id="adm-fx-meta">ویرایش مستقیم نرخ عمده روز بازار و درصد تغییر نسبت به دیروز — به‌صورت زنده با شاخص ارز صادراتی همگام می‌شود.</p>
+              </div>
+              <button type="button" class="btn btn-gold btn-sm" id="btn-save-market-rates">ذخیره و انتشار نرخ‌های روز</button>
+            </div>
+            <div class="dash-table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>گرید شاخص</th>
+                    <th>مبدأ</th>
+                    <th>نرخ عمده روز (تومان/کیلو)</th>
+                    <th>تغییر روزانه (٪)</th>
+                    <th>معادل دلاری (FOB)</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-rates-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -944,6 +968,7 @@
       renderOrdersList();
       renderAdminTickets();
       renderProductsTable();
+      renderAdminMarketRates();
       renderVendorsTable();
       renderSupplyTable();
       renderCouponsTable();
@@ -1292,6 +1317,46 @@
           await loadAdminOverview();
         };
       });
+    }
+
+    /* ---------- Live Market Rates Desk ---------- */
+    let _admRates = [];
+    async function renderAdminMarketRates() {
+      const tbody = document.getElementById('adm-rates-tbody');
+      if (!tbody) return;
+      try {
+        const res = await apiFetch('/api/market-rates');
+        _admRates = Array.isArray(res.rates) ? res.rates : [];
+        if (res.fx && document.getElementById('adm-fx-meta')) {
+          document.getElementById('adm-fx-meta').textContent =
+            `${res.fx.live ? 'متصل به شاخص زندهٔ ارز جهانی' : 'نرخ مرجع داخلی'} · دلار مرجع: ${faToman(res.fx.usdToman)} · هر تغییری بلافاصله در تابلوی نرخ روز نمایش داده می‌شود.`;
+        }
+        tbody.innerHTML = _admRates.map((r, i) => `
+          <tr>
+            <td><strong>${esc(r.name)}</strong><div style="font-size:0.74rem;color:var(--lux-muted)">${esc(r.grade || '')}</div></td>
+            <td>${esc(r.origin || r.region || 'رفسنجان')}</td>
+            <td><input class="ltr" style="width:118px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" step="5000" data-mr-price="${i}" value="${Number(r.wholesalePrice || r.price || 0)}"></td>
+            <td><input class="ltr" style="width:82px;padding:6px 8px;background:var(--lux-bg-2);border:1px solid var(--lux-line);border-radius:6px;color:#fff" type="number" step="0.1" data-mr-pct="${i}" value="${Number(r.changePct || 0)}"></td>
+            <td class="num ltr" style="color:var(--lux-gold)">$${Number(r.fobUsd || 0).toFixed(2)}</td>
+          </tr>`).join('');
+
+        const saveBtn = document.getElementById('btn-save-market-rates');
+        if (saveBtn) {
+          saveBtn.onclick = async () => {
+            const payload = _admRates.map((r, i) => ({
+              ...r,
+              wholesalePrice: Number(document.querySelector(`[data-mr-price="${i}"]`).value) || r.wholesalePrice,
+              changePct: Number(document.querySelector(`[data-mr-pct="${i}"]`).value) || 0,
+            }));
+            await apiFetch('/api/admin/market-rates', {
+              method: 'PUT',
+              body: JSON.stringify({ rates: payload }),
+            });
+            toast('تابلوی نرخ روز بازار ذخیره و منتشر شد');
+            await renderAdminMarketRates();
+          };
+        }
+      } catch {}
     }
 
     /* ---------- House Products ---------- */

@@ -39,15 +39,15 @@
         </div>
 
         <div class="auth-method-tabs" role="tablist" aria-label="روش‌های ورود">
-          <button type="button" class="auth-method-btn active" data-method="otp">موبایل و رمز یک‌بارمصرف</button>
-          <button type="button" class="auth-method-btn" data-method="password">نام کاربری و رمز عبور</button>
+          <button type="button" class="auth-method-btn active" data-method="password">نام کاربری و رمز عبور</button>
+          <button type="button" class="auth-method-btn" data-method="otp">موبایل و رمز یک‌بارمصرف</button>
           <button type="button" class="auth-method-btn" data-method="google">حساب گوگل</button>
         </div>
 
         <div class="auth-msg" id="auth-msg"></div>
 
         <!-- Method 1: Mobile Phone + 6-Digit OTP -->
-        <div id="method-otp">
+        <div id="method-otp" hidden>
           <form id="otp-req-form" class="form-grid">
             <div class="field form-full">
               <label for="otp-phone">شماره تلفن همراه</label>
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Method 2: Username / Email & Password (Login + Register + OTP Reset) -->
-        <div id="method-password" hidden>
+        <div id="method-password">
           <div class="auth-sub-toggle">
             <button type="button" class="active" data-pwmode="login">ورود با رمز عبور</button>
             <button type="button" data-pwmode="register">ثبت‌نام حساب جدید</button>
@@ -92,14 +92,14 @@
           <form id="pw-login-form" class="form-grid">
             <div class="field form-full">
               <label for="pw-id">نام کاربری، ایمیل یا شماره موبایل</label>
-              <input id="pw-id" class="ltr" required placeholder="username یا email@example.com" style="text-align:right">
+              <input id="pw-id" class="ltr" required placeholder="user یا admin" style="text-align:right">
             </div>
             <div class="field form-full">
               <label for="pw-pass">رمز عبور</label>
-              <input id="pw-pass" type="password" class="ltr" required minlength="6" placeholder="••••••••" style="text-align:right">
+              <input id="pw-pass" type="password" class="ltr" required minlength="4" placeholder="••••••••" style="text-align:right">
             </div>
             <div class="form-full">
-              <button type="submit" class="btn btn-primary" style="width:100%">ورود به داشبورد کاربری</button>
+              <button type="submit" class="btn btn-primary" style="width:100%">ورود به داشبورد</button>
             </div>
           </form>
 
@@ -817,13 +817,12 @@
     document.getElementById('pw-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       showAuthMsg('');
+      const identifier = document.getElementById('pw-id').value.trim();
+      const password = document.getElementById('pw-pass').value;
       try {
         const res = await apiFetch('/api/auth/login', {
           method: 'POST',
-          body: JSON.stringify({
-            identifier: document.getElementById('pw-id').value.trim(),
-            password: document.getElementById('pw-pass').value,
-          }),
+          body: JSON.stringify({ identifier, password }),
         });
         APP.serverUser = res.user;
         if (res && res.token) APP._userToken = res.token;
@@ -831,7 +830,23 @@
         if (nextUrl && /^[a-z0-9._-]+\.html/i.test(nextUrl)) { location.href = nextUrl; return; }
         await refreshAccountView();
       } catch (err) {
-        showAuthMsg(err.message || 'نام کاربری یا رمز عبور اشتباه است');
+        if (err && err.status === 401) {
+          try {
+            const admRes = await apiFetch('/api/admin/login', {
+              method: 'POST',
+              body: JSON.stringify({ username: identifier, password }),
+            });
+            if (admRes && admRes.ok) {
+              if (admRes.token) APP._adminToken = admRes.token;
+              toast('ورود مدیر تأیید شد — انتقال به پنل مدیریت...');
+              location.href = 'admin.html';
+              return;
+            }
+          } catch {
+            // Fall through to standard invalid credentials message
+          }
+        }
+        showAuthMsg((err && err.message) || 'نام کاربری یا رمز عبور اشتباه است');
       }
     });
 
