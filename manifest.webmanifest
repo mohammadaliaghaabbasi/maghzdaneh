@@ -1,11 +1,11 @@
 {
-  "id": "./",
+  "id": "./index.html",
   "name": "مغزدانه — بازار تخصصی مغز پسته، بادام و گردو",
   "short_name": "مغزدانه",
   "description": "مرجع تخصصی خرید و فروش خرده، نیم‌عمده و عمده مغز پسته، بادام و گردو؛ عرضه مستقیم از باغداران رفسنجان و بازارچه غرفه‌های فروشندگان.",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "./catalog.html?source=pwa",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],

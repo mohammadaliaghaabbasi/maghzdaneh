@@ -39,8 +39,45 @@ function safeImgUrl(url, fallback = 'assets/img/maghz-pistachio-akbari.jpg') {
   return fallback;
 }
 
-/* ---------- Hardened Server API Fetch Helper (Includes Cookies + CSRF Header) ---------- */
+/* ---------- Static / GitHub Pages API Fallback Engine Loader ---------- */
+let _staticApiPromise = null;
+function isKnownStaticHost() {
+  try {
+    const host = (location.hostname || '').toLowerCase();
+    return location.protocol === 'file:' || host === 'github.io' || host.endsWith('.github.io');
+  } catch {
+    return false;
+  }
+}
+
+function ensureStaticApi() {
+  if (window.MgzStaticApi) return Promise.resolve(window.MgzStaticApi);
+  if (_staticApiPromise) return _staticApiPromise;
+  _staticApiPromise = new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[src*="static-api.js"]');
+    if (existing) {
+      const check = () => (window.MgzStaticApi ? resolve(window.MgzStaticApi) : setTimeout(check, 30));
+      check();
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'assets/js/static-api.js?v=1';
+    s.onload = () => (window.MgzStaticApi ? resolve(window.MgzStaticApi) : reject(new Error('Static API failed to initialize')));
+    s.onerror = () => reject(new Error('Failed to load static-api.js'));
+    document.head.appendChild(s);
+  });
+  return _staticApiPromise;
+}
+
+/* ---------- Hardened Server API Fetch Helper (Includes Cookies + CSRF Header + Static Fallback) ---------- */
 async function apiFetch(url, options = {}) {
+  const isApiPath = String(url || '').startsWith('/api/');
+  if (isApiPath && (APP._staticApiMode || isKnownStaticHost())) {
+    APP._staticApiMode = true;
+    const engine = await ensureStaticApi();
+    return engine.handle(url, options);
+  }
+
   const authHeaders = {};
   if (APP._adminToken) authHeaders['X-Admin-Token'] = APP._adminToken;
   if (APP._userToken && !String(url).startsWith('/api/admin/')) {
@@ -52,18 +89,49 @@ async function apiFetch(url, options = {}) {
     ...(options.body ? { 'Content-Type': 'application/json' } : {}),
     ...(options.headers || {}),
   };
-  const res = await fetch(url, {
-    credentials: 'include',
-    cache: 'no-store',
-    ...options,
-    headers,
-  });
-  let data = null;
+
+  let res;
   try {
-    data = await res.json();
-  } catch {
-    data = null;
+    res = await fetch(url, {
+      credentials: 'include',
+      cache: 'no-store',
+      ...options,
+      headers,
+    });
+  } catch (netErr) {
+    if (isApiPath) {
+      APP._staticApiMode = true;
+      const engine = await ensureStaticApi();
+      return engine.handle(url, options);
+    }
+    throw netErr;
   }
+
+  let data = null;
+  const contentType = (res.headers.get('content-type') || '').toLowerCase();
+  const isJson = contentType.includes('application/json');
+  if (isJson) {
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+  } else {
+    try {
+      const txt = await res.text();
+      if (txt && txt.trim().startsWith('{')) data = JSON.parse(txt);
+    } catch {
+      data = null;
+    }
+  }
+
+  // Automatic fallback for static hosts (e.g. GitHub Pages on custom domain returning 405 or HTML 404 for /api/*)
+  if (isApiPath && (res.status === 405 || ((res.status === 404 || res.status === 501) && !isJson && !data))) {
+    APP._staticApiMode = true;
+    const engine = await ensureStaticApi();
+    return engine.handle(url, options);
+  }
+
   if (!res.ok) {
     const err = new Error((data && data.error) || `خطای سرور (${res.status})`);
     err.status = res.status;

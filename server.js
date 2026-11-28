@@ -561,8 +561,48 @@ function isValidIranPhone(phone) {
   return /^09\d{9}$/.test(phone);
 }
 
+function defaultUserNotifyPrefs() {
+  return {
+    orderUpdates: true,
+    walletAlerts: true,
+    supportReplies: true,
+    priceDrops: true,
+    marketingSms: false,
+  };
+}
+
+function defaultAdminProfile() {
+  return {
+    fullName: 'مدیر ارشد مغزدانه',
+    title: 'مدیر اجرایی و ناظر بازارچه',
+    email: 'admin@maghzdaneh.ir',
+    phone: '021-91008080',
+    avatarColor: 'gold',
+    notifyPrefs: {
+      newOrders: true,
+      openTickets: true,
+      pendingPayouts: true,
+      supplyAndRfq: true,
+      lowStock: true,
+      community: true,
+    },
+    updatedAt: null,
+  };
+}
+
+function getAdminProfile() {
+  const base = defaultAdminProfile();
+  const saved = STORE.adminProfile && typeof STORE.adminProfile === 'object' ? STORE.adminProfile : {};
+  return {
+    ...base,
+    ...saved,
+    notifyPrefs: { ...base.notifyPrefs, ...(saved.notifyPrefs || {}) },
+  };
+}
+
 function publicUser(u) {
   if (!u) return null;
+  const prefs = { ...defaultUserNotifyPrefs(), ...(u.notifyPrefs && typeof u.notifyPrefs === 'object' ? u.notifyPrefs : {}) };
   return {
     id: u.id,
     fullName: u.fullName || '',
@@ -574,12 +614,259 @@ function publicUser(u) {
     city: u.city || '',
     postalCode: u.postalCode || '',
     address: u.address || '',
+    bio: u.bio || '',
+    avatarColor: u.avatarColor || 'emerald',
+    notifyPrefs: prefs,
     authMethod: u.authMethod || 'password',
     walletBalance: Math.max(0, Math.round(Number(u.walletBalance) || 0)),
     addresses: Array.isArray(u.addresses) ? u.addresses : [],
     favoriteIds: Array.isArray(u.favoriteIds) ? u.favoriteIds : [],
     createdAt: u.createdAt,
   };
+}
+
+function buildUserNotifications(user) {
+  const readSet = new Set((STORE.userNotifReads && STORE.userNotifReads[user.id]) || []);
+  const phone = normalizeIranPhone(user.phone || '');
+  const list = [];
+
+  // 1. Orders updates
+  STORE.orders
+    .filter((o) => o.userId === user.id)
+    .slice(0, 12)
+    .forEach((o) => {
+      const stMap = {
+        new: 'ثبت شد و در صف بررسی است',
+        processing: 'تأیید شد و در مرحله برشته‌کاری و بسته‌بندی است',
+        shipped: 'ارسال شد و تحویل پست/پیک گردید',
+        done: 'تحویل شما داده شد — نوش جان!',
+        canceled: 'لغو شد',
+      };
+      const id = `uord_${o.id}_${o.status}`;
+      list.push({
+        id,
+        category: 'orders',
+        categoryLabel: 'سفارش‌ها',
+        title: `وضعیت سفارش ${o.orderCode}`,
+        body: `سفارش شما به مبلغ ${Number(o.grandTotal || 0).toLocaleString('fa-IR')} تومان ${stMap[o.status] || 'به‌روزرسانی شد'}.`,
+        createdAt: o.updatedAt || o.createdAt,
+        targetView: 'orders',
+        read: readSet.has(id),
+      });
+    });
+
+  // 2. Wallet transactions
+  STORE.transactions
+    .filter((t) => t.userId === user.id)
+    .slice(0, 10)
+    .forEach((t) => {
+      const id = `utx_${t.id}`;
+      const isCredit = Number(t.amount) >= 0;
+      list.push({
+        id,
+        category: 'wallet',
+        categoryLabel: 'کیف پول',
+        title: isCredit ? 'افزایش اعتبار کیف پول' : 'پرداخت از کیف پول',
+        body: `${Math.abs(Number(t.amount || 0)).toLocaleString('fa-IR')} تومان — ${t.note || t.method || 'تراکنش کیف پول'}`,
+        createdAt: t.createdAt,
+        targetView: 'wallet',
+        read: readSet.has(id),
+      });
+    });
+
+  // 3. Support tickets
+  STORE.tickets
+    .filter((t) => t.userId === user.id)
+    .slice(0, 8)
+    .forEach((t) => {
+      const id = `utkt_${t.id}_${t.status}_${(t.messages || []).length}`;
+      list.push({
+        id,
+        category: 'support',
+        categoryLabel: 'پشتیبانی',
+        title: t.status === 'answered' ? `پاسخ جدید برای تیکت «${t.subject}»` : `تیکت پشتیبانی «${t.subject}»`,
+        body: t.status === 'answered' ? 'کارشناس مغزدانه به درخواست شما پاسخ داد.' : 'درخواست شما ثبت شده و در نوبت پاسخ‌گویی است.',
+        createdAt: t.updatedAt || t.createdAt,
+        targetView: 'tickets',
+        read: readSet.has(id),
+      });
+    });
+
+  // 4. Buyer-Vendor messages
+  (STORE.vendorMessages || [])
+    .filter((m) => (m.userId && m.userId === user.id) || (phone && normalizeIranPhone(m.phone || '') === phone))
+    .slice(0, 8)
+    .forEach((m) => {
+      const id = `uvmsg_${m.id}_${m.reply ? 'replied' : 'sent'}`;
+      list.push({
+        id,
+        category: 'support',
+        categoryLabel: 'پیام غرفه‌دار',
+        title: m.reply ? `پاسخ غرفه ${m.vendorName}` : `پیام ارسال‌شده به ${m.vendorName}`,
+        body: m.reply ? m.reply : (m.text || m.body || 'پیام شما در انتظار پاسخ غرفه‌دار است.'),
+        createdAt: m.repliedAt || m.createdAt,
+        targetView: 'tickets',
+        read: readSet.has(id),
+      });
+    });
+
+  // 5. Welcome & security milestone
+  const welcomeId = `uwelcome_${user.id}`;
+  list.push({
+    id: welcomeId,
+    category: 'system',
+    categoryLabel: 'حساب کاربری',
+    title: 'خوش آمدید به پورتال اختصاصی مغزدانه',
+    body: 'پروفایل و آدرس پیش‌فرض خود را تکمیل کنید تا سفارش‌ها با یک کلیک ثبت شوند و از امتیازهای باشگاه مشتریان بهره‌مند شوید.',
+    createdAt: user.createdAt || new Date().toISOString(),
+    targetView: 'profile',
+    read: readSet.has(welcomeId),
+  });
+
+  list.sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0));
+  const unreadCount = list.filter((n) => !n.read).length;
+  return { notifications: list.slice(0, 40), unreadCount };
+}
+
+function buildAdminNotifications() {
+  const readSet = new Set(Array.isArray(STORE.adminNotifReads) ? STORE.adminNotifReads : []);
+  const prefs = getAdminProfile().notifyPrefs;
+  const list = [];
+
+  if (prefs.newOrders !== false) {
+    STORE.orders
+      .filter((o) => o.status === 'new' || o.status === 'processing')
+      .slice(0, 12)
+      .forEach((o) => {
+        const id = `aord_${o.id}_${o.status}`;
+        list.push({
+          id,
+          severity: o.status === 'new' ? 'high' : 'medium',
+          category: 'orders',
+          categoryLabel: 'سفارش‌ها',
+          title: o.status === 'new' ? `سفارش جدید ${o.orderCode}` : `سفارش در حال آماده‌سازی ${o.orderCode}`,
+          body: `${o.customerName || 'خریدار'} — مبلغ ${Number(o.grandTotal || 0).toLocaleString('fa-IR')} تومان (${o.totalKg || 0} کیلو)`,
+          createdAt: o.createdAt,
+          targetView: 'orders',
+          read: readSet.has(id),
+        });
+      });
+  }
+
+  if (prefs.openTickets !== false) {
+    STORE.tickets
+      .filter((t) => t.status === 'open')
+      .slice(0, 10)
+      .forEach((t) => {
+        const id = `atkt_${t.id}_${(t.messages || []).length}`;
+        list.push({
+          id,
+          severity: 'high',
+          category: 'tickets',
+          categoryLabel: 'پشتیبانی',
+          title: `تیکت باز: ${t.subject}`,
+          body: `از طرف ${t.userName || 'کاربر'} — در انتظار پاسخ کارشناس مدیریت`,
+          createdAt: t.updatedAt || t.createdAt,
+          targetView: 'tickets',
+          read: readSet.has(id),
+        });
+      });
+  }
+
+  if (prefs.pendingPayouts !== false) {
+    (STORE.payouts || [])
+      .filter((p) => p.status === 'pending')
+      .slice(0, 8)
+      .forEach((p) => {
+        const id = `apay_${p.id}`;
+        list.push({
+          id,
+          severity: 'high',
+          category: 'payouts',
+          categoryLabel: 'تسویه شبا',
+          title: `درخواست تسویه غرفه ${p.vendorName}`,
+          body: `مبلغ ${Number(p.amount || 0).toLocaleString('fa-IR')} تومان به شبا ${p.shaba || '—'}`,
+          createdAt: p.createdAt,
+          targetView: 'payouts',
+          read: readSet.has(id),
+        });
+      });
+  }
+
+  if (prefs.supplyAndRfq !== false) {
+    (STORE.supplyOffers || []).slice(0, 6).forEach((s) => {
+      const id = `asup_${s.id}`;
+      list.push({
+        id,
+        severity: 'medium',
+        category: 'supply',
+        categoryLabel: 'عرضه و عمده',
+        title: `اعلام بار جدید از ${s.city || 'باغدار'}`,
+        body: `${s.name || 'تأمین‌کننده'} — ${s.product || 'محصول'} (${s.qtyKg || 0} کیلو)`,
+        createdAt: s.createdAt,
+        targetView: 'vendors',
+        read: readSet.has(id),
+      });
+    });
+    (STORE.rfqTenders || []).slice(0, 5).forEach((r) => {
+      const id = `arfq_${r.id}`;
+      list.push({
+        id,
+        severity: 'medium',
+        category: 'supply',
+        categoryLabel: 'مناقصه عمده',
+        title: `درخواست استعلام عمده (RFQ): ${r.productName || r.category || 'بار عمده'}`,
+        body: `${r.buyerName || 'خریدار عمده'} — حجم ${r.qtyKg || 0} کیلو (${(r.bids || []).length} پیشنهاد ثبت‌شده)`,
+        createdAt: r.createdAt,
+        targetView: 'vendors',
+        read: readSet.has(id),
+      });
+    });
+  }
+
+  if (prefs.lowStock !== false) {
+    getHouseProducts()
+      .filter((p) => Number(p.stock) <= 35)
+      .slice(0, 6)
+      .forEach((p) => {
+        const id = `astk_${p.id}_${p.stock}`;
+        list.push({
+          id,
+          severity: Number(p.stock) <= 10 ? 'high' : 'medium',
+          category: 'inventory',
+          categoryLabel: 'انبار و موجودی',
+          title: `هشدار کاهش موجودی: ${p.name}`,
+          body: `موجودی فعلی انبار مرکزی فقط ${p.stock} کیلوگرم است.`,
+          createdAt: new Date().toISOString(),
+          targetView: 'catalog',
+          read: readSet.has(id),
+        });
+      });
+  }
+
+  if (prefs.community !== false) {
+    (STORE.questions || [])
+      .filter((q) => !q.answer)
+      .slice(0, 6)
+      .forEach((q) => {
+        const id = `aqa_${q.id}`;
+        list.push({
+          id,
+          severity: 'info',
+          category: 'community',
+          categoryLabel: 'پرسش محصول',
+          title: `پرسش بدون پاسخ از ${q.authorName || 'کاربر'}`,
+          body: q.question || '',
+          createdAt: q.createdAt,
+          targetView: 'community',
+          read: readSet.has(id),
+        });
+      });
+  }
+
+  list.sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0));
+  const unreadCount = list.filter((n) => !n.read).length;
+  return { notifications: list.slice(0, 50), unreadCount };
 }
 
 function computeLoyalty(totalSpent, orderCount) {
@@ -1529,12 +1816,35 @@ async function handleApi(req, res, pathname, query) {
     return sendJson(res, 200, { ok: true, subscription: sub });
   }
 
-  /* ---------- USER PROFILE & ORDERS ---------- */
+  /* ---------- USER PROFILE, NOTIFICATIONS & ORDERS ---------- */
+  if (req.method === 'GET' && pathname === '/api/customer/notifications') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    return sendJson(res, 200, { ok: true, ...buildUserNotifications(user) });
+  }
+
+  if (req.method === 'POST' && pathname === '/api/customer/notifications/read') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
+    const body = await readJsonBody(req);
+    if (!STORE.userNotifReads || typeof STORE.userNotifReads !== 'object') STORE.userNotifReads = {};
+    const cur = new Set(Array.isArray(STORE.userNotifReads[user.id]) ? STORE.userNotifReads[user.id] : []);
+    if (body.all) {
+      buildUserNotifications(user).notifications.forEach((n) => cur.add(n.id));
+    } else if (body.id) {
+      cur.add(cleanStr(body.id, 120));
+    }
+    STORE.userNotifReads[user.id] = [...cur].slice(-250);
+    saveStore();
+    return sendJson(res, 200, { ok: true, ...buildUserNotifications(user) });
+  }
+
   if (req.method === 'PUT' && pathname === '/api/profile') {
     const user = getAuthenticatedUser(req);
     if (!user) return sendJson(res, 401, { error: 'ابتدا وارد حساب کاربری شوید.' });
     const body = await readJsonBody(req);
     if (body.fullName !== undefined) user.fullName = cleanStr(body.fullName, 120) || user.fullName;
+    if (body.email !== undefined) user.email = cleanStr(body.email, 120).toLowerCase();
     if (body.phone !== undefined) {
       const p = normalizeIranPhone(body.phone);
       if (!body.phone || isValidIranPhone(p)) user.phone = body.phone ? p : '';
@@ -1544,6 +1854,17 @@ async function handleApi(req, res, pathname, query) {
     if (body.city !== undefined) user.city = cleanStr(body.city, 80);
     if (body.postalCode !== undefined) user.postalCode = cleanStr(body.postalCode, 20);
     if (body.address !== undefined) user.address = cleanStr(body.address, 400);
+    if (body.bio !== undefined) user.bio = cleanStr(body.bio, 260);
+    if (['emerald', 'gold', 'ruby', 'jade', 'amber'].includes(body.avatarColor)) {
+      user.avatarColor = body.avatarColor;
+    }
+    if (body.notifyPrefs && typeof body.notifyPrefs === 'object') {
+      const cur = { ...defaultUserNotifyPrefs(), ...(user.notifyPrefs || {}) };
+      ['orderUpdates', 'walletAlerts', 'supportReplies', 'priceDrops', 'marketingSms'].forEach((k) => {
+        if (typeof body.notifyPrefs[k] === 'boolean') cur[k] = body.notifyPrefs[k];
+      });
+      user.notifyPrefs = cur;
+    }
     if (Array.isArray(body.favoriteIds)) {
       user.favoriteIds = body.favoriteIds.map((x) => cleanStr(x, 80)).filter(Boolean).slice(0, 60);
     }
@@ -2325,8 +2646,12 @@ async function handleApi(req, res, pathname, query) {
         pct: Math.round((count / Math.max(1, merged.length)) * 100),
       }));
 
+      const admNotifs = buildAdminNotifications();
       return sendJson(res, 200, {
         admin,
+        adminProfile: getAdminProfile(),
+        notifications: admNotifs.notifications,
+        unreadNotifications: admNotifs.unreadCount,
         analytics: {
           totalRevenue,
           totalKgSold,
@@ -2358,6 +2683,86 @@ async function handleApi(req, res, pathname, query) {
         priceAlerts: STORE.priceAlerts || [],
         auditLogs: (STORE.auditLogs || []).slice(0, 60),
       });
+    }
+
+    if (req.method === 'GET' && pathname === '/api/admin/notifications') {
+      return sendJson(res, 200, { ok: true, ...buildAdminNotifications() });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/admin/notifications/read') {
+      const body = await readJsonBody(req);
+      const cur = new Set(Array.isArray(STORE.adminNotifReads) ? STORE.adminNotifReads : []);
+      if (body.all) {
+        buildAdminNotifications().notifications.forEach((n) => cur.add(n.id));
+      } else if (body.id) {
+        cur.add(cleanStr(body.id, 120));
+      }
+      STORE.adminNotifReads = [...cur].slice(-300);
+      saveStore();
+      return sendJson(res, 200, { ok: true, ...buildAdminNotifications() });
+    }
+
+    if (req.method === 'GET' && pathname === '/api/admin/profile') {
+      const cfg = getAdminConfig();
+      return sendJson(res, 200, {
+        ok: true,
+        username: admin.username,
+        envManaged: Boolean(cfg.envManaged),
+        profile: getAdminProfile(),
+      });
+    }
+
+    if (req.method === 'PUT' && pathname === '/api/admin/profile') {
+      const body = await readJsonBody(req);
+      const cur = getAdminProfile();
+      if (body.fullName !== undefined) cur.fullName = cleanStr(body.fullName, 120) || cur.fullName;
+      if (body.title !== undefined) cur.title = cleanStr(body.title, 120) || cur.title;
+      if (body.email !== undefined) cur.email = cleanStr(body.email, 120).toLowerCase();
+      if (body.phone !== undefined) cur.phone = cleanStr(body.phone, 30);
+      if (['emerald', 'gold', 'ruby', 'jade', 'amber'].includes(body.avatarColor)) {
+        cur.avatarColor = body.avatarColor;
+      }
+      if (body.notifyPrefs && typeof body.notifyPrefs === 'object') {
+        const np = { ...cur.notifyPrefs };
+        ['newOrders', 'openTickets', 'pendingPayouts', 'supplyAndRfq', 'lowStock', 'community'].forEach((k) => {
+          if (typeof body.notifyPrefs[k] === 'boolean') np[k] = body.notifyPrefs[k];
+        });
+        cur.notifyPrefs = np;
+      }
+      cur.updatedAt = new Date().toISOString();
+      STORE.adminProfile = cur;
+      recordAudit(admin.username, 'به‌روزرسانی پروفایل مدیر', `نام: ${cur.fullName}`);
+      saveStore();
+      return sendJson(res, 200, { ok: true, profile: cur });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/admin/change-password') {
+      const body = await readJsonBody(req);
+      const currentPassword = String(body.currentPassword || '');
+      const newPassword = String(body.newPassword || '');
+      if (newPassword.length < 4 || newPassword.length > 128) {
+        return sendJson(res, 400, { error: 'رمز عبور جدید مدیر باید بین ۴ تا ۱۲۸ کاراکتر باشد.' });
+      }
+      const cfg = getAdminConfig();
+      if (!cfg.configured) {
+        return sendJson(res, 400, { error: 'پیکربندی احراز هویت مدیر یافت نشد.' });
+      }
+      const okCurrent = cfg.envManaged
+        ? safeEqualText(currentPassword, cfg.passwordPlain)
+        : verifyPassword(currentPassword, cfg.passwordHash);
+      if (!okCurrent) {
+        return sendJson(res, 400, { error: 'رمز عبور فعلی مدیر اشتباه است.' });
+      }
+      const record = {
+        username: cfg.username,
+        passwordHash: hashPassword(newPassword),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      fs.writeFileSync(ADMIN_AUTH_PATH, JSON.stringify(record, null, 2), { mode: 0o600 });
+      recordAudit(admin.username, 'تغییر رمز عبور مدیر', 'رمز عبور ورود به کنسول مدیریت با موفقیت تغییر یافت');
+      saveStore();
+      return sendJson(res, 200, { ok: true });
     }
 
     if (req.method === 'POST' && pathname.startsWith('/api/admin/users/') && pathname.endsWith('/wallet')) {

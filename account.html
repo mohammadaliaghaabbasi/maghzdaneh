@@ -6,7 +6,7 @@
   <title>داشبورد کاربری، کیف پول و حساب | مغزدانه</title>
   <meta name="description" content="داشبورد تخصصی مشتریان مغزدانه: شارژ آنلاین کیف پول، دفترکل تراکنش‌های مالی، پیگیری سفارش‌ها، دفترچه آدرس، علاقه‌مندی‌ها، تیکت پشتیبانی و مدیریت غرفه شخصی.">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest?v=25">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-title" content="مغزدانه">
   <meta name="theme-color" content="#060907">
   <link rel="stylesheet" href="assets/css/fonts.css?v=14">
-  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/main.css?v=20">
   <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
@@ -219,8 +219,12 @@
             <span>تیکت و پشتیبانی</span>
             <span class="dash-nav-count" id="nav-tkt-cnt">۰</span>
           </button>
+          <button type="button" class="dash-nav-btn" data-cview="notifications">
+            <span>مرکز اعلان‌ها</span>
+            <span class="dash-nav-count" id="nav-notif-cnt">۰</span>
+          </button>
           <button type="button" class="dash-nav-btn" data-cview="profile">
-            <span>پروفایل و تغییر رمز عبور</span>
+            <span>پروفایل، تنظیمات و امنیت</span>
           </button>
           <button type="button" class="dash-nav-btn" data-cview="seller">
             <span>پنل مدیریت غرفهٔ من</span>
@@ -230,7 +234,7 @@
         <div class="dash-sidebar-foot">
           <a href="catalog.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">مشاهده فروشگاه</a>
           <a href="admin.html" id="u-admin-link" class="admin-banner-link" style="justify-content:center" hidden>ورود به پنل مدیریت</a>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-signout" style="width:100%;justify-content:center">خروج از حساب</button>
+          <button type="button" class="btn btn-danger-outline btn-sm" id="btn-signout" style="width:100%;justify-content:center">خروج امن از حساب</button>
         </div>
       </aside>
 
@@ -243,7 +247,72 @@
           </div>
           <div class="dash-topbar-actions">
             <button type="button" class="btn btn-gold btn-sm" id="btn-quick-goto-wallet">+ شارژ کیف پول</button>
-            <a href="seller.html" class="btn btn-outline btn-sm">غرفه شخصی من</a>
+            <div class="dash-util-cluster">
+              <!-- Notifications Bell + Popover -->
+              <div class="dash-popover-wrap">
+                <button type="button" class="dash-icon-btn" id="c-notif-trigger" aria-label="مرکز اعلان‌ها" aria-expanded="false" aria-haspopup="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span class="dash-notif-count" id="c-notif-badge" hidden>۰</span>
+                </button>
+                <div class="dash-popover" id="c-notif-popover" hidden role="region" aria-label="اعلان‌های کاربری">
+                  <div class="dash-pop-head">
+                    <div>
+                      <h3>اعلان‌های من</h3>
+                      <div class="dash-pop-sub" id="c-notif-pop-sub">همهٔ اعلان‌ها خوانده شده‌اند</div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" id="c-notif-mark-all-pop" style="padding:5px 10px;font-size:0.72rem">خواندن همه</button>
+                  </div>
+                  <div class="dash-pop-tabs" id="c-notif-pop-tabs">
+                    <button type="button" class="dash-pop-tab active" data-cnfilter="all">همه</button>
+                    <button type="button" class="dash-pop-tab" data-cnfilter="unread">خوانده‌نشده</button>
+                    <button type="button" class="dash-pop-tab" data-cnfilter="orders">سفارش‌ها</button>
+                    <button type="button" class="dash-pop-tab" data-cnfilter="wallet">کیف پول</button>
+                    <button type="button" class="dash-pop-tab" data-cnfilter="support">پشتیبانی</button>
+                  </div>
+                  <div class="dash-pop-list" id="c-notif-pop-list"></div>
+                  <div class="dash-pop-foot">
+                    <button type="button" class="btn btn-outline btn-sm" id="c-notif-open-full" style="width:100%;justify-content:center;font-size:0.78rem">مشاهده مرکز کامل اعلان‌ها ←</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Profile Trigger + Executive Account Menu -->
+              <div class="dash-popover-wrap">
+                <button type="button" class="dash-profile-trigger" id="c-profile-trigger" aria-expanded="false" aria-haspopup="true">
+                  <span class="dash-avatar" id="c-top-avatar" data-tone="emerald">م</span>
+                  <span class="dash-profile-trigger-meta">
+                    <span class="dash-profile-trigger-name" id="c-top-name">کاربر مغزدانه</span>
+                    <span class="dash-profile-trigger-role" id="c-top-role">عضو برنزی</span>
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="dash-popover profile-pop" id="c-profile-popover" hidden role="menu" aria-label="منوی حساب کاربری">
+                  <div class="dash-pop-head">
+                    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                      <span class="dash-avatar" id="c-pop-avatar" data-tone="emerald">م</span>
+                      <div style="min-width:0">
+                        <h3 id="c-pop-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">کاربر مغزدانه</h3>
+                        <div class="dash-pop-sub" id="c-pop-sub">—</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-menu-list">
+                    <button type="button" class="dash-menu-item" data-cmenu-jump="profile"><span>پروفایل و ویرایش مشخصات</span><span style="font-size:0.72rem;color:var(--c-text-muted)">حساب</span></button>
+                    <button type="button" class="dash-menu-item" data-cmenu-jump="notifications"><span>مرکز اعلان‌ها و پیام‌ها</span><span class="num" id="c-menu-notif-cnt" style="font-size:0.74rem;color:var(--c-accent-light)">۰</span></button>
+                    <button type="button" class="dash-menu-item" data-cmenu-jump="wallet"><span>کیف پول و تراکنش‌ها</span><span style="font-size:0.72rem;color:var(--c-primary-light)" id="c-menu-wallet-lbl">—</span></button>
+                    <button type="button" class="dash-menu-item" id="c-menu-security"><span>تغییر رمز عبور و امنیت</span><span style="font-size:0.72rem;color:var(--c-text-muted)">امنیت</span></button>
+                    <div class="dash-menu-sep"></div>
+                    <a class="dash-menu-item" href="catalog.html"><span>بازگشت به فروشگاه</span><span style="font-size:0.72rem;color:var(--c-text-muted)">←</span></a>
+                    <a class="dash-menu-item" href="index.html"><span>صفحهٔ اصلی سه‌بعدی</span><span style="font-size:0.72rem;color:var(--c-text-muted)">←</span></a>
+                    <div class="dash-menu-sep"></div>
+                    <button type="button" class="dash-menu-item danger" id="c-menu-signout"><span>خروج امن از حساب کاربری</span><span>↪</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -606,8 +675,61 @@
           </div>
         </section>
 
-        <!-- VIEW 7: PROFILE SETTINGS & PASSWORD CHANGE -->
+        <!-- VIEW 7: FULL NOTIFICATIONS CENTER -->
+        <section id="cview-notifications" class="dash-view" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>مرکز اعلان‌ها و رویدادهای حساب</h2>
+                <p id="c-notif-full-sub">تمامی اعلان‌های سفارش، کیف پول، پاسخ تیکت‌ها و پیام‌های غرفه‌داران در یکجا.</p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn btn-outline btn-sm" id="c-notif-refresh-btn">به‌روزرسانی</button>
+                <button type="button" class="btn btn-primary btn-sm" id="c-notif-mark-all-full">علامت‌گذاری همه به‌عنوان خوانده‌شده</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px">
+              <div class="dash-pop-tabs" id="c-notif-full-tabs" style="padding:0;border:none">
+                <button type="button" class="dash-pop-tab active" data-cnfull="all">همه</button>
+                <button type="button" class="dash-pop-tab" data-cnfull="unread">خوانده‌نشده</button>
+                <button type="button" class="dash-pop-tab" data-cnfull="orders">سفارش‌ها</button>
+                <button type="button" class="dash-pop-tab" data-cnfull="wallet">کیف پول</button>
+                <button type="button" class="dash-pop-tab" data-cnfull="support">پشتیبانی و غرفه</button>
+                <button type="button" class="dash-pop-tab" data-cnfull="system">حساب کاربری</button>
+              </div>
+              <input id="c-notif-search" type="search" placeholder="جست‌وجو در اعلان‌ها…" style="max-width:240px;padding:8px 12px;border-radius:10px;background:var(--lux-bg-2);border:1px solid var(--lux-line);color:#fff;font-size:0.82rem">
+            </div>
+            <div id="c-notif-full-list" style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 8: PROFILE SETTINGS, PREFERENCES, SECURITY & SESSION -->
         <section id="cview-profile" class="dash-view" hidden style="display:flex;flex-direction:column;gap:22px">
+          <!-- Identity & Avatar Header Card -->
+          <div class="dash-card">
+            <div class="profile-id-banner">
+              <div class="profile-id-left">
+                <div class="dash-avatar lg" id="pf-avatar-preview" data-tone="emerald">م</div>
+                <div>
+                  <h2 id="pf-id-name" style="margin:0;font-size:1.12rem;color:#fff">کاربر مغزدانه</h2>
+                  <div style="font-size:0.8rem;color:var(--lux-muted);margin-top:4px" id="pf-id-meta">—</div>
+                  <div style="font-size:0.78rem;color:var(--lux-emerald);margin-top:4px" id="pf-complete-lbl">تکمیل پروفایل: ۰٪</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:0.76rem;color:var(--lux-muted);margin-bottom:8px">رنگ نشان پروفایل شما</div>
+                <div class="avatar-swatches" id="pf-avatar-swatches">
+                  <button type="button" class="avatar-swatch active" data-tone="emerald" aria-label="زمردی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="gold" aria-label="طلایی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="jade" aria-label="فیروزه‌ای"></button>
+                  <button type="button" class="avatar-swatch" data-tone="amber" aria-label="کهربایی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="ruby" aria-label="یاقوتی"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Personal Details & Default Address -->
           <div class="dash-card">
             <div class="dash-card-head">
               <div>
@@ -619,6 +741,7 @@
             <form id="profile-form" class="form-grid">
               <div class="field"><label for="pf-name">نام و نام خانوادگی</label><input id="pf-name" required maxlength="120"></div>
               <div class="field"><label for="pf-phone">شماره تلفن همراه</label><input id="pf-phone" class="ltr" maxlength="20" placeholder="09123456789" style="text-align:right"></div>
+              <div class="field"><label for="pf-email">ایمیل (جهت رسید و فاکتور)</label><input id="pf-email" type="email" class="ltr" maxlength="120" placeholder="you@example.com" style="text-align:right"></div>
               <div class="field">
                 <label for="pf-buyer-type">نوع خریدار</label>
                 <select id="pf-buyer-type">
@@ -630,15 +753,50 @@
               <div class="field"><label for="pf-province">استان</label><input id="pf-province" maxlength="80"></div>
               <div class="field"><label for="pf-city">شهر</label><input id="pf-city" maxlength="80"></div>
               <div class="field"><label for="pf-postal">کد پستی</label><input id="pf-postal" class="ltr" maxlength="20" style="text-align:right"></div>
+              <div class="field"><label for="pf-bio">یادداشت کوتاه یا نام مجموعه (اختیاری)</label><input id="pf-bio" maxlength="260" placeholder="مثلاً: قنادی گلستان یا خریدار خانگی"></div>
               <div class="field form-full"><label for="pf-address">نشانی دقیق ارسال</label><textarea id="pf-address" rows="3" maxlength="400"></textarea></div>
               <div class="form-full" style="display:flex;gap:12px;flex-wrap:wrap">
-                <button type="submit" class="btn btn-primary" id="pf-save-btn">ذخیره اطلاعات کاربری</button>
+                <button type="submit" class="btn btn-primary" id="pf-save-btn">ذخیره اطلاعات پروفایل</button>
                 <a class="btn btn-outline" href="catalog.html">رفتن به فروشگاه</a>
               </div>
             </form>
           </div>
 
+          <!-- Notification Preferences -->
           <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تنظیمات اعلان‌ها و اطلاع‌رسانی</h2>
+                <p>انتخاب کنید دربارهٔ چه رویدادهایی به شما اطلاع‌رسانی شود.</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" id="pf-save-prefs-btn">ذخیره ترجیحات اعلان</button>
+            </div>
+            <div class="pref-list">
+              <div class="pref-row">
+                <div><strong>تغییر وضعیت سفارش و ارسال مرسوله</strong><span>اعلان ثبت سفارش، برشته‌کاری، صدور کد رهگیری و تحویل</span></div>
+                <label class="lux-switch"><input type="checkbox" id="pref-orders" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>تراکنش‌های کیف پول و اعتبار هدیه</strong><span>اطلاع‌رسانی آنی شارژ کیف پول، پرداخت‌ها و بازگشت وجه</span></div>
+                <label class="lux-switch"><input type="checkbox" id="pref-wallet" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>پاسخ پشتیبانی و پیام غرفه‌داران</strong><span>وقتی کارشناس یا غرفه‌دار به پیام شما پاسخ می‌دهد</span></div>
+                <label class="lux-switch"><input type="checkbox" id="pref-support" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>هشدار افت قیمت و شارژ موجودی</strong><span>اعلان تغییر نرخ محصولاتی که نشان کرده‌اید</span></div>
+                <label class="lux-switch"><input type="checkbox" id="pref-price" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>پیشنهادهای فصلی و برداشت تازه</strong><span>خبرنامهٔ برداشت جدید پسته رفسنجان و کدهای تخفیف مناسبتی</span></div>
+                <label class="lux-switch"><input type="checkbox" id="pref-mkt"><span class="lux-switch-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Password & Security -->
+          <div class="dash-card" id="c-security-card">
             <div class="dash-card-head">
               <div>
                 <h2>تغییر یا تنظیم رمز عبور حساب</h2>
@@ -663,6 +821,26 @@
                 <button type="submit" class="btn btn-gold btn-sm">ذخیره رمز عبور جدید</button>
               </div>
             </form>
+          </div>
+
+          <!-- Active Session & Safe Sign-out Card -->
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>نشست فعال و خروج امن از صفحه</h2>
+                <p>وضعیت اتصال فعلی حساب شما و مدیریت خروج امن از این دستگاه.</p>
+              </div>
+            </div>
+            <div class="session-meta-grid">
+              <div class="session-meta-box"><small>روش ورود فعال</small><strong id="csess-method">—</strong></div>
+              <div class="session-meta-box"><small>تاریخ عضویت</small><strong id="csess-joined">—</strong></div>
+              <div class="session-meta-box"><small>دستگاه فعلی</small><strong id="csess-device">مرورگر وب</strong></div>
+              <div class="session-meta-box"><small>وضعیت سبد خرید</small><strong id="csess-cart">همگام‌سازی خودکار</strong></div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button type="button" class="btn btn-danger-outline btn-sm" id="btn-signout-profile">خروج امن از حساب کاربری</button>
+              <a class="btn btn-outline btn-sm" href="index.html">بازگشت به صفحه اصلی سایت</a>
+            </div>
           </div>
         </section>
 
@@ -696,9 +874,30 @@
     </div>
   </main>
 
+  <!-- Safe Sign-Out Confirmation Modal -->
+  <div class="modal-back" id="user-signout-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="sec-label" style="margin:0;color:#ff9c9c">خروج امن از حساب کاربری</span>
+        <button type="button" class="drawer-close" id="uso-close-x" aria-label="بستن">×</button>
+      </div>
+      <h3 style="margin:0 0 8px">آیا مایل به خروج از حساب خود هستید؟</h3>
+      <p id="uso-summary" style="font-size:0.84rem;color:var(--c-text-soft);line-height:1.8;margin-bottom:14px">نشست فعلی شما به‌طور امن بسته می‌شود. سبد خرید و سفارش‌های شما در حساب کاربری محفوظ می‌مانند.</p>
+      <label style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--c-text-soft);margin-bottom:16px;cursor:pointer">
+        <input type="checkbox" id="uso-clear-local" style="width:auto">
+        <span>پاک‌سازی لیست مقایسه و تاریخچهٔ مرور این دستگاه (مناسب دستگاه‌های عمومی)</span>
+      </label>
+      <div style="display:grid;gap:8px">
+        <button type="button" class="btn btn-danger-outline" id="uso-confirm-stay" style="width:100%;justify-content:center">خروج از حساب کاربری</button>
+        <button type="button" class="btn btn-outline btn-sm" id="uso-confirm-home" style="width:100%;justify-content:center">خروج و رفتن به صفحهٔ اصلی فروشگاه</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="uso-cancel" style="width:100%;justify-content:center">انصراف و ماندن در پنل</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js?v=20"></script>
+  <script src="assets/js/app.js?v=21"></script>
   <script>
     const nextUrl = new URLSearchParams(location.search).get('next');
     const STATUS_FA = { new: 'ثبت جدید', processing: 'در حال آماده‌سازی', shipped: 'ارسال‌شده', done: 'تحویل‌شده', canceled: 'لغوشده' };
@@ -717,7 +916,8 @@
       subscriptions: 'اشتراک‌های دوره‌ای من',
       favorites: 'محصولات علاقه‌مندی',
       tickets: 'تیکت و پشتیبانی',
-      profile: 'پروفایل و تغییر رمز عبور',
+      notifications: 'مرکز اعلان‌ها و رویدادها',
+      profile: 'پروفایل، تنظیمات و امنیت',
       seller: 'پنل مدیریت غرفهٔ من',
     };
 
@@ -727,6 +927,11 @@
     let currentCView = 'overview';
     let txFilter = 'all';
     let ordFilter = 'all';
+    let custNotifs = [];
+    let custNotifUnread = 0;
+    let cNotifPopFilter = 'all';
+    let cNotifFullFilter = 'all';
+    let selectedUserTone = 'emerald';
 
     function faDate(iso) {
       if (!iso) return '—';
@@ -967,8 +1172,36 @@
       }
     });
 
-    /* ---------- Sign Out ---------- */
-    document.getElementById('btn-signout').addEventListener('click', async () => {
+    /* ---------- Safe Sign Out Modal & Execution ---------- */
+    function closeCustomerPopovers() {
+      const np = document.getElementById('c-notif-popover');
+      const pp = document.getElementById('c-profile-popover');
+      const nt = document.getElementById('c-notif-trigger');
+      const pt = document.getElementById('c-profile-trigger');
+      if (np) np.hidden = true;
+      if (pp) pp.hidden = true;
+      if (nt) nt.setAttribute('aria-expanded', 'false');
+      if (pt) pt.setAttribute('aria-expanded', 'false');
+    }
+
+    function openUserSignOutModal() {
+      closeCustomerPopovers();
+      const usr = (custDash && custDash.user) || APP.serverUser || {};
+      const name = usr.fullName || usr.username || 'کاربر مغزدانه';
+      const cartCnt = (APP.cart || []).length;
+      document.getElementById('uso-summary').textContent =
+        `شما با حساب «${name}» وارد شده‌اید. ${cartCnt ? `${fmt(cartCnt)} قلم در سبد خرید شما ذخیره شده است.` : 'همهٔ تغییرات حساب شما ذخیره شده‌اند.'} پس از خروج، نشست این مرورگر بسته می‌شود.`;
+      document.getElementById('uso-clear-local').checked = false;
+      document.getElementById('user-signout-modal').classList.add('open');
+    }
+
+    function closeUserSignOutModal() {
+      document.getElementById('user-signout-modal').classList.remove('open');
+    }
+
+    async function performUserSignOut(redirectHome = false) {
+      const clearLocal = document.getElementById('uso-clear-local').checked;
+      closeUserSignOutModal();
       await apiFetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
       APP._userToken = null;
       APP.serverUser = null;
@@ -976,11 +1209,276 @@
       if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
         await window.MgzCloud.signOutUser().catch(() => {});
       }
+      if (clearLocal) {
+        try {
+          localStorage.removeItem('maghzdaneh_compare');
+          localStorage.removeItem('maghzdaneh_recent');
+        } catch {}
+      }
       APP.user = null;
       custDash = null;
+      custNotifs = [];
+      custNotifUnread = 0;
       updateHeaderAccountState();
-      toast('از حساب کاربری خارج شدید');
+      toast('با موفقیت و به‌صورت امن از حساب کاربری خارج شدید');
+      if (redirectHome) {
+        location.href = 'index.html';
+        return;
+      }
       await refreshAccountView();
+    }
+
+    document.getElementById('btn-signout').addEventListener('click', openUserSignOutModal);
+    document.getElementById('btn-signout-profile').addEventListener('click', openUserSignOutModal);
+    document.getElementById('c-menu-signout').addEventListener('click', openUserSignOutModal);
+    document.getElementById('uso-close-x').addEventListener('click', closeUserSignOutModal);
+    document.getElementById('uso-cancel').addEventListener('click', closeUserSignOutModal);
+    document.getElementById('uso-confirm-stay').addEventListener('click', () => performUserSignOut(false));
+    document.getElementById('uso-confirm-home').addEventListener('click', () => performUserSignOut(true));
+    document.getElementById('user-signout-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'user-signout-modal') closeUserSignOutModal();
+    });
+
+    /* ---------- Topbar Popovers & Notifications Engine ---------- */
+    document.getElementById('c-notif-trigger').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pop = document.getElementById('c-notif-popover');
+      const willOpen = pop.hidden;
+      closeCustomerPopovers();
+      pop.hidden = !willOpen;
+      e.currentTarget.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    document.getElementById('c-profile-trigger').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pop = document.getElementById('c-profile-popover');
+      const willOpen = pop.hidden;
+      closeCustomerPopovers();
+      pop.hidden = !willOpen;
+      e.currentTarget.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dash-popover-wrap')) closeCustomerPopovers();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeCustomerPopovers(); closeUserSignOutModal(); }
+    });
+
+    document.querySelectorAll('[data-cmenu-jump]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        closeCustomerPopovers();
+        switchCustomerView(btn.dataset.cmenuJump);
+      });
+    });
+    document.getElementById('c-menu-security').addEventListener('click', () => {
+      closeCustomerPopovers();
+      switchCustomerView('profile');
+      setTimeout(() => document.getElementById('c-security-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    });
+    document.getElementById('c-notif-open-full').addEventListener('click', () => {
+      closeCustomerPopovers();
+      switchCustomerView('notifications');
+    });
+
+    function userInitials(name) {
+      const clean = String(name || 'مغزدانه').trim();
+      return clean ? clean.slice(0, 1) : 'م';
+    }
+
+    function applyUserAvatarTone(tone) {
+      selectedUserTone = ['emerald', 'gold', 'ruby', 'jade', 'amber'].includes(tone) ? tone : 'emerald';
+      ['c-top-avatar', 'c-pop-avatar', 'pf-avatar-preview'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('data-tone', selectedUserTone);
+      });
+      document.querySelectorAll('#pf-avatar-swatches .avatar-swatch').forEach(b => {
+        b.classList.toggle('active', b.dataset.tone === selectedUserTone);
+      });
+    }
+
+    document.querySelectorAll('#pf-avatar-swatches .avatar-swatch').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        applyUserAvatarTone(btn.dataset.tone);
+        if (authMode === 'server') {
+          try {
+            const res = await apiFetch('/api/profile', { method: 'PUT', body: JSON.stringify({ avatarColor: selectedUserTone }) });
+            if (res && res.user) APP.serverUser = res.user;
+            toast('رنگ نشان پروفایل ذخیره شد');
+          } catch {}
+        }
+      });
+    });
+
+    function getLocalReadSet() {
+      try { return new Set(JSON.parse(localStorage.getItem('maghzdaneh_user_notif_reads') || '[]')); }
+      catch { return new Set(); }
+    }
+    function saveLocalReadSet(set) {
+      try { localStorage.setItem('maghzdaneh_user_notif_reads', JSON.stringify([...set].slice(-120))); } catch {}
+    }
+
+    async function loadCustomerNotifications() {
+      if (authMode === 'server') {
+        try {
+          const r = await apiFetch('/api/customer/notifications');
+          if (r && Array.isArray(r.notifications)) {
+            custNotifs = r.notifications;
+            custNotifUnread = Number(r.unreadCount || 0);
+            renderCustomerNotifications();
+            return;
+          }
+        } catch {}
+      }
+      // Static / Google fallback built from current dashboard data
+      const rs = getLocalReadSet();
+      const orders = (custDash && custDash.orders) || [];
+      const list = orders.slice(0, 8).map(o => ({
+        id: `loc_ord_${o.id || o.orderCode}`,
+        category: 'orders',
+        categoryLabel: 'سفارش‌ها',
+        title: `وضعیت سفارش ${o.orderCode || o.id}`,
+        body: `مبلغ ${faToman(o.grandTotal || 0)} — وضعیت: ${STATUS_FA[o.status] || o.status}`,
+        createdAt: o.createdAt,
+        targetView: 'orders',
+        read: rs.has(`loc_ord_${o.id || o.orderCode}`),
+      }));
+      list.push({
+        id: 'loc_welcome',
+        category: 'system',
+        categoryLabel: 'حساب کاربری',
+        title: 'خوش آمدید به پورتال اختصاصی مغزدانه',
+        body: 'پروفایل و آدرس پیش‌فرض خود را تکمیل کنید تا ثبت سفارش سریع‌تر انجام شود.',
+        createdAt: new Date().toISOString(),
+        targetView: 'profile',
+        read: rs.has('loc_welcome'),
+      });
+      custNotifs = list;
+      custNotifUnread = list.filter(n => !n.read).length;
+      renderCustomerNotifications();
+    }
+
+    async function markCustomerNotifRead(id, all = false) {
+      if (authMode === 'server') {
+        try {
+          const r = await apiFetch('/api/customer/notifications/read', {
+            method: 'POST',
+            body: JSON.stringify(all ? { all: true } : { id }),
+          });
+          if (r && Array.isArray(r.notifications)) {
+            custNotifs = r.notifications;
+            custNotifUnread = Number(r.unreadCount || 0);
+            renderCustomerNotifications();
+            return;
+          }
+        } catch {}
+      }
+      const rs = getLocalReadSet();
+      if (all) custNotifs.forEach(n => { n.read = true; rs.add(n.id); });
+      else {
+        const hit = custNotifs.find(n => n.id === id);
+        if (hit) { hit.read = true; rs.add(hit.id); }
+      }
+      saveLocalReadSet(rs);
+      custNotifUnread = custNotifs.filter(n => !n.read).length;
+      renderCustomerNotifications();
+    }
+
+    function filterCustomerNotifs(filterKey, searchText = '') {
+      const q = (searchText || '').trim();
+      return custNotifs.filter(n => {
+        if (filterKey === 'unread' && n.read) return false;
+        if (filterKey !== 'all' && filterKey !== 'unread' && n.category !== filterKey) return false;
+        if (q && !(String(n.title || '') + ' ' + String(n.body || '') + ' ' + String(n.categoryLabel || '')).includes(q)) return false;
+        return true;
+      });
+    }
+
+    function renderNotifItemsHtml(items) {
+      if (!items.length) {
+        return '<div style="padding:26px 16px;text-align:center;color:var(--lux-muted);font-size:0.83rem">اعلانی در این دسته وجود ندارد.</div>';
+      }
+      return items.map(n => `
+        <button type="button" class="notif-row ${n.read ? '' : 'is-unread'}" data-cnotif-id="${esc(n.id)}" data-cnotif-target="${esc(n.targetView || 'overview')}">
+          <div class="notif-row-meta">
+            <span class="notif-row-cat">${esc(n.categoryLabel || 'اعلان')}</span>
+            <span>${faDate(n.createdAt)}</span>
+          </div>
+          <div class="notif-row-title">
+            <span>${esc(n.title)}</span>
+            ${n.read ? '' : '<span class="notif-unread-lbl">جدید</span>'}
+          </div>
+          <div class="notif-row-body">${esc(n.body)}</div>
+        </button>`).join('');
+    }
+
+    function bindCustomerNotifClicks(container) {
+      container.querySelectorAll('[data-cnotif-id]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.cnotifId;
+          const target = btn.dataset.cnotifTarget || 'overview';
+          await markCustomerNotifRead(id, false);
+          closeCustomerPopovers();
+          switchCustomerView(target);
+        });
+      });
+    }
+
+    function renderCustomerNotifications() {
+      const badge = document.getElementById('c-notif-badge');
+      const navCnt = document.getElementById('nav-notif-cnt');
+      const menuCnt = document.getElementById('c-menu-notif-cnt');
+      const popSub = document.getElementById('c-notif-pop-sub');
+      const fullSub = document.getElementById('c-notif-full-sub');
+
+      if (badge) {
+        badge.textContent = fmt(custNotifUnread);
+        badge.hidden = custNotifUnread <= 0;
+      }
+      if (navCnt) navCnt.textContent = fmt(custNotifUnread);
+      if (menuCnt) menuCnt.textContent = custNotifUnread > 0 ? `${fmt(custNotifUnread)} جدید` : 'همه خوانده‌شده';
+      if (popSub) popSub.textContent = custNotifUnread > 0 ? `${fmt(custNotifUnread)} اعلان خوانده‌نشده دارید` : 'همهٔ اعلان‌ها خوانده شده‌اند';
+      if (fullSub) fullSub.textContent = `مجموع ${fmt(custNotifs.length)} اعلان (${fmt(custNotifUnread)} خوانده‌نشده) از سفارش‌ها، کیف پول و پشتیبانی.`;
+
+      const popList = document.getElementById('c-notif-pop-list');
+      if (popList) {
+        popList.innerHTML = renderNotifItemsHtml(filterCustomerNotifs(cNotifPopFilter).slice(0, 10));
+        bindCustomerNotifClicks(popList);
+      }
+      const fullList = document.getElementById('c-notif-full-list');
+      if (fullList) {
+        const q = document.getElementById('c-notif-search')?.value || '';
+        fullList.innerHTML = renderNotifItemsHtml(filterCustomerNotifs(cNotifFullFilter, q));
+        bindCustomerNotifClicks(fullList);
+      }
+    }
+
+    document.querySelectorAll('[data-cnfilter]').forEach(b => {
+      b.addEventListener('click', () => {
+        cNotifPopFilter = b.dataset.cnfilter;
+        document.querySelectorAll('[data-cnfilter]').forEach(x => x.classList.toggle('active', x === b));
+        renderCustomerNotifications();
+      });
+    });
+    document.querySelectorAll('[data-cnfull]').forEach(b => {
+      b.addEventListener('click', () => {
+        cNotifFullFilter = b.dataset.cnfull;
+        document.querySelectorAll('[data-cnfull]').forEach(x => x.classList.toggle('active', x === b));
+        renderCustomerNotifications();
+      });
+    });
+    document.getElementById('c-notif-search').addEventListener('input', renderCustomerNotifications);
+    document.getElementById('c-notif-mark-all-pop').addEventListener('click', async () => {
+      await markCustomerNotifRead(null, true);
+      toast('همهٔ اعلان‌ها به‌عنوان خوانده‌شده ثبت شدند');
+    });
+    document.getElementById('c-notif-mark-all-full').addEventListener('click', async () => {
+      await markCustomerNotifRead(null, true);
+      toast('همهٔ اعلان‌ها به‌عنوان خوانده‌شده ثبت شدند');
+    });
+    document.getElementById('c-notif-refresh-btn').addEventListener('click', async () => {
+      await loadCustomerNotifications();
+      toast('لیست اعلان‌ها به‌روزرسانی شد');
     });
 
     /* ---------- SVG 6-Month Customer Chart ---------- */
@@ -1545,21 +2043,55 @@
           }).join('')}</div>`
         : '<div style="padding:18px 0;color:var(--lux-muted);font-size:0.84rem">تراکنش مالی ثبت نشده است — از کادر شارژ فوری اولین شارژ را انجام دهید.</div>';
 
-      // Hydrate Profile Form
+      // Hydrate Profile Form, Topbar Identity, Preferences & Session Meta
       let prof = usr;
       if (authMode === 'google' && gUser && window.MgzCloud) {
         await window.MgzCloud.ensureUserProfileExists(gUser).catch(() => {});
         prof = (await window.MgzCloud.getMyProfile(gUser.uid).catch(() => null)) || usr;
       }
+      const displayName = prof.fullName || gUser?.displayName || usr.username || 'کاربر مغزدانه';
+      const initial = userInitials(displayName);
+      const loyaltyTier = (custDash && custDash.loyalty && custDash.loyalty.tier) || 'برنزی';
+      applyUserAvatarTone(prof.avatarColor || 'emerald');
+      ['c-top-avatar', 'c-pop-avatar', 'pf-avatar-preview'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = initial;
+      });
+      document.getElementById('c-top-name').textContent = displayName;
+      document.getElementById('c-top-role').textContent = `عضو ${loyaltyTier}`;
+      document.getElementById('c-pop-name').textContent = displayName;
+      document.getElementById('c-pop-sub').textContent = prof.phone || prof.email || prof.username || 'حساب فعال مغزدانه';
+      document.getElementById('c-menu-wallet-lbl').textContent = faToman(usr.walletBalance || 0);
+      document.getElementById('pf-id-name').textContent = displayName;
+      document.getElementById('pf-id-meta').textContent = [prof.username ? `@${prof.username}` : '', prof.phone || '', prof.email || ''].filter(Boolean).join(' · ') || 'کاربر مغزدانه';
+
+      const compFields = [prof.fullName, prof.phone, prof.email, prof.province, prof.city, prof.address];
+      const compPct = Math.round((compFields.filter(Boolean).length / compFields.length) * 100);
+      document.getElementById('pf-complete-lbl').textContent = `تکمیل پروفایل: ${fmt(compPct)}٪ · سطح باشگاه: ${loyaltyTier}`;
+
       document.getElementById('pf-name').value = prof.fullName || gUser?.displayName || '';
       document.getElementById('pf-phone').value = prof.phone || '';
+      document.getElementById('pf-email').value = prof.email || gUser?.email || '';
       document.getElementById('pf-buyer-type').value = prof.buyerType || 'retail';
       document.getElementById('pf-province').value = prof.province || '';
       document.getElementById('pf-city').value = prof.city || '';
       document.getElementById('pf-postal').value = prof.postalCode || '';
+      document.getElementById('pf-bio').value = prof.bio || '';
       document.getElementById('pf-address').value = prof.address || '';
       if (!document.getElementById('ad-receiver').value) document.getElementById('ad-receiver').value = prof.fullName || '';
       if (!document.getElementById('ad-phone').value) document.getElementById('ad-phone').value = prof.phone || '';
+
+      const np = prof.notifyPrefs || {};
+      document.getElementById('pref-orders').checked = np.orderUpdates !== false;
+      document.getElementById('pref-wallet').checked = np.walletAlerts !== false;
+      document.getElementById('pref-support').checked = np.supportReplies !== false;
+      document.getElementById('pref-price').checked = np.priceDrops !== false;
+      document.getElementById('pref-mkt').checked = Boolean(np.marketingSms);
+
+      document.getElementById('csess-method').textContent = authMode === 'google' ? 'حساب گوگل ابری' : (prof.authMethod === 'otp' ? 'ورود پیامکی (OTP)' : 'نام کاربری و رمز عبور');
+      document.getElementById('csess-joined').textContent = faDate(prof.createdAt);
+      document.getElementById('csess-device').textContent = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'اپلیکیشن / مرورگر موبایل' : 'مرورگر دسکتاپ';
+      document.getElementById('csess-cart').textContent = `${fmt((APP.cart || []).length)} قلم در سبد فعال`;
 
       // Render sub-views
       renderTransactionsTable();
@@ -1568,6 +2100,7 @@
       renderSubscriptions();
       renderFavorites();
       renderTickets();
+      loadCustomerNotifications();
 
       // Referral Program & Web Push Readiness
       (async () => {
@@ -1686,11 +2219,14 @@
       const payload = {
         fullName: document.getElementById('pf-name').value.trim(),
         phone: document.getElementById('pf-phone').value.trim(),
+        email: document.getElementById('pf-email').value.trim(),
         buyerType: document.getElementById('pf-buyer-type').value,
         province: document.getElementById('pf-province').value.trim(),
         city: document.getElementById('pf-city').value.trim(),
         postalCode: document.getElementById('pf-postal').value.trim(),
+        bio: document.getElementById('pf-bio').value.trim(),
         address: document.getElementById('pf-address').value.trim(),
+        avatarColor: selectedUserTone,
       };
       try {
         if (authMode === 'server') {
@@ -1699,11 +2235,31 @@
         } else if (window.MgzCloud && window.MgzCloud.getCurrentUser()) {
           await window.MgzCloud.saveMyProfile(window.MgzCloud.getCurrentUser().uid, payload);
         }
-        document.getElementById('profile-saved-note').textContent = 'ذخیره شد';
-        toast('اطلاعات کاربری با موفقیت ذخیره شد');
+        document.getElementById('profile-saved-note').textContent = 'ذخیره شد ✓';
+        toast('اطلاعات پروفایل با موفقیت ذخیره شد');
         await refreshAccountView();
       } catch (err) {
         toast(err.message || 'خطا در ذخیره اطلاعات');
+      }
+    });
+
+    document.getElementById('pf-save-prefs-btn').addEventListener('click', async () => {
+      const notifyPrefs = {
+        orderUpdates: document.getElementById('pref-orders').checked,
+        walletAlerts: document.getElementById('pref-wallet').checked,
+        supportReplies: document.getElementById('pref-support').checked,
+        priceDrops: document.getElementById('pref-price').checked,
+        marketingSms: document.getElementById('pref-mkt').checked,
+      };
+      try {
+        if (authMode === 'server') {
+          const res = await apiFetch('/api/profile', { method: 'PUT', body: JSON.stringify({ notifyPrefs }) });
+          if (res && res.user) APP.serverUser = res.user;
+        }
+        try { localStorage.setItem('maghzdaneh_user_prefs', JSON.stringify(notifyPrefs)); } catch {}
+        toast('تنظیمات اعلان‌های حساب ذخیره شد');
+      } catch (err) {
+        toast(err.message || 'خطا در ذخیره تنظیمات اعلان');
       }
     });
 

@@ -7,7 +7,7 @@
    - Stale-While-Revalidate for static assets
    ========================================================================== */
 
-const CACHE_VERSION = 'maghzdaneh-pwa-v23';
+const CACHE_VERSION = 'maghzdaneh-pwa-v25';
 const SHELL_RELATIVE = [
   './',
   './index.html',
@@ -21,10 +21,12 @@ const SHELL_RELATIVE = [
   './wholesale.html',
   './cart.html',
   './account.html',
+  './admin.html',
   './manifest.webmanifest',
-  './assets/css/main.css?v=19',
+  './assets/css/main.css?v=20',
   './assets/css/fx.css?v=17',
-  './assets/js/app.js?v=20',
+  './assets/js/app.js?v=21',
+  './assets/js/static-api.js?v=1',
   './assets/img/logo.svg',
   './assets/img/pwa-192x192.png',
   './assets/img/pwa-512x512.png',
@@ -115,7 +117,7 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
   if (url.pathname.includes('/api/')) return;
 
-  // Navigation / HTML pages: Network-First with scope-safe cache & offline fallback
+  // Navigation / HTML pages: Network-First with 404 recovery & scope-safe cache fallback
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith(
       fetch(req)
@@ -123,6 +125,12 @@ self.addEventListener('fetch', (event) => {
           if (res && res.status === 200) {
             const clone = res.clone();
             caches.open(CACHE_VERSION).then((c) => c.put(req, clone)).catch(() => {});
+            return res;
+          }
+          if (res && res.status === 404) {
+            return fetch(scopeUrl('./index.html')).catch(() =>
+              caches.match(scopeUrl('./index.html')).then((fb) => fb || res)
+            );
           }
           return res;
         })
@@ -130,7 +138,7 @@ self.addEventListener('fetch', (event) => {
           caches
             .match(req)
             .then((cached) =>
-              cached || caches.match(scopeUrl('./catalog.html')).then((fb) => fb || offlineFallbackHtml())
+              cached || caches.match(scopeUrl('./index.html')).then((fb) => fb || offlineFallbackHtml())
             )
         )
     );

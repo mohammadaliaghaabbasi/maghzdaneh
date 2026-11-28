@@ -7,7 +7,7 @@
   <meta name="description" content="داشبورد تخصصی مدیریت مغزدانه: پایش فروش و کیف پول کاربران، شارژ و تعدیل دستی حساب‌ها، پاسخگویی به تیکت‌ها، مدیریت سفارش‌ها، غرفه‌ها، محصولات و محتوای سه‌بعدی.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=14">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest?v=25">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,7 +15,7 @@
   <meta name="apple-mobile-web-app-title" content="مغزدانه">
   <meta name="theme-color" content="#060907">
   <link rel="stylesheet" href="assets/css/fonts.css?v=14">
-  <link rel="stylesheet" href="assets/css/main.css?v=19">
+  <link rel="stylesheet" href="assets/css/main.css?v=20">
   <link rel="stylesheet" href="assets/css/fx.css?v=17">
 </head>
 <body>
@@ -149,6 +149,13 @@
           <button type="button" class="dash-nav-btn" data-aview="branding">
             <span>تنظیمات برند و سایت</span>
           </button>
+          <button type="button" class="dash-nav-btn" data-aview="notifications">
+            <span>مرکز اعلان‌های مدیریت</span>
+            <span class="dash-nav-count" id="anav-notifs">۰</span>
+          </button>
+          <button type="button" class="dash-nav-btn" data-aview="profile">
+            <span>پروفایل و امنیت مدیر</span>
+          </button>
           <button type="button" class="dash-nav-btn" data-aview="audit">
             <span>گزارش فعالیت‌ها (Audit)</span>
           </button>
@@ -161,7 +168,7 @@
         <div class="dash-sidebar-foot">
           <a class="btn btn-outline btn-sm" href="index.html" style="width:100%;justify-content:center">نمای سه‌بعدی صفحه اول</a>
           <a class="btn btn-outline btn-sm" href="catalog.html" style="width:100%;justify-content:center">مشاهده فروشگاه</a>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-adm-signout" style="width:100%;justify-content:center">خروج مدیر</button>
+          <button type="button" class="btn btn-danger-outline btn-sm" id="btn-adm-signout" style="width:100%;justify-content:center">خروج امن مدیر</button>
         </div>
       </aside>
 
@@ -173,9 +180,75 @@
             <h1 id="a-page-title">داشبورد مدیریتی</h1>
           </div>
           <div class="dash-topbar-actions">
-            <button type="button" class="btn btn-gold btn-sm" id="btn-top-wallet">+ شارژ دستی کاربر</button>
+            <button type="button" class="btn btn-gold btn-sm" id="btn-top-wallet">+ شارژ دستی</button>
             <button type="button" class="btn btn-primary btn-sm" id="btn-new-prod-top">+ محصول رسمی</button>
-            <button type="button" class="btn btn-outline btn-sm" id="btn-reload-all">به‌روزرسانی</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-reload-all" aria-label="به‌روزرسانی">به‌روزرسانی</button>
+            <div class="dash-util-cluster">
+              <!-- Admin Operational Notifications Bell + Popover -->
+              <div class="dash-popover-wrap">
+                <button type="button" class="dash-icon-btn" id="a-notif-trigger" aria-label="اعلان‌های مدیریت" aria-expanded="false" aria-haspopup="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span class="dash-notif-count" id="a-notif-badge" hidden>۰</span>
+                </button>
+                <div class="dash-popover" id="a-notif-popover" hidden role="region" aria-label="اعلان‌های عملیاتی مدیریت">
+                  <div class="dash-pop-head">
+                    <div>
+                      <h3>مرکز اعلان‌های مدیریت</h3>
+                      <div class="dash-pop-sub" id="a-notif-pop-sub">همهٔ هشدارها بررسی شده‌اند</div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" id="a-notif-mark-all-pop" style="padding:5px 10px;font-size:0.72rem">خواندن همه</button>
+                  </div>
+                  <div class="dash-pop-tabs">
+                    <button type="button" class="dash-pop-tab active" data-anfilter="all">همه</button>
+                    <button type="button" class="dash-pop-tab" data-anfilter="unread">خوانده‌نشده</button>
+                    <button type="button" class="dash-pop-tab" data-anfilter="orders">سفارش‌ها</button>
+                    <button type="button" class="dash-pop-tab" data-anfilter="tickets">تیکت‌ها</button>
+                    <button type="button" class="dash-pop-tab" data-anfilter="payouts">تسویه</button>
+                  </div>
+                  <div class="dash-pop-list" id="a-notif-pop-list"></div>
+                  <div class="dash-pop-foot">
+                    <button type="button" class="btn btn-outline btn-sm" id="a-notif-open-full" style="width:100%;justify-content:center;font-size:0.78rem">مشاهده مرکز کامل اعلان‌های مدیریت ←</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Admin Executive Profile Menu -->
+              <div class="dash-popover-wrap">
+                <button type="button" class="dash-profile-trigger" id="a-profile-trigger" aria-expanded="false" aria-haspopup="true">
+                  <span class="dash-avatar" id="a-top-avatar" data-tone="gold">م</span>
+                  <span class="dash-profile-trigger-meta">
+                    <span class="dash-profile-trigger-name" id="a-top-name">مدیر ارشد مغزدانه</span>
+                    <span class="dash-profile-trigger-role" id="a-top-role">مدیر اجرایی</span>
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="dash-popover profile-pop" id="a-profile-popover" hidden role="menu" aria-label="منوی حساب مدیر">
+                  <div class="dash-pop-head">
+                    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                      <span class="dash-avatar" id="a-pop-avatar" data-tone="gold">م</span>
+                      <div style="min-width:0">
+                        <h3 id="a-pop-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">مدیر ارشد مغزدانه</h3>
+                        <div class="dash-pop-sub" id="a-pop-sub">@admin</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-menu-list">
+                    <button type="button" class="dash-menu-item" data-amenu-jump="profile"><span>پروفایل و تنظیمات مدیر</span><span style="font-size:0.72rem;color:var(--c-text-muted)">حساب</span></button>
+                    <button type="button" class="dash-menu-item" data-amenu-jump="notifications"><span>مرکز اعلان‌های عملیاتی</span><span class="num" id="a-menu-notif-cnt" style="font-size:0.74rem;color:var(--c-accent-light)">۰</span></button>
+                    <button type="button" class="dash-menu-item" id="a-menu-security"><span>تغییر رمز عبور مدیریت</span><span style="font-size:0.72rem;color:var(--c-text-muted)">امنیت</span></button>
+                    <button type="button" class="dash-menu-item" data-amenu-jump="audit"><span>گزارش ممیزی (Audit Log)</span><span style="font-size:0.72rem;color:var(--c-text-muted)">گزارش</span></button>
+                    <div class="dash-menu-sep"></div>
+                    <a class="dash-menu-item" href="catalog.html"><span>مشاهده فروشگاه عمومی</span><span style="font-size:0.72rem;color:var(--c-text-muted)">←</span></a>
+                    <a class="dash-menu-item" href="account.html"><span>پورتال مشتریان</span><span style="font-size:0.72rem;color:var(--c-text-muted)">←</span></a>
+                    <div class="dash-menu-sep"></div>
+                    <button type="button" class="dash-menu-item danger" id="a-menu-signout"><span>خروج امن از پنل مدیریت</span><span>↪</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -702,9 +775,173 @@
             </div>
           </div>
         </section>
+
+        <!-- VIEW 15: ADMIN OPERATIONAL NOTIFICATIONS CENTER -->
+        <section id="aview-notifications" hidden style="display:flex;flex-direction:column;gap:20px">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>مرکز اعلان‌ها و هشدارهای عملیاتی مدیریت</h2>
+                <p id="a-notif-full-sub">سفارش‌های جدید، تیکت‌های باز، تسویه‌های در انتظار، عرضه باغداران و هشدار انبار.</p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn btn-outline btn-sm" id="a-notif-refresh-btn">به‌روزرسانی</button>
+                <button type="button" class="btn btn-primary btn-sm" id="a-notif-mark-all-full">علامت‌گذاری همه به‌عنوان خوانده‌شده</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px">
+              <div class="dash-pop-tabs" style="padding:0;border:none">
+                <button type="button" class="dash-pop-tab active" data-anfull="all">همه</button>
+                <button type="button" class="dash-pop-tab" data-anfull="unread">خوانده‌نشده</button>
+                <button type="button" class="dash-pop-tab" data-anfull="orders">سفارش‌ها</button>
+                <button type="button" class="dash-pop-tab" data-anfull="tickets">تیکت‌ها</button>
+                <button type="button" class="dash-pop-tab" data-anfull="payouts">تسویه شبا</button>
+                <button type="button" class="dash-pop-tab" data-anfull="supply">عرضه و RFQ</button>
+                <button type="button" class="dash-pop-tab" data-anfull="inventory">انبار</button>
+                <button type="button" class="dash-pop-tab" data-anfull="community">پرسش‌ها</button>
+              </div>
+              <input id="a-notif-search" type="search" placeholder="جست‌وجو در هشدارها…" style="max-width:240px;padding:8px 12px;border-radius:10px;background:var(--lux-bg-2);border:1px solid var(--lux-line);color:#fff;font-size:0.82rem">
+            </div>
+            <div id="a-notif-full-list" style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 16: ADMIN PROFILE, ALERT PREFERENCES, SECURITY & SESSION -->
+        <section id="aview-profile" hidden style="display:flex;flex-direction:column;gap:22px">
+          <div class="dash-card">
+            <div class="profile-id-banner">
+              <div class="profile-id-left">
+                <div class="dash-avatar lg" id="apf-avatar-preview" data-tone="gold">م</div>
+                <div>
+                  <h2 id="apf-id-name" style="margin:0;font-size:1.15rem;color:#fff">مدیر ارشد مغزدانه</h2>
+                  <div style="font-size:0.8rem;color:var(--lux-muted);margin-top:4px" id="apf-id-meta">@admin · مدیر اجرایی</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:0.76rem;color:var(--lux-muted);margin-bottom:8px">رنگ نشان پروفایل مدیر</div>
+                <div class="avatar-swatches" id="apf-avatar-swatches">
+                  <button type="button" class="avatar-swatch active" data-tone="gold" aria-label="طلایی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="emerald" aria-label="زمردی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="jade" aria-label="فیروزه‌ای"></button>
+                  <button type="button" class="avatar-swatch" data-tone="amber" aria-label="کهربایی"></button>
+                  <button type="button" class="avatar-swatch" data-tone="ruby" aria-label="یاقوتی"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>مشخصات مدیر کنسول اجرایی</h2>
+                <p>نام نمایشی، سمت مدیریتی و راه‌های تماس داخلی مدیر را تنظیم کنید.</p>
+              </div>
+              <span id="apf-saved-note" class="st-ok" style="font-size:0.82rem"></span>
+            </div>
+            <form id="adm-profile-form" class="form-grid">
+              <div class="field"><label for="apf-name">نام و نام خانوادگی مدیر *</label><input id="apf-name" required maxlength="120"></div>
+              <div class="field"><label for="apf-title">سمت اجرایی</label><input id="apf-title" maxlength="120" placeholder="مدیر اجرایی و ناظر بازارچه"></div>
+              <div class="field"><label for="apf-email">ایمیل مدیریت</label><input id="apf-email" type="email" class="ltr" maxlength="120" style="text-align:right"></div>
+              <div class="field"><label for="apf-phone">شماره تماس مستقیم</label><input id="apf-phone" class="ltr" maxlength="30" style="text-align:right"></div>
+              <div class="form-full">
+                <button type="submit" class="btn btn-primary btn-sm">ذخیره مشخصات مدیر</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تنظیمات اعلان‌های عملیاتی مدیریت</h2>
+                <p>مشخص کنید کدام رویدادهای سایت در زنگوله و مرکز اعلان‌های مدیریت نمایش داده شوند.</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" id="apf-save-prefs-btn">ذخیره تنظیمات اعلان</button>
+            </div>
+            <div class="pref-list">
+              <div class="pref-row">
+                <div><strong>سفارش‌های جدید و در حال آماده‌سازی</strong><span>نمایش سفارش‌های تازه ثبت‌شده در بالای لیست هشدارها</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-orders" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>تیکت‌های باز پشتیبانی مشتریان</strong><span>هشدار برای تیکت‌هایی که هنوز پاسخ داده نشده‌اند</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-tickets" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>درخواست‌های تسویه شبا غرفه‌داران</strong><span>اعلان فوری ثبت درخواست تسویه مالی توسط فروشندگان</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-payouts" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>اعلام بار باغداران و مناقصه‌های عمده (RFQ)</strong><span>هشدار ثبت عرضه جدید و استعلام خریداران عمده</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-supply" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>هشدار کاهش موجودی انبار مرکزی</strong><span>نمایش کالاهایی که موجودی آن‌ها به زیر ۳۵ کیلوگرم رسیده است</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-stock" checked><span class="lux-switch-track"></span></label>
+              </div>
+              <div class="pref-row">
+                <div><strong>پرسش‌های بدون پاسخ کاربران در صفحه محصول</strong><span>یادآوری پاسخ تخصصی به سؤالات خریداران</span></div>
+                <label class="lux-switch"><input type="checkbox" id="apref-comm" checked><span class="lux-switch-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-card" id="a-security-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>تغییر رمز عبور ورود مدیریت</h2>
+                <p>رمز عبور جدید بلافاصله با رمزنگاری امن روی سرور ذخیره شده و در گزارش ممیزی ثبت می‌شود.</p>
+              </div>
+            </div>
+            <div class="auth-msg" id="apwc-msg"></div>
+            <form id="adm-pw-change-form" class="form-grid">
+              <div class="field"><label for="apwc-cur">رمز عبور فعلی مدیر *</label><input id="apwc-cur" type="password" class="ltr" required placeholder="••••••••" style="text-align:right"></div>
+              <div class="field"><label for="apwc-new">رمز عبور جدید (حداقل ۴ کاراکتر) *</label><input id="apwc-new" type="password" class="ltr" required minlength="4" placeholder="••••••••" style="text-align:right"></div>
+              <div class="field"><label for="apwc-conf">تکرار رمز عبور جدید *</label><input id="apwc-conf" type="password" class="ltr" required minlength="4" placeholder="••••••••" style="text-align:right"></div>
+              <div class="form-full">
+                <button type="submit" class="btn btn-gold btn-sm">تغییر رمز عبور مدیر</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>نشست فعال مدیریت و خروج امن</h2>
+                <p>جزئیات نشست احراز هویت شدهٔ فعلی و کنترل خروج از پنل مدیریت.</p>
+              </div>
+            </div>
+            <div class="session-meta-grid">
+              <div class="session-meta-box"><small>نام کاربری مدیر</small><strong class="ltr" id="asess-user">admin</strong></div>
+              <div class="session-meta-box"><small>سطح دسترسی</small><strong>مدیر کل (Full Executive)</strong></div>
+              <div class="session-meta-box"><small>اعتبار نشست</small><strong>۱۲ ساعت (امضاشده)</strong></div>
+              <div class="session-meta-box"><small>دستگاه فعلی</small><strong id="asess-device">مرورگر وب</strong></div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button type="button" class="btn btn-danger-outline btn-sm" id="btn-adm-signout-profile">خروج امن از پنل مدیریت</button>
+              <button type="button" class="btn btn-outline btn-sm" data-jump-aview="audit">مشاهده گزارش ممیزی (Audit)</button>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </main>
+
+  <!-- Admin Safe Sign-Out Confirmation Modal -->
+  <div class="modal-back" id="adm-signout-modal">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="sec-label" style="margin:0;color:#ff9c9c">خروج امن از کنسول مدیریت</span>
+        <button type="button" class="drawer-close" id="aso-close-x" aria-label="بستن">×</button>
+      </div>
+      <h3 style="margin:0 0 8px">آیا از پنل مدیریت خارج می‌شوید؟</h3>
+      <p id="aso-summary" style="font-size:0.84rem;color:var(--c-text-soft);line-height:1.8;margin-bottom:16px">پس از خروج، توکن نشست مدیر باطل می‌شود و برای دسترسی مجدد نیاز به ورود دوباره خواهید داشت.</p>
+      <div style="display:grid;gap:8px">
+        <button type="button" class="btn btn-danger-outline" id="aso-confirm-stay" style="width:100%;justify-content:center">خروج از پنل مدیریت</button>
+        <button type="button" class="btn btn-outline btn-sm" id="aso-confirm-store" style="width:100%;justify-content:center">خروج و رفتن به صفحهٔ فروشگاه</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="aso-cancel" style="width:100%;justify-content:center">انصراف و ماندن در کنسول</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Article Add/Edit Modal -->
   <div class="modal-back" id="art-modal">
@@ -779,7 +1016,7 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="assets/js/app.js?v=20"></script>
+  <script src="assets/js/app.js?v=21"></script>
   <script>
     const STAGE_DEFAULTS = [
       { index: '۰۱', label: 'پوستهٔ بسته', kicker: '۰۱ · دست‌چین رفسنجان', title: 'رازی در دلِ صدف.', subtitle: 'دست‌چین باغ‌های رفسنجان؛ هنوز در حصار طبیعت.' },
@@ -803,6 +1040,8 @@
       'home-cms': 'محتوای سه‌بعدی صفحه اول',
       articles: 'مجله و مقالات',
       branding: 'تنظیمات برند و سایت',
+      notifications: 'مرکز اعلان‌های مدیریت',
+      profile: 'پروفایل و امنیت مدیر',
       audit: 'گزارش فعالیت‌ها (Audit)',
     };
 
@@ -814,6 +1053,11 @@
     let admTxFilter = 'all';
     let admOrdFilter = 'all';
     let admTktFilter = 'all';
+    let admNotifs = [];
+    let admNotifUnread = 0;
+    let aNotifPopFilter = 'all';
+    let aNotifFullFilter = 'all';
+    let selectedAdminTone = 'gold';
 
     function faDate(iso) {
       if (!iso) return '—';
@@ -932,19 +1176,333 @@
     document.getElementById('btn-adm-google-1').addEventListener('click', handleGoogleAdmin);
     document.getElementById('btn-adm-google-2').addEventListener('click', handleGoogleAdmin);
 
-    document.getElementById('btn-adm-signout').addEventListener('click', async () => {
+    /* ---------- Admin Popovers, Notifications, Profile & Safe Sign Out ---------- */
+    function closeAdminPopovers() {
+      const np = document.getElementById('a-notif-popover');
+      const pp = document.getElementById('a-profile-popover');
+      const nt = document.getElementById('a-notif-trigger');
+      const pt = document.getElementById('a-profile-trigger');
+      if (np) np.hidden = true;
+      if (pp) pp.hidden = true;
+      if (nt) nt.setAttribute('aria-expanded', 'false');
+      if (pt) pt.setAttribute('aria-expanded', 'false');
+    }
+
+    function openAdminSignOutModal() {
+      closeAdminPopovers();
+      const an = (overview && overview.analytics) || {};
+      const pendOrd = Number(an.pendingOrdersCount || 0);
+      const openTkt = Number(an.openTicketsCount || 0);
+      document.getElementById('aso-summary').textContent =
+        `وضعیت فعلی کنسول: ${fmt(pendOrd)} سفارش در انتظار و ${fmt(openTkt)} تیکت باز. با خروج امن، توکن نشست مدیریت از این مرورگر حذف می‌شود.`;
+      document.getElementById('adm-signout-modal').classList.add('open');
+    }
+
+    function closeAdminSignOutModal() {
+      document.getElementById('adm-signout-modal').classList.remove('open');
+    }
+
+    async function performAdminSignOut(goStore = false) {
+      closeAdminSignOutModal();
       await apiFetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
       APP._adminToken = null;
       APP.serverAdmin = null;
       APP.isAdmin = false;
-      toast('از پنل مدیریت خارج شدید');
+      toast('با موفقیت و به‌صورت امن از پنل مدیریت خارج شدید');
+      if (goStore) {
+        location.href = 'catalog.html';
+        return;
+      }
       await checkAdminGate();
+    }
+
+    document.getElementById('btn-adm-signout').addEventListener('click', openAdminSignOutModal);
+    document.getElementById('btn-adm-signout-profile').addEventListener('click', openAdminSignOutModal);
+    document.getElementById('a-menu-signout').addEventListener('click', openAdminSignOutModal);
+    document.getElementById('aso-close-x').addEventListener('click', closeAdminSignOutModal);
+    document.getElementById('aso-cancel').addEventListener('click', closeAdminSignOutModal);
+    document.getElementById('aso-confirm-stay').addEventListener('click', () => performAdminSignOut(false));
+    document.getElementById('aso-confirm-store').addEventListener('click', () => performAdminSignOut(true));
+    document.getElementById('adm-signout-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'adm-signout-modal') closeAdminSignOutModal();
+    });
+
+    document.getElementById('a-notif-trigger').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pop = document.getElementById('a-notif-popover');
+      const willOpen = pop.hidden;
+      closeAdminPopovers();
+      pop.hidden = !willOpen;
+      e.currentTarget.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    document.getElementById('a-profile-trigger').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const pop = document.getElementById('a-profile-popover');
+      const willOpen = pop.hidden;
+      closeAdminPopovers();
+      pop.hidden = !willOpen;
+      e.currentTarget.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dash-popover-wrap')) closeAdminPopovers();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeAdminPopovers(); closeAdminSignOutModal(); }
+    });
+
+    document.querySelectorAll('[data-amenu-jump]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        closeAdminPopovers();
+        switchAdminView(btn.dataset.amenuJump);
+      });
+    });
+    document.getElementById('a-menu-security').addEventListener('click', () => {
+      closeAdminPopovers();
+      switchAdminView('profile');
+      setTimeout(() => document.getElementById('a-security-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    });
+    document.getElementById('a-notif-open-full').addEventListener('click', () => {
+      closeAdminPopovers();
+      switchAdminView('notifications');
+    });
+
+    function applyAdminAvatarTone(tone) {
+      selectedAdminTone = ['emerald', 'gold', 'ruby', 'jade', 'amber'].includes(tone) ? tone : 'gold';
+      ['a-top-avatar', 'a-pop-avatar', 'apf-avatar-preview'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('data-tone', selectedAdminTone);
+      });
+      document.querySelectorAll('#apf-avatar-swatches .avatar-swatch').forEach(b => {
+        b.classList.toggle('active', b.dataset.tone === selectedAdminTone);
+      });
+    }
+
+    document.querySelectorAll('#apf-avatar-swatches .avatar-swatch').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        applyAdminAvatarTone(btn.dataset.tone);
+        try {
+          await apiFetch('/api/admin/profile', { method: 'PUT', body: JSON.stringify({ avatarColor: selectedAdminTone }) });
+          toast('رنگ نشان پروفایل مدیر ذخیره شد');
+        } catch {}
+      });
+    });
+
+    function filterAdminNotifs(filterKey, searchText = '') {
+      const q = (searchText || '').trim();
+      return admNotifs.filter(n => {
+        if (filterKey === 'unread' && n.read) return false;
+        if (filterKey !== 'all' && filterKey !== 'unread' && n.category !== filterKey) return false;
+        if (q && !(String(n.title || '') + ' ' + String(n.body || '') + ' ' + String(n.categoryLabel || '')).includes(q)) return false;
+        return true;
+      });
+    }
+
+    function renderAdminNotifRows(items) {
+      if (!items.length) {
+        return '<div style="padding:26px 16px;text-align:center;color:var(--lux-muted);font-size:0.83rem">هشدار یا اعلانی در این دسته وجود ندارد.</div>';
+      }
+      return items.map(n => `
+        <button type="button" class="notif-row ${n.read ? '' : 'is-unread'}" data-anotif-id="${esc(n.id)}" data-anotif-target="${esc(n.targetView || 'overview')}">
+          <div class="notif-row-meta">
+            <span class="notif-row-cat ${n.severity === 'high' ? 'sev-high' : ''}">${esc(n.categoryLabel || 'اعلان')}${n.severity === 'high' ? ' · فوری' : ''}</span>
+            <span>${faDate(n.createdAt)}</span>
+          </div>
+          <div class="notif-row-title">
+            <span>${esc(n.title)}</span>
+            ${n.read ? '' : '<span class="notif-unread-lbl">جدید</span>'}
+          </div>
+          <div class="notif-row-body">${esc(n.body)}</div>
+        </button>`).join('');
+    }
+
+    async function markAdminNotifRead(id, all = false) {
+      try {
+        const r = await apiFetch('/api/admin/notifications/read', {
+          method: 'POST',
+          body: JSON.stringify(all ? { all: true } : { id }),
+        });
+        if (r && Array.isArray(r.notifications)) {
+          admNotifs = r.notifications;
+          admNotifUnread = Number(r.unreadCount || 0);
+          renderAdminNotifications();
+        }
+      } catch {}
+    }
+
+    function bindAdminNotifClicks(container) {
+      container.querySelectorAll('[data-anotif-id]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.anotifId;
+          const target = btn.dataset.anotifTarget || 'overview';
+          await markAdminNotifRead(id, false);
+          closeAdminPopovers();
+          switchAdminView(target);
+        });
+      });
+    }
+
+    function renderAdminNotifications() {
+      const badge = document.getElementById('a-notif-badge');
+      const navCnt = document.getElementById('anav-notifs');
+      const menuCnt = document.getElementById('a-menu-notif-cnt');
+      const popSub = document.getElementById('a-notif-pop-sub');
+      const fullSub = document.getElementById('a-notif-full-sub');
+
+      if (badge) { badge.textContent = fmt(admNotifUnread); badge.hidden = admNotifUnread <= 0; }
+      if (navCnt) navCnt.textContent = fmt(admNotifUnread);
+      if (menuCnt) menuCnt.textContent = admNotifUnread > 0 ? `${fmt(admNotifUnread)} جدید` : 'بررسی‌شده';
+      if (popSub) popSub.textContent = admNotifUnread > 0 ? `${fmt(admNotifUnread)} هشدار خوانده‌نشده` : 'همهٔ هشدارها بررسی شده‌اند';
+      if (fullSub) fullSub.textContent = `مجموع ${fmt(admNotifs.length)} اعلان عملیاتی (${fmt(admNotifUnread)} خوانده‌نشده).`;
+
+      const popList = document.getElementById('a-notif-pop-list');
+      if (popList) {
+        popList.innerHTML = renderAdminNotifRows(filterAdminNotifs(aNotifPopFilter).slice(0, 12));
+        bindAdminNotifClicks(popList);
+      }
+      const fullList = document.getElementById('a-notif-full-list');
+      if (fullList) {
+        const q = document.getElementById('a-notif-search')?.value || '';
+        fullList.innerHTML = renderAdminNotifRows(filterAdminNotifs(aNotifFullFilter, q));
+        bindAdminNotifClicks(fullList);
+      }
+    }
+
+    document.querySelectorAll('[data-anfilter]').forEach(b => {
+      b.addEventListener('click', () => {
+        aNotifPopFilter = b.dataset.anfilter;
+        document.querySelectorAll('[data-anfilter]').forEach(x => x.classList.toggle('active', x === b));
+        renderAdminNotifications();
+      });
+    });
+    document.querySelectorAll('[data-anfull]').forEach(b => {
+      b.addEventListener('click', () => {
+        aNotifFullFilter = b.dataset.anfull;
+        document.querySelectorAll('[data-anfull]').forEach(x => x.classList.toggle('active', x === b));
+        renderAdminNotifications();
+      });
+    });
+    document.getElementById('a-notif-search').addEventListener('input', renderAdminNotifications);
+    document.getElementById('a-notif-mark-all-pop').addEventListener('click', async () => {
+      await markAdminNotifRead(null, true);
+      toast('همهٔ اعلان‌های مدیریت خوانده شدند');
+    });
+    document.getElementById('a-notif-mark-all-full').addEventListener('click', async () => {
+      await markAdminNotifRead(null, true);
+      toast('همهٔ اعلان‌های مدیریت خوانده شدند');
+    });
+    document.getElementById('a-notif-refresh-btn').addEventListener('click', async () => {
+      await loadAdminOverview();
+      toast('اعلان‌های عملیاتی به‌روزرسانی شد');
+    });
+
+    function hydrateAdminProfileUI(prof, username) {
+      const p = prof || {};
+      const fullName = p.fullName || 'مدیر ارشد مغزدانه';
+      const title = p.title || 'مدیر اجرایی و ناظر بازارچه';
+      const init = fullName.trim().slice(0, 1) || 'م';
+      applyAdminAvatarTone(p.avatarColor || 'gold');
+      ['a-top-avatar', 'a-pop-avatar', 'apf-avatar-preview'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = init;
+      });
+      document.getElementById('adm-user-name').textContent = fullName;
+      document.getElementById('a-top-name').textContent = fullName;
+      document.getElementById('a-top-role').textContent = title;
+      document.getElementById('a-pop-name').textContent = fullName;
+      document.getElementById('a-pop-sub').textContent = `@${username || 'admin'} · ${title}`;
+      document.getElementById('apf-id-name').textContent = fullName;
+      document.getElementById('apf-id-meta').textContent = `@${username || 'admin'} · ${title}`;
+      document.getElementById('apf-name').value = fullName;
+      document.getElementById('apf-title').value = title;
+      document.getElementById('apf-email').value = p.email || '';
+      document.getElementById('apf-phone').value = p.phone || '';
+      document.getElementById('asess-user').textContent = username || 'admin';
+      document.getElementById('asess-device').textContent = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'مرورگر موبایل' : 'مرورگر دسکتاپ';
+
+      const np = p.notifyPrefs || {};
+      document.getElementById('apref-orders').checked = np.newOrders !== false;
+      document.getElementById('apref-tickets').checked = np.openTickets !== false;
+      document.getElementById('apref-payouts').checked = np.pendingPayouts !== false;
+      document.getElementById('apref-supply').checked = np.supplyAndRfq !== false;
+      document.getElementById('apref-stock').checked = np.lowStock !== false;
+      document.getElementById('apref-comm').checked = np.community !== false;
+    }
+
+    document.getElementById('adm-profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const r = await apiFetch('/api/admin/profile', {
+          method: 'PUT',
+          body: JSON.stringify({
+            fullName: document.getElementById('apf-name').value.trim(),
+            title: document.getElementById('apf-title').value.trim(),
+            email: document.getElementById('apf-email').value.trim(),
+            phone: document.getElementById('apf-phone').value.trim(),
+            avatarColor: selectedAdminTone,
+          }),
+        });
+        if (r && r.profile) hydrateAdminProfileUI(r.profile, overview?.admin?.username);
+        document.getElementById('apf-saved-note').textContent = 'ذخیره شد ✓';
+        toast('پروفایل مدیر ذخیره شد');
+      } catch (err) {
+        toast(err.message || 'خطا در ذخیره پروفایل مدیر');
+      }
+    });
+
+    document.getElementById('apf-save-prefs-btn').addEventListener('click', async () => {
+      const notifyPrefs = {
+        newOrders: document.getElementById('apref-orders').checked,
+        openTickets: document.getElementById('apref-tickets').checked,
+        pendingPayouts: document.getElementById('apref-payouts').checked,
+        supplyAndRfq: document.getElementById('apref-supply').checked,
+        lowStock: document.getElementById('apref-stock').checked,
+        community: document.getElementById('apref-comm').checked,
+      };
+      try {
+        await apiFetch('/api/admin/profile', { method: 'PUT', body: JSON.stringify({ notifyPrefs }) });
+        toast('تنظیمات اعلان‌های مدیریت ذخیره شد');
+        await loadAdminOverview();
+      } catch (err) {
+        toast(err.message || 'خطا در ذخیره تنظیمات');
+      }
+    });
+
+    document.getElementById('adm-pw-change-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('apwc-msg');
+      const cur = document.getElementById('apwc-cur').value;
+      const nw = document.getElementById('apwc-new').value;
+      const conf = document.getElementById('apwc-conf').value;
+      if (nw !== conf) {
+        msg.textContent = 'تکرار رمز عبور جدید مطابقت ندارد.';
+        msg.className = 'auth-msg err';
+        return;
+      }
+      try {
+        await apiFetch('/api/admin/change-password', {
+          method: 'POST',
+          body: JSON.stringify({ currentPassword: cur, newPassword: nw }),
+        });
+        e.target.reset();
+        msg.textContent = 'رمز عبور مدیریت با موفقیت تغییر یافت.';
+        msg.className = 'auth-msg ok';
+        toast('رمز عبور مدیر تغییر کرد');
+      } catch (err) {
+        msg.textContent = err.message || 'خطا در تغییر رمز عبور';
+        msg.className = 'auth-msg err';
+      }
     });
 
     /* ---------- Load Full Admin Executive Overview ---------- */
     async function loadAdminOverview() {
       overview = await apiFetch('/api/admin/overview');
       const an = overview.analytics || {};
+      admNotifs = Array.isArray(overview.notifications) ? overview.notifications : [];
+      admNotifUnread = Number(overview.unreadNotifications || 0);
+      hydrateAdminProfileUI(overview.adminProfile, overview.admin && overview.admin.username);
+      renderAdminNotifications();
 
       // Sidebar badges
       document.getElementById('anav-tx').textContent = fmt((overview.transactions || []).length);
